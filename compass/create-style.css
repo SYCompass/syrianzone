@@ -1,0 +1,186 @@
+/* بوصلة سوريا - Syria Compass */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap');
+
+:root {
+    --primary-color: #3b82f6;
+    --hover-color: #ffffff;
+}
+
+body {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+/* تصميم لوحة الكانبان الأفقية */
+.kanban-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    gap: 1rem;
+    padding: 0.5rem;
+    scrollbar-width: thin;
+}
+
+.kanban-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.kanban-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.kanban-container::-webkit-scrollbar-thumb {
+    background: #d1d1d1;
+    border-radius: 10px;
+}
+
+.kanban-container::-webkit-scrollbar-thumb:hover {
+    background: #b1b1b1;
+}
+
+.kanban-column {
+    min-height: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-bottom: 20px;
+    /* إضافة تباعد أسفل العمود */
+    flex: 0 0 350px;
+    /* عرض ثابت لكل عمود */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.question-card {
+    transition: all 0.3s ease;
+    opacity: 1 !important;
+    /* ضمان ظهور جميع البطاقات */
+    display: block !important;
+    /* ضمان عرض جميع البطاقات */
+}
+
+.question-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* تضمين شريط التمرير في أعمدة الكانبان */
+.kanban-column::-webkit-scrollbar {
+    width: 6px;
+}
+
+.kanban-column::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.kanban-column::-webkit-scrollbar-thumb {
+    background: #d1d1d1;
+    border-radius: 10px;
+}
+
+.kanban-column::-webkit-scrollbar-thumb:hover {
+    background: #b1b1b1;
+}
+
+/* أزرار التمرير للأجهزة اللوحية والهواتف */
+.scroll-controls {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.scroll-btn {
+    background-color: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.scroll-btn:hover {
+    background-color: #f8fafc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 1024px) {
+    .scroll-controls {
+        display: none;
+    }
+}
+
+/* تصميم النافذة المنبثقة (Modal) */
+#questionModal {
+    transition: opacity 0.3s ease;
+}
+
+#questionModal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#questionModal.flex {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#questionModal .bg-white {
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+#questionModal.flex .bg-white {
+    transform: scale(1);
+}
+
+#closeModal {
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+}
+
+#closeModal:hover {
+    background-color: #f3f4f6;
+}
+
+/* تأثيرات إضافة زر الإضافة في العناوين */
+.add-question-btn {
+    transition: all 0.3s ease;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.add-question-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-question-btn i {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+} 
