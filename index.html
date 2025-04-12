@@ -1,14 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Syrian Zone</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <style>
+    body {
+      font-family: "IBM Plex Sans Arabic", sans-serif !important;
+      direction: rtl;
+    }
+    .card {
+      transition: transform 0.2s ease-in-out;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId captureTraceFeedback captureTraceMetric".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_s3Ok4ZCZEF1Fgh5svZfhxKoFghHU2neSzdhjKKMG5I0', {
+        api_host: 'https://eu.i.posthog.com',
+        person_profiles: 'identified_only',
+    })
+  </script>
 </head>
-<body>
-    <h1>Hello world!</h1>
-    <p>This is a paragraph.</p>
-    <br>
-    <span>This is a span.</span>
+
+<body class="bg-gray-100 min-h-screen">
+  <div class="container mx-auto px-4 py-8">
+    <header class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-800 mb-4">Syrian.zone</h1>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-4xl mx-auto">
+      <!-- Tier List Card -->
+      <a href="/tierlist" class="card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl">
+        <div class="p-6">
+          <div class="flex items-center justify-center mb-4">
+            <i class="fas fa-list-ol text-3xl text-[#2d4d3c]"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">تير ليست الوزراء</h2>
+          <p class="text-gray-600 text-center">قم بتصنيف وزراء الحكومة السورية الجديدة حسب رأيك</p>
+        </div>
+      </a>
+
+      <!-- Flag Replacer Card -->
+      <a href="/flag-replacer" class="card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl">
+        <div class="p-6">
+          <div class="flex items-center justify-center mb-4">
+            <i class="fas fa-flag text-3xl text-[#807fff]"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">مبدل العلم</h2>
+          <p class="text-gray-600 text-center">قم بتغيير علم صورتك الشخصية بسهولة</p>
+        </div>
+      </a>
+
+      <!-- Compass Card -->
+      <a href="/compass" class="card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl">
+        <div class="p-6">
+          <div class="flex items-center justify-center mb-4">
+            <i class="fas fa-compass text-3xl text-[#7fbfff]"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">البوصلة السياسية</h2>
+          <p class="text-gray-600 text-center">اكتشف توجهك السياسي من خلال مجموعة من الأسئلة</p>
+        </div>
+      </a>
+
+      <!-- Bingo Card -->
+      <a href="https://github.com/SYCompass/Twitter-SVG-Syrian-Flag-Replacer/releases/tag/1.0.1" target="_blank" class="card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl">
+        <div class="p-6">
+          <div class="flex items-center justify-center mb-4">
+            <i class="fas fa-th text-3xl text-[#ffbf7f]"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-center text-gray-800 mb-2"> بينغو موسى العمر</h2>
+          <p class="text-gray-600 text-center">العب بينغو على منشورات الموسى العمر</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <footer class="bg-white py-6 mt-12 w-full">
+    <div class="container mx-auto px-4 text-center text-gray-600">
+      <p>&copy; 2025 syria.zone</p>
+      <p class="mt-2 text-sm">
+        تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span>
+      </p>
+      <div class="mt-2 flex justify-center gap-4">
+        <a href="http://hadealahmad.com/" target="_blank" rel="noopener" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+          <i class="fas fa-globe ml-1"></i> الموقع الشخصي
+        </a>
+        <a href="https://x.com/hadealahmad" target="_blank" rel="noopener" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+          <i class="fab fa-x-twitter ml-1"></i> حساب X
+        </a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

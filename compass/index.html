@@ -1,50 +1,49 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>بوصلة سوريا | Syria Compass</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/TextPlugin.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <script>
-      // Cookie consent functions
-      function setCookie(name, value, days) {
-        let expires = "";
-        if (days) {
-          const date = new Date();
-          date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-          expires = "; expires=" + date.toUTCString();
-        }
-        document.cookie = name + "=" + (value || "") + expires + "; path=/";
-      }
 
-      function getCookie(name) {
-        const nameEQ = name + "=";
-        const ca = document.cookie.split(";");
-        for (let i = 0; i < ca.length; i++) {
-          let c = ca[i];
-          while (c.charAt(0) == " ") c = c.substring(1, c.length);
-          if (c.indexOf(nameEQ) == 0)
-            return c.substring(nameEQ.length, c.length);
-        }
-        return null;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>بوصلة سوريا | Syria Compass</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/TextPlugin.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script src="/components/navbar.js"></script>
+  <script>
+    // Cookie consent functions
+    function setCookie(name, value, days) {
+      let expires = "";
+      if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = "; expires=" + date.toUTCString();
       }
+      document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
 
-      // PostHog initialization function
-      function initPostHog() {
-        !(function (t, e) {
-          var o, n, p, r;
-          e.__SV ||
-            ((window.posthog = e),
+    function getCookie(name) {
+      const nameEQ = name + "=";
+      const ca = document.cookie.split(";");
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == " ") c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0)
+          return c.substring(nameEQ.length, c.length);
+      }
+      return null;
+    }
+
+    // PostHog initialization function
+    function initPostHog() {
+      !(function (t, e) {
+        var o, n, p, r;
+        e.__SV ||
+          ((window.posthog = e),
             (e._i = []),
             (e.init = function (i, s, a) {
               function g(t, e) {
@@ -66,29 +65,29 @@
                   ) + "/static/array.js"),
                 (r =
                   t.getElementsByTagName("script")[0]).parentNode.insertBefore(
-                  p,
-                  r
-                );
+                    p,
+                    r
+                  );
               var u = e;
               for (
                 void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
-                  u.people = u.people || [],
-                  u.toString = function (t) {
-                    var e = "posthog";
-                    return (
-                      "posthog" !== a && (e += "." + a),
-                      t || (e += " (stub)"),
-                      e
-                    );
-                  },
-                  u.people.toString = function () {
-                    return u.toString(1) + ".people (stub)";
-                  },
-                  o =
-                    "init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId captureTraceFeedback captureTraceMetric".split(
-                      " "
-                    ),
-                  n = 0;
+                u.people = u.people || [],
+                u.toString = function (t) {
+                  var e = "posthog";
+                  return (
+                    "posthog" !== a && (e += "." + a),
+                    t || (e += " (stub)"),
+                    e
+                  );
+                },
+                u.people.toString = function () {
+                  return u.toString(1) + ".people (stub)";
+                },
+                o =
+                "init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId captureTraceFeedback captureTraceMetric".split(
+                  " "
+                ),
+                n = 0;
                 n < o.length;
                 n++
               )
@@ -96,470 +95,315 @@
               e._i.push([i, s, a]);
             }),
             (e.__SV = 1));
-        })(document, window.posthog || []);
-        posthog.init("phc_OycGLzkRpncoy03IF9ZoFO4ezTRxkqY1HUuhSoj7bMz", {
-          api_host: "https://eu.i.posthog.com",
-          person_profiles: "identified_only",
-        });
-      }
-
-      // Check for analytics consent on page load
-      window.addEventListener("DOMContentLoaded", function () {
-        const hasConsent = getCookie("analytics_consent");
-        if (hasConsent === "true") {
-          initPostHog();
-        } else if (hasConsent === null) {
-          // Show consent banner if no choice has been made
-          document.getElementById("consent-banner").classList.remove("hidden");
-        }
+      })(document, window.posthog || []);
+      posthog.init("phc_OycGLzkRpncoy03IF9ZoFO4ezTRxkqY1HUuhSoj7bMz", {
+        api_host: "https://eu.i.posthog.com",
+        person_profiles: "identified_only",
       });
+    }
 
-      // Handle consent choice
-      function handleConsent(accepted) {
-        setCookie("analytics_consent", accepted, 365); // Store consent for 1 year
-        document.getElementById("consent-banner").classList.add("hidden");
-        if (accepted) {
-          initPostHog();
-        }
+    // Check for analytics consent on page load
+    window.addEventListener("DOMContentLoaded", function () {
+      const hasConsent = getCookie("analytics_consent");
+      if (hasConsent === "true") {
+        initPostHog();
+      } else if (hasConsent === null) {
+        // Show consent banner if no choice has been made
+        document.getElementById("consent-banner").classList.remove("hidden");
       }
-    </script>
-  </head>
-  <body class="bg-gray-100">
-    <!-- Cookie Consent Banner -->
-    <div
-      id="consent-banner"
-      class="hidden bg-white shadow-lg p-4 z-50"
-    >
-      <div
-        class="container mx-auto max-w-4xl flex flex-col md:flex-row items-center justify-between gap-4"
-      >
-        <div class="text-gray-700">
-          <p class="mb-2">
-            نستخدم تقنيات التحليل لتحسين تجربة المستخدم وفهم كيفية استخدام
-            موقعنا.
-          </p>
-          <p class="text-sm">
-            يمكنك قبول أو رفض هذه التقنيات. يمكنك تغيير خيارك في أي وقت.
-          </p>
-        </div>
-        <div class="flex gap-3 animate-pulse">
-          <button
-            onclick="handleConsent(false)"
-            class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition"
-          >
-            رفض
-          </button>
-          <button
-            onclick="handleConsent(true)"
-            class="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition"
-          >
-            قبول
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="container mx-auto px-4 py-8">
-      <header class="text-center mb-10">
-        <h1 class="text-4xl font-bold text-gray-800 mb-2">بوصلة سوريا</h1>
-        <p class="text-xl text-gray-600">اختبار البوصلة السياسية لسوريا</p>
-      </header>
+    });
 
-      <div
-        id="previous-results"
-        class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8 mb-8 hidden"
-      >
-        <h2 class="text-2xl font-bold mb-4">نتائج الإختبارات السابقة</h2>
+    // Handle consent choice
+    function handleConsent(accepted) {
+      setCookie("analytics_consent", accepted, 365); // Store consent for 1 year
+      document.getElementById("consent-banner").classList.add("hidden");
+      if (accepted) {
+        initPostHog();
+      }
+    }
+  </script>
+</head>
 
-        <div class="mb-4">
-          <ul
-            id="previous-results-list"
-            class="list-disc list-inside space-y-1"
-          ></ul>
-        </div>
-      </div>
+<body class="bg-gray-100">
+  <!-- Navbar Web Component -->
+  <nav-bar></nav-bar>
 
-      <div
-        id="intro"
-        class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8 mb-8"
-      >
-        <h2 class="text-2xl font-bold mb-4">مرحباً بك في بوصلة سوريا</h2>
-        <p class="mb-4">
-          هذا الاختبار يقيس آراءك السياسية على ستة محاور مختلفة تتعلق بمستقبل
-          سوريا.
+  <!-- Cookie Consent Banner -->
+  <div id="consent-banner" class="hidden bg-white shadow-lg p-4 z-50">
+    <div class="container mx-auto max-w-4xl flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-gray-700">
+        <p class="mb-2">
+          نستخدم تقنيات التحليل لتحسين تجربة المستخدم وفهم كيفية استخدام
+          موقعنا.
         </p>
-        <p class="mb-4">
-          ستُعرض عليك مجموعة من العبارات، وعليك تحديد مدى موافقتك عليها.
+        <p class="text-sm">
+          يمكنك قبول أو رفض هذه التقنيات. يمكنك تغيير خيارك في أي وقت.
         </p>
-        <div class="mb-4">
-          <h3 class="text-xl font-semibold mb-2">المحاور:</h3>
-          <ul class="list-disc list-inside space-y-1">
-            <li>سلطويّة مقابل تحررية</li>
-            <li>ديني مقابل علماني</li>
-            <li>اقتصادي اشتراكي مقابل اقتصادي ليبرالي</li>
-            <li>قومي مقابل عالمي</li>
-            <li>عسكري توسّعي مقابل سلمي انعزالي</li>
-            <li>عدالة انتقالية انتقامية مقابل تصالحية</li>
-          </ul>
-        </div>
-        <button
-          id="start-btn"
-          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 w-full"
-        >
-          ابدأ الاختبار
+      </div>
+      <div class="flex gap-3 animate-pulse">
+        <button onclick="handleConsent(false)" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition">
+          رفض
+        </button>
+        <button onclick="handleConsent(true)"
+          class="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition">
+          قبول
         </button>
       </div>
+    </div>
+  </div>
+  <div class="container mx-auto px-4 py-8">
+    <header class="text-center mb-10">
+      <h1 class="text-4xl font-bold text-gray-800 mb-2">بوصلة سوريا</h1>
+      <p class="text-xl text-gray-600">اختبار البوصلة السياسية لسوريا</p>
+    </header>
 
-      <div
-        id="question-container"
-        class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8 mb-8 hidden"
-      >
-        <div class="mb-4">
-          <div class="flex justify-between items-center mb-2">
-            <span id="question-number" class="text-gray-600"
-              >السؤال 1 من 30</span
-            >
-            <span
-              id="category"
-              class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
-              >سلطويّة مقابل ليبرالية</span
-            >
-          </div>
-          <h2 id="question-text" class="text-xl font-bold"></h2>
-        </div>
-        <div class="my-8">
-          <div class="flex justify-between text-sm text-gray-600 mb-2">
-            <span>أعارض بشدة</span>
-            <span>محايد</span>
-            <span>أوافق بشدة</span>
-          </div>
-          <div class="flex gap-4">
-            <button
-              data-value="-2"
-              class="answer-btn flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-100"
-            >
-              -2
-            </button>
-            <button
-              data-value="-1"
-              class="answer-btn flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-100"
-            >
-              -1
-            </button>
-            <button
-              data-value="0"
-              class="answer-btn flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-100"
-            >
-              0
-            </button>
-            <button
-              data-value="1"
-              class="answer-btn flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-100"
-            >
-              +1
-            </button>
-            <button
-              data-value="2"
-              class="answer-btn flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-100"
-            >
-              +2
-            </button>
-          </div>
-        </div>
-        <div class="flex justify-between">
-          <button
-            id="prev-btn"
-            class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            السابق
-          </button>
-          <button
-            id="next-btn"
-            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
-          >
-            التالي
-          </button>
-        </div>
-        <div class="mt-4 w-full bg-gray-200 rounded-full h-2.5">
-          <div
-            id="progress-bar"
-            class="bg-blue-600 h-2.5 rounded-full"
-            style="width: 0%"
-          ></div>
-        </div>
-      </div>
+    <div id="previous-results" class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8 mb-8 hidden">
+      <h2 class="text-2xl font-bold mb-4">نتائج الإختبارات السابقة</h2>
 
-      <div
-        id="results-container"
-        class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8 hidden"
-      >
-        <h2 class="text-2xl font-bold mb-6 text-center">نتائج بوصلة سوريا</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="results-scale">
-            <h3 class="text-lg font-semibold mb-2">سلطويّة مقابل تحررية</h3>
-            <div
-              class="flex justify-between items-center text-sm text-gray-600 mb-1"
-            >
-              <span>تحررية</span>
-              <div class="text-center">
-                <span id="rating-auth-lib" class="font-semibold text-sm block"
-                  >محايد</span
-                >
-                <span id="percentage-auth-lib" class="font-bold block"
-                  >50%</span
-                >
-              </div>
-              <span>سلطويّة</span>
-            </div>
-            <div
-              class="relative w-full h-8 bg-gray-200 rounded-lg overflow-hidden"
-            >
-              <div
-                id="scale-auth-lib"
-                class="absolute h-full bg-gradient-to-r from-red-500 to-green-500"
-              ></div>
-              <div
-                id="marker-auth-lib"
-                class="absolute w-4 h-8 bg-white border-2 border-black rounded-sm"
-              ></div>
-            </div>
-          </div>
-
-          <div class="results-scale">
-            <h3 class="text-lg font-semibold mb-2">ديني مقابل علماني</h3>
-            <div
-              class="flex justify-between items-center text-sm text-gray-600 mb-1"
-            >
-              <span>علمانية</span>
-              <div class="text-center">
-                <span id="rating-rel-sec" class="font-semibold text-sm block"
-                  >محايد</span
-                >
-                <span id="percentage-rel-sec" class="font-bold block">50%</span>
-              </div>
-              <span>دينية</span>
-            </div>
-            <div
-              class="relative w-full h-8 bg-gray-200 rounded-lg overflow-hidden"
-            >
-              <div
-                id="scale-rel-sec"
-                class="absolute h-full bg-gradient-to-r from-purple-500 to-yellow-500"
-              ></div>
-              <div
-                id="marker-rel-sec"
-                class="absolute w-4 h-8 bg-white border-2 border-black rounded-sm"
-              ></div>
-            </div>
-          </div>
-
-          <div class="results-scale">
-            <h3 class="text-lg font-semibold mb-2">
-              اقتصادي اشتراكي مقابل اقتصادي ليبرالي
-            </h3>
-            <div
-              class="flex justify-between items-center text-sm text-gray-600 mb-1"
-            >
-              <span>رأسمالية</span>
-              <div class="text-center">
-                <span id="rating-soc-cap" class="font-semibold text-sm block"
-                  >محايد</span
-                >
-                <span id="percentage-soc-cap" class="font-bold block">50%</span>
-              </div>
-              <span>اشتراكية</span>
-            </div>
-            <div
-              class="relative w-full h-8 bg-gray-200 rounded-lg overflow-hidden"
-            >
-              <div
-                id="scale-soc-cap"
-                class="absolute h-full bg-gradient-to-r from-red-500 to-blue-500"
-              ></div>
-              <div
-                id="marker-soc-cap"
-                class="absolute w-4 h-8 bg-white border-2 border-black rounded-sm"
-              ></div>
-            </div>
-          </div>
-
-          <div class="results-scale">
-            <h3 class="text-lg font-semibold mb-2">وطنيّ مقابل عالمي</h3>
-            <div
-              class="flex justify-between items-center text-sm text-gray-600 mb-1"
-            >
-              <span>عالمية</span>
-              <div class="text-center">
-                <span id="rating-nat-glob" class="font-semibold text-sm block"
-                  >محايد</span
-                >
-                <span id="percentage-nat-glob" class="font-bold block"
-                  >50%</span
-                >
-              </div>
-              <span>وطنيّة</span>
-            </div>
-            <div
-              class="relative w-full h-8 bg-gray-200 rounded-lg overflow-hidden"
-            >
-              <div
-                id="scale-nat-glob"
-                class="absolute h-full bg-gradient-to-r from-green-500 to-blue-500"
-              ></div>
-              <div
-                id="marker-nat-glob"
-                class="absolute w-4 h-8 bg-white border-2 border-black rounded-sm"
-              ></div>
-            </div>
-          </div>
-
-          <div class="results-scale">
-            <h3 class="text-lg font-semibold mb-2">
-              عسكري توسّعي مقابل سلمي انعزالي
-            </h3>
-            <div
-              class="flex justify-between items-center text-sm text-gray-600 mb-1"
-            >
-              <span>سلميّ انعزالي</span>
-              <div class="text-center">
-                <span id="rating-mil-pac" class="font-semibold text-sm block"
-                  >محايد</span
-                >
-                <span id="percentage-mil-pac" class="font-bold block">50%</span>
-              </div>
-              <span>عسكري توسّعي</span>
-            </div>
-            <div
-              class="relative w-full h-8 bg-gray-200 rounded-lg overflow-hidden"
-            >
-              <div
-                id="scale-mil-pac"
-                class="absolute h-full bg-gradient-to-r from-yellow-600 to-blue-400"
-              ></div>
-              <div
-                id="marker-mil-pac"
-                class="absolute w-4 h-8 bg-white border-2 border-black rounded-sm"
-              ></div>
-            </div>
-          </div>
-
-          <div class="results-scale">
-            <h3 class="text-lg font-semibold mb-2">
-              عدالة انتقالية انتقامية مقابل تصالحية
-            </h3>
-            <div
-              class="flex justify-between items-center text-sm text-gray-600 mb-1"
-            >
-              <span>عدالة تصالحية</span>
-              <div class="text-center">
-                <span id="rating-ret-rec" class="font-semibold text-sm block"
-                  >محايد</span
-                >
-                <span id="percentage-ret-rec" class="font-bold block">50%</span>
-              </div>
-              <span>عدالة انتقامية</span>
-            </div>
-            <div
-              class="relative w-full h-8 bg-gray-200 rounded-lg overflow-hidden"
-            >
-              <div
-                id="scale-ret-rec"
-                class="absolute h-full bg-gradient-to-r from-pink-500 to-indigo-500"
-              ></div>
-              <div
-                id="marker-ret-rec"
-                class="absolute w-4 h-8 bg-white border-2 border-black rounded-sm"
-              ></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-8 text-center">
-          <button
-            id="restart-btn"
-            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300"
-          >
-            إعادة الاختبار
-          </button>
-          <button
-            id="share-btn"
-            class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ml-4"
-          >
-            مشاركة النتائج
-          </button>
-        </div>
+      <div class="mb-4">
+        <ul id="previous-results-list" class="list-disc list-inside space-y-1"></ul>
       </div>
     </div>
 
-    <footer class="bg-white py-6 mt-8">
-      <div class="container mx-auto px-4 text-center text-gray-600">
-        <p>&copy; 2025 بوصلة سوريا | Syria Compass</p>
-
-        <p class="mt-2 text-sm">
-          تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span>
-        </p>
-        <div class="mt-2 flex justify-center space-x-4 space-x-reverse">
-          <a
-            href="http://hadealahmad.com/"
-            target="_blank"
-            rel="noopener"
-            class="text-gray-600 hover:text-blue-600 transition flex items-center"
-          >
-            <i class="fas fa-globe ml-1"></i>
-            الموقع الشخصي
-          </a>
-          <a
-            href="https://x.com/hadealahmad"
-            target="_blank"
-            rel="noopener"
-            class="text-gray-600 hover:text-blue-600 transition flex items-center"
-          >
-            <i class="fab fa-x-twitter ml-1"></i>
-            حساب X
-          </a>
-        </div>
+    <div id="intro" class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8 mb-8">
+      <h2 class="text-2xl font-bold mb-4">مرحباً بك في بوصلة سوريا</h2>
+      <p class="mb-4">
+        هذا الاختبار يقيس آراءك السياسية على ستة محاور مختلفة تتعلق بمستقبل
+        سوريا.
+      </p>
+      <p class="mb-4">
+        ستُعرض عليك مجموعة من العبارات، وعليك تحديد مدى موافقتك عليها.
+      </p>
+      <div class="mb-4">
+        <h3 class="text-xl font-semibold mb-2">المحاور:</h3>
+        <ul class="list-disc list-inside space-y-1">
+          <li>سلطويّة مقابل تحررية</li>
+          <li>ديني مقابل علماني</li>
+          <li>اقتصادي اشتراكي مقابل اقتصادي ليبرالي</li>
+          <li>قومي مقابل عالمي</li>
+          <li>عسكري توسّعي مقابل سلمي انعزالي</li>
+          <li>عدالة انتقالية انتقامية مقابل تصالحية</li>
+        </ul>
       </div>
-    </footer>
+      <button id="start-btn"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 w-full">
+        ابدأ الاختبار
+      </button>
+    </div>
 
-    <!-- Modal for showing category questions -->
-    <div
-      id="questions-modal"
-      class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden"
-    >
-      <div
-        class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[80vh] overflow-hidden p-6"
-      >
-        <div class="flex justify-between items-center mb-4">
-          <h3 id="modal-title" class="text-xl font-bold"></h3>
-          <button
-            id="close-modal"
-            class="text-gray-500 hover:text-gray-700 focus:outline-none"
-          >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              ></path>
-            </svg>
+    <div id="question-container" class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8 mb-8 hidden">
+      <div class="mb-4">
+        <div class="flex justify-between items-center mb-2">
+          <span id="question-number" class="text-gray-600">السؤال 1 من 30</span>
+          <span id="category" class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">سلطويّة مقابل
+            ليبرالية</span>
+        </div>
+        <h2 id="question-text" class="text-xl font-bold"></h2>
+      </div>
+      <div class="my-8">
+        <div class="flex justify-between text-sm text-gray-600 mb-2">
+          <span>أعارض بشدة</span>
+          <span>محايد</span>
+          <span>أوافق بشدة</span>
+        </div>
+        <div class="flex gap-4">
+          <button data-value="-2"
+            class="answer-btn flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-100">
+            -2
+          </button>
+          <button data-value="-1"
+            class="answer-btn flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-100">
+            -1
+          </button>
+          <button data-value="0"
+            class="answer-btn flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-100">
+            0
+          </button>
+          <button data-value="1"
+            class="answer-btn flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-100">
+            +1
+          </button>
+          <button data-value="2"
+            class="answer-btn flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-100">
+            +2
           </button>
         </div>
-        <div
-          id="modal-content"
-          class="mt-4 modal-content-height overflow-y-auto pr-2"
-        >
-          <!-- Content will be dynamically inserted here -->
-        </div>
+      </div>
+      <div class="flex justify-between">
+        <button id="prev-btn"
+          class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+          السابق
+        </button>
+        <button id="next-btn"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+          التالي
+        </button>
+      </div>
+      <div class="mt-4 w-full bg-gray-200 rounded-full h-2.5">
+        <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
       </div>
     </div>
 
-    <script src="questions.js"></script>
-    <script src="app.js"></script>
-  </body>
+    <div id="results-container" class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8 hidden">
+      <h2 class="text-2xl font-bold mb-6 text-center">نتائج بوصلة سوريا</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="results-scale">
+          <h3 class="text-lg font-semibold mb-2">سلطويّة مقابل تحررية</h3>
+          <div class="flex justify-between items-center text-sm text-gray-600 mb-1">
+            <span>تحررية</span>
+            <div class="text-center">
+              <span id="rating-auth-lib" class="font-semibold text-sm block">محايد</span>
+              <span id="percentage-auth-lib" class="font-bold block">50%</span>
+            </div>
+            <span>سلطويّة</span>
+          </div>
+          <div class="relative w-full h-8 bg-gray-200 rounded-lg overflow-hidden">
+            <div id="scale-auth-lib" class="absolute h-full bg-gradient-to-r from-red-500 to-green-500"></div>
+            <div id="marker-auth-lib" class="absolute w-4 h-8 bg-white border-2 border-black rounded-sm"></div>
+          </div>
+        </div>
+
+        <div class="results-scale">
+          <h3 class="text-lg font-semibold mb-2">ديني مقابل علماني</h3>
+          <div class="flex justify-between items-center text-sm text-gray-600 mb-1">
+            <span>علمانية</span>
+            <div class="text-center">
+              <span id="rating-rel-sec" class="font-semibold text-sm block">محايد</span>
+              <span id="percentage-rel-sec" class="font-bold block">50%</span>
+            </div>
+            <span>دينية</span>
+          </div>
+          <div class="relative w-full h-8 bg-gray-200 rounded-lg overflow-hidden">
+            <div id="scale-rel-sec" class="absolute h-full bg-gradient-to-r from-purple-500 to-yellow-500"></div>
+            <div id="marker-rel-sec" class="absolute w-4 h-8 bg-white border-2 border-black rounded-sm"></div>
+          </div>
+        </div>
+
+        <div class="results-scale">
+          <h3 class="text-lg font-semibold mb-2">
+            اقتصادي اشتراكي مقابل اقتصادي ليبرالي
+          </h3>
+          <div class="flex justify-between items-center text-sm text-gray-600 mb-1">
+            <span>رأسمالية</span>
+            <div class="text-center">
+              <span id="rating-soc-cap" class="font-semibold text-sm block">محايد</span>
+              <span id="percentage-soc-cap" class="font-bold block">50%</span>
+            </div>
+            <span>اشتراكية</span>
+          </div>
+          <div class="relative w-full h-8 bg-gray-200 rounded-lg overflow-hidden">
+            <div id="scale-soc-cap" class="absolute h-full bg-gradient-to-r from-red-500 to-blue-500"></div>
+            <div id="marker-soc-cap" class="absolute w-4 h-8 bg-white border-2 border-black rounded-sm"></div>
+          </div>
+        </div>
+
+        <div class="results-scale">
+          <h3 class="text-lg font-semibold mb-2">وطنيّ مقابل عالمي</h3>
+          <div class="flex justify-between items-center text-sm text-gray-600 mb-1">
+            <span>عالمية</span>
+            <div class="text-center">
+              <span id="rating-nat-glob" class="font-semibold text-sm block">محايد</span>
+              <span id="percentage-nat-glob" class="font-bold block">50%</span>
+            </div>
+            <span>وطنيّة</span>
+          </div>
+          <div class="relative w-full h-8 bg-gray-200 rounded-lg overflow-hidden">
+            <div id="scale-nat-glob" class="absolute h-full bg-gradient-to-r from-green-500 to-blue-500"></div>
+            <div id="marker-nat-glob" class="absolute w-4 h-8 bg-white border-2 border-black rounded-sm"></div>
+          </div>
+        </div>
+
+        <div class="results-scale">
+          <h3 class="text-lg font-semibold mb-2">
+            عسكري توسّعي مقابل سلمي انعزالي
+          </h3>
+          <div class="flex justify-between items-center text-sm text-gray-600 mb-1">
+            <span>سلميّ انعزالي</span>
+            <div class="text-center">
+              <span id="rating-mil-pac" class="font-semibold text-sm block">محايد</span>
+              <span id="percentage-mil-pac" class="font-bold block">50%</span>
+            </div>
+            <span>عسكري توسّعي</span>
+          </div>
+          <div class="relative w-full h-8 bg-gray-200 rounded-lg overflow-hidden">
+            <div id="scale-mil-pac" class="absolute h-full bg-gradient-to-r from-yellow-600 to-blue-400"></div>
+            <div id="marker-mil-pac" class="absolute w-4 h-8 bg-white border-2 border-black rounded-sm"></div>
+          </div>
+        </div>
+
+        <div class="results-scale">
+          <h3 class="text-lg font-semibold mb-2">
+            عدالة انتقالية انتقامية مقابل تصالحية
+          </h3>
+          <div class="flex justify-between items-center text-sm text-gray-600 mb-1">
+            <span>عدالة تصالحية</span>
+            <div class="text-center">
+              <span id="rating-ret-rec" class="font-semibold text-sm block">محايد</span>
+              <span id="percentage-ret-rec" class="font-bold block">50%</span>
+            </div>
+            <span>عدالة انتقامية</span>
+          </div>
+          <div class="relative w-full h-8 bg-gray-200 rounded-lg overflow-hidden">
+            <div id="scale-ret-rec" class="absolute h-full bg-gradient-to-r from-pink-500 to-indigo-500"></div>
+            <div id="marker-ret-rec" class="absolute w-4 h-8 bg-white border-2 border-black rounded-sm"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 text-center">
+        <button id="restart-btn"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+          إعادة الاختبار
+        </button>
+        <button id="share-btn"
+          class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ml-4">
+          مشاركة النتائج
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-white py-6 mt-8">
+    <div class="container mx-auto px-4 text-center text-gray-600">
+      <p>&copy; 2025 بوصلة سوريا | Syria Compass</p>
+
+      <p class="mt-2 text-sm">
+        تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span>
+      </p>
+      <div class="mt-2 flex justify-center space-x-4 space-x-reverse">
+        <a href="http://hadealahmad.com/" target="_blank" rel="noopener"
+          class="text-gray-600 hover:text-blue-600 transition flex items-center">
+          <i class="fas fa-globe ml-1"></i>
+          الموقع الشخصي
+        </a>
+        <a href="https://x.com/hadealahmad" target="_blank" rel="noopener"
+          class="text-gray-600 hover:text-blue-600 transition flex items-center">
+          <i class="fab fa-x-twitter ml-1"></i>
+          حساب X
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal for showing category questions -->
+  <div id="questions-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[80vh] overflow-hidden p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 id="modal-title" class="text-xl font-bold"></h3>
+        <button id="close-modal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div id="modal-content" class="mt-4 modal-content-height overflow-y-auto pr-2">
+        <!-- Content will be dynamically inserted here -->
+      </div>
+    </div>
+  </div>
+
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+
 </html>

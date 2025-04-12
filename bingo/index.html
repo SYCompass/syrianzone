@@ -1,40 +1,43 @@
 <!-- index.html -->
 <!DOCTYPE html>
-<html lang="ar" >
+<html lang="ar" dir="rtl">
+
 <head>
   <!-- Import Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-	<style>
-/* styles.css */
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap');
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-  font-family: "IBM Plex Sans Arabic", sans-serif!important;
-}
-#bingo-card {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 5px;
-  max-width: 300px;
-}
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script src="/components/navbar.js"></script>
+  <style>
+    /* styles.css */
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap');
 
-.cell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 60px;
-  border: 1px solid #000;
-  font-size: 14px;
-  cursor: pointer;
-}
+    body {
+      font-family: "IBM Plex Sans Arabic", sans-serif !important;
+    }
 
-.marked {
-  background-color: #66ff66;
-}
-	</style>
+    #bingo-card {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+      max-width: 300px;
+    }
+
+    .cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60px;
+      border: 1px solid #000;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .marked {
+      background-color: #66ff66;
+    }
+  </style>
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,120 +45,119 @@ body {
   <!-- Include Tailwind CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 flex flex-col justify-center items-center p-4" style="direction:rtl">
+
+<body class="bg-gray-100">
+  <!-- Navbar Web Component -->
+  <nav-bar></nav-bar>
+
   <header class="text-center mb-10">
     <h1 class="text-4xl font-bold text-gray-800 mb-2">بينغو موسى العمر</h1>
     <p class="text-xl text-gray-600">مرحباً بك في بينغو موسى العمر!</p>
   </header>
 
-<script>
-  // Array of MP3 files
-  const mp3Files = [
-    "abo3amsha.mp3",
-    "bayyed.mp3",
-    "3yne.mp3"
-  ];
-document.addEventListener('DOMContentLoaded', function() {
-  const randomFile = mp3Files[Math.floor(Math.random() * mp3Files.length)];
-  document.getElementById('winSound').src = randomFile;
-});
-</script>
-<audio id="winSound" src=""></audio>
-<div>
-<div class=" flex flex-col md:flex-row items-center justify-center" >
-  <div class="max-w-md p-6 bg-white rounded-md shadow-md mb-4 md:mr-4 md:mb-0 mb-2">
-    <!-- Insert image as a banner -->
-    <img class="object-cover w-full h-40 mb-2" src="moussa.jpeg" alt="بينغو موسى العمر،">
-    <h1 class="text-2xl font-bold text-gray-800">مرحبًا بك في بينغو موسى العمر، إليك طريقة اللعب</h1>
-    <p class="text-lg leading-relaxed text-gray-600 mb-4">عندما ينشر موسى العمر صورة جديدة، حدث هذه الصفحة، ثم اضغط على المربعات التي تطابق الظاهر في الصورة.</p>
-    <p class="text-lg leading-relaxed text-gray-600 mb-4">عندما تحصل على سطر أو عمود أو ضلع أفقيّ كاملٍ من خمس مربعات متواصلة، تفوز في اللعبة، عليك حينها تصوير الشاشة والرد على صورة موسى العمر بالنتيجة</p>
-    <p class="text-lg leading-relaxed text-gray-600 mb-4">بالتوفيق!</p>
-    <label for="itemsInput" class="block text-sm font-medium text-gray-600 hidden">Enter 24 items separated by a new line:</label>
-    <textarea id="itemsInput" rows="4" class="mt-1 p-2 block w-full border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300 hidden"></textarea> 
-    <button onclick="generateBingoCard()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 hidden">Generate Bingo Card</button>
-    <button onclick="reshuffleItems()" class="mt-2 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring focus:border-gray-300">إعادة ترتيب العناصر</button>
-    <button onclick="saveList()" class="mt-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:border-green-300 hidden">Save List</button>
-    <button id="muteButton" class="mt-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300">إغلاق صوت الفوز</button>
-    <script>
-      document.getElementById('muteButton').addEventListener('click', function() {
-        const winSound = document.getElementById('winSound');
-        winSound.src = '';
-        const muteButton = document.getElementById('muteButton');
-        if (document.getElementById('muteButton').classList.contains('bg-red-500')) {
-          muteButton.classList.replace('bg-red-500', 'bg-green-500');
-        muteButton.innerHTML = 'تفعيل الصوت';
-        } else {
-          muteButton.classList.replace('bg-green-500', 'bg-red-500');
-          muteButton.innerHTML = 'إغلاق صوت الفوز';
-        }
-      });
-    </script>
-    <div id="savedListLink" class="mt-2 p-2 bg-gray-100 rounded-md hidden">
-      <!-- The saved list link will be displayed here -->
-    </div>
-  </div>
+  <script>
+    // Array of MP3 files
+    const mp3Files = [
+      "abo3amsha.mp3",
+      "bayyed.mp3",
+      "3yne.mp3"
+    ];
+    document.addEventListener('DOMContentLoaded', function () {
+      const randomFile = mp3Files[Math.floor(Math.random() * mp3Files.length)];
+      document.getElementById('winSound').src = randomFile;
+    });
+  </script>
+  <audio id="winSound" src=""></audio>
+  <div>
+    <div class=" flex flex-col md:flex-row items-center justify-center">
+      <div class="max-w-md p-6 bg-white rounded-md shadow-md mb-4 md:mr-4 md:mb-0 mb-2">
+        <!-- Insert image as a banner -->
+        <img class="object-cover w-full h-40 mb-2" src="moussa.jpeg" alt="بينغو موسى العمر،">
+        <h1 class="text-2xl font-bold text-gray-800">مرحبًا بك في بينغو موسى العمر، إليك طريقة اللعب</h1>
+        <p class="text-lg leading-relaxed text-gray-600 mb-4">عندما ينشر موسى العمر صورة جديدة، حدث هذه الصفحة، ثم اضغط
+          على المربعات التي تطابق الظاهر في الصورة.</p>
+        <p class="text-lg leading-relaxed text-gray-600 mb-4">عندما تحصل على سطر أو عمود أو ضلع أفقيّ كاملٍ من خمس
+          مربعات متواصلة، تفوز في اللعبة، عليك حينها تصوير الشاشة والرد على صورة موسى العمر بالنتيجة</p>
+        <p class="text-lg leading-relaxed text-gray-600 mb-4">بالتوفيق!</p>
+        <label for="itemsInput" class="block text-sm font-medium text-gray-600 hidden">Enter 24 items separated by a new
+          line:</label>
+        <textarea id="itemsInput" rows="4"
+          class="mt-1 p-2 block w-full border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300 hidden"></textarea>
+        <button onclick="generateBingoCard()"
+          class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 hidden">Generate
+          Bingo Card</button>
+        <button onclick="reshuffleItems()"
+          class="mt-2 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring focus:border-gray-300">إعادة
+          ترتيب العناصر</button>
+        <button onclick="saveList()"
+          class="mt-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:border-green-300 hidden">Save
+          List</button>
+        <button id="muteButton"
+          class="mt-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300">إغلاق
+          صوت الفوز</button>
+        <script>
+          document.getElementById('muteButton').addEventListener('click', function () {
+            const winSound = document.getElementById('winSound');
+            winSound.src = '';
+            const muteButton = document.getElementById('muteButton');
+            if (document.getElementById('muteButton').classList.contains('bg-red-500')) {
+              muteButton.classList.replace('bg-red-500', 'bg-green-500');
+              muteButton.innerHTML = 'تفعيل الصوت';
+            } else {
+              muteButton.classList.replace('bg-green-500', 'bg-red-500');
+              muteButton.innerHTML = 'إغلاق صوت الفوز';
+            }
+          });
+        </script>
+        <div id="savedListLink" class="mt-2 p-2 bg-gray-100 rounded-md hidden">
+          <!-- The saved list link will be displayed here -->
+        </div>
+      </div>
 
-  <div class="max-w-md p-6 bg-white rounded-md shadow-md mb-4 md:mr-4 md:mb-0 grid grid-cols-5 gap-2 max-w-md mb-2">
-    <!-- Bingo grid will be dynamically generated here -->
-  </div>
-</div>
-</div>
-<script src="script.js"></script>
-<div >
-<footer class="bg-white py-6 mt-8 " style="width: 100vw;">
-  <div class="container mx-auto px-4 text-center text-gray-600">
-    <p>&copy; 2025 بينغو موسى العمر | Moussa Alomar Bingo</p>
-    <p class="mt-2 text-sm">
-      لا تنس متابعة <span class="font-semibold">موسى العمر</span> على السوشال ميديا
-    </p>
-    <div class="mt-2 flex justify-center space-x-4 space-x-reverse">
-      <a
-        href="https://www.facebook.com/mousaomar0"
-        target="_blank"
-        rel="noopener"
-        class="text-gray-600 hover:text-blue-600 transition flex items-center"
-      >
-      <i class="fa-brands fa-facebook-f ml-1"></i>
-        فيسبوك
-      </a>
-      <a
-        href="https://x.com/MousaAlomar"
-        target="_blank"
-        rel="noopener"
-        class="text-gray-600 hover:text-blue-600 transition flex items-center"
-      >
-        <i class="fab fa-x-twitter ml-1"></i>
-        حساب X
-      </a>
+      <div class="max-w-md p-6 bg-white rounded-md shadow-md mb-4 md:mr-4 md:mb-0 grid grid-cols-5 gap-2 max-w-md mb-2">
+        <!-- Bingo grid will be dynamically generated here -->
+      </div>
     </div>
+  </div>
+  <script src="script.js"></script>
+  <div>
+    <footer class="bg-white py-6 mt-8 " style="width: 100vw;">
+      <div class="container mx-auto px-4 text-center text-gray-600">
+        <p>&copy; 2025 بينغو موسى العمر | Moussa Alomar Bingo</p>
+        <p class="mt-2 text-sm">
+          لا تنس متابعة <span class="font-semibold">موسى العمر</span> على السوشال ميديا
+        </p>
+        <div class="mt-2 flex justify-center space-x-4 space-x-reverse">
+          <a href="https://www.facebook.com/mousaomar0" target="_blank" rel="noopener"
+            class="text-gray-600 hover:text-blue-600 transition flex items-center">
+            <i class="fa-brands fa-facebook-f ml-1"></i>
+            فيسبوك
+          </a>
+          <a href="https://x.com/MousaAlomar" target="_blank" rel="noopener"
+            class="text-gray-600 hover:text-blue-600 transition flex items-center">
+            <i class="fab fa-x-twitter ml-1"></i>
+            حساب X
+          </a>
+        </div>
 
-    <p class="mt-2 text-sm">
-      تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span>
-    </p>
-    <div class="mt-2 flex justify-center space-x-4 space-x-reverse">
-      <a
-        href="http://hadealahmad.com/"
-        target="_blank"
-        rel="noopener"
-        class="text-gray-600 hover:text-blue-600 transition flex items-center"
-      >
-        <i class="fas fa-globe ml-1"></i>
-        الموقع الشخصي
-      </a>
-      <a
-        href="https://x.com/hadealahmad"
-        target="_blank"
-        rel="noopener"
-        class="text-gray-600 hover:text-blue-600 transition flex items-center"
-      >
-        <i class="fab fa-x-twitter ml-1"></i>
-        حساب X
-      </a>
-    </div>
+        <p class="mt-2 text-sm">
+          تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span>
+        </p>
+        <div class="mt-2 flex justify-center space-x-4 space-x-reverse">
+          <a href="http://hadealahmad.com/" target="_blank" rel="noopener"
+            class="text-gray-600 hover:text-blue-600 transition flex items-center">
+            <i class="fas fa-globe ml-1"></i>
+            الموقع الشخصي
+          </a>
+          <a href="https://x.com/hadealahmad" target="_blank" rel="noopener"
+            class="text-gray-600 hover:text-blue-600 transition flex items-center">
+            <i class="fab fa-x-twitter ml-1"></i>
+            حساب X
+          </a>
+        </div>
+      </div>
+    </footer>
   </div>
-</footer>
-</div>
 </body>
 
 </html>
-
