@@ -179,8 +179,8 @@ cloneContainer.querySelectorAll('.item').forEach(item => {
   
     const p = item.querySelector('p');
     if (p) {
-      p.style.fontSize = '1.6rem'; // Tailwind's text-xs
-      p.style.lineHeight = '2';
+      p.style.fontSize = '0.75rem'; // Tailwind's text-xs
+      p.style.lineHeight = '1.2';
       p.style.margin = '0';
       p.style.textAlign = 'center';
       p.style.overflow = 'visible';
