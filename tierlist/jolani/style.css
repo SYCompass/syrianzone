@@ -1,0 +1,236 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap');
+
+body {
+    font-family: "IBM Plex Sans Arabic", sans-serif !important;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    margin: 0;
+    /* Add margin 0 to prevent potential scroll bars */
+    direction: rtl;
+}
+
+h1,
+h2,
+span,
+p {
+    text-align: center;
+    color: #333;
+}
+
+.tier-list-app {
+    max-width: 1000px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.item-bank-container {
+    margin-bottom: 30px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #eee;
+}
+
+.tier-row {
+    display: flex;
+    /* align-items: stretch; Let dropzone height grow naturally */
+    align-items: flex-start;
+    /* Align label to the top */
+    margin-bottom: 5px;
+    /* min-height removed, will be determined by content */
+}
+
+.tier-label {
+    width: 80px;
+    min-height: 165px;
+    /* Give label a min-height to match items roughly */
+    padding: 10px 0;
+    /* Add some padding */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    color: white;
+    border-radius: 0px 5px 5px 0px;
+    flex-shrink: 0;
+    /* Prevent label from shrinking */
+}
+
+/* Tier specific colors */
+.s-tier {
+    background-color: #2d4d3c;
+}
+
+.a-tier {
+    background-color: #807fff;
+}
+
+.b-tier {
+    background-color: #7fbfff;
+}
+
+.c-tier {
+    background-color: #ffbf7f;
+}
+
+.d-tier {
+    background-color: #ff7f7e;
+}
+
+.f-tier {
+    background-color: #3b3b3b;
+}
+
+
+.tier.dropzone {
+    flex-grow: 1;
+    /* Take remaining width */
+    border: 2px dashed #ccc;
+    background-color: #f9f9f9;
+    /* Let height be determined by content, but set a minimum */
+    min-height: 165px;
+    /* Minimum height for dropzone (roughly one item row + padding) */
+    padding: 10px;
+    display: flex;
+    /* Use flexbox to arrange items */
+    flex-wrap: wrap;
+    /* Allow items to wrap to next line */
+    align-content: flex-start;
+    /* Align wrapped lines to the start vertically */
+    border-radius: 0 5px 5px 0;
+}
+
+#item-bank.dropzone {
+    border-radius: 5px;
+    /* Full border radius for item bank */
+    min-height: 120px;
+    background-color: #e0e0e0;
+    /* Ensure item bank also wraps correctly */
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    padding: 10px;
+}
+
+
+.item {
+    /* Use a fixed width or a more robust percentage */
+    width: 100px;
+    /* Example fixed width */
+    /* width: calc(20% - 10px); /* Example percentage (adjust as needed) */
+
+    /* Set a fixed height for items */
+    height: 160px;
+
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 5px;
+    /* Consistent margin for spacing */
+    padding: 5px;
+    cursor: grab;
+    text-align: center;
+    transition: opacity 0.2s ease, transform 0.1s ease-out, box-shadow 0.1s ease-out, border-color 0.1s ease-out;
+    /* Combine transitions */
+    display: flex;
+    flex-direction: column;
+    justify-content: normal;
+    /* Pushes text towards bottom */
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    /* Prevent text overflow issues */
+    flex-shrink: 0;
+    /* Prevent items from shrinking */
+}
+
+.item img {
+    max-width: 100%;
+    /* Set a max-height for the image within the item */
+    max-height: 100%;
+    display: block;
+    margin-bottom: 5px;
+    object-fit: contain;
+    /* Scale image while preserving aspect ratio */
+    user-select: none;
+    /* Prevent image selection during drag */
+    -webkit-user-drag: none;
+    /* Prevent browser default image drag */
+}
+
+.item p {
+    font-size: 0.9em;
+    /* Slightly adjust font size if needed */
+    margin: 0;
+    word-wrap: break-word;
+    /* Wrap long text */
+    line-height: 1.2;
+    /* Adjust line height */
+    overflow: hidden;
+    /* Hide overflow text */
+    text-overflow: ellipsis;
+    /* Add ellipsis for overflow */
+}
+
+/* Style for the item being dragged */
+.item.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+    border: 2px dashed #555;
+}
+
+/* Style for the dropzone being hovered over */
+.dropzone.drag-over {
+    background-color: #e8f0fe;
+    /* Light blue highlight */
+    border-color: #4285f4;
+    /* Google blue border */
+}
+
+#save-button {
+    font-family: "IBM Plex Sans Arabic", sans-serif !important;
+
+    display: block;
+    margin: 30px auto 10px auto;
+    /* Center the button */
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #4285f4;
+    /* Green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#save-button:hover {
+    background-color: #7fbfff;
+}
+
+/* Style for the item selected via click/tap on mobile */
+.item.item-selected {
+    border: 2px solid #4285f4;
+    /* Google blue border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+    /* Slightly larger */
+}
+
+/* Optional: Add slight pointer cursor for dropzones on mobile if desired */
+@media (pointer: coarse) {
+
+    /* Targets touch devices */
+    .dropzone {
+        /* cursor: pointer; /* You might not need this if taps work well */
+    }
+}
+
+.justify-center {
+    display: flex;
+    justify-content: center;
+}

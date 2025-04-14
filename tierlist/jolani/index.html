@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تقييم الوزراء</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="../components/navbar.js"></script>
+  <script>
+    !function (t, e) { var o, n, p, r; e.__SV || (window.posthog = e, e._i = [], e.init = function (i, s, a) { function g(t, e) { var o = e.split("."); 2 == o.length && (t = t[o[0]], e = o[1]), t[e] = function () { t.push([e].concat(Array.prototype.slice.call(arguments, 0))) } } (p = t.createElement("script")).type = "text/javascript", p.crossOrigin = "anonymous", p.async = !0, p.src = s.api_host.replace(".i.posthog.com", "-assets.i.posthog.com") + "/static/array.js", (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(p, r); var u = e; for (void 0 !== a ? u = e[a] = [] : a = "posthog", u.people = u.people || [], u.toString = function (t) { var e = "posthog"; return "posthog" !== a && (e += "." + a), t || (e += " (stub)"), e }, u.people.toString = function () { return u.toString(1) + ".people (stub)" }, o = "init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId captureTraceFeedback captureTraceMetric".split(" "), n = 0; n < o.length; n++)g(u, o[n]); e._i.push([i, s, a]) }, e.__SV = 1) }(document, window.posthog || []);
+    posthog.init('phc_s3Ok4ZCZEF1Fgh5svZfhxKoFghHU2neSzdhjKKMG5I0', {
+      api_host: 'https://eu.i.posthog.com',
+      person_profiles: 'identified_only', // or 'always' to create profiles for anonymous users as well
+    })
+  </script>
+
+  <style>
+    body {
+      font-family: "IBM Plex Sans Arabic", sans-serif !important;
+      direction: rtl;
+    }
+  </style>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap"
+    rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+  <!-- Navbar Web Component -->
+  <nav-bar></nav-bar>
+
+
+  <h1 class="text-2xl font-bold text-gray-800 text-center">تير ليست الجولاني</h1>
+  <p class="text-lg leading-relaxed text-gray-600 mb-4 text-center">يمكن حفظ صورة جاهزة لمشاركتها على السوشال ميديا
+    بسهولة من خلال الرز الموجود في آخر الصفحة</p>
+
+  <div class="max-w-screen-lg mx-auto bg-white p-5 rounded-lg shadow tier-list-app">
+    <p class="text-lg leading-relaxed text-gray-600 mb-4 text-center">في نسخة الكمبيوتر: يمكنك سحب وافلات اسم الجولاني في
+      القائمة</p>
+    <p class="text-lg leading-relaxed text-gray-600 mb-4 text-center">في نسخة الموبايل: يمكنك النقر على اسم الجولاني ثم
+      النقر على المكان في القائمة لنقله</p>
+
+    <div class="mb-6 border border-gray-300 rounded bg-gray-200 p-2">
+      <h2 class="text-xl font-bold text-gray-800 text-center">قائمة الجولاني</h2>
+      <div id="item-bank" class="flex flex-wrap gap-2 p-2 bg-gray-300 rounded dropzone">
+        <div class="item" draggable="true" data-id="item1">
+          <img src="images/item1.webp" alt="جولانسكي">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">جولانسكي</p>
+        </div>
+        <div class="item" draggable="true" data-id="item2">
+          <img src="images/item2.webp" alt="جوكاسترو">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">جوكاسترو</p>
+        </div>
+        <div class="item" draggable="true" data-id="item3">
+          <img src="images/item3.webp" alt="جولاكس">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">جولاكس</p>
+        </div>
+        <div class="item" draggable="true" data-id="item4">
+          <img src="images/item4.webp" alt="عصباني">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">عصباني</p>
+        </div>
+        <div class="item" draggable="true" data-id="item5">
+          <img src="images/item5.webp" alt="جوقاعدي">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">جوقاعدي</p>
+        </div>
+        <div class="item" draggable="true" data-id="item6">
+          <img src="images/item6.webp" alt="جورسمي">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">جورسمي</p>
+        </div>
+        <div class="item" draggable="true" data-id="item8">
+          <img src="images/item8.webp" alt="أبو محمد">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">أبو محمد</p>
+        </div>
+        <div class="item" draggable="true" data-id="item9">
+          <img src="images/item9.webp" alt="علماني">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">علماني</p>
+        </div>
+        <div class="item" draggable="true" data-id="item10">
+          <img src="images/item10.webp" alt="لبراني">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">لبراني</p>
+        </div>
+        <div class="item" draggable="true" data-id="item11">
+          <img src="images/item11.webp" alt="احمد الدستور">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">احمد الدستور</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tiers-container" style="max-width: 1024px; margin:auto;">
+    <!-- Repeatable tier-row blocks -->
+    <!-- Example row: -->
+    <div class="flex mb-1">
+      <div
+        class="w-20 min-h-[165px] bg-[#2d4d3c] text-white text-xl font-bold flex items-center justify-center rounded-r">
+        S</div>
+      <div id="tier-s"
+        class="flex flex-wrap min-h-[165px] flex-grow p-2 border-2 border-dashed border-gray-300 bg-gray-50 rounded-l dropzone">
+      </div>
+    </div>
+    <div class="flex mb-1">
+      <div
+        class="w-20 min-h-[165px] bg-[#807fff] text-white text-xl font-bold flex items-center justify-center rounded-r">
+        A</div>
+      <div id="tier-a"
+        class="flex flex-wrap min-h-[165px] flex-grow p-2 border-2 border-dashed border-gray-300 bg-gray-50 rounded-l dropzone">
+      </div>
+    </div>
+    <div class="flex mb-1">
+      <div
+        class="w-20 min-h-[165px] bg-[#7fbfff] text-white text-xl font-bold flex items-center justify-center rounded-r">
+        B</div>
+      <div id="tier-b"
+        class="flex flex-wrap min-h-[165px] flex-grow p-2 border-2 border-dashed border-gray-300 bg-gray-50 rounded-l dropzone">
+      </div>
+    </div>
+    <div class="flex mb-1">
+      <div
+        class="w-20 min-h-[165px] bg-[#ffbf7f] text-white text-xl font-bold flex items-center justify-center rounded-r">
+        C</div>
+      <div id="tier-d"
+        class="flex flex-wrap min-h-[165px] flex-grow p-2 border-2 border-dashed border-gray-300 bg-gray-50 rounded-l dropzone">
+      </div>
+    </div>
+    <div class="flex mb-1">
+      <div
+        class="w-20 min-h-[165px] bg-[#ff7f7e] text-white text-xl font-bold flex items-center justify-center rounded-r">
+        D</div>
+      <div id="tier-d"
+        class="flex flex-wrap min-h-[165px] flex-grow p-2 border-2 border-dashed border-gray-300 bg-gray-50 rounded-l dropzone">
+      </div>
+    </div>
+    <div class="flex mb-1">
+      <div
+        class="w-20 min-h-[165px] bg-[#3b3b3b] text-white text-xl font-bold flex items-center justify-center rounded-r">
+        F</div>
+      <div id="tier-f"
+        class="flex flex-wrap min-h-[165px] flex-grow p-2 border-2 border-dashed border-gray-300 bg-gray-50 rounded-l dropzone">
+      </div>
+    </div>
+    <!-- Continue with A, B, C, D, F rows (change label and color accordingly) -->
+  </div>
+
+  <button id="save-button"
+    class="block mx-auto my-8 px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-400 transition">حفظ قائمتك
+    كصورة</button>
+  </div>
+
+  <script src="script.js"></script>
+
+  <footer class="bg-white py-6 mt-8 w-full">
+    <div class="container mx-auto px-4 text-center text-gray-600">
+      <p>&copy; 2025 تير ليست الوزراء | Ministers Tier List</p>
+      <p class="mt-2 text-sm">
+        تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span>
+      </p>
+      <div class="mt-2 flex justify-center gap-4">
+        <a href="http://hadealahmad.com/" target="_blank" rel="noopener"
+          class="text-gray-600 hover:text-blue-600 transition flex items-center">
+          <i class="fas fa-globe ml-1"></i> الموقع الشخصي
+        </a>
+        <a href="https://x.com/hadealahmad" target="_blank" rel="noopener"
+          class="text-gray-600 hover:text-blue-600 transition flex items-center">
+          <i class="fab fa-x-twitter ml-1"></i> حساب X
+        </a>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
