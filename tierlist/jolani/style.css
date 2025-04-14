@@ -124,7 +124,7 @@ p {
     /* width: calc(20% - 10px); /* Example percentage (adjust as needed) */
 
     /* Set a fixed height for items */
-    height: 160px;
+    height: 14px;
 
     background-color: #fff;
     border: 1px solid #ddd;
@@ -163,12 +163,12 @@ p {
 }
 
 .item p {
-    font-size: 0.9em;
+    font-size: 2em;
     /* Slightly adjust font size if needed */
     margin: 0;
     word-wrap: break-word;
     /* Wrap long text */
-    line-height: 1.2;
+    line-height: 2;
     /* Adjust line height */
     overflow: hidden;
     /* Hide overflow text */
