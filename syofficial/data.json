@@ -432,7 +432,8 @@
         "description": "وزير الثقافة السوري",
         "image": "images/public_figures/pf-mohammad-saleh.webp",
         "socials": {
-          "twitter": "https://twitter.com/AL_SAALEH"
+          "twitter": "https://twitter.com/AL_SAALEH",
+          "instagram": "https://www.instagram.com/muhammadsaleeh_/?hl=en"
         }
       },
       {
@@ -574,6 +575,17 @@
         "image": "images/public_figures/pf-abdulrahman-aldabbagh.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1USkGfVmpn/"
+        }
+      },
+      {
+        "id": "pf-marwan-alhalabi",
+        "name": "Prof. Dr. Marwan Al-Halabi",
+        "name_ar": "الأستاذ الدكتور مروان الحلبي",
+        "description": "وزير التعليم العالي",
+        "image": "images/public_figures/pf-marwan-alhalabi.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/16F1eLAC8k/",
+          "instagram": "https://www.instagram.com/marwanalhalabi/"
         }
       }
     ],
@@ -799,6 +811,33 @@
         "image": "images/other/other-syrian-airlines.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/16TXDg4RNq/"
+        }
+      },
+      {
+        "id": "other-central-bank",
+        "name": "Central Bank of Syria",
+        "name_ar": "مصرف سورية المركزي",
+        "image": "images/other/placeholder.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/19V3CKAWNb/"
+        }
+      },
+      {
+        "id": "other-cham-wings",
+        "name": "Cham Wings Airlines",
+        "name_ar": "أجنحة الشام للطيران",
+        "image": "images/other/other-cham-wings.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1BVeSkE99G/"
+        }
+      },
+      {
+        "id": "other-football-association",
+        "name": "Syrian Football Association",
+        "name_ar": "الاتحاد السوري لكرة القدم",
+        "image": "images/other/other-football-association.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/198vwuWvQ8/"
         }
       }
     ]
