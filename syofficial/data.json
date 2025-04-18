@@ -599,6 +599,26 @@
           "facebook": "https://www.facebook.com/share/16F1eLAC8k/",
           "instagram": "https://www.instagram.com/marwanalhalabi/"
         }
+      },
+      {
+        "id": "pf-ali-alrefaee",
+        "name": "Ali Al-Refaee",
+        "name_ar": "علي الرفاعي",
+        "description": "مدير العلاقات العامة في وزارة الإعلام",
+        "image": "images/public_figures/pf-ali-alrefaee.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/19PncFKZFs/"
+        }
+      },
+      {
+        "id": "pf-mazen-alloush",
+        "name": "Mazen Alloush",
+        "name_ar": "مازن علوش",
+        "description": "مدير العلاقات العامة في الهيئة العامة للمنافذ البرية والبحرية",
+        "image": "images/public_figures/pf-mazen-alloush.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/16HoM5MC61/"
+        }
       }
     ],
     "syndicates": [
@@ -734,7 +754,7 @@
         "id": "uni-national-private",
         "name": "National Private University",
         "name_ar": "الجامعة الوطنية الخاصة",
-        "image": "images/universities/National Private University.jpg",
+        "image": "images/universities/uni-national-private.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1ANGfwVPkH/"
         }
