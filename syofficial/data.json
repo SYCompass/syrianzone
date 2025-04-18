@@ -566,6 +566,109 @@
         }
       }
     ],
+    "syndicates": [
+      {
+        "id": "synd-lawyers",
+        "name": "Syrian Bar Association",
+        "name_ar": "نقابة المحامين",
+        "image": "images/syndicates/synd-lawyers.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1PtEPs8Rnd/"
+        }
+      },
+      {
+        "id": "synd-dentists",
+        "name": "Syrian Dentists Syndicate",
+        "name_ar": "نقابة أطباء الأسنان",
+        "image": "images/syndicates/synd-dentists.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1AGUMLAfeD/"
+        }
+      },
+      {
+        "id": "synd-pharmacists",
+        "name": "Syrian Pharmacists Syndicate",
+        "name_ar": "نقابة صيادلة سوريا",
+        "image": "images/syndicates/synd-pharmacists.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/19M4n6EM3E/"
+        }
+      },
+      {
+        "id": "synd-doctors",
+        "name": "Syrian Doctors Syndicate",
+        "name_ar": "نقابة أطباء سوريا",
+        "image": "images/syndicates/synd-doctors.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/18LcBRxNfU/"
+        }
+      },
+      {
+        "id": "synd-engineers",
+        "name": "Syrian Engineers Syndicate",
+        "name_ar": "نقابة المهندسين",
+        "image": "images/syndicates/synd-engineers.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1ABpA9cctz/"
+        }
+      }
+    ],
+    "universities": [
+      {
+        "id": "uni-damascus",
+        "name": "Damascus University",
+        "name_ar": "جامعة دمشق",
+        "image": "images/universities/uni-damascus.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1FHR31osxR/"
+        }
+      },
+      {
+        "id": "uni-aleppo",
+        "name": "Aleppo University",
+        "name_ar": "جامعة حلب",
+        "image": "images/universities/uni-aleppo.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1Dki3sE5Yo/"
+        }
+      },
+      {
+        "id": "uni-idlib",
+        "name": "Idlib University",
+        "name_ar": "جامعة إدلب",
+        "image": "images/universities/uni-idlib.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1AUNjzQvhU/"
+        }
+      },
+      {
+        "id": "uni-homs",
+        "name": "Homs University",
+        "name_ar": "جامعة حمص",
+        "image": "images/universities/uni-homs.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/19bwcbZYEC/"
+        }
+      },
+      {
+        "id": "uni-hama",
+        "name": "Hama University",
+        "name_ar": "جامعة حماة",
+        "image": "images/universities/uni-hama.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1BXFqSPNrj/"
+        }
+      },
+      {
+        "id": "uni-lattakia",
+        "name": "Lattakia University",
+        "name_ar": "جامعة اللاذقية",
+        "image": "images/universities/uni-lattakia.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1HfqKTAiR7/"
+        }
+      }
+    ],
     "other": [
       {
         "id": "other-syrian-civil-defense",
@@ -676,6 +779,15 @@
         "image": "images/other/other-sana.jpg",
         "socials": {
           "telegram": "https://t.me/SyrianArabNewsAgency"
+        }
+      },
+      {
+        "id": "other-syrian-airlines",
+        "name": "Syrian Airlines",
+        "name_ar": "الخطوط الجوية السورية",
+        "image": "images/other/other-syrian-airlines.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/16TXDg4RNq/"
         }
       }
     ]
