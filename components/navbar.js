@@ -194,6 +194,10 @@ class NavBar extends HTMLElement {
               <i class="fas fa-compass" style="color: #7fbfff;"></i>
               البوصلة السياسية
             </a>
+            <a href="/syofficial" class="nav-item">
+              <i class="fas fa-check-circle" style="color: #7fbfff;"></i>
+              الحسابات الرسمية السورية
+            </a>
             <a target="_blank" href="https://github.com/SYCompass/Twitter-SVG-Syrian-Flag-Replacer/releases/tag/1.0.1" class="nav-item">
               <i class="fas fa-th" style="color: #ffbf7f;"></i>
               مبدل العلم
