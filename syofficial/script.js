@@ -56,24 +56,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         allItems.forEach(item => {
             const row = document.createElement('tr');
-            row.className = 'hover:bg-gray-50';
+            row.className = 'hover:bg-gray-50 flex flex-col sm:table-row border-b border-gray-200 sm:border-0';
             row.dataset.name = item.name.toLowerCase();
             row.dataset.name_ar = item.name_ar.toLowerCase();
             row.dataset.category = item.category;
 
             const nameCell = document.createElement('td');
-            nameCell.className = 'px-6 py-4 whitespace-nowrap';
+            nameCell.className = 'px-6 py-4 sm:whitespace-nowrap flex flex-col sm:table-cell';
             nameCell.innerHTML = `
+                <div class="text-xs text-gray-500 sm:hidden mb-1">الاسم</div>
                 <div class="text-sm font-medium text-gray-900">${item.name_ar}</div>
                 <div class="text-sm text-gray-500">${item.name}</div>
             `;
 
             const descCell = document.createElement('td');
-            descCell.className = 'px-6 py-4 whitespace-nowrap';
-            descCell.innerHTML = `<div class="text-sm text-gray-500">${item.description || ''}</div>`;
+            descCell.className = 'px-6 py-4 sm:whitespace-nowrap flex flex-col sm:table-cell';
+            descCell.innerHTML = `
+                <div class="text-xs text-gray-500 sm:hidden mb-1">الوصف</div>
+                <div class="text-sm text-gray-500">${item.description || ''}</div>
+            `;
 
             const linksCell = document.createElement('td');
-            linksCell.className = 'px-6 py-4 whitespace-nowrap';
+            linksCell.className = 'px-6 py-4 sm:whitespace-nowrap flex flex-col sm:table-cell';
             
             if (item.socials && Object.keys(item.socials).length > 0) {
                 const linksContainer = document.createElement('div');
@@ -93,9 +97,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     linksContainer.appendChild(linkElement);
                 });
                 
-                linksCell.appendChild(linksContainer);
+                linksCell.innerHTML = `
+                    <div class="text-xs text-gray-500 sm:hidden mb-1">روابط التواصل</div>
+                    <div class="flex flex-wrap gap-2">${linksContainer.innerHTML}</div>
+                `;
             } else {
-                linksCell.innerHTML = '<div class="text-sm text-gray-500">لا توجد روابط</div>';
+                linksCell.innerHTML = `
+                    <div class="text-xs text-gray-500 sm:hidden mb-1">روابط التواصل</div>
+                    <div class="text-sm text-gray-500">لا توجد روابط</div>
+                `;
             }
 
             row.appendChild(nameCell);
