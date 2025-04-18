@@ -544,6 +544,16 @@
         "socials": {
           "twitter": "https://twitter.com/mhdchukri"
         }
+      },
+      {
+        "id": "pf-hamzah-almustafa",
+        "name": "Hamzah Almustafa",
+        "name_ar": "حمزة المصطفى",
+        "description": "وزير الإعلام في الجمهورية العربية السورية",
+        "image": "images/public_figures/pf-hamzah-almustafa.webp",
+        "socials": {
+          "twitter": "https://twitter.com/HmzhMo"
+        }
       }
     ],
     "other": [
