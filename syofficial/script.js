@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const otherGrid = document.getElementById('other-grid');
     const syndicatesGrid = document.getElementById('syndicates-grid');
     const universitiesGrid = document.getElementById('universities-grid');
+    const embassiesGrid = document.getElementById('embassies-grid');
     const modal = document.getElementById('social-modal');
     const modalTitle = document.getElementById('modal-title');
     const modalBody = document.getElementById('modal-body');
@@ -16,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sections = document.querySelectorAll('.data-section');
     const noResultsDiv = document.getElementById('no-results');
 
-    let allData = { governorates: [], ministries: [], public_figures: [], other: [], syndicates: [], universities: [] }; // To store fetched data
+    let allData = { governorates: [], ministries: [], public_figures: [], other: [], syndicates: [], universities: [], embassies: [] }; // To store fetched data
 
     // --- Data Fetching ---
     fetch('data.json')
@@ -35,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             populateGrid(otherGrid, data.other, 'other');
             populateGrid(syndicatesGrid, data.syndicates, 'syndicates');
             populateGrid(universitiesGrid, data.universities, 'universities');
+            populateGrid(embassiesGrid, data.embassies, 'embassies');
             updateVisibility(); // Check if any sections should be hidden initially
         })
         .catch(error => {
@@ -45,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             otherGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات أخرى.</p>';
             syndicatesGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات النقابات.</p>';
             universitiesGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات الجامعات.</p>';
+            embassiesGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات السفارات.</p>';
         });
 
     // --- Grid Population ---

@@ -460,17 +460,6 @@
         }
       },
       {
-        "id": "pf-mousa-alomar",
-        "name": "Mousa Alomar",
-        "name_ar": "موسى العمر",
-        "description": "إعلاميّ سوري",
-        "image": "images/public_figures/pf-mousa-alomar.jpg",
-        "socials": {
-          "twitter": "https://twitter.com/MousaAlomar",
-          "facebook": "https://www.facebook.com/mousa.alomar0"
-        }
-      },
-      {
         "id": "pf-hind-kabawat",
         "name": "Hind Kabawat",
         "name_ar": "هند قبوات",
@@ -713,6 +702,171 @@
         "socials": {
           "facebook": "https://www.facebook.com/share/1HfqKTAiR7/"
         }
+      },
+      {
+        "id": "uni-syrian-private",
+        "name": "Syrian Private University",
+        "name_ar": "الجامعة السورية الخاصة",
+        "image": "images/universities/uni-syrian-private.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1PbUcEv3bj/"
+        }
+      },
+      {
+        "id": "uni-qalamoun-private",
+        "name": "Qalamoun Private University",
+        "name_ar": "جامعة القلمون الخاصة",
+        "image": "images/universities/uni-qalamoun-private.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1HjpVqe5q3/"
+        }
+      },
+      {
+        "id": "uni-arab-private",
+        "name": "Arab Private University",
+        "name_ar": "الجامعة العربية الخاصة",
+        "image": "images/universities/uni-arab-private.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/aust.hama?mibextid=ZbWKwL"
+        }
+      },
+      {
+        "id": "uni-national-private",
+        "name": "National Private University",
+        "name_ar": "الجامعة الوطنية الخاصة",
+        "image": "images/universities/National Private University.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1ANGfwVPkH/"
+        }
+      },
+      {
+        "id": "uni-international-private",
+        "name": "International Private University",
+        "name_ar": "الجامعة الدولية الخاصة",
+        "image": "images/universities/uni-international-private.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1Bmyjssdhz/"
+        }
+      },
+      {
+        "id": "uni-marie-private",
+        "name": "Marie Private University",
+        "name_ar": "جامعة ماري الخاصة",
+        "image": "images/universities/uni-marie-private.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/12L5MKPJgNj/"
+        }
+      },
+      {
+        "id": "uni-islamic",
+        "name": "Islamic University",
+        "name_ar": "الجامعة الإسلامية",
+        "image": "images/universities/uni-islamic.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/15CYofgxcD/"
+        }
+      },
+      {
+        "id": "uni-north-private",
+        "name": "North Private University",
+        "name_ar": "جامعة الشمال الخاصة",
+        "image": "images/universities/uni-north-private.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/15SjNQG7UC/"
+        }
+      },
+      {
+        "id": "uni-sham",
+        "name": "Sham University",
+        "name_ar": "جامعة الشام",
+        "image": "images/universities/uni-sham.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1BeWdhanEN/"
+        }
+      },
+      {
+        "id": "uni-ebla-private",
+        "name": "Ebla Private University",
+        "name_ar": "جامعة إيبلا الخاصة",
+        "image": "images/universities/uni-ebla-private.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/14eM6N3bQT/"
+        }
+      },
+      {
+        "id": "uni-hawash-private",
+        "name": "Hawash Private University",
+        "name_ar": "جامعة الحواش الخاصة",
+        "image": "images/universities/uni-hawash-private.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/18hXrfp2Et/"
+        }
+      },
+      {
+        "id": "uni-manara",
+        "name": "Manara University",
+        "name_ar": "جامعة المنارة",
+        "image": "images/universities/uni-manara.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1BopQj3hi3/"
+        }
+      }
+    ],
+    "embassies": [
+      {
+        "id": "emb-kuwait",
+        "name": "Syrian Embassy in Kuwait",
+        "name_ar": "السفارة السورية في الكويت",
+        "image": "images/embassies/emb-kuwait.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/syrianembassyku",
+          "facebook": "https://www.facebook.com/share/1BWd8yf98H/"
+        }
+      },
+      {
+        "id": "emb-cairo",
+        "name": "Syrian Embassy in Cairo",
+        "name_ar": "السفارة السورية في القاهرة",
+        "image": "images/embassies/emb-cairo.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1BxUg8DbJ6/"
+        }
+      },
+      {
+        "id": "emb-amman",
+        "name": "Syrian Embassy in Amman",
+        "name_ar": "السفارة السورية في عمّان",
+        "image": "images/embassies/emb-amman.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/17zSAn6Sqx/"
+        }
+      },
+      {
+        "id": "emb-beirut",
+        "name": "Syrian Embassy in Beirut",
+        "name_ar": "السفارة السورية في بيروت",
+        "image": "images/embassies/emb-beirut.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/19HEYSYB9C/"
+        }
+      },
+      {
+        "id": "emb-doha",
+        "name": "Syrian Embassy in Doha",
+        "name_ar": "السفارة السورية في الدوحة",
+        "image": "images/embassies/emb-doha.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/16Nj7JkdEj/"
+        }
+      },
+      {
+        "id": "emb-abu-dhabi",
+        "name": "Syrian Embassy in Abu Dhabi",
+        "name_ar": "السفارة السورية في أبو ظبي",
+        "image": "images/embassies/emb-abu-dhabi.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/15LfCFDJj6/"
+        }
       }
     ],
     "other": [
@@ -723,6 +877,15 @@
         "image": "images/other/other-syrian-civil-defense.jpg",
         "socials": {
           "twitter": "https://twitter.com/SyriaCivilDefe"
+        }
+      },
+      {
+        "id": "other-general-control",
+        "name": "General Authority for Control and Inspection",
+        "name_ar": "الهيئة العامة للرقابة والتفتيش",
+        "image": "images/other/other-general-control.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1HVaaJEnLW/"
         }
       },
       {
@@ -769,15 +932,6 @@
         "image": "images/other/other-syrian-mission-un.jpg",
         "socials": {
           "twitter": "https://twitter.com/SyriaMissionUN"
-        }
-      },
-      {
-        "id": "other-syrian-embassy-kuwait",
-        "name": "Syrian Embassy in Kuwait",
-        "name_ar": "السفارة السورية في الكويت",
-        "image": "images/other/other-syrian-embassy-kuwait.jpg",
-        "socials": {
-          "twitter": "https://twitter.com/syrianembassyku"
         }
       },
       {

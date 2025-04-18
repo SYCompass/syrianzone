@@ -182,13 +182,13 @@ class NavBar extends HTMLElement {
               <i class="fas fa-home" style="color: #2d4d3c;"></i>
               الرئيسية
             </a>
+            <a target="_blank" href="https://forum.syrian.zone" class="nav-item">
+              <i class="fas fa-comments" style="color: #2d4d3c;"></i>
+              المنتدى السياسي السوري
+            </a>
             <a href="/tierlist" class="nav-item">
               <i class="fas fa-list-ol" style="color: #2d4d3c;"></i>
               تير ليست الوزراء
-            </a>
-            <a href="/bingo" class="nav-item">
-              <i class="fas fa-flag" style="color: #807fff;"></i>
-              بينغو موسى العمر
             </a>
             <a href="/compass" class="nav-item">
               <i class="fas fa-compass" style="color: #7fbfff;"></i>
