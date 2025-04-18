@@ -332,7 +332,15 @@
         "socials": {
           "twitter": "https://twitter.com/tnmyaedarya"
         }
-      }
+      },
+      {
+        "id": "min-ministry-of-endowments",
+        "name": "Ministry of Endowments",
+        "name_ar": "وزارة الأوقاف السورية",
+        "image": "images/ministries/min-ministry-of-endowments.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/MOfEndowments"
+        }
     ],
     "public_figures": [
       {
@@ -488,6 +496,34 @@
         "socials": {
           "twitter": "https://twitter.com/Aisha_AlDebs"
         }
+      },
+      {
+        "id": "pf-osama-alrefaee",
+        "name": "Osama Abdul Karim Al-Refaee",
+        "name_ar": "أسامة عبد الكريم الرفاعي",
+        "image": "images/public_figures/pf-osama-alrefaee.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/osama.alrefaee.22"
+        }
+      },
+      {
+        "id": "pf-amer-alsheikh",
+        "name": "Amer Al-Sheikh (Abu Ubaida)",
+        "name_ar": "عامر الشيخ (أبو عبيدة)",
+        "image": "images/public_figures/pf-amer-alsheikh.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/AmerAlsheikh0"
+        }
+      },
+      {
+        "id": "pf-mohammed-abu-khair-shukri",
+        "name": "Mohammed Abu Al-Khair Shukri",
+        "name_ar": "محمد أبو الخير شكري",
+        "image": "images/public_figures/pf-mohammed-abu-khair-shukri.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/mhdchukri"
+        }
+      }
       }
     ],
     "other": [
