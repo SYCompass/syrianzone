@@ -301,7 +301,11 @@
         "name": "Ministry of Emergency and Disasters",
         "name_ar": "وزارة الطوارئ والكوارث",
         "image": "images/ministries/placeholder.jpg",
-        "socials": {}
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1XNGuietPF/",
+          "telegram": "https://t.me/MOEADMS",
+          "twitter": "https://x.com/MOEADMSy?t=JXNsvw7KZFgsPfUgcpAhyw&s=09"
+        }
       },
       {
         "id": "min-information",
