@@ -348,6 +348,7 @@
         "id": "pf-anas-airout",
         "name": "Dr. Anas Airout",
         "name_ar": "د. أنس عيروط",
+        "description": "عضو مجلس الإفتاء الأعلى في الجمهورية العربية السورية",
         "image": "images/public_figures/pf-anas-airout.jpg",
         "socials": {
           "twitter": "https://twitter.com/anasairout2"
@@ -355,8 +356,9 @@
       },
       {
         "id": "pf-asaad-alshaibani",
-        "name": "أسعد الشيباني",
+        "name": "Assad Alshaibani",
         "name_ar": "أسعد الشيباني",
+        "description": "وزير الخارجية السوري",
         "image": "images/public_figures/pf-asaad-alshaibani.jpg",
         "socials": {
           "twitter": "https://x.com/AssadAlshaibani",
@@ -367,6 +369,7 @@
         "id": "pf-ahmed-dalati",
         "name": "Ahmed Dalati",
         "name_ar": "أحمد الدالاتي",
+        "description": "محافظ القنيطرة",
         "image": "images/public_figures/pf-ahmed-dalati.jpg",
         "socials": {
           "twitter": "https://twitter.com/ah_dalati"
@@ -376,6 +379,7 @@
         "id": "pf-mazhar-alwais",
         "name": "Dr. Mazhar Alwais",
         "name_ar": "د.مظهر الويس",
+        "description": "وزير العدل السوري",
         "image": "images/public_figures/pf-mazhar-alwais.webp",
         "socials": {
           "twitter": "https://twitter.com/maabdwalshamee1"
@@ -385,6 +389,7 @@
         "id": "pf-hasan-soufan",
         "name": "Hasan Soufan",
         "name_ar": "حسن صوفان",
+        "description": "عضو اللجنة العليا للسلم الأهلي",
         "image": "images/public_figures/pf-hasan-soufan.jpg",
         "socials": {
           "twitter": "https://twitter.com/hasan0soufan"
@@ -394,6 +399,7 @@
         "id": "pf-houda-atassi",
         "name": "Houda Atassi",
         "name_ar": "هدى الاتاسي",
+        "description": "اللجنة التحضيرية لمؤتمر الحوار الوطني السوري",
         "image": "images/public_figures/pf-houda-atassi.jpg",
         "socials": {
           "twitter": "https://twitter.com/HoudaAtassi"
@@ -403,6 +409,7 @@
         "id": "pf-hasan-daghim",
         "name": "Hasan Daghim",
         "name_ar": "حسن الدغيم",
+        "description": "اللجنة التحضيرية لمؤتمر الحوار الوطني السوري",
         "image": "images/public_figures/pf-hasan-daghim.jpg",
         "socials": {
           "twitter": "https://twitter.com/Hasan_Dagim"
@@ -412,6 +419,7 @@
         "id": "pf-raed-alsaleh",
         "name": "Raed Al Saleh",
         "name_ar": "رائد الصالح",
+        "description": "وزير الطوارئ والكوارث في الجمهورية العربية السورية",
         "image": "images/public_figures/pf-raed-alsaleh.webp",
         "socials": {
           "twitter": "https://twitter.com/RaedAlSaleh3"
@@ -421,6 +429,7 @@
         "id": "pf-mohammad-saleh",
         "name": "Mohammad Yassin Saleh",
         "name_ar": "محمد ياسين صالح",
+        "description": "وزير الثقافة السوري",
         "image": "images/public_figures/pf-mohammad-saleh.webp",
         "socials": {
           "twitter": "https://twitter.com/AL_SAALEH"
@@ -430,6 +439,7 @@
         "id": "pf-mousa-alomar",
         "name": "Mousa Alomar",
         "name_ar": "موسى العمر",
+        "description": "إعلاميّ سوري",
         "image": "images/public_figures/pf-mousa-alomar.jpg",
         "socials": {
           "twitter": "https://twitter.com/MousaAlomar"
@@ -439,6 +449,7 @@
         "id": "pf-hind-kabawat",
         "name": "Hind Kabawat",
         "name_ar": "هند قبوات",
+        "description": "وزيرة الشؤون الإجتماعيّة والعمل السورية",
         "image": "images/public_figures/pf-hind-kabawat.webp",
         "socials": {
           "twitter": "https://twitter.com/HindKabawat"
@@ -448,6 +459,7 @@
         "id": "pf-abdulsalam-haykal",
         "name": "Abdulsalam Haykal",
         "name_ar": "عبدالسلام هيكل",
+        "description": "وزير الاتسالات وتقنية المعلومات السوري",
         "image": "images/public_figures/pf-abdulsalam-haykal.webp",
         "socials": {
           "twitter": "https://twitter.com/amhaykal"
@@ -457,6 +469,7 @@
         "id": "pf-anas-khatab",
         "name": "Anas Hassan Khatab",
         "name_ar": "أنس حسان خطاب",
+        "description": "Former Minister of Communications and Technology",
         "image": "images/public_figures/pf-anas-khatab.jpg",
         "socials": {
           "twitter": "https://twitter.com/Anas_Khatab_sy"
@@ -466,6 +479,7 @@
         "id": "pf-hasan-abdulghani",
         "name": "Colonel Hasan Abdulghani",
         "name_ar": "العقيد حسن عبد الغني",
+        "description": "المتحدث باسم وزارة الدفاع السورية",
         "image": "images/public_figures/pf-hasan-abdulghani.jpg",
         "socials": {
           "twitter": "https://twitter.com/hasanabdalgany"
@@ -475,6 +489,7 @@
         "id": "pf-obaida-arnaout",
         "name": "Obaida Arnaout",
         "name_ar": "عبيدة الأرناؤوط",
+        "description": "مدير مكتب الشؤون السياسية - حمص",
         "image": "images/public_figures/pf-obaida-arnaout.jpg",
         "socials": {
           "twitter": "https://twitter.com/obaidaarnaout"
@@ -484,6 +499,7 @@
         "id": "pf-abdulrahman-alamaa",
         "name": "Abdulrahman Alamaa",
         "name_ar": "عبد الرحمن الأعمى",
+        "description": "محافظ حمص",
         "image": "images/public_figures/pf-abdulrahman-alamaa.jpg",
         "socials": {
           "twitter": "https://twitter.com/abulrhmanalamaa"
@@ -493,6 +509,7 @@
         "id": "pf-aisha-aldebs",
         "name": "Aisha AlDebs",
         "name_ar": "عائشة الدبس",
+        "description": "رئيسة مكتب شؤون المرأة",
         "image": "images/public_figures/pf-aisha-aldebs.jpg",
         "socials": {
           "twitter": "https://twitter.com/Aisha_AlDebs"
@@ -502,6 +519,7 @@
         "id": "pf-osama-alrefaee",
         "name": "Osama Abdul Karim Al-Refaee",
         "name_ar": "أسامة عبد الكريم الرفاعي",
+        "description": "المفتي العام للجمهورية العربية السورية",
         "image": "images/public_figures/pf-osama-alrefaee.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/osama.alrefaee.22"
@@ -511,6 +529,7 @@
         "id": "pf-amer-alsheikh",
         "name": "Amer Al-Sheikh (Abu Ubaida)",
         "name_ar": "عامر الشيخ (أبو عبيدة)",
+        "description": "محافظ ريف دمشق",
         "image": "images/public_figures/pf-amer-alsheikh.jpg",
         "socials": {
           "twitter": "https://twitter.com/AmerAlsheikh0"
@@ -520,6 +539,7 @@
         "id": "pf-mohammed-abu-khair-shukri",
         "name": "Mohammed Abu Al-Khair Shukri",
         "name_ar": "محمد أبو الخير شكري",
+        "description": "وزير الأوقاف السوريّ",
         "image": "images/public_figures/pf-mohammed-abu-khair-shukri.jpg",
         "socials": {
           "twitter": "https://twitter.com/mhdchukri"

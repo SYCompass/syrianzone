@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="p-3 flex-grow flex flex-col items-center justify-center"> 
                     <span class="block text-center text-xl font-medium text-gray-600 leading-snug mt-1">${item.name_ar}</span>
                     <span class="block text-center text-sm font-medium text-gray-800 leading-snug">${item.name}</span>
+                    ${item.description ? `<span class="block text-center text-xs text-gray-500 mt-1">${item.description}</span>` : ''}
                 </div>
             `;
 
@@ -80,6 +81,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modalTitle.textContent = item.name_ar;
         modalBody.innerHTML = ''; // Clear previous links
+
+        // Add description if available
+        if (item.description) {
+            const descriptionElement = document.createElement('p');
+            descriptionElement.className = 'text-gray-600 text-center mb-4';
+            descriptionElement.textContent = item.description;
+            modalBody.appendChild(descriptionElement);
+        }
 
         if (item.socials && Object.keys(item.socials).length > 0) {
             Object.entries(item.socials).forEach(([platform, link]) => {
