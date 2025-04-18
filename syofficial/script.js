@@ -153,8 +153,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         sections.forEach(section => {
             const category = section.dataset.category;
-            const grid = section.querySelector('.grid');
-            const items = grid.querySelectorAll('.grid-item');
+            const grid = section.querySelector('div[id$="-grid"]');
+            const items = grid.querySelectorAll('div[data-category]');
             let sectionHasVisibleItems = false;
 
             const isSectionVisible = currentFilter === 'all' || currentFilter === category;
