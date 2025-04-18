@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>روابط الجهات الرسمية السورية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'IBM Plex Sans Arabic', sans-serif!important;
+        }
+        /* Basic modal transition */
+        .modal { transition: opacity 0.25s ease; }
+        .modal-content { transition: transform 0.25s ease; }
+        /* Hide scrollbar when modal is open */
+        body.modal-active { overflow: hidden; }
+        /* Styling for better grid item appearance */
+        .grid-item {
+            @apply flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer;
+        }
+        .grid-item img {
+            @apply w-20 h-20 object-cover rounded-full mb-3;
+        }
+        .grid-item span {
+            @apply text-center text-sm font-medium text-gray-700;
+        }
+    </style>
+      <script src="/components/navbar.js"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <nav-bar></nav-bar>
+
+    <div class="container mx-auto px-4 py-8">
+
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">دليل وسائل التواصل الاجتماعي للجهات السورية</h1>
+        <p class="text-center text-gray-600 mb-8">اضغط على اسم الجهة للوصول إلى صفحاتها الرسمية على وسائل التواصل الاجتماعي</p>
+        <div class="mb-8 p-4 bg-white rounded shadow-md">
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+                <div class="flex space-x-2 mb-4 md:mb-0" id="filter-buttons">
+                    <button data-filter="all" class="filter-btn bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 active">الكل</button>
+                    <button data-filter="governorates" class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">المحافظات</button>
+                    <button data-filter="ministries" class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">الوزارات</button>
+                    <button data-filter="public_figures" class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">الشخصيات العامة</button>
+                    <button data-filter="other" class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">أخرى</button>
+                </div>
+                <div class="relative flex-grow w-full md:w-auto">
+                    <span class="absolute inset-y-0 right-0 flex items-center pr-3">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </span>
+                    <input type="text" id="search-bar" placeholder="ابحث بالاسم..." class="w-full pr-10 pl-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+                </div>
+            </div>
+        </div>
+
+        <div id="content-sections">
+            <section id="governorates-section" class="mb-12 data-section" data-category="governorates">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">المحافظات</h2>
+                <div id="governorates-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                </div>
+            </section>
+
+            <section id="ministries-section" class="mb-12 data-section" data-category="ministries">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">الوزارات</h2>
+                <div id="ministries-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                </div>
+            </section>
+
+            <section id="public_figures-section" class="mb-12 data-section" data-category="public_figures">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">الشخصيات العامة</h2>
+                <div id="public_figures-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                </div>
+            </section>
+
+            <section id="other-section" class="mb-12 data-section" data-category="other">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">أخرى</h2>
+                <div id="other-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                </div>
+            </section>
+
+            <div id="no-results" class="text-center text-gray-500 py-10 hidden">
+                لا توجد نتائج مطابقة
+            </div>
+        </div>
+
+    </div>
+
+    <div id="social-modal" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 opacity-0 pointer-events-none">
+        <div class="modal-content bg-white rounded-lg shadow-xl w-11/12 md:max-w-md mx-auto p-6 transform -translate-y-10">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <h3 id="modal-title" class="text-xl font-semibold">روابط التواصل الاجتماعي</h3>
+                <button id="close-modal-button" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            <div id="modal-body" class="space-y-3">
+            </div>
+            <div class="text-left mt-4">
+                <button id="close-modal-button-footer" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <footer class="bg-white py-6 mt-8">
+        <div class="container mx-auto px-4 text-center text-gray-600">
+          <p>&copy; 2025 روابط الجهات الرسمية السورية</p>
+    
+          <p class="mt-2 text-sm">
+            تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span>
+          </p>
+          <div class="mt-2 flex justify-center space-x-4 space-x-reverse">
+            <a href="http://hadealahmad.com/" target="_blank" rel="noopener"
+              class="text-gray-600 hover:text-blue-600 transition flex items-center">
+              <i class="fas fa-globe ml-1"></i>
+              الموقع الشخصي
+            </a>
+            <a href="https://x.com/hadealahmad" target="_blank" rel="noopener"
+              class="text-gray-600 hover:text-blue-600 transition flex items-center">
+              <i class="fab fa-x-twitter ml-1"></i>
+              حساب X
+            </a>
+          </div>
+        </div>
+      </footer>
+    
+</body>
+</html>

@@ -1,0 +1,576 @@
+{
+    "governorates": [
+      {
+        "id": "gov-damascus",
+        "name": "Damascus Governorate",
+        "name_ar": "محافظة دمشق",
+        "image": "images/governorates/gov-damascus.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/18YdzgxcqW/",
+          "telegram": "https://t.me/Free_Damascus_city",
+          "whatsapp": "https://whatsapp.com/channel/0029Vb0BpWCD8SE6dhDM3P35"
+        }
+      },
+      {
+        "id": "gov-rural-damascus",
+        "name": "Rural Damascus Governorate",
+        "name_ar": "محافظة ريف دمشق",
+        "image": "images/governorates/gov-rural-damascus.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/shamsewar?mibextid=ZbWKwL",
+          "telegram": "https://t.me/Free_R_Damascus",
+          "whatsapp": "https://whatsapp.com/channel/0029VawfLxU47Xe9fkVkeB3o"
+        }
+      },
+      {
+        "id": "gov-aleppo",
+        "name": "Aleppo Governorate",
+        "name_ar": "محافظة حلب",
+        "image": "images/governorates/gov-aleppo.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/profile.php?id=61569786300600&mibextid=ZbWKwL",
+          "telegram": "https://t.me/Aleppo_sh",
+          "whatsapp": "https://whatsapp.com/channel/0029VatzImW4IBhKPOVECo1t"
+        }
+      },
+      {
+        "id": "gov-homs",
+        "name": "Homs Governorate",
+        "name_ar": "محافظة حمص",
+        "image": "images/governorates/gov-homs.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/HomsGov1",
+          "telegram": "https://t.me/The_Free_City_of_Homs",
+          "whatsapp": "https://whatsapp.com/channel/0029VazgZGQ6xCSXOSCe5w34"
+        }
+      },
+      {
+        "id": "gov-hama",
+        "name": "Hama Governorate",
+        "name_ar": "محافظة حماة",
+        "image": "images/governorates/gov-hama.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/profile.php?id=61570565693800&mibextid=ZbWKwL",
+          "telegram": "https://t.me/Free_Hama_city",
+          "whatsapp": "https://whatsapp.com/channel/0029VavaI0i2ZjCha8900j2H"
+        }
+      },
+      {
+        "id": "gov-lattakia",
+        "name": "Lattakia Governorate",
+        "name_ar": "محافظة اللاذقية",
+        "image": "images/governorates/gov-lattakia.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/profile.php?id=61570241887147&mibextid=kFxxJD",
+          "telegram": "https://t.me/Alatikya_city",
+          "whatsapp": "https://whatsapp.com/channel/0029Vb00xnp0lwgsFHsH4s0K"
+        }
+      },
+      {
+        "id": "gov-tartus",
+        "name": "Tartus Governorate",
+        "name_ar": "محافظة طرطوس",
+        "image": "images/governorates/gov-tartus.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/profile.php?id=61569805704680&mibextid=JRoKGi",
+          "telegram": "https://t.me/Free_Tartous_city",
+          "whatsapp": "https://whatsapp.com/channel/0029VazKoaO72WTzYPYkiK0U"
+        }
+      },
+      {
+        "id": "gov-daraa",
+        "name": "Daraa Governorate",
+        "name_ar": "محافظة درعا",
+        "image": "images/governorates/gov-daraa.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/profile.php?id=61570255894645&mibextid=kFxxJD",
+          "telegram": "https://t.me/Free_Daraa_city",
+          "whatsapp": "https://whatsapp.com/channel/0029Vav44VR545v141r1662m"
+        }
+      },
+      {
+        "id": "gov-quneitra",
+        "name": "Quneitra Governorate",
+        "name_ar": "محافظة القنيطرة",
+        "image": "images/governorates/gov-quneitra.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/profile.php?id=61570800710870&mibextid=ZbWKwL",
+          "telegram": "https://t.me/Free_Kenitra_city",
+          "whatsapp": "https://whatsapp.com/channel/0029VazaWGOEQIak9SYWm90d"
+        }
+      },
+      {
+        "id": "gov-deir-ez-zor",
+        "name": "Deir ez-Zor Governorate",
+        "name_ar": "محافظة دير الزور",
+        "image": "images/governorates/gov-deir-ez-zor.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/profile.php?id=61570212550810&mibextid=ZbWKwL",
+          "telegram": "https://t.me/Free_Deir_ezZor_city",
+          "whatsapp": "https://whatsapp.com/channel/0029Vav66zrBVJlDd6NZqJ3g"
+        }
+      },
+      {
+        "id": "v",
+        "name": "Idlib Governorate",
+        "name_ar": "محافظة إدلب",
+        "image": "images/governorates/gov-idlib.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/profile.php?id=61570241356582&mibextid=ZbWKwL",
+          "telegram": "https://t.me/Free_Idlib_city",
+          "whatsapp": "https://whatsapp.com/channel/0029Vb0ET5lFMqrWgxJlAn2q"
+        }
+      },
+      {
+        "id": "gov-sweida",
+        "name": "As-Suwayda Governorate",
+        "name_ar": "محافظة السويداء",
+        "image": "images/governorates/gov-sweida.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/profile.php?id=61570584846604&mibextid=JRoKGi",
+          "telegram": "https://t.me/Free_Suwayda_city",
+          "whatsapp": "https://whatsapp.com/channel/0029Vb17Ihq002TEvkKYPW1Q"
+        }
+      },
+      {
+        "id": "gov-raqqa",
+        "name": "Raqqa Governorate",
+        "name_ar": "محافظة الرقة",
+        "image": "images/governorates/placeholder.jpg",
+        "socials": {}
+      },
+      {
+        "id": "gov-hasakah",
+        "name": "Hasakah Governorate",
+        "name_ar": "محافظة الحسكة",
+        "image": "images/governorates/placeholder.jpg",
+        "socials": {}
+      }
+    ],
+    "ministries": [
+      {
+        "id": "min-interior",
+        "name": "Ministry of Interior",
+        "name_ar": "وزارة الداخلية",
+        "image": "images/ministries/min-interior.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/syrianmoi"
+        }
+      },
+      {
+        "id": "min-foreign",
+        "name": "Ministry of Foreign Affairs",
+        "name_ar": "وزارة الخارجية والمغتربين",
+        "image": "images/ministries/min-foreign.jpg",
+        "socials": {
+          "twitter": "https://x.com/syrianmofaex",
+          "facebook": "https://www.facebook.com/Mofaexsy",
+          "instagram": "https://www.instagram.com/syrianmofaex1",
+          "telegram": "https://t.me/syrianmofaex1"
+        }
+      },
+      {
+        "id": "min-defense",
+        "name": "Ministry of Defense",
+        "name_ar": "وزارة الدفاع",
+        "image": "images/ministries/min-defense.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/Sy_Defense"
+        }
+      },
+      {
+        "id": "min-justice",
+        "name": "Ministry of Justice",
+        "name_ar": "وزارة العدل",
+        "image": "images/ministries/min-justice.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/al_dl79629"
+        }
+      },
+      {
+        "id": "min-economy",
+        "name": "Ministry of Economy",
+        "name_ar": "وزارة الاقتصاد",
+        "image": "images/ministries/placeholder.jpg",
+        "socials": {}
+      },
+      {
+        "id": "min-energy",
+        "name": "Ministry of Energy",
+        "name_ar": "وزارة الطاقة",
+        "image": "images/ministries/min-energy.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/mopmr_syria"
+        }
+      },
+      {
+        "id": "min-education",
+        "name": "Ministry of Education",
+        "name_ar": "وزارة التربية",
+        "image": "images/ministries/min-education.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/TrbyaGov"
+        }
+      },
+      {
+        "id": "min-higher-education",
+        "name": "Ministry of Higher Education",
+        "name_ar": "وزارة التعليم العالي",
+        "image": "images/ministries/min-higher-education.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/mohesyria1"
+        }
+      },
+      {
+        "id": "min-health",
+        "name": "Ministry of Health",
+        "name_ar": "وزارة الصحة",
+        "image": "images/ministries/placeholder.jpg",
+        "socials": {}
+      },
+      {
+        "id": "min-social-affairs",
+        "name": "Ministry of Social Affairs and Labor",
+        "name_ar": "وزارة الشؤون الاجتماعية والعمل",
+        "image": "images/ministries/min-social-affairs.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/mosal_syria"
+        }
+      },
+      {
+        "id": "min-public-works",
+        "name": "Ministry of Public Works",
+        "name_ar": "وزارة الأشغال العامة",
+        "image": "images/ministries/placeholder.jpg",
+        "socials": {}
+      },
+      {
+        "id": "min-transport",
+        "name": "Ministry of Transport",
+        "name_ar": "وزارة النقل",
+        "image": "images/ministries/min-transport.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/AlnqlWzart"
+        }
+      },
+      {
+        "id": "min-agriculture",
+        "name": "Ministry of Agriculture",
+        "name_ar": "وزارة الزراعة",
+        "image": "images/ministries/placeholder.jpg",
+        "socials": {}
+      },
+      {
+        "id": "min-culture",
+        "name": "Ministry of Culture",
+        "name_ar": "وزارة الثقافة",
+        "image": "images/ministries/placeholder.jpg",
+        "socials": {}
+      },
+      {
+        "id": "min-tourism",
+        "name": "Ministry of Tourism",
+        "name_ar": "وزارة السياحة",
+        "image": "images/ministries/placeholder.jpg",
+        "socials": {}
+      },
+      {
+        "id": "min-youth-sports",
+        "name": "Ministry of Youth and Sports",
+        "name_ar": "وزارة الشباب والرياضة",
+        "image": "images/ministries/placeholder.jpg",
+        "socials": {}
+      },
+      {
+        "id": "min-emergency",
+        "name": "Ministry of Emergency and Disasters",
+        "name_ar": "وزارة الطوارئ والكوارث",
+        "image": "images/ministries/placeholder.jpg",
+        "socials": {}
+      },
+      {
+        "id": "min-information",
+        "name": "Ministry of Information",
+        "name_ar": "وزارة الإعلام",
+        "image": "images/ministries/min-information.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/moi_syria1"
+        }
+      },
+      {
+        "id": "min-communications",
+        "name": "Ministry of Communications and Information Technology",
+        "name_ar": "وزارة الاتصالات وتقنية المعلومات",
+        "image": "images/ministries/min-communications.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/moctsyria"
+        }
+      },
+      {
+        "id": "min-finance",
+        "name": "Ministry of Finance",
+        "name_ar": "وزارة المالية",
+        "image": "images/ministries/min-finance.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/FinanceSYR"
+        }
+      },
+      {
+        "id": "min-local-administration",
+        "name": "Ministry of Local Administration and Environment",
+        "name_ar": "وزارة الإدارة المحلية والبيئة",
+        "image": "images/ministries/min-local-administration.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/molasy19"
+        }
+      },
+      {
+        "id": "min-administrative-development",
+        "name": "Ministry of Administrative Development",
+        "name_ar": "وزارة التنمية الإدارية",
+        "image": "images/ministries/min-administrative-development.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/tnmyaedarya"
+        }
+      }
+    ],
+    "public_figures": [
+      {
+        "id": "pf-anas-airout",
+        "name": "Dr. Anas Airout",
+        "name_ar": "د. أنس عيروط",
+        "image": "images/public_figures/pf-anas-airout.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/anasairout2"
+        }
+      },
+      {
+        "id": "pf-asaad-alshaibani",
+        "name": "أسعد الشيباني",
+        "name_ar": "أسعد الشيباني",
+        "image": "images/public_figures/pf-asaad-alshaibani.jpg",
+        "socials": {
+          "twitter": "https://x.com/AssadAlshaibani",
+          "instagram": "https://www.instagram.com/asaad.alshaibani"
+        }
+      },
+      {
+        "id": "pf-ahmed-dalati",
+        "name": "Ahmed Dalati",
+        "name_ar": "أحمد الدالاتي",
+        "image": "images/public_figures/pf-ahmed-dalati.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/ah_dalati"
+        }
+      },
+      {
+        "id": "pf-mazhar-alwais",
+        "name": "Dr. Mazhar Alwais",
+        "name_ar": "د.مظهر الويس",
+        "image": "images/public_figures/pf-mazhar-alwais.webp",
+        "socials": {
+          "twitter": "https://twitter.com/maabdwalshamee1"
+        }
+      },
+      {
+        "id": "pf-hasan-soufan",
+        "name": "Hasan Soufan",
+        "name_ar": "حسن صوفان",
+        "image": "images/public_figures/pf-hasan-soufan.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/hasan0soufan"
+        }
+      },
+      {
+        "id": "pf-houda-atassi",
+        "name": "Houda Atassi",
+        "name_ar": "هدى الاتاسي",
+        "image": "images/public_figures/pf-houda-atassi.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/HoudaAtassi"
+        }
+      },
+      {
+        "id": "pf-hasan-daghim",
+        "name": "Hasan Daghim",
+        "name_ar": "حسن الدغيم",
+        "image": "images/public_figures/pf-hasan-daghim.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/Hasan_Dagim"
+        }
+      },
+      {
+        "id": "pf-raed-alsaleh",
+        "name": "Raed Al Saleh",
+        "name_ar": "رائد الصالح",
+        "image": "images/public_figures/pf-raed-alsaleh.webp",
+        "socials": {
+          "twitter": "https://twitter.com/RaedAlSaleh3"
+        }
+      },
+      {
+        "id": "pf-mohammad-saleh",
+        "name": "Mohammad Yassin Saleh",
+        "name_ar": "محمد ياسين صالح",
+        "image": "images/public_figures/pf-mohammad-saleh.webp",
+        "socials": {
+          "twitter": "https://twitter.com/AL_SAALEH"
+        }
+      },
+      {
+        "id": "pf-mousa-alomar",
+        "name": "Mousa Alomar",
+        "name_ar": "موسى العمر",
+        "image": "images/public_figures/pf-mousa-alomar.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/MousaAlomar"
+        }
+      },
+      {
+        "id": "pf-hind-kabawat",
+        "name": "Hind Kabawat",
+        "name_ar": "هند قبوات",
+        "image": "images/public_figures/pf-hind-kabawat.webp",
+        "socials": {
+          "twitter": "https://twitter.com/HindKabawat"
+        }
+      },
+      {
+        "id": "pf-abdulsalam-haykal",
+        "name": "Abdulsalam Haykal",
+        "name_ar": "عبدالسلام هيكل",
+        "image": "images/public_figures/pf-abdulsalam-haykal.webp",
+        "socials": {
+          "twitter": "https://twitter.com/amhaykal"
+        }
+      },
+      {
+        "id": "pf-anas-khatab",
+        "name": "Anas Hassan Khatab",
+        "name_ar": "أنس حسان خطاب",
+        "image": "images/public_figures/pf-anas-khatab.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/Anas_Khatab_sy"
+        }
+      },
+      {
+        "id": "pf-hasan-abdulghani",
+        "name": "Colonel Hasan Abdulghani",
+        "name_ar": "العقيد حسن عبد الغني",
+        "image": "images/public_figures/pf-hasan-abdulghani.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/hasanabdalgany"
+        }
+      },
+      {
+        "id": "pf-obaida-arnaout",
+        "name": "Obaida Arnaout",
+        "name_ar": "عبيدة الأرناؤوط",
+        "image": "images/public_figures/pf-obaida-arnaout.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/obaidaarnaout"
+        }
+      },
+      {
+        "id": "pf-abdulrahman-alamaa",
+        "name": "Abdulrahman Alamaa",
+        "name_ar": "عبد الرحمن الأعمى",
+        "image": "images/public_figures/pf-abdulrahman-alamaa.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/abulrhmanalamaa"
+        }
+      },
+      {
+        "id": "pf-aisha-aldebs",
+        "name": "Aisha AlDebs",
+        "name_ar": "عائشة الدبس",
+        "image": "images/public_figures/pf-aisha-aldebs.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/Aisha_AlDebs"
+        }
+      }
+    ],
+    "other": [
+      {
+        "id": "other-syrian-civil-defense",
+        "name": "Syrian Civil Defense",
+        "name_ar": "الدفاع المدني السوري",
+        "image": "images/other/other-syrian-civil-defense.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/SyriaCivilDefe"
+        }
+      },
+      {
+        "id": "other-alekhbariah",
+        "name": "Alekhbariah Syria",
+        "name_ar": "الإخبارية السورية",
+        "image": "images/other/other-alekhbariah.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/AlekhbariahSY"
+        }
+      },
+      {
+        "id": "other-syrian-red-crescent",
+        "name": "Syrian Red Crescent",
+        "name_ar": "الهلال الأحمر السوري",
+        "image": "images/other/other-syrian-red-crescent.png",
+        "socials": {
+          "twitter": "https://twitter.com/SYRedCrescent"
+        }
+      },
+      {
+        "id": "other-political-affairs",
+        "name": "Political Affairs Administration",
+        "name_ar": "إدارة الشؤون السياسية - سوريا",
+        "image": "images/other/other-political-affairs.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/syriadpa"
+        }
+      },
+      {
+        "id": "other-presidency",
+        "name": "Presidency of the Syrian Arab Republic",
+        "name_ar": "رئاسة الجمهورية العربية السورية",
+        "image": "images/other/other-presidency.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/SyPresidency"
+        }
+      },
+      {
+        "id": "other-syrian-mission-un",
+        "name": "Syrian Mission to UN Geneva",
+        "name_ar": "البعثة الدائمة للجمهورية العربية السورية لدى الأمم المتحدة في جنيف",
+        "image": "images/other/other-syrian-mission-un.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/SyriaMissionUN"
+        }
+      },
+      {
+        "id": "other-syrian-embassy-kuwait",
+        "name": "Syrian Embassy in Kuwait",
+        "name_ar": "السفارة السورية في الكويت",
+        "image": "images/other/other-syrian-embassy-kuwait.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/syrianembassyku"
+        }
+      },
+      {
+        "id": "other-syrian-borders",
+        "name": "General Authority for Land and Sea Ports",
+        "name_ar": "الهيئة العامة للمنافذ البرية والبحرية السورية",
+        "image": "images/other/other-syrian-borders.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/Syrianborders"
+        }
+      },
+      {
+        "id": "other-civil-aviation",
+        "name": "General Authority for Civil Aviation",
+        "name_ar": "الهيئة العامة للطيران المدني والنقل الجوي السوري",
+        "image": "images/other/other-civil-aviation.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/AllltyraN"
+        }
+      }
+    ]
+  }

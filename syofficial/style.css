@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* RTL-specific styles */
+body {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Fix RTL spacing issues */
+.space-x-2 > * + * {
+    margin-right: 0.5rem;
+    margin-left: 0;
+}
+
+.space-x-4 > * + * {
+    margin-right: 1rem;
+    margin-left: 0;
+}
+
+/* RTL modal adjustments */
+.modal-content {
+    text-align: right;
+}
+
+/* RTL grid adjustments */
+.grid {
+    direction: rtl;
+}
+
+/* RTL button adjustments */
+button {
+    text-align: right;
+}
+
+/* RTL input adjustments */
+input {
+    text-align: right;
+}
+
+/* RTL icon adjustments */
+.fa-search {
+    margin-left: 0.5rem;
+    margin-right: 0;
+}
+
+/* RTL modal close button */
+#close-modal-button {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+/* RTL filter buttons */
+#filter-buttons {
+    direction: rtl;
+}
+
+/* RTL search input */
+#search-bar {
+    padding-right: 2.5rem;
+    padding-left: 1rem;
+}
+
+/* RTL grid items */
+.grid-item {
+    text-align: right;
+}
+
+/* RTL modal footer */
+#close-modal-button-footer {
+    margin-right: auto;
+    margin-left: 0;
+}
