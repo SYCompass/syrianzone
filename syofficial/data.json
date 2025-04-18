@@ -154,7 +154,8 @@
         "name_ar": "وزارة الداخلية",
         "image": "images/ministries/min-interior.jpg",
         "socials": {
-          "twitter": "https://twitter.com/syrianmoi"
+          "twitter": "https://twitter.com/syrianmoi",
+          "facebook": "https://www.facebook.com/share/18cBGB8ZKj/"
         }
       },
       {
@@ -166,7 +167,8 @@
           "twitter": "https://x.com/syrianmofaex",
           "facebook": "https://www.facebook.com/Mofaexsy",
           "instagram": "https://www.instagram.com/syrianmofaex1",
-          "telegram": "https://t.me/syrianmofaex1"
+          "telegram": "https://t.me/syrianmofaex1",
+          "facebook2": "https://www.facebook.com/share/1699keaxML/"
         }
       },
       {
@@ -184,7 +186,8 @@
         "name_ar": "وزارة العدل",
         "image": "images/ministries/min-justice.jpg",
         "socials": {
-          "twitter": "https://twitter.com/al_dl79629"
+          "twitter": "https://twitter.com/al_dl79629",
+          "facebook": "https://www.facebook.com/share/1ExHwmbSiH/"
         }
       },
       {
@@ -200,7 +203,8 @@
         "name_ar": "وزارة الطاقة",
         "image": "images/ministries/min-energy.jpg",
         "socials": {
-          "twitter": "https://twitter.com/mopmr_syria"
+          "twitter": "https://twitter.com/mopmr_syria",
+          "facebook": "https://www.facebook.com/share/1AGLafKVQw/"
         }
       },
       {
@@ -209,7 +213,8 @@
         "name_ar": "وزارة التربية",
         "image": "images/ministries/min-education.jpg",
         "socials": {
-          "twitter": "https://twitter.com/TrbyaGov"
+          "twitter": "https://twitter.com/TrbyaGov",
+          "facebook": "https://www.facebook.com/share/18tXs9xxZw/"
         }
       },
       {
@@ -218,7 +223,8 @@
         "name_ar": "وزارة التعليم العالي",
         "image": "images/ministries/min-higher-education.jpg",
         "socials": {
-          "twitter": "https://twitter.com/mohesyria1"
+          "twitter": "https://twitter.com/mohesyria1",
+          "facebook": "https://www.facebook.com/share/15CNqFcnfc/"
         }
       },
       {
@@ -226,7 +232,9 @@
         "name": "Ministry of Health",
         "name_ar": "وزارة الصحة",
         "image": "images/ministries/placeholder.jpg",
-        "socials": {}
+        "socials": {
+          "facebook": "https://www.facebook.com/share/18frAotGfp/"
+        }
       },
       {
         "id": "min-social-affairs",
@@ -250,7 +258,8 @@
         "name_ar": "وزارة النقل",
         "image": "images/ministries/min-transport.jpg",
         "socials": {
-          "twitter": "https://twitter.com/AlnqlWzart"
+          "twitter": "https://twitter.com/AlnqlWzart",
+          "facebook": "https://www.facebook.com/share/1685F3H6bp/"
         }
       },
       {
@@ -258,7 +267,9 @@
         "name": "Ministry of Agriculture",
         "name_ar": "وزارة الزراعة",
         "image": "images/ministries/placeholder.jpg",
-        "socials": {}
+        "socials": {
+          "facebook": "https://www.facebook.com/share/16M4y35ibi/"
+        }
       },
       {
         "id": "min-culture",
@@ -279,7 +290,9 @@
         "name": "Ministry of Youth and Sports",
         "name_ar": "وزارة الشباب والرياضة",
         "image": "images/ministries/placeholder.jpg",
-        "socials": {}
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1EPDgsxB2X/"
+        }
       },
       {
         "id": "min-emergency",
@@ -294,7 +307,8 @@
         "name_ar": "وزارة الإعلام",
         "image": "images/ministries/min-information.jpg",
         "socials": {
-          "twitter": "https://twitter.com/moi_syria1"
+          "twitter": "https://twitter.com/moi_syria1",
+          "facebook": "https://www.facebook.com/share/19LMr7oUQ5/"
         }
       },
       {
@@ -303,7 +317,8 @@
         "name_ar": "وزارة الاتصالات وتقنية المعلومات",
         "image": "images/ministries/min-communications.jpg",
         "socials": {
-          "twitter": "https://twitter.com/moctsyria"
+          "twitter": "https://twitter.com/moctsyria",
+          "facebook": "https://www.facebook.com/share/1ABqbSKr9R/"
         }
       },
       {
@@ -312,7 +327,8 @@
         "name_ar": "وزارة المالية",
         "image": "images/ministries/min-finance.jpg",
         "socials": {
-          "twitter": "https://twitter.com/FinanceSYR"
+          "twitter": "https://twitter.com/FinanceSYR",
+          "facebook": "https://www.facebook.com/share/18ftW3ZKBz/"
         }
       },
       {
@@ -339,7 +355,8 @@
         "name_ar": "وزارة الأوقاف السورية",
         "image": "images/ministries/min-ministry-of-endowments.jpg",
         "socials": {
-          "twitter": "https://twitter.com/MOfEndowments"
+          "twitter": "https://twitter.com/MOfEndowments",
+          "facebook": "https://www.facebook.com/share/1AQhpU6fbE/"
         }
       }
     ],
