@@ -565,6 +565,16 @@
         "socials": {
           "twitter": "https://twitter.com/sn_syria"
         }
+      },
+      {
+        "id": "pf-abdulrahman-aldabbagh",
+        "name": "Abdul Rahman Al-Dabbagh",
+        "name_ar": "عبد الرحمن الدباغ",
+        "description": "مدير مديرية أمن دمشق",
+        "image": "images/public_figures/pf-abdulrahman-aldabbagh.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1USkGfVmpn/"
+        }
       }
     ],
     "syndicates": [
