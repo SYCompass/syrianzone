@@ -554,6 +554,16 @@
         "socials": {
           "twitter": "https://twitter.com/HmzhMo"
         }
+      },
+      {
+        "id": "pf-saad-naasan",
+        "name": "Saad Naasan",
+        "name_ar": "سعد نعسان",
+        "description": "المدير العام لمديرية الشؤون السياسية في محافظة حلب",
+        "image": "images/public_figures/pf-saad-naasan.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/sn_syria"
+        }
       }
     ],
     "other": [
@@ -581,7 +591,8 @@
         "name_ar": "الهلال الأحمر السوري",
         "image": "images/other/other-syrian-red-crescent.png",
         "socials": {
-          "twitter": "https://twitter.com/SYRedCrescent"
+          "twitter": "https://twitter.com/SYRedCrescent",
+          "facebook": "https://www.facebook.com/share/19J1KBdWbS/"
         }
       },
       {
@@ -626,7 +637,8 @@
         "name_ar": "الهيئة العامة للمنافذ البرية والبحرية السورية",
         "image": "images/other/other-syrian-borders.jpg",
         "socials": {
-          "twitter": "https://twitter.com/Syrianborders"
+          "twitter": "https://twitter.com/Syrianborders",
+          "facebook": "https://www.facebook.com/share/1Bj5jtqwoS/"
         }
       },
       {
@@ -635,7 +647,35 @@
         "name_ar": "الهيئة العامة للطيران المدني والنقل الجوي السوري",
         "image": "images/other/other-civil-aviation.jpg",
         "socials": {
-          "twitter": "https://twitter.com/AllltyraN"
+          "twitter": "https://twitter.com/AllltyraN",
+          "facebook": "https://www.facebook.com/share/1FikzjEesF/"
+        }
+      },
+      {
+        "id": "other-aleppo-airport",
+        "name": "Aleppo International Airport",
+        "name_ar": "مطار حلب الدولي",
+        "image": "images/other/other-aleppo-airport.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1G7ineU8Le/"
+        }
+      },
+      {
+        "id": "other-national-quality",
+        "name": "National Quality and Accreditation Authority",
+        "name_ar": "الهيئة الوطنية للجودة والاعتمادية",
+        "image": "images/other/other-national-quality.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1BSf9UF7Rp/"
+        }
+      },
+      {
+        "id": "other-sana",
+        "name": "Syrian Arab News Agency",
+        "name_ar": "سانا",
+        "image": "images/other/other-sana.jpg",
+        "socials": {
+          "telegram": "https://t.me/SyrianArabNewsAgency"
         }
       }
     ]
