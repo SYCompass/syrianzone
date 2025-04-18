@@ -7,7 +7,7 @@
         "image": "images/governorates/gov-damascus.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/18YdzgxcqW/",
-          "telegram": "https://t.me/Free_Damascus_city",
+          "telegram": "https://t.me/DamascusGov1",
           "whatsapp": "https://whatsapp.com/channel/0029Vb0BpWCD8SE6dhDM3P35"
         }
       },
@@ -29,7 +29,7 @@
         "image": "images/governorates/gov-aleppo.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61569786300600&mibextid=ZbWKwL",
-          "telegram": "https://t.me/Aleppo_sh",
+          "telegram": "https://t.me/AleppoGov1",
           "whatsapp": "https://whatsapp.com/channel/0029VatzImW4IBhKPOVECo1t"
         }
       },
@@ -40,7 +40,7 @@
         "image": "images/governorates/gov-homs.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/HomsGov1",
-          "telegram": "https://t.me/The_Free_City_of_Homs",
+          "telegram": "https://t.me/HomsGov1",
           "whatsapp": "https://whatsapp.com/channel/0029VazgZGQ6xCSXOSCe5w34"
         }
       },
@@ -51,7 +51,7 @@
         "image": "images/governorates/gov-hama.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61570565693800&mibextid=ZbWKwL",
-          "telegram": "https://t.me/Free_Hama_city",
+          "telegram": "https://t.me/HamaGov1",
           "whatsapp": "https://whatsapp.com/channel/0029VavaI0i2ZjCha8900j2H"
         }
       },
@@ -62,7 +62,7 @@
         "image": "images/governorates/gov-lattakia.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61570241887147&mibextid=kFxxJD",
-          "telegram": "https://t.me/Alatikya_city",
+          "telegram": "https://t.me/LatakiaGov1",
           "whatsapp": "https://whatsapp.com/channel/0029Vb00xnp0lwgsFHsH4s0K"
         }
       },
@@ -73,7 +73,7 @@
         "image": "images/governorates/gov-tartus.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61569805704680&mibextid=JRoKGi",
-          "telegram": "https://t.me/Free_Tartous_city",
+          "telegram": "https://t.me/TartusGov1",
           "whatsapp": "https://whatsapp.com/channel/0029VazKoaO72WTzYPYkiK0U"
         }
       },
@@ -84,7 +84,7 @@
         "image": "images/governorates/gov-daraa.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61570255894645&mibextid=kFxxJD",
-          "telegram": "https://t.me/Free_Daraa_city",
+          "telegram": "https://t.me/DaraaGov1",
           "whatsapp": "https://whatsapp.com/channel/0029Vav44VR545v141r1662m"
         }
       },
@@ -111,13 +111,13 @@
         }
       },
       {
-        "id": "v",
+        "id": "gov-idlib",
         "name": "Idlib Governorate",
         "name_ar": "محافظة إدلب",
         "image": "images/governorates/gov-idlib.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61570241356582&mibextid=ZbWKwL",
-          "telegram": "https://t.me/Free_Idlib_city",
+          "telegram": "https://t.me/Idlib_Gov",
           "whatsapp": "https://whatsapp.com/channel/0029Vb0ET5lFMqrWgxJlAn2q"
         }
       },
@@ -128,7 +128,7 @@
         "image": "images/governorates/gov-sweida.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61570584846604&mibextid=JRoKGi",
-          "telegram": "https://t.me/Free_Suwayda_city",
+          "telegram": "https://t.me/SweidaGov1",
           "whatsapp": "https://whatsapp.com/channel/0029Vb17Ihq002TEvkKYPW1Q"
         }
       },
