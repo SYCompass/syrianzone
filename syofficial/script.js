@@ -16,8 +16,94 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterButtons = document.querySelectorAll('.filter-btn');
     const sections = document.querySelectorAll('.data-section');
     const noResultsDiv = document.getElementById('no-results');
+    const viewToggle = document.getElementById('view-toggle');
+    const contentSections = document.getElementById('content-sections');
+    const tableView = document.getElementById('table-view');
+    const tableBody = document.getElementById('table-body');
 
+    let isTableView = false;
     let allData = { governorates: [], ministries: [], public_figures: [], other: [], syndicates: [], universities: [], embassies: [] }; // To store fetched data
+
+    // --- View Toggle Handling ---
+    viewToggle.addEventListener('click', () => {
+        isTableView = !isTableView;
+        if (isTableView) {
+            contentSections.classList.add('hidden');
+            tableView.classList.remove('hidden');
+            viewToggle.innerHTML = '<i class="fas fa-th-large"></i><span>عرض الشبكة</span>';
+            populateTable();
+        } else {
+            contentSections.classList.remove('hidden');
+            tableView.classList.add('hidden');
+            viewToggle.innerHTML = '<i class="fas fa-table"></i><span>عرض الجدول</span>';
+        }
+    });
+
+    // --- Table Population ---
+    function populateTable() {
+        tableBody.innerHTML = '';
+        let allItems = [];
+        
+        // Collect all items from all categories
+        Object.entries(allData).forEach(([category, items]) => {
+            items.forEach(item => {
+                allItems.push({...item, category});
+            });
+        });
+
+        // Sort items by Arabic name
+        allItems.sort((a, b) => a.name_ar.localeCompare(b.name_ar));
+
+        allItems.forEach(item => {
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-gray-50';
+            row.dataset.name = item.name.toLowerCase();
+            row.dataset.name_ar = item.name_ar.toLowerCase();
+            row.dataset.category = item.category;
+
+            const nameCell = document.createElement('td');
+            nameCell.className = 'px-6 py-4 whitespace-nowrap';
+            nameCell.innerHTML = `
+                <div class="text-sm font-medium text-gray-900">${item.name_ar}</div>
+                <div class="text-sm text-gray-500">${item.name}</div>
+            `;
+
+            const descCell = document.createElement('td');
+            descCell.className = 'px-6 py-4 whitespace-nowrap';
+            descCell.innerHTML = `<div class="text-sm text-gray-500">${item.description || ''}</div>`;
+
+            const linksCell = document.createElement('td');
+            linksCell.className = 'px-6 py-4 whitespace-nowrap';
+            
+            if (item.socials && Object.keys(item.socials).length > 0) {
+                const linksContainer = document.createElement('div');
+                linksContainer.className = 'flex flex-wrap gap-2';
+                
+                Object.entries(item.socials).forEach(([platform, link]) => {
+                    const iconClass = getSocialIcon(platform);
+                    const linkElement = document.createElement('a');
+                    linkElement.href = link;
+                    linkElement.target = '_blank';
+                    linkElement.rel = 'noopener noreferrer';
+                    linkElement.className = 'inline-flex items-center px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 transition-colors';
+                    linkElement.innerHTML = `
+                        <i class="${iconClass} fa-fw text-blue-600"></i>
+                        <span class="text-xs text-gray-700 mr-1">${platform}</span>
+                    `;
+                    linksContainer.appendChild(linkElement);
+                });
+                
+                linksCell.appendChild(linksContainer);
+            } else {
+                linksCell.innerHTML = '<div class="text-sm text-gray-500">لا توجد روابط</div>';
+            }
+
+            row.appendChild(nameCell);
+            row.appendChild(descCell);
+            row.appendChild(linksCell);
+            tableBody.appendChild(row);
+        });
+    }
 
     // --- Data Fetching ---
     fetch('data.json')
@@ -169,34 +255,52 @@ document.addEventListener('DOMContentLoaded', () => {
         currentSearchTerm = searchBar.value.toLowerCase().trim();
         let hasVisibleItems = false;
 
-        sections.forEach(section => {
-            const category = section.dataset.category;
-            const grid = section.querySelector('div[id$="-grid"]');
-            const items = grid.querySelectorAll('div[data-category]');
-            let sectionHasVisibleItems = false;
+        if (isTableView) {
+            const rows = tableBody.querySelectorAll('tr');
+            rows.forEach(row => {
+                const itemName = row.dataset.name;
+                const itemNameAr = row.dataset.name_ar;
+                const category = row.dataset.category;
+                const matchesSearch = itemName.includes(currentSearchTerm) || itemNameAr.includes(currentSearchTerm);
+                const matchesFilter = currentFilter === 'all' || currentFilter === category;
 
-            const isSectionVisible = currentFilter === 'all' || currentFilter === category;
+                if (matchesSearch && matchesFilter) {
+                    row.style.display = '';
+                    hasVisibleItems = true;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        } else {
+            sections.forEach(section => {
+                const category = section.dataset.category;
+                const grid = section.querySelector('div[id$="-grid"]');
+                const items = grid.querySelectorAll('div[data-category]');
+                let sectionHasVisibleItems = false;
 
-            if (isSectionVisible) {
-                section.style.display = 'block';
+                const isSectionVisible = currentFilter === 'all' || currentFilter === category;
 
-                items.forEach(item => {
-                    const itemName = item.dataset.name;
-                    const itemNameAr = item.dataset.name_ar;
-                    const matchesSearch = itemName.includes(currentSearchTerm) || itemNameAr.includes(currentSearchTerm);
+                if (isSectionVisible) {
+                    section.style.display = 'block';
 
-                    if (matchesSearch) {
-                        item.style.display = 'flex';
-                        sectionHasVisibleItems = true;
-                        hasVisibleItems = true;
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            } else {
-                section.style.display = 'none';
-            }
-        });
+                    items.forEach(item => {
+                        const itemName = item.dataset.name;
+                        const itemNameAr = item.dataset.name_ar;
+                        const matchesSearch = itemName.includes(currentSearchTerm) || itemNameAr.includes(currentSearchTerm);
+
+                        if (matchesSearch) {
+                            item.style.display = 'flex';
+                            sectionHasVisibleItems = true;
+                            hasVisibleItems = true;
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        }
 
         noResultsDiv.style.display = hasVisibleItems ? 'none' : 'block';
         if (!hasVisibleItems) {
