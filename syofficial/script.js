@@ -239,6 +239,8 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'linkedin': return 'fab fa-linkedin';
             case 'youtube': return 'fab fa-youtube';
             case 'whatsapp': return 'fab fa-whatsapp';
+            case 'linkedin': return 'fab fa-linkedin';
+            case 'website': return 'fas fa-globe';
             default: return 'fas fa-link';
         }
     }
