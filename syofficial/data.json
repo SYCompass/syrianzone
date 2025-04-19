@@ -941,6 +941,15 @@
         "socials": {
           "facebook": "https://www.facebook.com/share/15LfCFDJj6/"
         }
+      },
+      {
+        "id": "emb-consulate-dubai",
+        "name": "Syrian Consulate in Dubai",
+        "name_ar": "القنصلية العامة للجمهورية العربية السورية في دبي",
+        "image": "images/embassies/emb-consulate-dubai.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/syrianconsulatedubai"
+        }
       }
     ],
     "other": [
