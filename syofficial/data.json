@@ -1113,6 +1113,18 @@
           "youtube": "https://youtube.com/@ecleansy",
           "whatsapp": "https://chat.whatsapp.com/BrPNbETr2O4HYArmKeR7Gm"
         }
+      },
+      {
+        "id": "other-syrian-hajj",
+        "name": "Syrian Hajj and Umrah Authority",
+        "name_ar": "الهيئة السورية للحج والعمرة",
+        "image": "images/other/other-syrian-hajj.jpg",
+        "socials": {
+          "website": "https://syrianhajj.org",
+          "facebook": "https://www.facebook.com/syriahaj",
+          "telegram": "https://t.me/syria_hajj",
+          "instagram": "https://www.instagram.com/syriahajj/"
+        }
       }
     ]
   }
