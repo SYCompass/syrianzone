@@ -183,7 +183,7 @@ class NavBar extends HTMLElement {
               الرئيسية
             </a>
             <a target="_blank" href="https://forum.syrian.zone" class="nav-item">
-              <i class="fas fa-comments" style="color: #2d4d3c;"></i>
+              <i class="fas fa-comments" style="color:rgb(255, 0, 0);"></i>
               المنتدى السياسي السوري
             </a>
             <a href="/tierlist" class="nav-item">
@@ -195,7 +195,7 @@ class NavBar extends HTMLElement {
               البوصلة السياسية
             </a>
             <a href="/syofficial" class="nav-item">
-              <i class="fas fa-check-circle" style="color: #7fbfff;"></i>
+              <i class="fas fa-check-circle" style="color:rgb(0, 128, 255);"></i>
               الحسابات الرسمية السورية
             </a>
             <a target="_blank" href="https://github.com/SYCompass/Twitter-SVG-Syrian-Flag-Replacer/releases/tag/1.0.1" class="nav-item">
