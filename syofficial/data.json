@@ -1137,6 +1137,15 @@
           "telegram": "https://t.me/syria_hajj",
           "instagram": "https://www.instagram.com/syriahajj/"
         }
+      },
+      {
+        "id": "other-damascus-airport",
+        "name": "Damascus International Airport",
+        "name_ar": "مطار دمشق الدولي",
+        "image": "images/other/other-damascus-airport.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/profile.php?id=61573866154918"
+        }
       }
     ]
   }
