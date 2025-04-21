@@ -960,6 +960,24 @@
         "socials": {
           "facebook": "https://www.facebook.com/syrianconsulatedubai"
         }
+      },
+      {
+        "id": "emb-riyadh",
+        "name": "Syrian Embassy in Riyadh",
+        "name_ar": "سفارة الجمهورية العربية السورية في الرياض",
+        "image": "images/embassies/emb-riyadh.jpg",
+        "socials": {
+          "website": "https://mofaex.gov.sy/riyadh-embassy/index.php"
+        }
+      },
+      {
+        "id": "emb-ecsc",
+        "name": "Electronic Consular Center",
+        "name_ar": "المركز القنصلي الإلكتروني",
+        "image": "images/embassies/emb-ecsc.jpg",
+        "socials": {
+          "website": "https://www.ecsc-expat.sy/"
+        }
       }
     ],
     "other": [
