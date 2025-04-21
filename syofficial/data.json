@@ -884,6 +884,16 @@
         "socials": {
           "facebook": "https://www.facebook.com/share/1BopQj3hi3/"
         }
+      },
+      {
+        "id": "uni-furat",
+        "name": "Al-Furat University",
+        "name_ar": "جامعة الفرات",
+        "image": "images/universities/uni-furat.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/AlForatUniversity/",
+          "youtube": "https://www.youtube.com/channel/UCHjGF_KKpVKWjZUxK2xHbWQ"
+        }
       }
     ],
     "embassies": [
