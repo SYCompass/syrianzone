@@ -1094,6 +1094,11 @@
         "name_ar": "سانا",
         "image": "images/other/other-sana.jpg",
         "socials": {
+          "website": "https://sana.sy",
+          "facebook": "https://www.facebook.com/syrianarabnews/",
+          "twitter": "https://x.com/SanaAjel",
+          "youtube": "https://www.youtube.com/syrianarabnewsagency-sana",
+          "instagram": "https://www.instagram.com/syrianarabnewsagency/",
           "telegram": "https://t.me/SyrianArabNewsAgency"
         }
       },
