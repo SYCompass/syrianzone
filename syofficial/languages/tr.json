@@ -20,6 +20,16 @@
         "embassies": "Büyükelçilikler",
         "other": "Diğer"
     },
+    "sections": {
+        "governorates": "Valilikler",
+        "ministries": "Bakanlıklar",
+        "ministers": "Bakanlar",
+        "public_figures": "Kamu Görevlileri",
+        "syndicates": "Sendikalar",
+        "universities": "Üniversiteler",
+        "embassies": "Büyükelçilikler",
+        "other": "Diğer"
+    },
     "table": {
         "name": "İsim",
         "description": "Açıklama",

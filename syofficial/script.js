@@ -32,96 +32,121 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isTableView) {
             contentSections.classList.add('hidden');
             tableView.classList.remove('hidden');
-            viewToggle.innerHTML = `<i class="fas fa-th-large"></i><span data-i18n="view.grid">عرض الشبكة</span>`;
-            populateTable();
+            viewToggle.innerHTML = `<i class="fas fa-th-large"></i><span data-i18n="view.grid">Grid View</span>`;
+            if (allData && Object.keys(allData).length > 0) {
+                populateTable();
+            }
         } else {
             contentSections.classList.remove('hidden');
             tableView.classList.add('hidden');
-            viewToggle.innerHTML = `<i class="fas fa-table"></i><span data-i18n="view.table">عرض الجدول</span>`;
+            viewToggle.innerHTML = `<i class="fas fa-table"></i><span data-i18n="view.table">Table View</span>`;
         }
-        // Update the button text based on current language
-        updatePageLanguage();
+        // Update translations without triggering a full page update
+        const lang = translations[currentLanguage];
+        if (lang) {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                const value = getNestedValue(lang, key);
+                if (value) {
+                    element.textContent = value;
+                }
+            });
+        }
     });
 
     // Set initial state
     contentSections.classList.remove('hidden');
     tableView.classList.add('hidden');
-    viewToggle.innerHTML = `<i class="fas fa-table"></i><span data-i18n="view.table">عرض الجدول</span>`;
-    populateTable();
+    viewToggle.innerHTML = `<i class="fas fa-table"></i><span data-i18n="view.table">Table View</span>`;
 
     // --- Table Population ---
     function populateTable() {
-        tableBody.innerHTML = '';
-        let allItems = [];
+        if (!tableBody) return;
         
-        // Collect all items from all categories
-        Object.entries(allData).forEach(([category, items]) => {
+        // Clear existing content
+        tableBody.innerHTML = '';
+        
+        // Define section order and titles
+        const sections = [
+            { key: 'governorates', i18n: 'sections.governorates' },
+            { key: 'ministries', i18n: 'sections.ministries' },
+            { key: 'ministers', i18n: 'sections.ministers' },
+            { key: 'public_figures', i18n: 'sections.public_figures' },
+            { key: 'syndicates', i18n: 'sections.syndicates' },
+            { key: 'universities', i18n: 'sections.universities' },
+            { key: 'embassies', i18n: 'sections.embassies' },
+            { key: 'other', i18n: 'sections.other' }
+        ];
+
+        // Create a document fragment to batch DOM updates
+        const fragment = document.createDocumentFragment();
+
+        sections.forEach(section => {
+            const items = allData[section.key];
+            if (!items || items.length === 0) return;
+
+            // Add section header
+            const headerRow = document.createElement('tr');
+            headerRow.className = 'bg-gray-100';
+            headerRow.innerHTML = `
+                <td colspan="3" class="px-6 py-3 text-sm font-semibold text-gray-900">
+                    <span data-i18n="${section.i18n}">${section.key}</span>
+                </td>
+            `;
+            fragment.appendChild(headerRow);
+
+            // Add items for this section
             items.forEach(item => {
-                allItems.push({...item, category});
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 flex flex-col sm:table-row border-b border-gray-200 sm:border-0';
+                row.dataset.name = item.name.toLowerCase();
+                row.dataset.name_ar = item.name_ar.toLowerCase();
+                row.dataset.category = section.key;
+
+                const nameCell = document.createElement('td');
+                nameCell.className = 'px-6 py-4 sm:whitespace-nowrap flex flex-col sm:table-cell';
+                nameCell.innerHTML = `
+                    <div class="text-xs text-gray-500 sm:hidden mb-1" data-i18n="table.name">Name</div>
+                    <div class="text-sm font-medium text-gray-900" data-name="${item.name}" data-name-ar="${item.name_ar}">${currentLanguage === 'ar' ? item.name_ar : item.name}</div>
+                `;
+
+                const descCell = document.createElement('td');
+                descCell.className = 'px-6 py-4 sm:whitespace-nowrap flex flex-col sm:table-cell';
+                descCell.innerHTML = `
+                    <div class="text-xs text-gray-500 sm:hidden mb-1" data-i18n="table.description">Description</div>
+                    <div class="text-sm text-gray-500" data-desc="${item.description}" data-desc-ar="${item.description_ar || item.description}">${currentLanguage === 'ar' ? (item.description_ar || item.description) : item.description}</div>
+                `;
+
+                const linksCell = document.createElement('td');
+                linksCell.className = 'px-6 py-4 sm:whitespace-nowrap flex flex-col sm:table-cell';
+                
+                let socialLinksHTML = '';
+                if (item.socials && Object.keys(item.socials).length > 0) {
+                    socialLinksHTML = Object.entries(item.socials)
+                        .map(([platform, link]) => `
+                            <a href="${link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 transition-colors">
+                                <i class="${getSocialIcon(platform)} fa-fw text-blue-600"></i>
+                                <span class="text-xs text-gray-700 mr-1">${platform}</span>
+                            </a>
+                        `).join('');
+                } else {
+                    socialLinksHTML = `<span class="text-sm text-gray-500" data-i18n="table.noLinks">No Links</span>`;
+                }
+
+                linksCell.innerHTML = `
+                    <div class="text-xs text-gray-500 sm:hidden mb-1" data-i18n="table.socialLinks">Social Links</div>
+                    <div class="flex flex-wrap gap-2">${socialLinksHTML}</div>
+                `;
+
+                row.appendChild(nameCell);
+                row.appendChild(descCell);
+                row.appendChild(linksCell);
+                fragment.appendChild(row);
             });
         });
 
-        // Sort items by Arabic name
-        allItems.sort((a, b) => a.name_ar.localeCompare(b.name_ar));
-
-        allItems.forEach(item => {
-            const row = document.createElement('tr');
-            row.className = 'hover:bg-gray-50 flex flex-col sm:table-row border-b border-gray-200 sm:border-0';
-            row.dataset.name = item.name.toLowerCase();
-            row.dataset.name_ar = item.name_ar.toLowerCase();
-            row.dataset.category = item.category;
-
-            const nameCell = document.createElement('td');
-            nameCell.className = 'px-6 py-4 sm:whitespace-nowrap flex flex-col sm:table-cell';
-            nameCell.innerHTML = `
-                <div class="text-xs text-gray-500 sm:hidden mb-1" data-i18n="table.name">الاسم</div>
-                <div class="text-sm font-medium text-gray-900">${currentLanguage === 'ar' ? item.name_ar : item.name}</div>
-            `;
-
-            const descCell = document.createElement('td');
-            descCell.className = 'px-6 py-4 sm:whitespace-nowrap flex flex-col sm:table-cell';
-            descCell.innerHTML = `
-                <div class="text-xs text-gray-500 sm:hidden mb-1" data-i18n="table.description">الوصف</div>
-                <div class="text-sm text-gray-500">${currentLanguage === 'ar' ? (item.description_ar || item.description) : item.description}</div>
-            `;
-
-            const linksCell = document.createElement('td');
-            linksCell.className = 'px-6 py-4 sm:whitespace-nowrap flex flex-col sm:table-cell';
-            
-            if (item.socials && Object.keys(item.socials).length > 0) {
-                const linksContainer = document.createElement('div');
-                linksContainer.className = 'flex flex-wrap gap-2';
-                
-                Object.entries(item.socials).forEach(([platform, link]) => {
-                    const iconClass = getSocialIcon(platform);
-                    const linkElement = document.createElement('a');
-                    linkElement.href = link;
-                    linkElement.target = '_blank';
-                    linkElement.rel = 'noopener noreferrer';
-                    linkElement.className = 'inline-flex items-center px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 transition-colors';
-                    linkElement.innerHTML = `
-                        <i class="${iconClass} fa-fw text-blue-600"></i>
-                        <span class="text-xs text-gray-700 mr-1">${platform}</span>
-                    `;
-                    linksContainer.appendChild(linkElement);
-                });
-                
-                linksCell.innerHTML = `
-                    <div class="text-xs text-gray-500 sm:hidden mb-1" data-i18n="table.socialLinks">روابط التواصل</div>
-                    <div class="flex flex-wrap gap-2">${linksContainer.innerHTML}</div>
-                `;
-            } else {
-                linksCell.innerHTML = `
-                    <div class="text-xs text-gray-500 sm:hidden mb-1" data-i18n="table.socialLinks">روابط التواصل</div>
-                    <div class="text-sm text-gray-500" data-i18n="table.noLinks">لا توجد روابط</div>
-                `;
-            }
-
-            row.appendChild(nameCell);
-            row.appendChild(descCell);
-            row.appendChild(linksCell);
-            tableBody.appendChild(row);
-        });
+        // Append all rows at once
+        tableBody.appendChild(fragment);
     }
 
     // --- Data Fetching ---
@@ -306,6 +331,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isTableView) {
             const rows = tableBody.querySelectorAll('tr');
             rows.forEach(row => {
+                if (row.classList.contains('bg-gray-100')) {
+                    // This is a section header row
+                    const sectionKey = row.querySelector('span').getAttribute('data-i18n').split('.')[1];
+                    const matchesFilter = currentFilter === 'all' || currentFilter === sectionKey;
+                    row.style.display = matchesFilter ? '' : 'none';
+                    return;
+                }
+
                 const itemName = row.dataset.name;
                 const itemNameAr = row.dataset.name_ar;
                 const category = row.dataset.category;
@@ -352,7 +385,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         noResultsDiv.style.display = hasVisibleItems ? 'none' : 'block';
         if (!hasVisibleItems) {
-            noResultsDiv.innerHTML = '<p class="text-gray-500 text-center">لا توجد نتائج مطابقة للبحث.</p>';
+            noResultsDiv.innerHTML = '<p class="text-gray-500 text-center" data-i18n="search.noResults">No results found.</p>';
+            // Update the no results message with current language
+            const lang = translations[currentLanguage];
+            if (lang) {
+                const noResultsElement = noResultsDiv.querySelector('[data-i18n]');
+                const key = noResultsElement.getAttribute('data-i18n');
+                const value = getNestedValue(lang, key);
+                if (value) {
+                    noResultsElement.textContent = value;
+                }
+            }
         }
     }
 
@@ -383,8 +426,24 @@ document.addEventListener('DOMContentLoaded', () => {
         currentLanguage = localStorage.getItem('preferredLanguage') || 'ar';
         
         // Update table view if active
-        if (isTableView) {
-            populateTable();
+        if (isTableView && allData && Object.keys(allData).length > 0) {
+            const rows = tableBody.querySelectorAll('tr');
+            rows.forEach(row => {
+                const nameCell = row.querySelector('td:first-child');
+                const descCell = row.querySelector('td:nth-child(2)');
+                const nameDiv = nameCell.querySelector('.text-sm');
+                const descDiv = descCell.querySelector('.text-sm');
+                
+                if (nameDiv && descDiv) {
+                    const itemName = nameDiv.dataset.name;
+                    const itemNameAr = nameDiv.dataset.nameAr;
+                    const itemDesc = descDiv.dataset.desc;
+                    const itemDescAr = descDiv.dataset.descAr;
+                    
+                    nameDiv.textContent = currentLanguage === 'ar' ? itemNameAr : itemName;
+                    descDiv.textContent = currentLanguage === 'ar' ? (itemDescAr || itemDesc) : itemDesc;
+                }
+            });
         }
         
         // Update grid views
@@ -423,5 +482,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Store current modal state
     let currentModalId = null;
     let currentModalCategory = null;
+
+    // Helper function to get nested object values
+    function getNestedValue(obj, path) {
+        return path.split('.').reduce((o, p) => o?.[p], obj);
+    }
 
 }); // End DOMContentLoaded

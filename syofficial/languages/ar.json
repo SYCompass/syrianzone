@@ -20,6 +20,16 @@
         "embassies": "السفارات",
         "other": "أخرى"
     },
+    "sections": {
+        "governorates": "المحافظات",
+        "ministries": "الوزارات",
+        "ministers": "الوزراء",
+        "public_figures": "الشخصيات العامة",
+        "syndicates": "النقابات",
+        "universities": "الجامعات",
+        "embassies": "السفارات",
+        "other": "أخرى"
+    },
     "table": {
         "name": "الاسم",
         "description": "الوصف",
