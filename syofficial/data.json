@@ -4,6 +4,8 @@
         "id": "gov-damascus",
         "name": "Damascus Governorate",
         "name_ar": "محافظة دمشق",
+        "description": "The capital governorate of Syria",
+        "description_ar": "محافظة العاصمة السورية",
         "image": "images/governorates/gov-damascus.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/18YdzgxcqW/",
@@ -15,6 +17,8 @@
         "id": "gov-rural-damascus",
         "name": "Rural Damascus Governorate",
         "name_ar": "محافظة ريف دمشق",
+        "description": "The surrounding governorate of Damascus",
+        "description_ar": "المحافظة المحيطة بدمشق",
         "image": "images/governorates/gov-rural-damascus.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/shamsewar?mibextid=ZbWKwL",
@@ -26,6 +30,8 @@
         "id": "gov-aleppo",
         "name": "Aleppo Governorate",
         "name_ar": "محافظة حلب",
+        "description": "The largest governorate in Syria",
+        "description_ar": "أكبر محافظة في سوريا",
         "image": "images/governorates/gov-aleppo.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61569786300600&mibextid=ZbWKwL",
@@ -37,6 +43,8 @@
         "id": "gov-homs",
         "name": "Homs Governorate",
         "name_ar": "محافظة حمص",
+        "description": "The central governorate of Syria",
+        "description_ar": "المحافظة الوسطى في سوريا",
         "image": "images/governorates/gov-homs.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/HomsGov1",
@@ -48,6 +56,8 @@
         "id": "gov-hama",
         "name": "Hama Governorate",
         "name_ar": "محافظة حماة",
+        "description": "The governorate known for its waterwheels",
+        "description_ar": "المحافظة المعروفة بنواعيرها",
         "image": "images/governorates/gov-hama.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61570565693800&mibextid=ZbWKwL",
@@ -59,6 +69,8 @@
         "id": "gov-lattakia",
         "name": "Lattakia Governorate",
         "name_ar": "محافظة اللاذقية",
+        "description": "The coastal governorate of Syria",
+        "description_ar": "المحافظة الساحلية في سوريا",
         "image": "images/governorates/gov-lattakia.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61570241887147&mibextid=kFxxJD",
@@ -70,6 +82,8 @@
         "id": "gov-tartus",
         "name": "Tartus Governorate",
         "name_ar": "محافظة طرطوس",
+        "description": "The western coastal governorate of Syria",
+        "description_ar": "المحافظة الساحلية الغربية في سوريا",
         "image": "images/governorates/gov-tartus.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61569805704680&mibextid=JRoKGi",
@@ -81,6 +95,8 @@
         "id": "gov-daraa",
         "name": "Daraa Governorate",
         "name_ar": "محافظة درعا",
+        "description": "The southern governorate of Syria",
+        "description_ar": "المحافظة الجنوبية في سوريا",
         "image": "images/governorates/gov-daraa.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61570255894645&mibextid=kFxxJD",
@@ -92,6 +108,8 @@
         "id": "gov-quneitra",
         "name": "Quneitra Governorate",
         "name_ar": "محافظة القنيطرة",
+        "description": "The southwestern governorate of Syria",
+        "description_ar": "المحافظة الجنوبية الغربية في سوريا",
         "image": "images/governorates/gov-quneitra.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61570800710870&mibextid=ZbWKwL",
@@ -103,6 +121,8 @@
         "id": "gov-deir-ez-zor",
         "name": "Deir ez-Zor Governorate",
         "name_ar": "محافظة دير الزور",
+        "description": "The eastern governorate of Syria",
+        "description_ar": "المحافظة الشرقية في سوريا",
         "image": "images/governorates/gov-deir-ez-zor.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61570212550810&mibextid=ZbWKwL",
@@ -114,6 +134,8 @@
         "id": "gov-idlib",
         "name": "Idlib Governorate",
         "name_ar": "محافظة إدلب",
+        "description": "The northwestern governorate of Syria",
+        "description_ar": "المحافظة الشمالية الغربية في سوريا",
         "image": "images/governorates/gov-idlib.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61570241356582&mibextid=ZbWKwL",
@@ -125,6 +147,8 @@
         "id": "gov-sweida",
         "name": "As-Suwayda Governorate",
         "name_ar": "محافظة السويداء",
+        "description": "The southern governorate known for its Druze population",
+        "description_ar": "المحافظة الجنوبية المعروفة بسكانها الدروز",
         "image": "images/governorates/gov-sweida.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61570584846604&mibextid=JRoKGi",
@@ -136,6 +160,8 @@
         "id": "gov-raqqa",
         "name": "Raqqa Governorate",
         "name_ar": "محافظة الرقة",
+        "description": "The northeastern governorate of Syria",
+        "description_ar": "المحافظة الشمالية الشرقية في سوريا",
         "image": "images/governorates/placeholder.jpg",
         "socials": {}
       },
@@ -143,6 +169,8 @@
         "id": "gov-hasakah",
         "name": "Hasakah Governorate",
         "name_ar": "محافظة الحسكة",
+        "description": "The northeastern governorate bordering Iraq",
+        "description_ar": "المحافظة الشمالية الشرقية المتاخمة للعراق",
         "image": "images/governorates/placeholder.jpg",
         "socials": {}
       }
@@ -152,6 +180,8 @@
         "id": "min-interior",
         "name": "Ministry of Interior",
         "name_ar": "وزارة الداخلية السورية",
+        "description": "The ministry responsible for internal security and civil affairs",
+        "description_ar": "الوزارة المسؤولة عن الأمن الداخلي والشؤون المدنية",
         "image": "images/ministries/min-interior.jpg",
         "socials": {
           "twitter": "https://twitter.com/syrianmoi",
@@ -163,6 +193,8 @@
         "id": "min-foreign",
         "name": "Ministry of Foreign Affairs",
         "name_ar": "وزارة الخارجية والمغتربين في الجمهورية العربية السورية",
+        "description": "The ministry responsible for foreign relations and expatriate affairs",
+        "description_ar": "الوزارة المسؤولة عن العلاقات الخارجية وشؤون المغتربين",
         "image": "images/ministries/min-foreign.jpg",
         "socials": {
           "twitter": "https://x.com/syrianmofaex",
@@ -175,6 +207,8 @@
         "id": "min-defense",
         "name": "Ministry of Defense",
         "name_ar": "وزارة الدفاع السورية",
+        "description": "The ministry responsible for national defense and military affairs",
+        "description_ar": "الوزارة المسؤولة عن الدفاع الوطني والشؤون العسكرية",
         "image": "images/ministries/min-defense.jpg",
         "socials": {
           "twitter": "https://twitter.com/Sy_Defense",
@@ -186,6 +220,8 @@
         "id": "min-justice",
         "name": "Ministry of Justice",
         "name_ar": "وزارة العدل السورية",
+        "description": "The ministry responsible for judicial affairs and legal matters",
+        "description_ar": "الوزارة المسؤولة عن الشؤون القضائية والمسائل القانونية",
         "image": "images/ministries/min-justice.jpg",
         "socials": {
           "twitter": "https://twitter.com/al_dl79629",
@@ -197,6 +233,8 @@
         "id": "min-economy",
         "name": "Ministry of Economy",
         "name_ar": "وزارة الاقتصاد والصناعة السورية",
+        "description": "The ministry responsible for economic and industrial affairs",
+        "description_ar": "الوزارة المسؤولة عن الشؤون الاقتصادية والصناعية",
         "image": "images/ministries/min-economy.jpg",
         "socials": {
           "telegram": "https://t.me/MOEAFT"
@@ -206,6 +244,8 @@
         "id": "min-energy",
         "name": "Ministry of Energy",
         "name_ar": "وزارة الطاقة السورية",
+        "description": "The ministry responsible for energy resources and power generation",
+        "description_ar": "الوزارة المسؤولة عن موارد الطاقة وتوليد الكهرباء",
         "image": "images/ministries/min-energy.jpg",
         "socials": {
           "twitter": "https://twitter.com/mopmr_syria",
@@ -217,6 +257,8 @@
         "id": "min-education",
         "name": "Ministry of Education",
         "name_ar": "وزارة التربية والتعليم السورية",
+        "description": "The ministry responsible for primary and secondary education",
+        "description_ar": "الوزارة المسؤولة عن التعليم الأساسي والثانوي",
         "image": "images/ministries/min-education.jpg",
         "socials": {
           "twitter": "https://twitter.com/TrbyaGov",
@@ -228,6 +270,8 @@
         "id": "min-higher-education",
         "name": "Ministry of Higher Education",
         "name_ar": "وزارة التعليم العالي والبحث العلمي السورية",
+        "description": "The ministry responsible for higher education and scientific research",
+        "description_ar": "الوزارة المسؤولة عن التعليم العالي والبحث العلمي",
         "image": "images/ministries/min-higher-education.jpg",
         "socials": {
           "twitter": "https://twitter.com/mohesyria1",
@@ -239,6 +283,8 @@
         "id": "min-health",
         "name": "Ministry of Health",
         "name_ar": "وزارة الصحة السورية",
+        "description": "The ministry responsible for healthcare and medical services",
+        "description_ar": "الوزارة المسؤولة عن الرعاية الصحية والخدمات الطبية",
         "image": "images/ministries/min-health.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/18frAotGfp/",
@@ -249,6 +295,8 @@
         "id": "min-social-affairs",
         "name": "Ministry of Social Affairs and Labor",
         "name_ar": "وزارة الشؤون الاجتماعية والعمل السورية",
+        "description": "The ministry responsible for social welfare and labor affairs",
+        "description_ar": "الوزارة المسؤولة عن الرعاية الاجتماعية وشؤون العمل",
         "image": "images/ministries/min-social-affairs.jpg",
         "socials": {
           "twitter": "https://twitter.com/mosal_syria",
@@ -260,6 +308,8 @@
         "id": "min-public-works",
         "name": "Ministry of Public Works and Housing",
         "name_ar": "وزارة الأشغال العامة والإسكان السورية",
+        "description": "The ministry responsible for public works and housing projects",
+        "description_ar": "الوزارة المسؤولة عن الأشغال العامة ومشاريع الإسكان",
         "image": "images/ministries/min-public-works.jpg",
         "socials": {
           "telegram": "https://t.me/MOPWAH"
@@ -269,6 +319,8 @@
         "id": "min-transport",
         "name": "Ministry of Transport",
         "name_ar": "وزارة النقل السورية",
+        "description": "The ministry responsible for transportation and infrastructure",
+        "description_ar": "الوزارة المسؤولة عن النقل والبنية التحتية",
         "image": "images/ministries/min-transport.jpg",
         "socials": {
           "twitter": "https://twitter.com/AlnqlWzart",
@@ -280,6 +332,8 @@
         "id": "min-agriculture",
         "name": "Ministry of Agriculture",
         "name_ar": "وزارة الزراعة والإصلاح الزراعي السوري",
+        "description": "The ministry responsible for agricultural development and reform",
+        "description_ar": "الوزارة المسؤولة عن التنمية الزراعية والإصلاح الزراعي",
         "image": "images/ministries/min-agriculture.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/16M4y35ibi/",
@@ -290,6 +344,8 @@
         "id": "min-culture",
         "name": "Ministry of Culture",
         "name_ar": "وزارة الثقافة السورية",
+        "description": "The ministry responsible for cultural affairs and heritage",
+        "description_ar": "الوزارة المسؤولة عن الشؤون الثقافية والتراث",
         "image": "images/ministries/min-culture.jpg",
         "socials": {
           "telegram": "https://t.me/MinistryOfCultureS"
@@ -299,6 +355,8 @@
         "id": "min-youth-sports",
         "name": "Ministry of Youth and Sports",
         "name_ar": "وزارة الرياضة والشباب السورية",
+        "description": "The ministry responsible for youth affairs and sports development",
+        "description_ar": "الوزارة المسؤولة عن شؤون الشباب وتنمية الرياضة",
         "image": "images/ministries/min-youth-sports.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1EPDgsxB2X/",
@@ -309,6 +367,8 @@
         "id": "min-emergency",
         "name": "Ministry of Emergency and Disasters",
         "name_ar": "وزارة الطوارئ والكوارث",
+        "description": "The ministry responsible for emergency response and disaster management",
+        "description_ar": "الوزارة المسؤولة عن الاستجابة للطوارئ وإدارة الكوارث",
         "image": "images/ministries/min-emergency.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1XNGuietPF/",
@@ -320,6 +380,8 @@
         "id": "min-information",
         "name": "Ministry of Information",
         "name_ar": "وزارة الإعلام السورية",
+        "description": "The ministry responsible for media and information affairs",
+        "description_ar": "الوزارة المسؤولة عن شؤون الإعلام والمعلومات",
         "image": "images/ministries/min-information.jpg",
         "socials": {
           "twitter": "https://twitter.com/moi_syria1",
@@ -331,6 +393,8 @@
         "id": "min-communications",
         "name": "Ministry of Communications and Information Technology",
         "name_ar": "وزارة الاتصالات وتقانة المعلومات السورية",
+        "description": "The ministry responsible for communications and IT infrastructure",
+        "description_ar": "الوزارة المسؤولة عن الاتصالات والبنية التحتية لتقنية المعلومات",
         "image": "images/ministries/min-communications.jpg",
         "socials": {
           "twitter": "https://twitter.com/moctsyria",
@@ -342,6 +406,8 @@
         "id": "min-finance",
         "name": "Ministry of Finance",
         "name_ar": "وزارة المالية السورية",
+        "description": "The ministry responsible for financial affairs and budget management",
+        "description_ar": "الوزارة المسؤولة عن الشؤون المالية وإدارة الميزانية",
         "image": "images/ministries/min-finance.jpg",
         "socials": {
           "twitter": "https://twitter.com/FinanceSYR",
@@ -353,6 +419,8 @@
         "id": "min-local-administration",
         "name": "Ministry of Local Administration and Environment",
         "name_ar": "وزارة الادارة المحلية والبيئة السورية",
+        "description": "The ministry responsible for local governance and environmental affairs",
+        "description_ar": "الوزارة المسؤولة عن الحكم المحلي والشؤون البيئية",
         "image": "images/ministries/min-local-administration.jpg",
         "socials": {
           "twitter": "https://twitter.com/molasy19",
@@ -363,6 +431,8 @@
         "id": "min-administrative-development",
         "name": "Ministry of Administrative Development",
         "name_ar": "وزارة التنمية الإدارية السورية",
+        "description": "The ministry responsible for administrative reform and development",
+        "description_ar": "الوزارة المسؤولة عن الإصلاح الإداري والتنمية",
         "image": "images/ministries/min-administrative-development.jpg",
         "socials": {
           "twitter": "https://twitter.com/tnmyaedarya",
@@ -373,6 +443,8 @@
         "id": "min-ministry-of-endowments",
         "name": "Ministry of Endowments",
         "name_ar": "وزارة الأوقاف السورية",
+        "description": "The ministry responsible for religious endowments and affairs",
+        "description_ar": "الوزارة المسؤولة عن الأوقاف والشؤون الدينية",
         "image": "images/ministries/min-ministry-of-endowments.jpg",
         "socials": {
           "twitter": "https://twitter.com/MOfEndowments",
@@ -384,6 +456,8 @@
         "id": "min-industry",
         "name": "Ministry of Industry",
         "name_ar": "وزارة الصناعة السورية",
+        "description": "The ministry responsible for industrial development and production",
+        "description_ar": "الوزارة المسؤولة عن التنمية الصناعية والإنتاج",
         "image": "images/ministries/min-industry.jpg",
         "socials": {
           "telegram": "https://t.me/tusrt"
@@ -393,6 +467,8 @@
         "id": "min-tourism",
         "name": "Ministry of Tourism",
         "name_ar": "وزارة السياحة السورية",
+        "description": "The ministry responsible for tourism development and promotion",
+        "description_ar": "الوزارة المسؤولة عن تنمية السياحة والترويج",
         "image": "images/ministries/min-tourism.jpg",
         "socials": {
           "telegram": "https://t.me/MinistryOfTourism"
@@ -402,6 +478,8 @@
         "id": "min-electricity",
         "name": "Ministry of Electricity",
         "name_ar": "وزارة الكهرباء السورية",
+        "description": "The ministry responsible for electricity generation and distribution",
+        "description_ar": "الوزارة المسؤولة عن توليد وتوزيع الكهرباء",
         "image": "images/ministries/min-electricity.jpg",
         "socials": {
           "telegram": "https://t.me/MinistryOfElectricity"
@@ -413,7 +491,8 @@
         "id": "pf-asaad-alshaibani",
         "name": "Assad Alshaibani",
         "name_ar": "أسعد الشيباني",
-        "description": "وزير الخارجية السوري",
+        "description": "Minister of Foreign Affairs of Syria",
+        "description_ar": "وزير الخارجية السوري",
         "image": "images/public_figures/pf-asaad-alshaibani.jpg",
         "socials": {
           "twitter": "https://x.com/AssadAlshaibani",
@@ -424,7 +503,8 @@
         "id": "pf-mazhar-alwais",
         "name": "Dr. Mazhar Alwais",
         "name_ar": "د.مظهر الويس",
-        "description": "وزير العدل السوري",
+        "description": "Minister of Justice of Syria",
+        "description_ar": "وزير العدل السوري",
         "image": "images/public_figures/pf-mazhar-alwais.webp",
         "socials": {
           "twitter": "https://twitter.com/maabdwalshamee1",
@@ -435,7 +515,8 @@
         "id": "pf-raed-alsaleh",
         "name": "Raed Al Saleh",
         "name_ar": "رائد الصالح",
-        "description": "وزير الطوارئ والكوارث في الجمهورية العربية السورية",
+        "description": "Minister of Emergency and Disasters in the Syrian Arab Republic",
+        "description_ar": "وزير الطوارئ والكوارث في الجمهورية العربية السورية",
         "image": "images/public_figures/pf-raed-alsaleh.webp",
         "socials": {
           "twitter": "https://twitter.com/RaedAlSaleh3",
@@ -446,7 +527,8 @@
         "id": "pf-mohammad-saleh",
         "name": "Mohammad Yassin Saleh",
         "name_ar": "محمد ياسين صالح",
-        "description": "وزير الثقافة السوري",
+        "description": "Minister of Culture of Syria",
+        "description_ar": "وزير الثقافة السوري",
         "image": "images/public_figures/pf-mohammad-saleh.webp",
         "socials": {
           "twitter": "https://twitter.com/AL_SAALEH",
@@ -457,7 +539,8 @@
         "id": "pf-hind-kabawat",
         "name": "Hind Kabawat",
         "name_ar": "هند قبوات",
-        "description": "وزيرة الشؤون الإجتماعيّة والعمل السورية",
+        "description": "Minister of Social Affairs and Labor of Syria",
+        "description_ar": "وزيرة الشؤون الإجتماعيّة والعمل السورية",
         "image": "images/public_figures/pf-hind-kabawat.webp",
         "socials": {
           "twitter": "https://twitter.com/HindKabawat",
@@ -468,7 +551,8 @@
         "id": "pf-abdulsalam-haykal",
         "name": "Abdulsalam Haykal",
         "name_ar": "عبدالسلام هيكل",
-        "description": "وزير الاتصالات وتقنية المعلومات السوري",
+        "description": "Minister of Communications and Information Technology of Syria",
+        "description_ar": "وزير الاتصالات وتقنية المعلومات السوري",
         "image": "images/public_figures/pf-abdulsalam-haykal.webp",
         "socials": {
           "twitter": "https://twitter.com/amhaykal",
@@ -479,7 +563,8 @@
         "id": "pf-anas-khatab",
         "name": "Anas Hassan Khatab",
         "name_ar": "أنس حسان خطاب",
-        "description": "وزير الداخلية والأمن السوري",
+        "description": "Minister of Interior and Security of Syria",
+        "description_ar": "وزير الداخلية والأمن السوري",
         "image": "images/public_figures/pf-anas-khatab.jpg",
         "socials": {
           "twitter": "https://twitter.com/Anas_Khatab_sy"
@@ -489,7 +574,8 @@
         "id": "pf-marwan-alhalabi",
         "name": "Prof. Dr. Marwan Al-Halabi",
         "name_ar": "الأستاذ الدكتور مروان الحلبي",
-        "description": "وزير التعليم العالي",
+        "description": "Minister of Higher Education",
+        "description_ar": "وزير التعليم العالي",
         "image": "images/public_figures/pf-marwan-alhalabi.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/16F1eLAC8k/",
@@ -501,7 +587,8 @@
         "id": "pf-mohammed-abu-khair-shukri",
         "name": "Mohammed Abu Al-Khair Shukri",
         "name_ar": "محمد أبو الخير شكري",
-        "description": "وزير الأوقاف السوريّ",
+        "description": "Minister of Endowments of Syria",
+        "description_ar": "وزير الأوقاف السوريّ",
         "image": "images/public_figures/pf-mohammed-abu-khair-shukri.jpg",
         "socials": {
           "twitter": "https://twitter.com/mhdchukri"
@@ -511,7 +598,8 @@
         "id": "pf-hamzah-almustafa",
         "name": "Hamzah Almustafa",
         "name_ar": "حمزة المصطفى",
-        "description": "وزير الإعلام في الجمهورية العربية السورية",
+        "description": "Minister of Information in the Syrian Arab Republic",
+        "description_ar": "وزير الإعلام في الجمهورية العربية السورية",
         "image": "images/public_figures/pf-hamzah-almustafa.webp",
         "socials": {
           "twitter": "https://twitter.com/HmzhMo"
@@ -521,7 +609,8 @@
         "id": "pf-yarob-badr",
         "name": "Yarob Badr",
         "name_ar": "يعرب بدر",
-        "description": "وزير النقل",
+        "description": "Minister of Transport",
+        "description_ar": "وزير النقل",
         "image": "images/public_figures/pf-yarob-badr.webp",
         "socials": {
           "linkedin": "https://www.linkedin.com/in/yarob-badr-08b4986"
@@ -531,7 +620,8 @@
         "id": "pf-yisr-barnieh",
         "name": "Yisr Barnieh",
         "name_ar": "يسر برنية",
-        "description": "وزير المالية",
+        "description": "Minister of Finance",
+        "description_ar": "وزير المالية",
         "image": "images/public_figures/pf-yisr-barnieh.webp",
         "socials": {
           "linkedin": "https://www.linkedin.com/in/yisr-barnieh-3846a88a"
@@ -705,6 +795,8 @@
         "id": "synd-lawyers",
         "name": "Syrian Bar Association",
         "name_ar": "نقابة المحامين",
+        "description": "The professional association for lawyers in Syria",
+        "description_ar": "النقابة المهنية للمحامين في سوريا",
         "image": "images/syndicates/synd-lawyers.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1PtEPs8Rnd/"
@@ -714,6 +806,8 @@
         "id": "synd-dentists",
         "name": "Syrian Dentists Syndicate",
         "name_ar": "نقابة أطباء الأسنان",
+        "description": "The professional association for dentists in Syria",
+        "description_ar": "النقابة المهنية لأطباء الأسنان في سوريا",
         "image": "images/syndicates/synd-dentists.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1AGUMLAfeD/"
@@ -723,6 +817,8 @@
         "id": "synd-pharmacists",
         "name": "Syrian Pharmacists Syndicate",
         "name_ar": "نقابة صيادلة سوريا",
+        "description": "The professional association for pharmacists in Syria",
+        "description_ar": "النقابة المهنية للصيادلة في سوريا",
         "image": "images/syndicates/synd-pharmacists.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/19M4n6EM3E/"
@@ -732,6 +828,8 @@
         "id": "synd-doctors",
         "name": "Syrian Doctors Syndicate",
         "name_ar": "نقابة أطباء سوريا",
+        "description": "The professional association for doctors in Syria",
+        "description_ar": "النقابة المهنية للأطباء في سوريا",
         "image": "images/syndicates/synd-doctors.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/18LcBRxNfU/"
@@ -741,6 +839,8 @@
         "id": "synd-engineers",
         "name": "Syrian Engineers Syndicate",
         "name_ar": "نقابة المهندسين",
+        "description": "The professional association for engineers in Syria",
+        "description_ar": "النقابة المهنية للمهندسين في سوريا",
         "image": "images/syndicates/synd-engineers.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1ABpA9cctz/"
@@ -752,6 +852,8 @@
         "id": "uni-virtual",
         "name": "Syrian Virtual University",
         "name_ar": "الجامعة الافتراضية السورية",
+        "description": "The first virtual university in Syria offering online education",
+        "description_ar": "أول جامعة افتراضية في سوريا تقدم التعليم عن بعد",
         "image": "images/universities/uni-virtual.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/19zaMsCdXk/"
@@ -761,6 +863,8 @@
         "id": "uni-damascus",
         "name": "Damascus University",
         "name_ar": "جامعة دمشق",
+        "description": "The oldest and largest university in Syria",
+        "description_ar": "أقدم وأكبر جامعة في سوريا",
         "image": "images/universities/uni-damascus.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1FHR31osxR/"
@@ -770,6 +874,8 @@
         "id": "uni-aleppo",
         "name": "Aleppo University",
         "name_ar": "جامعة حلب",
+        "description": "The second largest university in Syria",
+        "description_ar": "ثاني أكبر جامعة في سوريا",
         "image": "images/universities/uni-aleppo.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1Dki3sE5Yo/"
@@ -779,6 +885,8 @@
         "id": "uni-idlib",
         "name": "Idlib University",
         "name_ar": "جامعة إدلب",
+        "description": "A public university serving the Idlib region",
+        "description_ar": "جامعة حكومية تخدم منطقة إدلب",
         "image": "images/universities/uni-idlib.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1AUNjzQvhU/"
@@ -788,6 +896,8 @@
         "id": "uni-homs",
         "name": "Homs University",
         "name_ar": "جامعة حمص",
+        "description": "A public university serving the Homs region",
+        "description_ar": "جامعة حكومية تخدم منطقة حمص",
         "image": "images/universities/uni-homs.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/19bwcbZYEC/"
@@ -797,15 +907,19 @@
         "id": "uni-hama",
         "name": "Hama University",
         "name_ar": "جامعة حماة",
+        "description": "A public university serving the Hama region",
+        "description_ar": "جامعة حكومية تخدم منطقة حماة",
         "image": "images/universities/uni-hama.jpg",
         "socials": {
-          "facebook": "https://www.facebook.com/share/1BXFqSPNrj/"
+          "facebook": "https://www.facebook.com/aust.hama?mibextid=ZbWKwL"
         }
       },
       {
         "id": "uni-lattakia",
         "name": "Lattakia University",
         "name_ar": "جامعة اللاذقية",
+        "description": "A public university serving the coastal region",
+        "description_ar": "جامعة حكومية تخدم المنطقة الساحلية",
         "image": "images/universities/uni-lattakia.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1HfqKTAiR7/"
@@ -815,6 +929,8 @@
         "id": "uni-syrian-private",
         "name": "Syrian Private University",
         "name_ar": "الجامعة السورية الخاصة",
+        "description": "A leading private university in Syria",
+        "description_ar": "إحدى الجامعات الخاصة الرائدة في سوريا",
         "image": "images/universities/uni-syrian-private.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1PbUcEv3bj/"
@@ -824,6 +940,8 @@
         "id": "uni-qalamoun-private",
         "name": "Qalamoun Private University",
         "name_ar": "جامعة القلمون الخاصة",
+        "description": "A private university in the Qalamoun region",
+        "description_ar": "جامعة خاصة في منطقة القلمون",
         "image": "images/universities/uni-qalamoun-private.png",
         "socials": {
           "facebook": "https://www.facebook.com/share/1HjpVqe5q3/"
@@ -833,6 +951,8 @@
         "id": "uni-arab-private",
         "name": "Arab Private University",
         "name_ar": "الجامعة العربية الخاصة",
+        "description": "A private university in Hama",
+        "description_ar": "جامعة خاصة في حماة",
         "image": "images/universities/uni-arab-private.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/aust.hama?mibextid=ZbWKwL"
@@ -842,6 +962,8 @@
         "id": "uni-national-private",
         "name": "National Private University",
         "name_ar": "الجامعة الوطنية الخاصة",
+        "description": "A private university in Homs",
+        "description_ar": "جامعة خاصة في حمص",
         "image": "images/universities/uni-national-private.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1ANGfwVPkH/"
@@ -851,6 +973,8 @@
         "id": "uni-international-private",
         "name": "International Private University",
         "name_ar": "الجامعة الدولية الخاصة",
+        "description": "A private university in Damascus",
+        "description_ar": "جامعة خاصة في دمشق",
         "image": "images/universities/uni-international-private.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1Bmyjssdhz/"
@@ -860,6 +984,8 @@
         "id": "uni-marie-private",
         "name": "Marie Private University",
         "name_ar": "جامعة ماري الخاصة",
+        "description": "A private university in Damascus",
+        "description_ar": "جامعة خاصة في دمشق",
         "image": "images/universities/uni-marie-private.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/12L5MKPJgNj/"
@@ -869,6 +995,8 @@
         "id": "uni-islamic",
         "name": "Islamic University",
         "name_ar": "الجامعة الإسلامية",
+        "description": "A private Islamic university in Damascus",
+        "description_ar": "جامعة إسلامية خاصة في دمشق",
         "image": "images/universities/uni-islamic.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/15CYofgxcD/"
@@ -878,6 +1006,8 @@
         "id": "uni-north-private",
         "name": "North Private University",
         "name_ar": "جامعة الشمال الخاصة",
+        "description": "A private university in Aleppo",
+        "description_ar": "جامعة خاصة في حلب",
         "image": "images/universities/uni-north-private.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/15SjNQG7UC/"
@@ -887,6 +1017,8 @@
         "id": "uni-sham",
         "name": "Sham University",
         "name_ar": "جامعة الشام",
+        "description": "A private university in Damascus",
+        "description_ar": "جامعة خاصة في دمشق",
         "image": "images/universities/uni-sham.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1BeWdhanEN/"
@@ -896,6 +1028,8 @@
         "id": "uni-ebla-private",
         "name": "Ebla Private University",
         "name_ar": "جامعة إيبلا الخاصة",
+        "description": "A private university in Idlib",
+        "description_ar": "جامعة خاصة في إدلب",
         "image": "images/universities/uni-ebla-private.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/14eM6N3bQT/"
@@ -905,6 +1039,8 @@
         "id": "uni-hawash-private",
         "name": "Hawash Private University",
         "name_ar": "جامعة الحواش الخاصة",
+        "description": "A private university in Homs",
+        "description_ar": "جامعة خاصة في حمص",
         "image": "images/universities/uni-hawash-private.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/18hXrfp2Et/"
@@ -914,6 +1050,8 @@
         "id": "uni-manara",
         "name": "Manara University",
         "name_ar": "جامعة المنارة",
+        "description": "A private university in Damascus",
+        "description_ar": "جامعة خاصة في دمشق",
         "image": "images/universities/uni-manara.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1BopQj3hi3/"
@@ -923,6 +1061,8 @@
         "id": "uni-furat",
         "name": "Al-Furat University",
         "name_ar": "جامعة الفرات",
+        "description": "A public university in Deir ez-Zor",
+        "description_ar": "جامعة حكومية في دير الزور",
         "image": "images/universities/uni-furat.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/AlForatUniversity/",
@@ -936,6 +1076,8 @@
         "id": "emb-kuwait",
         "name": "Syrian Embassy in Kuwait",
         "name_ar": "السفارة السورية في الكويت",
+        "description": "The diplomatic mission representing Syria in Kuwait",
+        "description_ar": "البعثة الدبلوماسية التي تمثل سوريا في الكويت",
         "image": "images/embassies/emb-kuwait.jpg",
         "socials": {
           "twitter": "https://twitter.com/syrianembassyku",
@@ -946,6 +1088,8 @@
         "id": "emb-cairo",
         "name": "Syrian Embassy in Cairo",
         "name_ar": "السفارة السورية في القاهرة",
+        "description": "The diplomatic mission representing Syria in Egypt",
+        "description_ar": "البعثة الدبلوماسية التي تمثل سوريا في مصر",
         "image": "images/embassies/emb-cairo.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1BxUg8DbJ6/"
@@ -955,6 +1099,8 @@
         "id": "emb-amman",
         "name": "Syrian Embassy in Amman",
         "name_ar": "السفارة السورية في عمّان",
+        "description": "The diplomatic mission representing Syria in Jordan",
+        "description_ar": "البعثة الدبلوماسية التي تمثل سوريا في الأردن",
         "image": "images/embassies/emb-amman.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/17zSAn6Sqx/"
@@ -964,6 +1110,8 @@
         "id": "emb-beirut",
         "name": "Syrian Embassy in Beirut",
         "name_ar": "السفارة السورية في بيروت",
+        "description": "The diplomatic mission representing Syria in Lebanon",
+        "description_ar": "البعثة الدبلوماسية التي تمثل سوريا في لبنان",
         "image": "images/embassies/emb-beirut.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/19HEYSYB9C/"
@@ -973,6 +1121,8 @@
         "id": "emb-doha",
         "name": "Syrian Embassy in Doha",
         "name_ar": "السفارة السورية في الدوحة",
+        "description": "The diplomatic mission representing Syria in Qatar",
+        "description_ar": "البعثة الدبلوماسية التي تمثل سوريا في قطر",
         "image": "images/embassies/emb-doha.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/16Nj7JkdEj/"
@@ -982,6 +1132,8 @@
         "id": "emb-abu-dhabi",
         "name": "Syrian Embassy in Abu Dhabi",
         "name_ar": "السفارة السورية في أبو ظبي",
+        "description": "The diplomatic mission representing Syria in the UAE",
+        "description_ar": "البعثة الدبلوماسية التي تمثل سوريا في الإمارات",
         "image": "images/embassies/emb-abu-dhabi.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/15LfCFDJj6/"
@@ -991,6 +1143,8 @@
         "id": "emb-consulate-dubai",
         "name": "Syrian Consulate in Dubai",
         "name_ar": "القنصلية العامة للجمهورية العربية السورية في دبي",
+        "description": "The consular mission representing Syria in Dubai",
+        "description_ar": "البعثة القنصلية التي تمثل سوريا في دبي",
         "image": "images/embassies/emb-consulate-dubai.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/syrianconsulatedubai"
@@ -1000,6 +1154,8 @@
         "id": "emb-riyadh",
         "name": "Syrian Embassy in Riyadh",
         "name_ar": "سفارة الجمهورية العربية السورية في الرياض",
+        "description": "The diplomatic mission representing Syria in Saudi Arabia",
+        "description_ar": "البعثة الدبلوماسية التي تمثل سوريا في السعودية",
         "image": "images/embassies/emb-riyadh.jpg",
         "socials": {
           "website": "https://mofaex.gov.sy/riyadh-embassy/index.php"
@@ -1009,6 +1165,8 @@
         "id": "emb-ecsc",
         "name": "Electronic Consular Center",
         "name_ar": "المركز القنصلي الإلكتروني",
+        "description": "The electronic platform for consular services",
+        "description_ar": "المنصة الإلكترونية للخدمات القنصلية",
         "image": "images/embassies/emb-ecsc.jpg",
         "socials": {
           "website": "https://www.ecsc-expat.sy/"
@@ -1020,6 +1178,8 @@
         "id": "other-syrian-civil-defense",
         "name": "Syrian Civil Defense",
         "name_ar": "الدفاع المدني السوري",
+        "description": "The national emergency response organization",
+        "description_ar": "منظمة الاستجابة للطوارئ الوطنية",
         "image": "images/other/other-syrian-civil-defense.jpg",
         "socials": {
           "twitter": "https://twitter.com/SyriaCivilDefe"
@@ -1029,6 +1189,8 @@
         "id": "other-general-control",
         "name": "General Authority for Control and Inspection",
         "name_ar": "الهيئة العامة للرقابة والتفتيش",
+        "description": "The government body responsible for oversight and inspection",
+        "description_ar": "الهيئة الحكومية المسؤولة عن الرقابة والتفتيش",
         "image": "images/other/other-general-control.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1HVaaJEnLW/"
@@ -1038,6 +1200,8 @@
         "id": "other-alekhbariah",
         "name": "Alekhbariah Syria",
         "name_ar": "الإخبارية السورية",
+        "description": "The official news agency of Syria",
+        "description_ar": "الوكالة الإخبارية الرسمية في سوريا",
         "image": "images/other/other-alekhbariah.jpg",
         "socials": {
           "twitter": "https://twitter.com/AlekhbariahSY",
@@ -1048,6 +1212,8 @@
         "id": "other-syrian-red-crescent",
         "name": "Syrian Red Crescent",
         "name_ar": "الهلال الأحمر السوري",
+        "description": "The humanitarian organization providing medical and relief services",
+        "description_ar": "المنظمة الإنسانية التي تقدم الخدمات الطبية والإغاثية",
         "image": "images/other/other-syrian-red-crescent.png",
         "socials": {
           "twitter": "https://twitter.com/SYRedCrescent",
@@ -1058,6 +1224,8 @@
         "id": "other-political-affairs",
         "name": "Political Affairs Administration",
         "name_ar": "إدارة الشؤون السياسية - سوريا",
+        "description": "The government body handling political affairs",
+        "description_ar": "الهيئة الحكومية المسؤولة عن الشؤون السياسية",
         "image": "images/other/other-political-affairs.jpg",
         "socials": {
           "twitter": "https://twitter.com/syriadpa"
@@ -1067,6 +1235,8 @@
         "id": "other-presidency",
         "name": "Presidency of the Syrian Arab Republic",
         "name_ar": "رئاسة الجمهورية العربية السورية",
+        "description": "The official office of the President of Syria",
+        "description_ar": "المكتب الرسمي لرئيس الجمهورية العربية السورية",
         "image": "images/other/other-presidency.jpg",
         "socials": {
           "twitter": "https://twitter.com/SyPresidency",
@@ -1080,6 +1250,8 @@
         "id": "other-syrian-mission-un",
         "name": "Syrian Mission to UN Geneva",
         "name_ar": "البعثة الدائمة للجمهورية العربية السورية لدى الأمم المتحدة في جنيف",
+        "description": "The permanent mission representing Syria at the United Nations in Geneva",
+        "description_ar": "البعثة الدائمة التي تمثل سوريا في الأمم المتحدة في جنيف",
         "image": "images/other/other-syrian-mission-un.jpg",
         "socials": {
           "twitter": "https://twitter.com/SyriaMissionUN"
@@ -1089,6 +1261,8 @@
         "id": "other-syrian-borders",
         "name": "General Authority for Land and Sea Ports",
         "name_ar": "الهيئة العامة للمنافذ البرية والبحرية السورية",
+        "description": "The government body managing land and sea ports",
+        "description_ar": "الهيئة الحكومية المسؤولة عن إدارة المنافذ البرية والبحرية",
         "image": "images/other/other-syrian-borders.jpg",
         "socials": {
           "twitter": "https://twitter.com/Syrianborders",
@@ -1099,6 +1273,8 @@
         "id": "other-civil-aviation",
         "name": "General Authority for Civil Aviation",
         "name_ar": "الهيئة العامة للطيران المدني والنقل الجوي السوري",
+        "description": "The government body regulating civil aviation",
+        "description_ar": "الهيئة الحكومية المسؤولة عن تنظيم الطيران المدني",
         "image": "images/other/other-civil-aviation.jpg",
         "socials": {
           "twitter": "https://twitter.com/AllltyraN",
@@ -1109,6 +1285,8 @@
         "id": "other-aleppo-airport",
         "name": "Aleppo International Airport",
         "name_ar": "مطار حلب الدولي",
+        "description": "The international airport serving Aleppo",
+        "description_ar": "المطار الدولي الذي يخدم مدينة حلب",
         "image": "images/other/other-aleppo-airport.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1G7ineU8Le/"
@@ -1118,6 +1296,8 @@
         "id": "other-national-quality",
         "name": "National Quality and Accreditation Authority",
         "name_ar": "الهيئة الوطنية للجودة والاعتمادية",
+        "description": "The government body ensuring quality standards and accreditation",
+        "description_ar": "الهيئة الحكومية المسؤولة عن ضمان معايير الجودة والاعتمادية",
         "image": "images/other/other-national-quality.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1BSf9UF7Rp/"
@@ -1127,6 +1307,8 @@
         "id": "other-sana",
         "name": "Syrian Arab News Agency",
         "name_ar": "سانا",
+        "description": "The official news agency of Syria",
+        "description_ar": "الوكالة الإخبارية الرسمية في سوريا",
         "image": "images/other/other-sana.jpg",
         "socials": {
           "website": "https://sana.sy",
@@ -1141,6 +1323,8 @@
         "id": "other-syrian-airlines",
         "name": "Syrian Airlines",
         "name_ar": "الخطوط الجوية السورية",
+        "description": "The national airline of Syria",
+        "description_ar": "الخطوط الجوية الوطنية السورية",
         "image": "images/other/other-syrian-airlines.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/16TXDg4RNq/"
@@ -1150,6 +1334,8 @@
         "id": "other-central-bank",
         "name": "Central Bank of Syria",
         "name_ar": "مصرف سورية المركزي",
+        "description": "The central bank of Syria",
+        "description_ar": "البنك المركزي السوري",
         "image": "images/other/other-central-bank.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/19V3CKAWNb/"
@@ -1159,6 +1345,8 @@
         "id": "other-cham-wings",
         "name": "Cham Wings Airlines",
         "name_ar": "أجنحة الشام للطيران",
+        "description": "A private Syrian airline",
+        "description_ar": "شركة طيران سورية خاصة",
         "image": "images/other/other-cham-wings.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1BVeSkE99G/"
@@ -1168,6 +1356,8 @@
         "id": "other-football-association",
         "name": "Syrian Football Association",
         "name_ar": "الاتحاد السوري لكرة القدم",
+        "description": "The governing body of football in Syria",
+        "description_ar": "الهيئة الحاكمة لكرة القدم في سوريا",
         "image": "images/other/other-football-association.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/198vwuWvQ8/"
@@ -1177,6 +1367,8 @@
         "id": "other-caff",
         "name": "Central Authority for Financial Control",
         "name_ar": "الجهاز المركزي للرقابة المالية",
+        "description": "The government body responsible for financial oversight",
+        "description_ar": "الهيئة الحكومية المسؤولة عن الرقابة المالية",
         "image": "images/other/other-caff.jpg",
         "socials": {
           "telegram": "https://t.me/CAFFControl"
@@ -1186,6 +1378,8 @@
         "id": "other-eclean",
         "name": "E-Clean Foundation",
         "name_ar": "مؤسسة البيئة النظيفة E-Clean",
+        "description": "An environmental organization promoting clean initiatives",
+        "description_ar": "منظمة بيئية تعزز المبادرات النظيفة",
         "image": "images/other/other-eclean.jpg",
         "socials": {
           "facebook": "https://facebook.com/ecleansyy",
@@ -1217,8 +1411,8 @@
       },
       {
         "id": "other-general-ports",
-        "name": "General Directorate of Ports",
-        "name_ar": "المديرية العامة للموانئ",
+        "name": "General Authority for Land and Sea Ports",
+        "name_ar": "الهيئة العامة للموانئ",
         "image": "images/other/other-general-ports.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1BPCtCT9HD/"

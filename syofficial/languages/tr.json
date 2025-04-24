@@ -1,0 +1,48 @@
+{
+    "app": {
+        "title": "Suriye Resmi Kurumları Sosyal Medya Bağlantıları",
+        "description": "Resmi sosyal medya sayfalarına erişmek için kurum adına tıklayın",
+        "noResults": "Eşleşen sonuç bulunamadı",
+        "searchPlaceholder": "İsme göre ara...",
+        "error": {
+            "connection": "Bağlantı hatası! Durum: {status}",
+            "loading": "{category} verileri yüklenirken hata oluştu"
+        }
+    },
+    "categories": {
+        "all": "Tümü",
+        "governorates": "Valilikler",
+        "ministries": "Bakanlıklar",
+        "ministers": "Bakanlar",
+        "public_figures": "Kamu Görevlileri",
+        "syndicates": "Sendikalar",
+        "universities": "Üniversiteler",
+        "embassies": "Büyükelçilikler",
+        "other": "Diğer"
+    },
+    "table": {
+        "name": "İsim",
+        "description": "Açıklama",
+        "socialLinks": "Sosyal Medya Bağlantıları",
+        "noLinks": "Bağlantı mevcut değil"
+    },
+    "modal": {
+        "title": "Sosyal Medya Bağlantıları",
+        "close": "Kapat",
+        "noSocialLinks": "Sosyal medya bağlantısı mevcut değil"
+    },
+    "view": {
+        "grid": "Izgara Görünümü",
+        "table": "Tablo Görünümü"
+    },
+    "social": {
+        "twitterList": "Twitter Listesi",
+        "telegramList": "Telegram Listesi"
+    },
+    "footer": {
+        "copyright": "© 2025 Suriye Resmi Kurumları Sosyal Medya Bağlantıları",
+        "developedBy": "Geliştiren",
+        "personalWebsite": "Kişisel Web Sitesi",
+        "xAccount": "X Hesabı"
+    }
+} 

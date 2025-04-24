@@ -2,6 +2,11 @@ class NavBar extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
+    this.languageMap = {
+      'ar': { text: 'العربية', alt: 'Arabic' },
+      'en': { text: 'English', alt: 'English' },
+      'tr': { text: 'Türkçe', alt: 'Turkish' }
+    };
   }
 
   connectedCallback() {
@@ -30,15 +35,141 @@ class NavBar extends HTMLElement {
     const menuButton = this.shadowRoot.querySelector('.menu-button');
     const navItems = this.shadowRoot.querySelector('.nav-items');
     const navbar = this.shadowRoot.querySelector('.navbar');
+    const languageButton = this.shadowRoot.querySelector('.language-button');
+    const mobileLanguageButton = this.shadowRoot.querySelector('.mobile-language-button');
+    const languageMenu = this.shadowRoot.querySelector('.language-menu');
+    const mobileLanguageMenu = this.shadowRoot.querySelector('.mobile-language-menu');
+    const languageOptions = this.shadowRoot.querySelectorAll('.language-option');
+    const mobileLanguageOptions = this.shadowRoot.querySelectorAll('.mobile-language-option');
     
     menuButton?.addEventListener('click', () => {
       navItems.classList.toggle('show');
       menuButton.classList.toggle('active');
       navbar.classList.toggle('menu-open');
     });
+
+    const handleLanguageClick = (e) => {
+      e.stopPropagation(); // Prevent event from bubbling up
+      if (window.innerWidth <= 768) {
+        mobileLanguageMenu.classList.toggle('show');
+      } else {
+        languageMenu.classList.toggle('show');
+      }
+    };
+
+    languageButton?.addEventListener('click', handleLanguageClick);
+    mobileLanguageButton?.addEventListener('click', handleLanguageClick);
+
+    const handleLanguageOptionClick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const lang = e.currentTarget.dataset.lang;
+      const currentLangSpan = this.shadowRoot.querySelector('.current-language');
+      const flagIcon = this.shadowRoot.querySelector('.language-button .flag-icon');
+      const mobileFlagIcon = this.shadowRoot.querySelector('.mobile-language-button .flag-icon');
+      
+      // Update active state
+      languageOptions.forEach(opt => opt.classList.remove('active'));
+      mobileLanguageOptions.forEach(opt => opt.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+      
+      // Update button text and flag
+      if (currentLangSpan) {
+        currentLangSpan.textContent = this.languageMap[lang]?.text || this.languageMap['ar'].text;
+      }
+      if (flagIcon) {
+        flagIcon.src = `/syofficial/assets/flags/${lang}.svg`;
+        flagIcon.alt = this.languageMap[lang]?.alt || this.languageMap['ar'].alt;
+      }
+      if (mobileFlagIcon) {
+        mobileFlagIcon.src = `/syofficial/assets/flags/${lang}.svg`;
+        mobileFlagIcon.alt = this.languageMap[lang]?.alt || this.languageMap['ar'].alt;
+      }
+      
+      // Close menus
+      languageMenu.classList.remove('show');
+      mobileLanguageMenu.classList.remove('show');
+      
+      // Dispatch custom event for language change
+      this.dispatchEvent(new CustomEvent('languageChange', {
+        detail: { lang },
+        bubbles: true,
+        composed: true
+      }));
+
+      // Call the global switchLanguage function if it exists
+      if (window.switchLanguage) {
+        window.switchLanguage(lang);
+      } else {
+        // Fallback if i18n.js is not loaded yet
+        localStorage.setItem('preferredLanguage', lang);
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+      }
+    };
+
+    languageOptions.forEach(option => {
+      option.addEventListener('click', handleLanguageOptionClick);
+    });
+
+    mobileLanguageOptions.forEach(option => {
+      option.addEventListener('click', handleLanguageOptionClick);
+    });
+
+    // Close language menus when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!this.shadowRoot.contains(e.target)) {
+        languageMenu.classList.remove('show');
+        mobileLanguageMenu.classList.remove('show');
+      }
+    });
+
+    // Update language button text based on current language
+    const updateLanguageButton = () => {
+      const currentLang = localStorage.getItem('preferredLanguage') || 'ar'; // Default to 'ar'
+      const currentLangSpan = this.shadowRoot.querySelector('.current-language');
+      const flagIcon = this.shadowRoot.querySelector('.language-button .flag-icon');
+      if (currentLangSpan && flagIcon) {
+        currentLangSpan.textContent = this.languageMap[currentLang]?.text || this.languageMap['ar'].text;
+        flagIcon.src = `/syofficial/assets/flags/${currentLang}.svg`;
+        flagIcon.alt = this.languageMap[currentLang]?.alt || this.languageMap['ar'].alt;
+      }
+      const languageOptions = this.shadowRoot.querySelectorAll('.language-option');
+      languageOptions.forEach(option => {
+        if (option.dataset.lang === currentLang) {
+          option.classList.add('active');
+        } else {
+          option.classList.remove('active');
+        }
+      });
+    };
+
+    // Listen for language changes from other components
+    document.addEventListener('languageChanged', () => {
+      updateLanguageButton();
+    });
+
+    // Initial update
+    updateLanguageButton();
+
+    // Check if i18n.js is loaded and update accordingly
+    const checkI18nLoaded = setInterval(() => {
+      if (window.switchLanguage) {
+        clearInterval(checkI18nLoaded);
+        // Ensure Arabic is set as default
+        if (!localStorage.getItem('preferredLanguage')) {
+          localStorage.setItem('preferredLanguage', 'ar');
+          document.documentElement.lang = 'ar';
+          document.documentElement.dir = 'rtl';
+        }
+        updateLanguageButton();
+      }
+    }, 100);
   }
 
   render() {
+    const isSyofficialPage = window.location.pathname.includes('/syofficial');
+    
     this.shadowRoot.innerHTML = `
       <style>
         :host {
@@ -108,6 +239,80 @@ class NavBar extends HTMLElement {
         .mobile-header {
           display: none;
         }
+        .language-dropdown {
+          position: relative;
+          display: inline-block;
+        }
+        .language-button {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.5rem 0.75rem;
+          border-radius: 0.5rem;
+          background: none;
+          border: none;
+          cursor: pointer;
+          color: #1a1a1a;
+          font-size: 0.95rem;
+          transition: all 0.2s;
+          font-family: "IBM Plex Sans Arabic", sans-serif;
+        }
+        .language-button:hover {
+          background-color: #f3f4f6;
+        }
+        .language-button i {
+          font-size: 1.1rem;
+        }
+        .language-menu {
+          position: absolute;
+          top: 100%;
+          right: 0;
+          background-color: white;
+          border-radius: 0.5rem;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          padding: 0.5rem;
+          display: none;
+          min-width: 120px;
+          z-index: 1000;
+          opacity: 0;
+          transform: translateY(-10px);
+          transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .language-menu.show {
+          display: block;
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .language-option {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.5rem 0.75rem;
+          border-radius: 0.375rem;
+          cursor: pointer;
+          transition: all 0.2s;
+          color: #1a1a1a;
+          text-decoration: none;
+          font-family: "IBM Plex Sans Arabic", sans-serif;
+        }
+        .language-option:hover {
+          background-color: #f3f4f6;
+        }
+        .language-option.active {
+          background-color: #edf7ed;
+          color: #2d4d3c;
+          font-weight: 500;
+        }
+        .language-option i {
+          font-size: 1.1rem;
+        }
+        .flag-icon {
+          width: 20px;
+          height: 15px;
+          object-fit: cover;
+          border-radius: 2px;
+          margin-right: 0.5rem;
+        }
         @media (max-width: 768px) {
           .navbar {
             position: fixed;
@@ -123,6 +328,7 @@ class NavBar extends HTMLElement {
             align-items: center;
             justify-content: space-between;
             padding: 0.25rem;
+            position: relative;
           }
           .mobile-title {
             display: flex;
@@ -134,10 +340,83 @@ class NavBar extends HTMLElement {
           .mobile-title i {
             margin-left: 0.5rem;
           }
+          .mobile-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+          }
           .menu-button {
             display: flex;
             align-items: center;
             justify-content: center;
+          }
+          .mobile-language-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.5rem;
+          }
+          .mobile-language-button:hover {
+            background-color: #f3f4f6;
+          }
+          .mobile-language-button .flag-icon {
+            width: 24px;
+            height: 18px;
+            object-fit: cover;
+            border-radius: 2px;
+          }
+          .mobile-language-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem;
+            display: none;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+          }
+          .mobile-language-menu.show {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            opacity: 1;
+            transform: translateY(0);
+          }
+          .mobile-language-option {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: none;
+            border: none;
+            width: 2.5rem;
+            height: 2.5rem;
+          }
+          .mobile-language-option:hover {
+            background-color: #f3f4f6;
+          }
+          .mobile-language-option.active {
+            background-color: #edf7ed;
+          }
+          .mobile-language-option .flag-icon {
+            width: 24px;
+            height: 18px;
+            object-fit: cover;
+            border-radius: 2px;
           }
           .nav-items {
             display: none;
@@ -166,6 +445,9 @@ class NavBar extends HTMLElement {
           .container {
             padding: 0 0.5rem;
           }
+          .language-dropdown {
+            display: none;
+          }
         }
       </style>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -173,9 +455,27 @@ class NavBar extends HTMLElement {
         <div class="container">
           <div class="mobile-header">
             <div class="mobile-title"></div>
-            <button class="menu-button">
-              <i class="fas fa-bars"></i>
-            </button>
+            <div class="mobile-actions">
+              ${isSyofficialPage ? `
+              <button class="mobile-language-button">
+                <img src="/syofficial/assets/flags/${localStorage.getItem('preferredLanguage') || 'ar'}.svg" alt="Current language" class="flag-icon">
+              </button>
+              <div class="mobile-language-menu">
+                <button class="mobile-language-option active" data-lang="ar">
+                  <img src="/syofficial/assets/flags/ar.svg" alt="Arabic" class="flag-icon">
+                </button>
+                <button class="mobile-language-option" data-lang="en">
+                  <img src="/syofficial/assets/flags/en.svg" alt="English" class="flag-icon">
+                </button>
+                <button class="mobile-language-option" data-lang="tr">
+                  <img src="/syofficial/assets/flags/tr.svg" alt="Turkish" class="flag-icon">
+                </button>
+              </div>
+              ` : ''}
+              <button class="menu-button">
+                <i class="fas fa-bars"></i>
+              </button>
+            </div>
           </div>
           <div class="nav-items">
             <a href="/" class="nav-item">
@@ -202,6 +502,29 @@ class NavBar extends HTMLElement {
               <i class="fas fa-th" style="color: #ffbf7f;"></i>
               مبدل العلم
             </a>
+            ${isSyofficialPage ? `
+            <div class="language-dropdown">
+              <button class="language-button">
+                <img src="/syofficial/assets/flags/${localStorage.getItem('preferredLanguage') || 'ar'}.svg" alt="Current language" class="flag-icon">
+                <span class="current-language">العربية</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="language-menu">
+                <a href="#" class="language-option active" data-lang="ar">
+                  <img src="/syofficial/assets/flags/ar.svg" alt="Arabic" class="flag-icon">
+                  العربية
+                </a>
+                <a href="#" class="language-option" data-lang="en">
+                  <img src="/syofficial/assets/flags/en.svg" alt="English" class="flag-icon">
+                  English
+                </a>
+                <a href="#" class="language-option" data-lang="tr">
+                  <img src="/syofficial/assets/flags/tr.svg" alt="Turkish" class="flag-icon">
+                  Türkçe
+                </a>
+              </div>
+            </div>
+            ` : ''}
           </div>
         </div>
       </nav>

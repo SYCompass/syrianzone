@@ -22,8 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const tableView = document.getElementById('table-view');
     const tableBody = document.getElementById('table-body');
 
-    let isTableView = false;
+    let isTableView = false; // Set default to false for grid view
     let allData = { governorates: [], ministries: [], ministers: [], public_figures: [], other: [], syndicates: [], universities: [], embassies: [] }; // To store fetched data
+    let currentLanguage = localStorage.getItem('preferredLanguage') || 'ar'; // Get language from localStorage or default to 'ar'
 
     // --- View Toggle Handling ---
     viewToggle.addEventListener('click', () => {
@@ -31,14 +32,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isTableView) {
             contentSections.classList.add('hidden');
             tableView.classList.remove('hidden');
-            viewToggle.innerHTML = '<i class="fas fa-th-large"></i><span>عرض الشبكة</span>';
+            viewToggle.innerHTML = `<i class="fas fa-th-large"></i><span data-i18n="view.grid">عرض الشبكة</span>`;
             populateTable();
         } else {
             contentSections.classList.remove('hidden');
             tableView.classList.add('hidden');
-            viewToggle.innerHTML = '<i class="fas fa-table"></i><span>عرض الجدول</span>';
+            viewToggle.innerHTML = `<i class="fas fa-table"></i><span data-i18n="view.table">عرض الجدول</span>`;
         }
+        // Update the button text based on current language
+        updatePageLanguage();
     });
+
+    // Set initial state
+    contentSections.classList.remove('hidden');
+    tableView.classList.add('hidden');
+    viewToggle.innerHTML = `<i class="fas fa-table"></i><span data-i18n="view.table">عرض الجدول</span>`;
+    populateTable();
 
     // --- Table Population ---
     function populateTable() {
@@ -65,16 +74,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const nameCell = document.createElement('td');
             nameCell.className = 'px-6 py-4 sm:whitespace-nowrap flex flex-col sm:table-cell';
             nameCell.innerHTML = `
-                <div class="text-xs text-gray-500 sm:hidden mb-1">الاسم</div>
-                <div class="text-sm font-medium text-gray-900">${item.name_ar}</div>
-                <div class="text-sm text-gray-500">${item.name}</div>
+                <div class="text-xs text-gray-500 sm:hidden mb-1" data-i18n="table.name">الاسم</div>
+                <div class="text-sm font-medium text-gray-900">${currentLanguage === 'ar' ? item.name_ar : item.name}</div>
             `;
 
             const descCell = document.createElement('td');
             descCell.className = 'px-6 py-4 sm:whitespace-nowrap flex flex-col sm:table-cell';
             descCell.innerHTML = `
-                <div class="text-xs text-gray-500 sm:hidden mb-1">الوصف</div>
-                <div class="text-sm text-gray-500">${item.description || ''}</div>
+                <div class="text-xs text-gray-500 sm:hidden mb-1" data-i18n="table.description">الوصف</div>
+                <div class="text-sm text-gray-500">${currentLanguage === 'ar' ? (item.description_ar || item.description) : item.description}</div>
             `;
 
             const linksCell = document.createElement('td');
@@ -99,13 +107,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 
                 linksCell.innerHTML = `
-                    <div class="text-xs text-gray-500 sm:hidden mb-1">روابط التواصل</div>
+                    <div class="text-xs text-gray-500 sm:hidden mb-1" data-i18n="table.socialLinks">روابط التواصل</div>
                     <div class="flex flex-wrap gap-2">${linksContainer.innerHTML}</div>
                 `;
             } else {
                 linksCell.innerHTML = `
-                    <div class="text-xs text-gray-500 sm:hidden mb-1">روابط التواصل</div>
-                    <div class="text-sm text-gray-500">لا توجد روابط</div>
+                    <div class="text-xs text-gray-500 sm:hidden mb-1" data-i18n="table.socialLinks">روابط التواصل</div>
+                    <div class="text-sm text-gray-500" data-i18n="table.noLinks">لا توجد روابط</div>
                 `;
             }
 
@@ -139,14 +147,14 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             console.error('خطأ في جلب البيانات:', error);
-            governoratesGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات المحافظات.</p>';
-            ministriesGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات الوزارات.</p>';
-            ministersGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات الوزراء.</p>';
-            publicFiguresGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات الشخصيات العامة.</p>';
-            otherGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات أخرى.</p>';
-            syndicatesGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات النقابات.</p>';
-            universitiesGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات الجامعات.</p>';
-            embassiesGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات السفارات.</p>';
+            governoratesGrid.innerHTML = `<p class="text-red-500 col-span-full" data-i18n="app.error.loading">خطأ في تحميل بيانات المحافظات.</p>`;
+            ministriesGrid.innerHTML = `<p class="text-red-500 col-span-full" data-i18n="app.error.loading">خطأ في تحميل بيانات الوزارات.</p>`;
+            ministersGrid.innerHTML = `<p class="text-red-500 col-span-full" data-i18n="app.error.loading">خطأ في تحميل بيانات الوزراء.</p>`;
+            publicFiguresGrid.innerHTML = `<p class="text-red-500 col-span-full" data-i18n="app.error.loading">خطأ في تحميل بيانات الشخصيات العامة.</p>`;
+            otherGrid.innerHTML = `<p class="text-red-500 col-span-full" data-i18n="app.error.loading">خطأ في تحميل بيانات أخرى.</p>`;
+            syndicatesGrid.innerHTML = `<p class="text-red-500 col-span-full" data-i18n="app.error.loading">خطأ في تحميل بيانات النقابات.</p>`;
+            universitiesGrid.innerHTML = `<p class="text-red-500 col-span-full" data-i18n="app.error.loading">خطأ في تحميل بيانات الجامعات.</p>`;
+            embassiesGrid.innerHTML = `<p class="text-red-500 col-span-full" data-i18n="app.error.loading">خطأ في تحميل بيانات السفارات.</p>`;
         });
 
     // --- Grid Population ---
@@ -167,12 +175,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // --- CARD CONTENT ---
             cell.innerHTML = `
                 <div class="w-full bg-gray-200"> 
-                    <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover" style="aspect-ratio: 1/1;" onerror="this.onerror=null; this.src='images/placeholder.png';">
+                    <img src="${item.image}" alt="${currentLanguage === 'ar' ? item.name_ar : item.name}" class="w-full h-full object-cover" style="aspect-ratio: 1/1;" onerror="this.onerror=null; this.src='images/placeholder.png';">
                 </div>
                 <div class="p-3 flex-grow flex flex-col items-center justify-center"> 
-                    <span class="block text-center text-xl font-medium text-gray-600 leading-snug mt-1">${item.name_ar}</span>
-                    <span class="block text-center text-sm font-medium text-gray-800 leading-snug">${item.name}</span>
-                    ${item.description ? `<span class="block text-center text-xs text-gray-500 mt-1">${item.description}</span>` : ''}
+                    <span class="block text-center text-xl font-medium text-gray-600 leading-snug mt-1">${currentLanguage === 'ar' ? item.name_ar : item.name}</span>
+                    ${item.description ? `<span class="block text-center text-xs text-gray-500 mt-1">${currentLanguage === 'ar' ? (item.description_ar || item.description) : item.description}</span>` : ''}
                 </div>
             `;
 
@@ -184,17 +191,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Modal Handling ---
     function openModal(itemId, category) {
+        currentModalId = itemId;
+        currentModalCategory = category;
         const item = allData[category]?.find(i => i.id === itemId);
         if (!item) return;
 
-        modalTitle.textContent = item.name_ar;
+        modalTitle.textContent = currentLanguage === 'ar' ? item.name_ar : item.name;
         modalBody.innerHTML = ''; // Clear previous links
 
         // Add description if available
         if (item.description) {
             const descriptionElement = document.createElement('p');
             descriptionElement.className = 'text-gray-600 text-center mb-4';
-            descriptionElement.textContent = item.description;
+            descriptionElement.textContent = currentLanguage === 'ar' ? (item.description_ar || item.description) : item.description;
             modalBody.appendChild(descriptionElement);
         }
 
@@ -214,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 modalBody.appendChild(linkElement);
             });
         } else {
-            modalBody.innerHTML = '<p class="text-gray-500">لا توجد روابط لوسائل التواصل الاجتماعي متاحة.</p>';
+            modalBody.innerHTML = `<p class="text-gray-500" data-i18n="modal.noSocialLinks">لا توجد روابط لوسائل التواصل الاجتماعي متاحة.</p>`;
         }
 
         // Show modal with transitions
@@ -251,8 +260,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Close modal listeners
     closeModalButton.addEventListener('click', closeModal);
     closeModalButtonFooter.addEventListener('click', closeModal);
-    modal.addEventListener('click', (event) => {
-        if (event.target === modal) {
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
             closeModal();
         }
     });
@@ -344,5 +353,51 @@ document.addEventListener('DOMContentLoaded', () => {
             filterAndSearch();
         });
     });
+
+    // Function to update page language
+    function updatePageLanguage() {
+        currentLanguage = localStorage.getItem('preferredLanguage') || 'ar';
+        
+        // Update table view if active
+        if (isTableView) {
+            populateTable();
+        }
+        
+        // Update grid views
+        populateGrid(governoratesGrid, allData.governorates, 'governorates');
+        populateGrid(ministriesGrid, allData.ministries, 'ministries');
+        populateGrid(ministersGrid, allData.ministers, 'ministers');
+        populateGrid(publicFiguresGrid, allData.public_figures, 'public_figures');
+        populateGrid(otherGrid, allData.other, 'other');
+        populateGrid(syndicatesGrid, allData.syndicates, 'syndicates');
+        populateGrid(universitiesGrid, allData.universities, 'universities');
+        populateGrid(embassiesGrid, allData.embassies, 'embassies');
+
+        // Update modal if it's open
+        if (!modal.classList.contains('pointer-events-none')) {
+            const currentItem = allData[currentModalCategory]?.find(i => i.id === currentModalId);
+            if (currentItem) {
+                modalTitle.textContent = currentLanguage === 'ar' ? currentItem.name_ar : currentItem.name;
+                const descriptionElement = modalBody.querySelector('p');
+                if (descriptionElement && currentItem.description) {
+                    descriptionElement.textContent = currentLanguage === 'ar' ? (currentItem.description_ar || currentItem.description) : currentItem.description;
+                }
+            }
+        }
+    }
+
+    // Listen for language changes
+    document.addEventListener('languageChange', (event) => {
+        currentLanguage = event.detail.lang;
+        localStorage.setItem('preferredLanguage', currentLanguage);
+        updatePageLanguage();
+    });
+
+    // Initial language setup
+    updatePageLanguage();
+
+    // Store current modal state
+    let currentModalId = null;
+    let currentModalCategory = null;
 
 }); // End DOMContentLoaded

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>روابط الجهات الرسمية السورية</title>
+    <title data-i18n="app.title">روابط الجهات الرسمية السورية</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,56 +28,67 @@
         .grid-item span {
             @apply text-center text-sm font-medium text-gray-700;
         }
+        /* Language switcher styles */
+        .language-switcher {
+            @apply flex justify-center items-center gap-2 py-2 bg-gray-100;
+        }
+        .language-switcher button {
+            @apply px-3 py-1 rounded-md transition-colors;
+        }
+        .language-switcher button.active {
+            @apply bg-blue-500 text-white;
+        }
+        .language-switcher button:not(.active) {
+            @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+        }
     </style>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-3VTZVPK0QR"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-3VTZVPK0QR');
-</script>
-      <script src="/components/navbar.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3VTZVPK0QR"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-3VTZVPK0QR');
+    </script>
+    <script src="/components/navbar.js"></script>
 </head>
 <body class="bg-gray-100 font-sans">
     <nav-bar></nav-bar>
-
+    
     <div class="container mx-auto px-4 py-8">
-
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">دليل وسائل التواصل الاجتماعي للجهات السورية</h1>
-        <p class="text-center text-gray-600 mb-8">اضغط على اسم الجهة للوصول إلى صفحاتها الرسمية على وسائل التواصل الاجتماعي</p>
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8" data-i18n="app.title">دليل وسائل التواصل الاجتماعي للجهات السورية</h1>
+        <p class="text-center text-gray-600 mb-8" data-i18n="app.description">اضغط على اسم الجهة للوصول إلى صفحاتها الرسمية على وسائل التواصل الاجتماعي</p>
         <div class="mb-8 p-4 bg-white rounded shadow-md">
             <div class="flex flex-col gap-4 items-center">
                 <div class="flex flex-wrap gap-2 justify-center w-full">
-                    <button data-filter="all" class="filter-btn bg-blue-500 text-white px-3 sm:px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 active text-sm sm:text-base">الكل</button>
-                    <button data-filter="governorates" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base">المحافظات</button>
-                    <button data-filter="ministries" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base">الوزارات</button>
-                    <button data-filter="ministers" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base">الوزراء</button>
-                    <button data-filter="public_figures" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base">الشخصيات العامة</button>
-                    <button data-filter="syndicates" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base">النقابات</button>
-                    <button data-filter="universities" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base">الجامعات</button>
-                    <button data-filter="embassies" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base">السفارات</button>
-                    <button data-filter="other" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base">أخرى</button>
+                    <button data-filter="all" class="filter-btn bg-blue-500 text-white px-3 sm:px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 active text-sm sm:text-base" data-i18n="categories.all">الكل</button>
+                    <button data-filter="governorates" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.governorates">المحافظات</button>
+                    <button data-filter="ministries" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.ministries">الوزارات</button>
+                    <button data-filter="ministers" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.ministers">الوزراء</button>
+                    <button data-filter="public_figures" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.public_figures">الشخصيات العامة</button>
+                    <button data-filter="syndicates" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.syndicates">النقابات</button>
+                    <button data-filter="universities" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.universities">الجامعات</button>
+                    <button data-filter="embassies" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.embassies">السفارات</button>
+                    <button data-filter="other" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.other">أخرى</button>
                 </div>
                 <div class="relative w-full">
                     <span class="absolute inset-y-0 right-0 flex items-center pr-3">
                         <i class="fas fa-search text-gray-400"></i>
                     </span>
-                    <input type="text" id="search-bar" placeholder="ابحث بالاسم..." class="w-full pr-10 pl-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+                    <input type="text" id="search-bar" data-i18n="app.searchPlaceholder" placeholder="ابحث بالاسم..." class="w-full pr-10 pl-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
                 </div>
                 <div class="flex flex-wrap gap-2 justify-center w-full">
                     <button id="view-toggle" class="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
                         <i class="fas fa-th-large"></i>
-                        <span>عرض الشبكة</span>
+                        <span data-i18n="view.grid">عرض الشبكة</span>
                     </button>
                     <a href="https://x.com/i/lists/1906101934660174006" target="_blank" rel="noopener" class="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
                         <i class="fab fa-x-twitter"></i>
-                        <span>قائمة تويتر</span>
+                        <span data-i18n="social.twitterList">قائمة تويتر</span>
                     </a>
                     <a href="https://t.me/addlist/fKrhEy2yNeEwODQ0" target="_blank" rel="noopener" class="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
                         <i class="fab fa-telegram"></i>
-                        <span>قائمة تلغرام</span>
+                        <span data-i18n="social.telegramList">قائمة تلغرام</span>
                     </a>
                 </div>
             </div>
@@ -88,9 +99,9 @@
                 <table class="min-w-full bg-white rounded-lg shadow">
                     <thead class="bg-gray-50 hidden sm:table-header-group">
                         <tr>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الاسم</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الوصف</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">روابط التواصل</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="table.name">الاسم</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="table.description">الوصف</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="table.socialLinks">روابط التواصل</th>
                         </tr>
                     </thead>
                     <tbody id="table-body" class="divide-y divide-gray-200">
@@ -101,54 +112,54 @@
 
         <div id="content-sections">
             <section id="governorates-section" class="mb-12 data-section" data-category="governorates">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-4">المحافظات</h2>
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4" data-i18n="categories.governorates">المحافظات</h2>
                 <div id="governorates-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 </div>
             </section>
 
             <section id="ministries-section" class="mb-12 data-section" data-category="ministries">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-4">الوزارات</h2>
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4" data-i18n="categories.ministries">الوزارات</h2>
                 <div id="ministries-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 </div>
             </section>
 
             <section id="ministers-section" class="mb-12 data-section" data-category="ministers">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-4">الوزراء</h2>
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4" data-i18n="categories.ministers">الوزراء</h2>
                 <div id="ministers-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 </div>
             </section>
 
             <section id="public_figures-section" class="mb-12 data-section" data-category="public_figures">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-4">الشخصيات العامة</h2>
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4" data-i18n="categories.public_figures">الشخصيات العامة</h2>
                 <div id="public_figures-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 </div>
             </section>
 
             <section id="other-section" class="mb-12 data-section" data-category="other">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-4">أخرى</h2>
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4" data-i18n="categories.other">أخرى</h2>
                 <div id="other-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 </div>
             </section>
 
             <section id="syndicates-section" class="mb-12 data-section" data-category="syndicates">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-4">النقابات</h2>
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4" data-i18n="categories.syndicates">النقابات</h2>
                 <div id="syndicates-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 </div>
             </section>
 
             <section id="universities-section" class="mb-12 data-section" data-category="universities">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-4">الجامعات</h2>
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4" data-i18n="categories.universities">الجامعات</h2>
                 <div id="universities-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 </div>
             </section>
 
             <section id="embassies-section" class="mb-12 data-section" data-category="embassies">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-4">السفارات</h2>
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4" data-i18n="categories.embassies">السفارات</h2>
                 <div id="embassies-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 </div>
             </section>
 
-            <div id="no-results" class="text-center text-gray-500 py-10 hidden">
+            <div id="no-results" class="text-center text-gray-500 py-10 hidden" data-i18n="app.noResults">
                 لا توجد نتائج مطابقة
             </div>
         </div>
@@ -158,35 +169,36 @@
     <div id="social-modal" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 opacity-0 pointer-events-none">
         <div class="modal-content bg-white rounded-lg shadow-xl w-11/12 md:max-w-md mx-auto p-6 transform -translate-y-10">
             <div class="flex justify-between items-center border-b pb-3 mb-4">
-                <h3 id="modal-title" class="text-xl font-semibold">روابط التواصل الاجتماعي</h3>
+                <h3 id="modal-title" class="text-xl font-semibold" data-i18n="modal.title">روابط التواصل الاجتماعي</h3>
                 <button id="close-modal-button" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
             </div>
             <div id="modal-body" class="space-y-3">
             </div>
             <div class="text-left mt-4">
-                <button id="close-modal-button-footer" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">إغلاق</button>
+                <button id="close-modal-button-footer" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400" data-i18n="modal.close">إغلاق</button>
             </div>
         </div>
     </div>
 
+    <script src="i18n.js"></script>
     <script src="script.js"></script>
     <footer class="bg-white py-6 mt-8">
         <div class="container mx-auto px-4 text-center text-gray-600">
-          <p>&copy; 2025 روابط الجهات الرسمية السورية</p>
+          <p data-i18n="footer.copyright">&copy; 2025 روابط الجهات الرسمية السورية</p>
     
           <p class="mt-2 text-sm">
-            تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span>
+            <span data-i18n="footer.developedBy">تم التطوير بواسطة</span> <span class="font-semibold">هادي الأحمد</span>
           </p>
           <div class="mt-2 flex justify-center space-x-4 space-x-reverse">
             <a href="http://hadealahmad.com/" target="_blank" rel="noopener"
               class="text-gray-600 hover:text-blue-600 transition flex items-center">
               <i class="fas fa-globe ml-1"></i>
-              الموقع الشخصي
+              <span data-i18n="footer.personalWebsite">الموقع الشخصي</span>
             </a>
             <a href="https://x.com/hadealahmad" target="_blank" rel="noopener"
               class="text-gray-600 hover:text-blue-600 transition flex items-center">
               <i class="fab fa-x-twitter ml-1"></i>
-              حساب X
+              <span data-i18n="footer.xAccount">حساب X</span>
             </a>
           </div>
         </div>
