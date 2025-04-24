@@ -41,6 +41,24 @@
         .language-switcher button:not(.active) {
             @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
         }
+        /* Lazy loading styles */
+        img.lazy {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        img.lazy.loaded {
+            opacity: 1;
+        }
+        /* Add a subtle loading animation for images */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        img.lazy {
+            background: linear-gradient(to right, #f6f7f8 8%, #edeef1 18%, #f6f7f8 33%);
+            background-size: 2000px 100%;
+            animation: shimmer 2s infinite linear;
+        }
     </style>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3VTZVPK0QR"></script>

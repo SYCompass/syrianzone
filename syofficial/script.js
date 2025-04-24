@@ -163,6 +163,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!items || items.length === 0) {
             return;
         }
+
+        // Create Intersection Observer for lazy loading
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.onload = () => {
+                        img.classList.remove('lazy');
+                        img.classList.add('loaded');
+                    };
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '50px 0px',
+            threshold: 0.01
+        });
+
         items.forEach(item => {
             const cell = document.createElement('div');
             // --- CARD STYLING ---
@@ -175,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // --- CARD CONTENT ---
             cell.innerHTML = `
                 <div class="w-full bg-gray-200"> 
-                    <img src="${item.image}" alt="${currentLanguage === 'ar' ? item.name_ar : item.name}" class="w-full h-full object-cover" style="aspect-ratio: 1/1;" onerror="this.onerror=null; this.src='images/placeholder.png';">
+                    <img data-src="${item.image}" alt="${currentLanguage === 'ar' ? item.name_ar : item.name}" class="w-full h-full object-cover lazy" style="aspect-ratio: 1/1;" onerror="this.onerror=null; this.src='images/placeholder.png';">
                 </div>
                 <div class="p-3 flex-grow flex flex-col items-center justify-center"> 
                     <span class="block text-center text-xl font-medium text-gray-600 leading-snug mt-1">${currentLanguage === 'ar' ? item.name_ar : item.name}</span>
@@ -185,6 +204,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Add click listener for modal
             cell.addEventListener('click', () => openModal(item.id, category));
+            
+            // Observe the image for lazy loading
+            const img = cell.querySelector('img');
+            imageObserver.observe(img);
+            
             gridElement.appendChild(cell);
         });
     }
