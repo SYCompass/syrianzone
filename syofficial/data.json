@@ -1069,6 +1069,17 @@
           "youtube": "https://www.youtube.com/channel/UCHjGF_KKpVKWjZUxK2xHbWQ",
           "website": "https://alfuratuniv.edu.sy/"
         }
+      },
+      {
+        "id": "uni-yarmouk-private",
+        "name": "Yarmouk Private University",
+        "name_ar": "جامعة اليرموك الخاصة",
+        "description": "A private university in Syria",
+        "description_ar": "جامعة خاصة في سوريا",
+        "image": "images/universities/uni-yarmouk-private.png",
+        "socials": {
+          "website": "https://ypu.edu.sy"
+        }
       }
     ],
     "embassies": [
