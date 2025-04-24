@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             contentSections.classList.remove('hidden');
             tableView.classList.add('hidden');
-            viewToggle.innerHTML = `<i class="fas fa-table"></i><span data-i18n="view.table">Table View</span>`;
+            viewToggle.innerHTML = `<i class="fas fa-table"></i><span data-i18n="view.table">عرض الجدول</span>`;
         }
         // Update translations without triggering a full page update
         const lang = translations[currentLanguage];
@@ -57,15 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set initial state
     contentSections.classList.remove('hidden');
     tableView.classList.add('hidden');
-    viewToggle.innerHTML = `<i class="fas fa-table"></i><span data-i18n="view.table">Table View</span>`;
+    viewToggle.innerHTML = `<i class="fas fa-table"></i><span data-i18n="view.table">عرض الجدول</span>`;
 
     // --- Table Population ---
     function populateTable() {
         if (!tableBody) return;
-        
+
         // Clear existing content
         tableBody.innerHTML = '';
-        
+
         // Define section order and titles
         const sections = [
             { key: 'governorates', i18n: 'sections.governorates' },
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const linksCell = document.createElement('td');
                 linksCell.className = 'px-6 py-4 sm:whitespace-nowrap flex flex-col sm:table-cell';
-                
+
                 let socialLinksHTML = '';
                 if (item.socials && Object.keys(item.socials).length > 0) {
                     socialLinksHTML = Object.entries(item.socials)
@@ -229,11 +229,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Add click listener for modal
             cell.addEventListener('click', () => openModal(item.id, category));
-            
+
             // Observe the image for lazy loading
             const img = cell.querySelector('img');
             imageObserver.observe(img);
-            
+
             gridElement.appendChild(cell);
         });
     }
@@ -424,7 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to update page language
     function updatePageLanguage() {
         currentLanguage = localStorage.getItem('preferredLanguage') || 'ar';
-        
+
         // Update table view if active
         if (isTableView && allData && Object.keys(allData).length > 0) {
             const rows = tableBody.querySelectorAll('tr');
@@ -433,19 +433,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 const descCell = row.querySelector('td:nth-child(2)');
                 const nameDiv = nameCell.querySelector('.text-sm');
                 const descDiv = descCell.querySelector('.text-sm');
-                
+
                 if (nameDiv && descDiv) {
                     const itemName = nameDiv.dataset.name;
                     const itemNameAr = nameDiv.dataset.nameAr;
                     const itemDesc = descDiv.dataset.desc;
                     const itemDescAr = descDiv.dataset.descAr;
-                    
+
                     nameDiv.textContent = currentLanguage === 'ar' ? itemNameAr : itemName;
                     descDiv.textContent = currentLanguage === 'ar' ? (itemDescAr || itemDesc) : itemDesc;
                 }
             });
         }
-        
+
         // Update grid views
         populateGrid(governoratesGrid, allData.governorates, 'governorates');
         populateGrid(ministriesGrid, allData.ministries, 'ministries');
