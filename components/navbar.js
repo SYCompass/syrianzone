@@ -5,7 +5,8 @@ class NavBar extends HTMLElement {
     this.languageMap = {
       'ar': { text: 'العربية', alt: 'Arabic' },
       'en': { text: 'English', alt: 'English' },
-      'tr': { text: 'Türkçe', alt: 'Turkish' }
+      'tr': { text: 'Türkçe', alt: 'Turkish' },
+      'ku': { text: 'Kurmanji', alt: 'Kurdish' }
     };
   }
 
@@ -470,6 +471,9 @@ class NavBar extends HTMLElement {
                 <button class="mobile-language-option" data-lang="tr">
                   <img src="/syofficial/assets/flags/tr.svg" alt="Turkish" class="flag-icon">
                 </button>
+                <button class="mobile-language-option" data-lang="ku">
+                  <img src="/syofficial/assets/flags/ku.svg" alt="Kurdish" class="flag-icon">
+                </button>
               </div>
               ` : ''}
               <button class="menu-button">
@@ -521,6 +525,10 @@ class NavBar extends HTMLElement {
                 <a href="#" class="language-option" data-lang="tr">
                   <img src="/syofficial/assets/flags/tr.svg" alt="Turkish" class="flag-icon">
                   Türkçe
+                </a>
+                <a href="#" class="language-option" data-lang="ku">
+                  <img src="/syofficial/assets/flags/ku.svg" alt="Kurdish" class="flag-icon">
+                  Kurmanji
                 </a>
               </div>
             </div>

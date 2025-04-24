@@ -21,6 +21,8 @@ async function loadTranslations(lang) {
 async function initTranslations() {
     await loadTranslations('ar');
     await loadTranslations('en');
+    await loadTranslations('tr');
+    await loadTranslations('ku');
     updatePageLanguage();
 }
 

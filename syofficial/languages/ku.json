@@ -1,0 +1,58 @@
+{
+    "app": {
+        "title": "Girêdanên medyaya civakî yên têkildarên fermî yên Sûriyê",
+        "description": "Li ser navê rayedarê bitikîne da ku bi rûpelên wan yên fermî li ser têkiliyên civakî bigihîzin",
+        "noResults": "Encamên lihevhatî nehatin dîtin.",
+        "searchPlaceholder": "Bi navê lêgerîn...",
+        "error": {
+            "connection": "Çewtî li têkiliyê! Rewşa: {status}",
+            "loading": "Çewtî li barkirina daneyên {category}"
+        }
+    },
+    "categories": {
+        "all": "Hemû",
+        "governorates": "Parêzgehên",
+        "ministries": "Wezaretên",
+        "ministers": "Wezîran",
+        "public_figures": "Şexsiyetên giştî",
+        "syndicates": "sendîkayan",
+        "universities": "Zanîngehan",
+        "embassies": "Balyozxanên",
+        "other": "Yên din"
+    },
+    "sections": {
+        "governorates": "Parêzgehên",
+        "ministries": "Wezaretên",
+        "ministers": "Wezîran",
+        "public_figures": "Şexsiyetên giştî",
+        "syndicates": "sendîkayan",
+        "universities": "Zanîngehan",
+        "embassies": "Balyozxanên",
+        "other": "Yên din"
+    },
+    "table": {
+        "name": "nav",
+        "description": "Danasîn",
+        "socialLinks": "Girêdanên ragihandinê",
+        "noLinks": "Girêdan tune"
+    },
+    "modal": {
+        "title": "Girêdanên medya civakî",
+        "close": "girtin",
+        "noSocialLinks": "Girêdanên medya civakî tune."
+    },
+    "view": {
+        "grid": "Tora Dîtina",
+        "table": "Tabloya dîtinê"
+    },
+    "social": {
+        "twitterList": "Lîsteya Twitter",
+        "telegramList": "Lîsteya Telegram"
+    },
+    "footer": {
+        "copyright": "Girêdanên bi dezgehên fermî yên Sûriyê re 2025  ©️",
+        "developedBy": "Pêşveçûn ji hêla",
+        "personalWebsite": "Malpera kesayî",
+        "xAccount": "Hesabê X"
+    }
+} 
