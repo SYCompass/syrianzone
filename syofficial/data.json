@@ -408,17 +408,7 @@
         }
       }
     ],
-    "public_figures": [
-      {
-        "id": "pf-anas-airout",
-        "name": "Dr. Anas Airout",
-        "name_ar": "د. أنس عيروط",
-        "description": "عضو مجلس الإفتاء الأعلى في الجمهورية العربية السورية",
-        "image": "images/public_figures/pf-anas-airout.jpg",
-        "socials": {
-          "twitter": "https://twitter.com/anasairout2"
-        }
-      },
+    "ministers": [
       {
         "id": "pf-asaad-alshaibani",
         "name": "Assad Alshaibani",
@@ -431,16 +421,6 @@
         }
       },
       {
-        "id": "pf-ahmed-dalati",
-        "name": "Ahmed Dalati",
-        "name_ar": "أحمد الدالاتي",
-        "description": "محافظ القنيطرة",
-        "image": "images/public_figures/pf-ahmed-dalati.jpg",
-        "socials": {
-          "twitter": "https://twitter.com/ah_dalati"
-        }
-      },
-      {
         "id": "pf-mazhar-alwais",
         "name": "Dr. Mazhar Alwais",
         "name_ar": "د.مظهر الويس",
@@ -449,36 +429,6 @@
         "socials": {
           "twitter": "https://twitter.com/maabdwalshamee1",
           "telegram": "https://t.me/Shami551"
-        }
-      },
-      {
-        "id": "pf-hasan-soufan",
-        "name": "Hasan Soufan",
-        "name_ar": "حسن صوفان",
-        "description": "عضو اللجنة العليا للسلم الأهلي",
-        "image": "images/public_figures/pf-hasan-soufan.jpg",
-        "socials": {
-          "twitter": "https://twitter.com/hasan0soufan"
-        }
-      },
-      {
-        "id": "pf-houda-atassi",
-        "name": "Houda Atassi",
-        "name_ar": "هدى الاتاسي",
-        "description": "اللجنة التحضيرية لمؤتمر الحوار الوطني السوري",
-        "image": "images/public_figures/pf-houda-atassi.jpg",
-        "socials": {
-          "twitter": "https://twitter.com/HoudaAtassi"
-        }
-      },
-      {
-        "id": "pf-hasan-daghim",
-        "name": "Hasan Daghim",
-        "name_ar": "حسن الدغيم",
-        "description": "اللجنة التحضيرية لمؤتمر الحوار الوطني السوري",
-        "image": "images/public_figures/pf-hasan-daghim.jpg",
-        "socials": {
-          "twitter": "https://twitter.com/Hasan_Dagim"
         }
       },
       {
@@ -533,6 +483,110 @@
         "image": "images/public_figures/pf-anas-khatab.jpg",
         "socials": {
           "twitter": "https://twitter.com/Anas_Khatab_sy"
+        }
+      },
+      {
+        "id": "pf-marwan-alhalabi",
+        "name": "Prof. Dr. Marwan Al-Halabi",
+        "name_ar": "الأستاذ الدكتور مروان الحلبي",
+        "description": "وزير التعليم العالي",
+        "image": "images/public_figures/pf-marwan-alhalabi.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/16F1eLAC8k/",
+          "instagram": "https://www.instagram.com/marwanalhalabi/",
+          "linkedin": "https://www.linkedin.com/in/marwanalhalabi"
+        }
+      },
+      {
+        "id": "pf-mohammed-abu-khair-shukri",
+        "name": "Mohammed Abu Al-Khair Shukri",
+        "name_ar": "محمد أبو الخير شكري",
+        "description": "وزير الأوقاف السوريّ",
+        "image": "images/public_figures/pf-mohammed-abu-khair-shukri.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/mhdchukri"
+        }
+      },
+      {
+        "id": "pf-hamzah-almustafa",
+        "name": "Hamzah Almustafa",
+        "name_ar": "حمزة المصطفى",
+        "description": "وزير الإعلام في الجمهورية العربية السورية",
+        "image": "images/public_figures/pf-hamzah-almustafa.webp",
+        "socials": {
+          "twitter": "https://twitter.com/HmzhMo"
+        }
+      },
+      {
+        "id": "pf-yarob-badr",
+        "name": "Yarob Badr",
+        "name_ar": "يعرب بدر",
+        "description": "وزير النقل",
+        "image": "images/public_figures/pf-yarob-badr.jpg",
+        "socials": {
+          "linkedin": "https://www.linkedin.com/in/yarob-badr-08b4986"
+        }
+      },
+      {
+        "id": "pf-yisr-barnieh",
+        "name": "Yisr Barnieh",
+        "name_ar": "يسر برنية",
+        "description": "وزير المالية",
+        "image": "images/public_figures/pf-yisr-barnieh.jpg",
+        "socials": {
+          "linkedin": "https://www.linkedin.com/in/yisr-barnieh-3846a88a"
+        }
+      }
+    ],
+    "public_figures": [
+      {
+        "id": "pf-anas-airout",
+        "name": "Dr. Anas Airout",
+        "name_ar": "د. أنس عيروط",
+        "description": "عضو مجلس الإفتاء الأعلى في الجمهورية العربية السورية",
+        "image": "images/public_figures/pf-anas-airout.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/anasairout2"
+        }
+      },
+      {
+        "id": "pf-ahmed-dalati",
+        "name": "Ahmed Dalati",
+        "name_ar": "أحمد الدالاتي",
+        "description": "محافظ القنيطرة",
+        "image": "images/public_figures/pf-ahmed-dalati.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/ah_dalati"
+        }
+      },
+      {
+        "id": "pf-hasan-soufan",
+        "name": "Hasan Soufan",
+        "name_ar": "حسن صوفان",
+        "description": "عضو اللجنة العليا للسلم الأهلي",
+        "image": "images/public_figures/pf-hasan-soufan.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/hasan0soufan"
+        }
+      },
+      {
+        "id": "pf-houda-atassi",
+        "name": "Houda Atassi",
+        "name_ar": "هدى الاتاسي",
+        "description": "اللجنة التحضيرية لمؤتمر الحوار الوطني السوري",
+        "image": "images/public_figures/pf-houda-atassi.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/HoudaAtassi"
+        }
+      },
+      {
+        "id": "pf-hasan-daghim",
+        "name": "Hasan Daghim",
+        "name_ar": "حسن الدغيم",
+        "description": "اللجنة التحضيرية لمؤتمر الحوار الوطني السوري",
+        "image": "images/public_figures/pf-hasan-daghim.jpg",
+        "socials": {
+          "twitter": "https://twitter.com/Hasan_Dagim"
         }
       },
       {
@@ -596,26 +650,6 @@
         }
       },
       {
-        "id": "pf-mohammed-abu-khair-shukri",
-        "name": "Mohammed Abu Al-Khair Shukri",
-        "name_ar": "محمد أبو الخير شكري",
-        "description": "وزير الأوقاف السوريّ",
-        "image": "images/public_figures/pf-mohammed-abu-khair-shukri.jpg",
-        "socials": {
-          "twitter": "https://twitter.com/mhdchukri"
-        }
-      },
-      {
-        "id": "pf-hamzah-almustafa",
-        "name": "Hamzah Almustafa",
-        "name_ar": "حمزة المصطفى",
-        "description": "وزير الإعلام في الجمهورية العربية السورية",
-        "image": "images/public_figures/pf-hamzah-almustafa.webp",
-        "socials": {
-          "twitter": "https://twitter.com/HmzhMo"
-        }
-      },
-      {
         "id": "pf-saad-naasan",
         "name": "Saad Naasan",
         "name_ar": "سعد نعسان",
@@ -633,18 +667,6 @@
         "image": "images/public_figures/pf-abdulrahman-aldabbagh.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/1USkGfVmpn/"
-        }
-      },
-      {
-        "id": "pf-marwan-alhalabi",
-        "name": "Prof. Dr. Marwan Al-Halabi",
-        "name_ar": "الأستاذ الدكتور مروان الحلبي",
-        "description": "وزير التعليم العالي",
-        "image": "images/public_figures/pf-marwan-alhalabi.jpg",
-        "socials": {
-          "facebook": "https://www.facebook.com/share/16F1eLAC8k/",
-          "instagram": "https://www.instagram.com/marwanalhalabi/",
-          "linkedin": "https://www.linkedin.com/in/marwanalhalabi"
         }
       },
       {
@@ -675,56 +697,6 @@
         "image": "images/public_figures/pf-abdulkader-husrieh.jpg",
         "socials": {
           "linkedin": "https://www.linkedin.com/in/abdulkader-husrieh"
-        }
-      },
-      {
-        "id": "pf-yarob-badr",
-        "name": "Yarob Badr",
-        "name_ar": "يعرب بدر",
-        "description": "وزير النقل",
-        "image": "images/public_figures/pf-yarob-badr.jpg",
-        "socials": {
-          "linkedin": "https://www.linkedin.com/in/yarob-badr-08b4986"
-        }
-      },
-      {
-        "id": "pf-yisr-barnieh",
-        "name": "Yisr Barnieh",
-        "name_ar": "يسر برنية",
-        "description": "وزير المالية",
-        "image": "images/public_figures/pf-yisr-barnieh.jpg",
-        "socials": {
-          "linkedin": "https://www.linkedin.com/in/yisr-barnieh-3846a88a"
-        }
-      },
-      {
-        "id": "pf-abdulsalam-haykal",
-        "name": "Abdulsalam Haykal",
-        "name_ar": "عبدالسلام هيكل",
-        "description": "وزير الاتصالات وتقنية المعلومات السوري",
-        "image": "images/public_figures/pf-abdulsalam-haykal.jpg",
-        "socials": {
-          "linkedin": "https://www.linkedin.com/in/abdulsalamhaykal"
-        }
-      },
-      {
-        "id": "pf-hind-kabawat",
-        "name": "Hind Kabawat",
-        "name_ar": "هند قبوات",
-        "description": "وزيرة الشؤون الاجتماعية",
-        "image": "images/public_figures/pf-hind-kabawat.jpg",
-        "socials": {
-          "linkedin": "https://www.linkedin.com/in/hind-aboud-kabawat-9a084b53"
-        }
-      },
-      {
-        "id": "pf-raed-alsaleh",
-        "name": "Raed Al Saleh",
-        "name_ar": "رائد الصالح",
-        "description": "وزير الطوارئ والكوارث",
-        "image": "images/public_figures/pf-raed-alsaleh.jpg",
-        "socials": {
-          "linkedin": "https://www.linkedin.com/in/raed-alsaleh-68590ab8"
         }
       }
     ],

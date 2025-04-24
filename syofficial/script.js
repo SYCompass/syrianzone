@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const governoratesGrid = document.getElementById('governorates-grid');
     const ministriesGrid = document.getElementById('ministries-grid');
+    const ministersGrid = document.getElementById('ministers-grid');
     const publicFiguresGrid = document.getElementById('public_figures-grid');
     const otherGrid = document.getElementById('other-grid');
     const syndicatesGrid = document.getElementById('syndicates-grid');
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tableBody = document.getElementById('table-body');
 
     let isTableView = false;
-    let allData = { governorates: [], ministries: [], public_figures: [], other: [], syndicates: [], universities: [], embassies: [] }; // To store fetched data
+    let allData = { governorates: [], ministries: [], ministers: [], public_figures: [], other: [], syndicates: [], universities: [], embassies: [] }; // To store fetched data
 
     // --- View Toggle Handling ---
     viewToggle.addEventListener('click', () => {
@@ -128,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Initial population of grids
             populateGrid(governoratesGrid, data.governorates, 'governorates');
             populateGrid(ministriesGrid, data.ministries, 'ministries');
+            populateGrid(ministersGrid, data.ministers, 'ministers');
             populateGrid(publicFiguresGrid, data.public_figures, 'public_figures');
             populateGrid(otherGrid, data.other, 'other');
             populateGrid(syndicatesGrid, data.syndicates, 'syndicates');
@@ -139,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('خطأ في جلب البيانات:', error);
             governoratesGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات المحافظات.</p>';
             ministriesGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات الوزارات.</p>';
+            ministersGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات الوزراء.</p>';
             publicFiguresGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات الشخصيات العامة.</p>';
             otherGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات أخرى.</p>';
             syndicatesGrid.innerHTML = '<p class="text-red-500 col-span-full">خطأ في تحميل بيانات النقابات.</p>';
