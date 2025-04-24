@@ -4,8 +4,8 @@
       "id": "gov-damascus",
       "name": "Damascus Governorate",
       "name_ar": "محافظة دمشق",
-      "description": "The capital governorate of Syria",
-      "description_ar": "محافظة العاصمة السورية",
+      "description": "The capital of Syria",
+      "description_ar": "العاصمة السورية",
       "image": "images/governorates/gov-damascus.webp",
       "socials": {
         "facebook": "https://www.facebook.com/share/18YdzgxcqW/",
@@ -30,8 +30,8 @@
       "id": "gov-aleppo",
       "name": "Aleppo Governorate",
       "name_ar": "محافظة حلب",
-      "description": "The largest governorate in Syria",
-      "description_ar": "أكبر محافظة في سوريا",
+      "description": "The industrial capital of Syria",
+      "description_ar": "عاصمة الصناعة السورية",
       "image": "images/governorates/gov-aleppo.webp",
       "socials": {
         "facebook": "https://www.facebook.com/profile.php?id=61569786300600&mibextid=ZbWKwL",
@@ -43,8 +43,8 @@
       "id": "gov-homs",
       "name": "Homs Governorate",
       "name_ar": "محافظة حمص",
-      "description": "The central governorate of Syria",
-      "description_ar": "المحافظة الوسطى في سوريا",
+      "description": "The revolutionary capital of Syria",
+      "description_ar": "عاصمة الثورة السورية",
       "image": "images/governorates/gov-homs.webp",
       "socials": {
         "facebook": "https://www.facebook.com/HomsGov1",
@@ -57,7 +57,7 @@
       "name": "Hama Governorate",
       "name_ar": "محافظة حماة",
       "description": "The governorate known for its waterwheels",
-      "description_ar": "المحافظة المعروفة بنواعيرها",
+      "description_ar": "محافظة النواعير",
       "image": "images/governorates/gov-hama.webp",
       "socials": {
         "facebook": "https://www.facebook.com/profile.php?id=61570565693800&mibextid=ZbWKwL",
@@ -82,8 +82,8 @@
       "id": "gov-tartus",
       "name": "Tartus Governorate",
       "name_ar": "محافظة طرطوس",
-      "description": "The western coastal governorate of Syria",
-      "description_ar": "المحافظة الساحلية الغربية في سوريا",
+      "description": "The southern coastal governorate of Syria",
+      "description_ar": "المحافظة الساحلية الجنوبية في سوريا",
       "image": "images/governorates/gov-tartus.webp",
       "socials": {
         "facebook": "https://www.facebook.com/profile.php?id=61569805704680&mibextid=JRoKGi",
