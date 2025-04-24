@@ -926,7 +926,8 @@
         "image": "images/universities/uni-furat.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/AlForatUniversity/",
-          "youtube": "https://www.youtube.com/channel/UCHjGF_KKpVKWjZUxK2xHbWQ"
+          "youtube": "https://www.youtube.com/channel/UCHjGF_KKpVKWjZUxK2xHbWQ",
+          "website": "https://alfuratuniv.edu.sy/"
         }
       }
     ],
