@@ -488,7 +488,8 @@
         "description": "وزير الطوارئ والكوارث في الجمهورية العربية السورية",
         "image": "images/public_figures/pf-raed-alsaleh.webp",
         "socials": {
-          "twitter": "https://twitter.com/RaedAlSaleh3"
+          "twitter": "https://twitter.com/RaedAlSaleh3",
+          "linkedin": "https://www.linkedin.com/in/raed-alsaleh-68590ab8"
         }
       },
       {
@@ -642,7 +643,8 @@
         "image": "images/public_figures/pf-marwan-alhalabi.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/16F1eLAC8k/",
-          "instagram": "https://www.instagram.com/marwanalhalabi/"
+          "instagram": "https://www.instagram.com/marwanalhalabi/",
+          "linkedin": "https://www.linkedin.com/in/marwanalhalabi"
         }
       },
       {
@@ -663,6 +665,66 @@
         "image": "images/public_figures/pf-mazen-alloush.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/share/16HoM5MC61/"
+        }
+      },
+      {
+        "id": "pf-abdulkader-husrieh",
+        "name": "Dr. Abdulkader Husrieh",
+        "name_ar": "د. عبد القادر الحصرية",
+        "description": "حاكم مصرف سوريا المركزي",
+        "image": "images/public_figures/pf-abdulkader-husrieh.jpg",
+        "socials": {
+          "linkedin": "https://www.linkedin.com/in/abdulkader-husrieh"
+        }
+      },
+      {
+        "id": "pf-yarob-badr",
+        "name": "Yarob Badr",
+        "name_ar": "يعرب بدر",
+        "description": "وزير النقل",
+        "image": "images/public_figures/pf-yarob-badr.jpg",
+        "socials": {
+          "linkedin": "https://www.linkedin.com/in/yarob-badr-08b4986"
+        }
+      },
+      {
+        "id": "pf-yisr-barnieh",
+        "name": "Yisr Barnieh",
+        "name_ar": "يسر برنية",
+        "description": "وزير المالية",
+        "image": "images/public_figures/pf-yisr-barnieh.jpg",
+        "socials": {
+          "linkedin": "https://www.linkedin.com/in/yisr-barnieh-3846a88a"
+        }
+      },
+      {
+        "id": "pf-abdulsalam-haykal",
+        "name": "Abdulsalam Haykal",
+        "name_ar": "عبدالسلام هيكل",
+        "description": "وزير الاتصالات وتقنية المعلومات السوري",
+        "image": "images/public_figures/pf-abdulsalam-haykal.jpg",
+        "socials": {
+          "linkedin": "https://www.linkedin.com/in/abdulsalamhaykal"
+        }
+      },
+      {
+        "id": "pf-hind-kabawat",
+        "name": "Hind Kabawat",
+        "name_ar": "هند قبوات",
+        "description": "وزيرة الشؤون الاجتماعية",
+        "image": "images/public_figures/pf-hind-kabawat.jpg",
+        "socials": {
+          "linkedin": "https://www.linkedin.com/in/hind-aboud-kabawat-9a084b53"
+        }
+      },
+      {
+        "id": "pf-raed-alsaleh",
+        "name": "Raed Al Saleh",
+        "name_ar": "رائد الصالح",
+        "description": "وزير الطوارئ والكوارث",
+        "image": "images/public_figures/pf-raed-alsaleh.jpg",
+        "socials": {
+          "linkedin": "https://www.linkedin.com/in/raed-alsaleh-68590ab8"
         }
       }
     ],
@@ -1178,6 +1240,15 @@
         "image": "images/other/other-damascus-airport.jpg",
         "socials": {
           "facebook": "https://www.facebook.com/profile.php?id=61573866154918"
+        }
+      },
+      {
+        "id": "other-general-ports",
+        "name": "General Directorate of Ports",
+        "name_ar": "المديرية العامة للموانئ",
+        "image": "images/other/other-general-ports.jpg",
+        "socials": {
+          "facebook": "https://www.facebook.com/share/1BPCtCT9HD/"
         }
       }
     ]
