@@ -1,0 +1,14 @@
+{
+  "todo": [
+    "design-update.md",
+    "feature-request.md"
+  ],
+  "in-progress": [
+    "api-integration.md",
+    "database-optimization.md"
+  ],
+  "done": [
+    "mobile-responsive.md",
+    "security-update.md"
+  ]
+}

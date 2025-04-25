@@ -20,6 +20,31 @@
     .card:hover {
       transform: translateY(-5px);
     }
+
+    .navbar {
+      backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Markdown styles */
+    .markdown-content {
+      @apply prose prose-lg max-w-none;
+    }
+    .markdown-content h1 {
+      @apply text-3xl font-bold text-gray-800 mb-4;
+    }
+    .markdown-content h2 {
+      @apply text-2xl font-bold text-gray-700 mb-3;
+    }
+    .markdown-content p {
+      @apply text-gray-600 mb-4;
+    }
+    .markdown-content ul {
+      @apply list-disc list-inside mb-4;
+    }
+    .markdown-content a {
+      @apply text-blue-600 hover:text-blue-800;
+    }
   </style>
   <link
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap"
@@ -31,58 +56,21 @@
       person_profiles: 'identified_only',
     })
   </script>
+  <!-- Import the navbar component -->
+  <script type="module" src="/components/navbar.js"></script>
+  <!-- Import the markdown renderer -->
+  <script type="module" src="/components/markdown-renderer.js"></script>
 </head>
 
 <body class="bg-gray-100 min-h-screen">
-  <div class="container mx-auto px-4 py-8">
-    <header class="text-center mb-12">
-      <h1 class="text-4xl font-bold text-gray-800 mb-4">Syrian.zone</h1>
-    </header>
+  <!-- Use the navbar component -->
+  <nav-bar></nav-bar>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-4xl mx-auto">
-      <!-- Tier List Card -->
-      <a href="/tierlist" class="card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl">
-        <div class="p-6">
-          <div class="flex items-center justify-center mb-4">
-            <i class="fas fa-list-ol text-3xl text-[#2d4d3c]"></i>
-          </div>
-          <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">تير ليست الوزراء</h2>
-          <p class="text-gray-600 text-center">قم بتصنيف وزراء الحكومة السورية الجديدة حسب رأيك</p>
-        </div>
-      </a>
-
-      <!-- Flag Replacer Card -->
-      <a href="https://github.com/SYCompass/Twitter-SVG-Syrian-Flag-Replacer/releases/tag/1.0.1" target="_blank" class="card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl">
-        <div class="p-6">
-          <div class="flex items-center justify-center mb-4">
-            <i class="fas fa-flag text-3xl text-[#807fff]"></i>
-          </div>
-          <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">مبدل العلم</h2>
-          <p class="text-gray-600 text-center">اضافة لمتصفح كروم تقوم بتغير شكل العلم السوري علي موقع X</p>
-        </div>
-      </a>
-
-      <!-- Compass Card -->
-      <a href="/compass" class="card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl">
-        <div class="p-6">
-          <div class="flex items-center justify-center mb-4">
-            <i class="fas fa-compass text-3xl text-[#7fbfff]"></i>
-          </div>
-          <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">البوصلة السياسية</h2>
-          <p class="text-gray-600 text-center">اكتشف توجهك السياسي من خلال مجموعة من الأسئلة</p>
-        </div>
-      </a>
-
-      <!-- Official Accounts Card -->
-      <a href="/syofficial" class="card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl">
-        <div class="p-6">
-          <div class="flex items-center justify-center mb-4">
-            <i class="fas fa-check-circle text-3xl text-[#ffbf7f]"></i>
-          </div>
-          <h2 class="text-2xl font-bold text-center text-gray-800 mb-2"> الحسابات الرسمية السورية</h2>
-          <p class="text-gray-600 text-center">اكتشف الحسابات الرسمية السورية على السوشيال ميديا</p>
-        </div>
-      </a>
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 pt-24 pb-8">
+    <!-- README Content -->
+    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+      <div id="readme-content" class="markdown-content"></div>
     </div>
   </div>
 
@@ -104,6 +92,11 @@
       </div>
     </div>
   </footer>
+
+  <script type="module">
+    import { renderMarkdown } from '/components/markdown-renderer.js';
+    renderMarkdown();
+  </script>
 </body>
 
 </html>

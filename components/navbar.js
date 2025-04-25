@@ -43,21 +43,23 @@ class NavBar extends HTMLElement {
     const languageOptions = this.shadowRoot.querySelectorAll('.language-option');
     const mobileLanguageOptions = this.shadowRoot.querySelectorAll('.mobile-language-option');
     
+    // Safely handle menu button click
     menuButton?.addEventListener('click', () => {
-      navItems.classList.toggle('show');
+      navItems?.classList.toggle('show');
       menuButton.classList.toggle('active');
-      navbar.classList.toggle('menu-open');
+      navbar?.classList.toggle('menu-open');
     });
 
     const handleLanguageClick = (e) => {
       e.stopPropagation(); // Prevent event from bubbling up
       if (window.innerWidth <= 768) {
-        mobileLanguageMenu.classList.toggle('show');
+        mobileLanguageMenu?.classList.toggle('show');
       } else {
-        languageMenu.classList.toggle('show');
+        languageMenu?.classList.toggle('show');
       }
     };
 
+    // Safely add language button event listeners
     languageButton?.addEventListener('click', handleLanguageClick);
     mobileLanguageButton?.addEventListener('click', handleLanguageClick);
 
@@ -120,8 +122,8 @@ class NavBar extends HTMLElement {
     // Close language menus when clicking outside
     document.addEventListener('click', (e) => {
       if (!this.shadowRoot.contains(e.target)) {
-        languageMenu.classList.remove('show');
-        mobileLanguageMenu.classList.remove('show');
+        languageMenu?.classList.remove('show');
+        mobileLanguageMenu?.classList.remove('show');
       }
     });
 
@@ -488,7 +490,7 @@ class NavBar extends HTMLElement {
             </a>
             <a target="_blank" href="https://forum.syrian.zone" class="nav-item">
               <i class="fas fa-comments" style="color:rgb(255, 0, 0);"></i>
-              المنتدى السياسي السوري
+              المنتدى
             </a>
             <a href="/tierlist" class="nav-item">
               <i class="fas fa-list-ol" style="color: #2d4d3c;"></i>
