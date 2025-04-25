@@ -1,7 +1,8 @@
 {
   "todo": [
     "design-update.md",
-    "feature-request.md"
+    "feature-request.md",
+    "implement-github-actions.md"
   ],
   "in-progress": [
     "api-integration.md",
