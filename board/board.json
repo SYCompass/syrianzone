@@ -231,7 +231,17 @@
         "user_view_type": "public",
         "site_admin": false
       },
-      "labels": [],
+      "labels": [
+        {
+          "id": 8443061678,
+          "node_id": "LA_kwDOOYKCoc8AAAAB9z7lrg",
+          "url": "https://api.github.com/repos/SYCompass/syrianzone/labels/%D8%AA%D8%AD%D8%B3%D9%8A%D9%86",
+          "name": "تحسين",
+          "color": "a2eeef",
+          "default": false,
+          "description": "ميزة جديدة أو طلب"
+        }
+      ],
       "state": "open",
       "locked": false,
       "assignee": {
@@ -281,7 +291,7 @@
       "milestone": null,
       "comments": 0,
       "created_at": "2025-04-26T01:54:28Z",
-      "updated_at": "2025-04-26T06:55:34Z",
+      "updated_at": "2025-04-26T07:03:15Z",
       "closed_at": null,
       "author_association": "OWNER",
       "active_lock_reason": null,
