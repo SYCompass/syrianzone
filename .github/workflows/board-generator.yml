@@ -23,21 +23,29 @@ jobs:
         run: npm install
         # if you don't have a package.json you can skip this step
 
-      # 4. Run your script
+      # 4. Run your script to generate the board file
       - name: Generate board.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           node list-projects-for-repo.mjs
 
-      # 5. (Optional) Commit & push board.json back to the repo
+      # 5. Commit updated board.json using git-auto-commit-action@v5
       - name: Commit board.json
-        if: github.event_name == 'push' || github.event_name == 'issues'
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add board/_board.json
-          git diff --quiet || git commit -m "chore(board): update board.json"
-          git push
+        uses: stefanzweifel/git-auto-commit-action@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          commit_message: chore(board) - update board.json
+          file_pattern: board/_board.json
+          commit_user_name: github-actions[bot]
+          commit_user_email: github-actions[bot]@users.noreply.github.com
+          commit_author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+          repository: .
+          skip_dirty_check: false
+          skip_fetch: false
+          skip_checkout: false
+          disable_globbing: false
+          create_branch: false
+          create_git_tag_only: false
+          internal_git_binary: git
