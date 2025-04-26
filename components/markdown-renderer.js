@@ -3,50 +3,41 @@ import { marked } from 'https://cdn.jsdelivr.net/npm/marked@4.3.0/lib/marked.esm
 // Configure marked with custom renderer
 const renderer = {
   heading(text, level) {
-    const baseClasses = 'font-bold mb-4';
-    const levelClasses = {
-      1: 'text-4xl text-gray-900',
-      2: 'text-3xl text-gray-800',
-      3: 'text-2xl text-gray-700',
-      4: 'text-xl text-gray-600',
-      5: 'text-lg text-gray-600',
-      6: 'text-base text-gray-600'
-    };
-    
-    return `<h${level} class="${baseClasses} ${levelClasses[level]}">${text}</h${level}>`;
+    return `<h${level}>${text}</h${level}>`;
   },
 
   paragraph(text) {
-    return `<p class="text-gray-700 mb-4 leading-relaxed">${text}</p>`;
+    return `<p>${text}</p>`;
   },
 
   link(href, title, text) {
-    return `<a href="${href}" title="${title || ''}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-200">${text}</a>`;
+    return `<a href="${href}" title="${title || ''}" target="_blank" rel="noopener noreferrer">${text}</a>`;
   },
 
   list(body, ordered) {
-    const listClass = ordered ? 'list-decimal' : 'list-disc';
-    return `<ul class="${listClass} mb-4 pl-4">${body}</ul>`;
+    const tag = ordered ? 'ol' : 'ul';
+    return `<${tag}>${body}</${tag}>`;
   },
 
   listitem(text) {
-    return `<li class="mb-2 pl-2">${text}</li>`;
+    return `<li>${text}</li>`;
   },
 
   strong(text) {
-    return `<strong class="font-bold">${text}</strong>`;
+    return `<strong>${text}</strong>`;
   },
 
   em(text) {
-    return `<em class="italic">${text}</em>`;
+    return `<em>${text}</em>`;
   },
 
   codespan(text) {
-    return `<code class="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">${text}</code>`;
+    return `<code>${text}</code>`;
   },
 
   code(text, language) {
-    return `<pre class="bg-gray-100 p-4 rounded-lg overflow-x-auto mb-4"><code class="text-sm font-mono">${text}</code></pre>`;
+    const langClass = language ? ` class="language-${language}"` : '';
+    return `<pre><code${langClass}>${text}</code></pre>`;
   }
 };
 
