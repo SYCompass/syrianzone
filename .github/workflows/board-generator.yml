@@ -5,14 +5,11 @@ on:
     types: [opened, edited, closed, reopened]
   schedule:
     - cron: '0 * * * *'   # every hour
-  push:
-    branches:
-      - main # Or your default branch
 
 permissions:
-  contents: write        # needed to commit back to the repo
-  issues: read           # to list issues
-  repository-projects: read # to read the new Projects (v2) experience
+  contents: write
+  issues: read
+  repository-projects: read
 
 jobs:
   build:
@@ -55,8 +52,7 @@ jobs:
             let items = [];
             let cursor = null;
             do {
-              const res = await github.graphql(
-                \`
+              const res = await github.graphql(`
                 query($owner: String!, $repo: String!, $number: Int!, $cursor: String) {
                   repository(owner: $owner, name: $repo) {
                     projectV2(number: $number) {
@@ -82,9 +78,9 @@ jobs:
                       }
                     }
                   }
-                }\`,
-                { owner, repo, number: projectNumber, cursor }
-              );
+                }
+              `, { owner, repo, number: projectNumber, cursor });
+              
               const page = res.repository.projectV2.items;
               for (const node of page.nodes) {
                 const issue = node.content;
