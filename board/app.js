@@ -127,13 +127,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to load and display cards for each column
     async function loadBoard() {
-        // Define columns matching the keys in _board.json and map to containers/titles
+        // Define columns matching the keys in board.json and map to containers/titles
         const columnConfig = {
             'todo': {
                 container: document.getElementById('todo-cards'),
                 title: 'المهام المطلوبة'
             },
-            'inProgress': { // Key updated to match _board.json
+            'inProgress': { // Key updated to match board.json
                 container: document.getElementById('in-progress-cards'),
                 title: 'قيد التنفيذ'
             },
@@ -144,9 +144,9 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         try {
-            // Fetch the entire board data from _board.json
-            const response = await fetch('_board.json'); // Updated path
-            if (!response.ok) throw new Error('Failed to load /_board.json');
+            // Fetch the entire board data from board.json
+            const response = await fetch('board.json'); // Updated path
+            if (!response.ok) throw new Error('Failed to load /board.json');
             const boardData = await response.json();
 
             // Process each column defined in columnConfig
