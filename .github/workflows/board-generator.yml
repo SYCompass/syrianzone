@@ -10,17 +10,17 @@ jobs:
     steps:
       # 1. Check out your code
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # 2. Set up Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
       # 3. Install dependencies (if any)
       - name: Install dependencies
-        run: npm install
+        run: npm ci
         # if you don't have a package.json you can skip this step
 
       # 4. Run your script to generate the board file
@@ -33,19 +33,9 @@ jobs:
       # 5. Commit updated board.json using git-auto-commit-action@v5
       - name: Commit board.json
         uses: stefanzweifel/git-auto-commit-action@v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          commit_message: chore(board) - update board.json
+          commit_message: "chore(board) - update board.json"
           file_pattern: board/_board.json
           commit_user_name: github-actions[bot]
           commit_user_email: github-actions[bot]@users.noreply.github.com
           commit_author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
-          repository: .
-          skip_dirty_check: false
-          skip_fetch: false
-          skip_checkout: false
-          disable_globbing: false
-          create_branch: false
-          create_git_tag_only: false
-          internal_git_binary: git
