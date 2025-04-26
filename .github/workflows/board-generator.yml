@@ -20,7 +20,7 @@ jobs:
 
       # 3. Install dependencies (if any)
       - name: Install dependencies
-        run: npm ci
+        run: npm install
         # if you don't have a package.json you can skip this step
 
       # 4. Run your script to generate the board file
