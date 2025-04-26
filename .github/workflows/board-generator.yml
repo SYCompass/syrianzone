@@ -1,116 +1,43 @@
-name: Update GitHub Issues Board
+name: Update Issue Board
 
 on:
   issues:
-    types: [opened, edited, closed, reopened]
-  schedule:
-    - cron: '0 * * * *'   # every hour\
-  push:
-    branches:
-      - main # Or your default branch
-
-permissions:
-  contents: write
-  issues: read
-  repository-projects: read
+    types: [opened, edited, deleted]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out repository
+      # 1. Check out your code
+      - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Fetch issues + board status (GraphQL)
-        id: fetch
-        uses: actions/github-script@v7
+      # 2. Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          result-encoding: string
-          script: |
-            const { owner, repo } = context.repo;
-            const projectTitle = 'My Board';
+          node-version: '18'
 
-            // 1) Locate your ProjectV2 by its title
-            const { repository } = await github.graphql(`
-              query($owner: String!, $repo: String!, $title: String!) {
-                repository(owner: $owner, name: $repo) {
-                  projectsV2(first: 100) {
-                    nodes {
-                      id
-                      number
-                      title
-                    }
-                  }
-                }
-              }
-            `, { owner, repo, title: projectTitle });
+      # 3. Install dependencies (if any)
+      - name: Install dependencies
+        run: npm install
+        # if you don't have a package.json you can skip this step
 
-            const project = repository.projectsV2.nodes.find(p => p.title === projectTitle);
-            if (!project) throw new Error(\`Project "\${projectTitle}" not found\`);
-            const projectNumber = project.number;
-
-            // 2) Page through all items (issues) in that project
-            let items = [];
-            let cursor = null;
-            do {
-              const res = await github.graphql(`
-                query($owner: String!, $repo: String!, $number: Int!, $cursor: String) {
-                  repository(owner: $owner, name: $repo) {
-                    projectV2(number: $number) {
-                      items(first: 100, after: $cursor) {
-                        pageInfo { hasNextPage endCursor }
-                        nodes {
-                          content {
-                            ... on Issue {
-                              number
-                              title
-                              state
-                              body
-                            }
-                          }
-                          fieldValues(first: 1) {
-                            nodes {
-                              ... on ProjectV2ItemFieldSingleSelectValue {
-                                name
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              `, { owner, repo, number: projectNumber, cursor });
-
-              const page = res.repository.projectV2.items;
-              for (const node of page.nodes) {
-                const issue = node.content;
-                const column = node.fieldValues.nodes[0]?.name || 'Unassigned';
-                items.push({
-                  number: issue.number,
-                  title: issue.title,
-                  state: issue.state,
-                  body: issue.body,
-                  column
-                });
-              }
-              cursor = page.pageInfo.hasNextPage ? page.pageInfo.endCursor : null;
-            } while (cursor);
-
-            // 3) Return your enriched JSON
-            return JSON.stringify(items, null, 2);
-
-      - name: Write data file
+      # 4. Run your script
+      - name: Generate board.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mkdir -p _data
-          echo "${{ steps.fetch.outputs.result }}" > _data/issues.json
+          node list-projects-for-repo.mjs
 
-      - name: Commit & push if changed
+      # 5. (Optional) Commit & push board.json back to the repo
+      - name: Commit board.json
+        if: github.event_name == 'push' || github.event_name == 'issues'
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add _data/issues.json
-          git diff --quiet || git commit -m "chore: update issues data"
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add board/_board.json
+          git diff --quiet || git commit -m "chore(board): update board.json"
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

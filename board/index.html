@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="ar">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board App</title>
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
@@ -15,6 +18,7 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-100 min-h-screen">
     <!-- Navbar Web Component -->
     <nav-bar></nav-bar>
@@ -38,13 +42,20 @@
     </div>
 
     <!-- Modal for card details -->
-    <div id="cardModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50 flex items-center justify-center">
+    <div id="cardModal"
+        class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50 flex items-center justify-center">
         <div class="relative mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
             <!-- Modal Header -->
             <div class="flex justify-between items-center border-b pb-3">
                 <h5 class="text-xl font-medium text-gray-900" id="cardModalTitle"></h5>
-                <button type="button" id="closeModalBtn" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" aria-label="Close">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                <button type="button" id="closeModalBtn"
+                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    aria-label="Close">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clip-rule="evenodd"></path>
+                    </svg>
                 </button>
             </div>
             <!-- Modal Body -->
@@ -56,16 +67,20 @@
 
     <footer class="bg-white py-6 mt-12 w-full">
         <div class="container mx-auto px-4 text-center text-gray-600">
-            <p>&copy; 2025 syria.zone</p>
+            <p dir="ltr">&copy; 2025 <a href="https://syria.zone" target="_blank" rel="noopener"
+                    class="text-gray-600 hover:text-blue-600 transition">Syrian.zone</a></p>
             <p class="mt-2 text-sm">
-                تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span>
+                تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span> و <span class="font-semibold">نور
+                    صوفاناتي</span>
             </p>
             <div class="mt-2 flex justify-center gap-4">
-                <a href="http://hadealahmad.com/" target="_blank" rel="noopener" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                <a href="http://hadealahmad.com/" target="_blank" rel="noopener"
+                    class="text-gray-600 hover:text-blue-600 transition flex items-center">
                     <i class="fas fa-globe ml-1"></i> الموقع الشخصي
                 </a>
-                <a href="https://x.com/hadealahmad" target="_blank" rel="noopener" class="text-gray-600 hover:text-blue-600 transition flex items-center">
-                    <i class="fab fa-x-twitter ml-1"></i> حساب X
+                <a href="https://x.com/hadealahmad" target="_blank" rel="noopener"
+                    class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                    <i class="fab fa-x-twitter ml-1"></i> حساب
                 </a>
             </div>
         </div>
@@ -75,4 +90,5 @@
     <script src="/components/navbar.js"></script>
     <script src="app.js"></script>
 </body>
-</html> 
+
+</html>
