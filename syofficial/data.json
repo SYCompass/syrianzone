@@ -626,6 +626,17 @@
       "socials": {
         "linkedin": "https://www.linkedin.com/in/yisr-barnieh-3846a88a"
       }
+    },
+    {
+      "id": "pf-baraa-shukri",
+      "name": "Baraa Shukri",
+      "name_ar": "براء شكر",
+      "description": "Director of the Consular and Expatriates Department at the Syrian Ministry of Foreign Affairs",
+      "description_ar": "مدير الإدارة القنصلية والمغتربين في الخارجية السورية",
+      "image": "images/public_figures/pf-baraa-shukri.webp",
+      "socials": {
+        "twitter": "https://x.com/baraashukri/"
+      }
     }
   ],
   "public_figures": [
