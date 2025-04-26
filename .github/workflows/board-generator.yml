@@ -5,6 +5,9 @@ on:
     types: [opened, edited, closed, reopened]
   schedule:
     - cron: '0 * * * *'   # every hour
+  push:
+    branches:
+      - main # Or your default branch
 
 permissions:
   contents: write        # needed to commit back to the repo
