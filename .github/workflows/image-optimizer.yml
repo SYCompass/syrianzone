@@ -18,13 +18,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Navigate to the syofficial directory
-        run: cd ./syofficial
+        run: cd syofficial
       
       - name: Make sure that "optimize-images.sh" is executable
-        run: chmod +x ./optimize-images.sh
+        run: chmod +x optimize-images.sh
 
       - name: Run the script
-        run: ./optimize-images.sh
+        run: optimize-images.sh
 
       - name: Commit the changes
         uses: stefanzweifel/git-auto-commit-action@v5
