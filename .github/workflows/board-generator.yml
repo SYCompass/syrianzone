@@ -9,7 +9,7 @@ on:
 permissions:
   contents: write        # needed to commit back to the repo
   issues: read           # to list issues
-  repository-projects: read # to read classic project boards
+  repository-projects: read # to read the new Projects (v2) experience
 
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - name: Fetch issues + board status
+      - name: Fetch issues + board status (GraphQL)
         id: fetch
         uses: actions/github-script@v7
         with:
@@ -27,47 +27,78 @@ jobs:
           result-encoding: string
           script: |
             const { owner, repo } = context.repo;
+            const projectTitle = 'My Board';
 
-            // 1) Fetch all issues (open + closed)
-            const issues = await github.paginate(
-              github.rest.issues.listForRepo,
-              { owner, repo, state: 'all', per_page: 100 }
-            );
-
-            // 2) Find your classic project by name
-            const { data: projects } = await github.rest.projects.listForRepo({ owner, repo });
-            const project = projects.find(p => p.name === 'My Board');
-            if (!project) throw new Error('Project "My Board" not found');
-
-            // 3) List its columns
-            const { data: columns } = await github.rest.projects.listColumns({
-              project_id: project.id
-            });
-
-            // 4) Build map: issue number → column name
-            const boardMap = {};
-            for (const col of columns) {
-              const { data: cards } = await github.rest.projects.listCards({
-                column_id: col.id,
-                per_page: 100
-              });
-              for (const card of cards) {
-                if (card.content_url?.includes('/issues/')) {
-                  const num = Number(card.content_url.split('/').pop());
-                  boardMap[num] = col.name;
+            // 1) Locate your ProjectV2 by its title
+            const { repository } = await github.graphql(`
+              query($owner: String!, $repo: String!, $title: String!) {
+                repository(owner: $owner, name: $repo) {
+                  projectsV2(first: 100) {
+                    nodes {
+                      id
+                      number
+                      title
+                    }
+                  }
                 }
               }
-            }
+            `, { owner, repo, title: projectTitle });
 
-            // 5) Merge and emit JSON
-            const enriched = issues.map(i => ({
-              number: i.number,
-              title:  i.title,
-              state:  i.state,
-              body:   i.body,
-              column: boardMap[i.number] || 'Unassigned'
-            }));
-            return JSON.stringify(enriched, null, 2);
+            const project = repository.projectsV2.nodes.find(p => p.title === projectTitle);
+            if (!project) throw new Error(\`Project "\${projectTitle}" not found\`);
+            const projectNumber = project.number;
+
+            // 2) Page through all items (issues) in that project
+            let items = [];
+            let cursor = null;
+            do {
+              const res = await github.graphql(
+                \`
+                query($owner: String!, $repo: String!, $number: Int!, $cursor: String) {
+                  repository(owner: $owner, name: $repo) {
+                    projectV2(number: $number) {
+                      items(first: 100, after: $cursor) {
+                        pageInfo { hasNextPage endCursor }
+                        nodes {
+                          content {
+                            ... on Issue {
+                              number
+                              title
+                              state
+                              body
+                            }
+                          }
+                          fieldValues(first: 1) {
+                            nodes {
+                              ... on ProjectV2ItemFieldSingleSelectValue {
+                                name
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }\`,
+                { owner, repo, number: projectNumber, cursor }
+              );
+              const page = res.repository.projectV2.items;
+              for (const node of page.nodes) {
+                const issue = node.content;
+                const column = node.fieldValues.nodes[0]?.name || 'Unassigned';
+                items.push({
+                  number: issue.number,
+                  title: issue.title,
+                  state: issue.state,
+                  body: issue.body,
+                  column
+                });
+              }
+              cursor = page.pageInfo.hasNextPage ? page.pageInfo.endCursor : null;
+            } while (cursor);
+
+            // 3) Return your enriched JSON
+            return JSON.stringify(items, null, 2);
 
       - name: Write data file
         run: |
