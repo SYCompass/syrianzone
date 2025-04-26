@@ -37,4 +37,4 @@ for (const issue of issuesResponse.data) {
     }
 }
 
-fs.writeFileSync('board/_board.json', JSON.stringify(board, null, 2));
+fs.writeFileSync('board/board.json', JSON.stringify(board, null, 2));
