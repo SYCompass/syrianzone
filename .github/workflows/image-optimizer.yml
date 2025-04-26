@@ -1,0 +1,30 @@
+name: Image Optimizer
+
+on:
+  push:
+    branches:
+      - main
+
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Check out your code
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      
+      - name: Make sure that "optimize-images.sh" is executable
+        run: chmod +x ./syofficial/optimize-images.sh
+
+      - name: Run the script
+        run: ./syofficial/optimize-images.sh
+
+      - name: Commit the changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(image-optimizer) - optimize images"
+          token: ${{ secrets.GITHUB_TOKEN }}
