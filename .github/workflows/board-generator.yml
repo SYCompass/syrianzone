@@ -2,7 +2,7 @@ name: Update Issue Board
 
 on:
   issues:
-    types: [opened, edited, deleted]
+    types: [opened, edited, deleted, labeled, unlabeled, assigned, unassigned]
 
 jobs:
   build:
