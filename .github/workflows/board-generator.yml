@@ -1,46 +1,65 @@
-name: Update issues board
+name: Update GitHub Issues Board
 
 on:
   issues:
     types: [opened, edited, closed, reopened]
+  schedule:
+    - cron: '0 * * * *'   # every hour
+
+permissions:
+  contents: write        # needed to commit back to the repo
+  issues: read           # to list issues
+  repository-projects: read # to read classic project boards
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
 
-      - name: Fetch all issues
-        uses: actions/github-script@v7
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Fetch issues + board status
         id: fetch
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           result-encoding: string
           script: |
+            const { owner, repo } = context.repo;
+
+            // 1) Fetch all issues (open + closed)
             const issues = await github.paginate(
               github.rest.issues.listForRepo,
-              {
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                state: 'all',
-                per_page: 100
-              }
+              { owner, repo, state: 'all', per_page: 100 }
             );
-            
+
+            // 2) Find your classic project by name
             const { data: projects } = await github.rest.projects.listForRepo({ owner, repo });
             const project = projects.find(p => p.name === 'My Board');
-            const { data: columns } = await github.rest.projects.listColumns({ project_id: project.id });
+            if (!project) throw new Error('Project "My Board" not found');
+
+            // 3) List its columns
+            const { data: columns } = await github.rest.projects.listColumns({
+              project_id: project.id
+            });
+
+            // 4) Build map: issue number → column name
             const boardMap = {};
-            for (let col of columns) {
-              const { data: cards } = await github.rest.projects.listCards({ column_id: col.id, per_page:100 });
-              for (let card of cards) {
+            for (const col of columns) {
+              const { data: cards } = await github.rest.projects.listCards({
+                column_id: col.id,
+                per_page: 100
+              });
+              for (const card of cards) {
                 if (card.content_url?.includes('/issues/')) {
-                  const num = +card.content_url.split('/').pop();
+                  const num = Number(card.content_url.split('/').pop());
                   boardMap[num] = col.name;
                 }
               }
             }
-            
+
+            // 5) Merge and emit JSON
             const enriched = issues.map(i => ({
               number: i.number,
               title:  i.title,
@@ -52,7 +71,8 @@ jobs:
 
       - name: Write data file
         run: |
-          echo '${{ steps.fetch.outputs.result }}' > board/_data/issues.json
+          mkdir -p _data
+          echo "${{ steps.fetch.outputs.result }}" > _data/issues.json
 
       - name: Commit & push if changed
         run: |
