@@ -637,6 +637,17 @@
       "socials": {
         "twitter": "https://x.com/baraashukri/"
       }
+    },
+    {
+      "id": "pf-nedal-alchaar",
+      "name": "Nedal Alshaar",
+      "name_ar": "نضال الشعار",
+      "description": "Minister of Economy and Industry of Syria",
+      "description_ar": "وزير الاقتصاد والصناعة السوري",
+      "image": "images/public_figures/pf-nedal-alchaar.webp",
+      "socials": {
+        "facebook": "https://www.facebook.com/Drnedal.alchaar"
+      }
     }
   ],
   "public_figures": [
@@ -798,6 +809,72 @@
       "image": "images/public_figures/pf-abdulkader-husrieh.webp",
       "socials": {
         "linkedin": "https://www.linkedin.com/in/abdulkader-husrieh"
+      }
+    },
+    {
+      "id": "pf-rasha-sirop",
+      "name": "Dr. Rasha Sirop",
+      "name_ar": "الدكتورة رشا سيروب",
+      "description": "Executive Advisor at the Ministry of Economy and Industry for Policy and Performance Control",
+      "description_ar": "مستشار تنفيذي في وزارة الاقتصاد والصناعة لشؤون السياسات وضبط الأداء",
+      "image": "images/public_figures/pf-rasha-sirop.webp",
+      "socials": {
+        "facebook": "https://www.facebook.com/rasha.sirop"
+      }
+    },
+    {
+      "id": "pf-karam-shaar",
+      "name": "Dr. Karam Shaar",
+      "name_ar": "الدكتور كرم شعار",
+      "description": "Executive Advisor at the Ministry of Economy and Industry for Digital Transformation and Technology",
+      "description_ar": "مستشار تنفيذي في وزارة الاقتصاد والصناعة لشؤون التحول الرقمي والتكنولوجيا",
+      "image": "images/public_figures/pf-karam-shaar.webp",
+      "socials": {
+        "facebook": "https://www.facebook.com/karam.shaar"
+      }
+    },
+    {
+      "id": "pf-razi-mohialdeen",
+      "name": "Dr. Razi Mohialdeen",
+      "name_ar": "الدكتور رازي محي الدين",
+      "description": "Executive Advisor at the Ministry of Economy and Industry for Planning and Follow-up",
+      "description_ar": "مستشار تنفيذي في وزارة الاقتصاد والصناعة لشؤون التخطيط والمتابعة",
+      "image": "images/public_figures/pf-razi-mohialdeen.webp",
+      "socials": {
+        "facebook": "https://www.facebook.com/drrazi.mohialdeen.7"
+      }
+    },
+    {
+      "id": "pf-george-khouzam",
+      "name": "Mr. George Khouzam",
+      "name_ar": "السيد جورج خزام",
+      "description": "Executive Advisor at the Ministry of Economy and Industry for Liquidity and Monetary Affairs",
+      "description_ar": "مستشار تنفيذي في وزارة الاقتصاد والصناعة لشؤون السيولة والنقد",
+      "image": "images/public_figures/pf-george-khouzam.webp",
+      "socials": {
+        "facebook": "https://www.facebook.com/george.khouzam.7"
+      }
+    },
+    {
+      "id": "pf-munaff-koman",
+      "name": "Mr. Munaff Koman",
+      "name_ar": "السيد مناف كومان",
+      "description": "Executive Advisor at the Ministry of Economy and Industry for Infrastructure and Institutional Reconstruction",
+      "description_ar": "مستشار تنفيذي في وزارة الاقتصاد والصناعة لشؤون البنية التحتية وإعادة بناء المؤسسات",
+      "image": "images/public_figures/pf-munaff-koman.webp",
+      "socials": {
+        "facebook": "https://www.facebook.com/munaff.koman.3"
+      }
+    },
+    {
+      "id": "pf-alaeddin-jabal",
+      "name": "Alaeddin Jabal",
+      "name_ar": "المستشار علاء الدين جبل",
+      "description": "Executive Advisor at the Ministry of Economy and Industry for Training and Qualification",
+      "description_ar": "مستشار تنفيذي في وزارة الاقتصاد والصناعة لشؤون التدريب والتأهيل",
+      "image": "images/public_figures/pf-alaeddin-jabal.webp",
+      "socials": {
+        "facebook": "https://www.facebook.com/alaeddin.jabal.9"
       }
     }
   ],
