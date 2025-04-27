@@ -1,3 +1,5 @@
+import { Octokit } from "https://esm.sh/@octokit/rest";
+
 document.addEventListener('DOMContentLoaded', function () {
     // Initialize marked with options
     marked.setOptions({
@@ -145,9 +147,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             // Fetch the entire board data from board.json
-            const response = await fetch('board.json'); // Updated path
-            if (!response.ok) throw new Error('Failed to load /board.json');
-            const boardData = await response.json();
+            const octokit = new Octokit({
+            });
+
+            const owner = 'SYCompass';
+            const repo = 'syrianzone';
+
+            const issuesResponse = await octokit.rest.issues.listForRepo({
+                owner,
+                repo,
+                state: 'all'
+            });
+
+            const board = {
+                todo: [],
+                inProgress: [],
+                done: [],
+            }
+
+            // add issues to the board
+            for (const issue of issuesResponse.data) {
+                const labels = issue.labels.map(label => label.description);
+                // remove the label from the issue
+                issue.labels = issue.labels.filter(label => label.description !== 'in_progress' && label.description !== 'todo' && label.description !== 'done');
+                if (labels.includes('in_progress')) {
+                    board.inProgress.push(issue);
+                } else if (labels.includes('todo')) {
+                    board.todo.push(issue);
+                } else if (labels.includes('done')) {
+                    board.done.push(issue);
+                }
+            }
+
+            const boardData = board;
+
 
             // Process each column defined in columnConfig
             for (const [statusKey, { container, title }] of Object.entries(columnConfig)) {
