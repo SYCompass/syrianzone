@@ -18,8 +18,8 @@ mkdir -p images
 OPTIMIZE_LIST=()
 
 while IFS= read -r img_path; do
-  # Remove the leading directory (syofficial/unprocessed-images/)
-  rel_path="${img_path#syofficial/unprocessed-images/}"
+  # Remove the leading directory (syofficial/_unprocessed-images/)
+  rel_path="${img_path#syofficial/_unprocessed-images/}"
   dest_dir="images/$(dirname "$rel_path")"
   mkdir -p "$dest_dir"
   cp "$img_path" "$dest_dir/"
