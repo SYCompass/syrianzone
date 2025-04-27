@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - syofficial/unprocessed-images/**
+      - syofficial/_unprocessed-images/**
       - syofficial/images/**  
 
 
@@ -27,7 +27,7 @@ jobs:
         id: changed-images
         run: |
           git fetch origin ${{ github.event.before }}
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^syofficial/unprocessed-images/.*\.(jpg\|jpeg\|png\|webp)$' > syofficial/changed_images.txt
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^syofficial/_unprocessed-images/.*\.(jpg\|jpeg\|png\|webp)$' > syofficial/changed_images.txt
 
       - name: Run Image Optimizer Script
         run: |
