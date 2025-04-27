@@ -32,8 +32,8 @@ jobs:
       - name: Run Image Optimizer Script
         run: |
           cd syofficial
-          chmod +x optimize-images.sh
-          ./optimize-images.sh changed_images.txt
+          chmod +x _optimize-images.sh
+          ./_optimize-images.sh changed_images.txt
 
       - name: Commit the changes
         uses: stefanzweifel/git-auto-commit-action@v5
