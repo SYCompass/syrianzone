@@ -3,17 +3,33 @@
 # Copyright 2025 Syrian Zone
 # Licensed under the MIT License
 
-# This script optimizes images in the /images directory and its subdirectories
-# and puts the optimized images in the /optimized-images directory
-# using mogrify from imagemagick
+# This script optimizes only changed images listed in the file passed as the first argument
 
-# Create the optimized-images directory if it doesn't exi
-rm -rf images
+CHANGED_LIST="$1"
 
-cp -r unprocessed-images images
+if [ -z "$CHANGED_LIST" ] || [ ! -s "$CHANGED_LIST" ]; then
+  echo "No changed images to process. Exiting."
+  exit 0
+fi
+
+# Do NOT delete the images directory; keep old optimized images
+mkdir -p images
+
+OPTIMIZE_LIST=()
+
+while IFS= read -r img_path; do
+  # Remove the leading directory (syofficial/unprocessed-images/)
+  rel_path="${img_path#syofficial/unprocessed-images/}"
+  dest_dir="images/$(dirname "$rel_path")"
+  mkdir -p "$dest_dir"
+  cp "$img_path" "$dest_dir/"
+  OPTIMIZE_LIST+=("$dest_dir/$(basename "$img_path")")
+done < "$CHANGED_LIST"
 
 # Remove non-image files like .DS_Store
 find images -name ".DS_Store" -type f -delete
 
-# Use mogrify to optimize images in the /images directory and its subdirectories recursively
-find images -type f -exec mogrify -resize 250x250 -quality 85 -strip -interlace Plane {} +
+# Optimize only the newly copied images
+if [ ${#OPTIMIZE_LIST[@]} -gt 0 ]; then
+  mogrify -resize 250x250 -quality 85 -strip -interlace Plane "${OPTIMIZE_LIST[@]}"
+fi
