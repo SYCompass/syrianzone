@@ -15,6 +15,7 @@ const repo = 'syrianzone';
 const issuesResponse = await octokit.rest.issues.listForRepo({
     owner,
     repo,
+    state: 'all'
 });
 
 const board = {
