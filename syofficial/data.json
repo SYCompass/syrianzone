@@ -489,6 +489,17 @@
   ],
   "ministers": [
     {
+      "id": "pf-albasheir",
+      "name": "EM Albasheir",
+      "name_ar": "وزير الطاقة",
+      "description": "Minister of Energy in the Syrian Arab Republic",
+      "description_ar": "وزير الطاقة في الجمهورية العربية السورية",
+      "image": "images/public_figures/pf-albasheir.webp",
+      "socials": {
+        "twitter": "https://x.com/EMAlbasheir"
+      }
+    },
+    {
       "id": "pf-asaad-alshaibani",
       "name": "Assad Alshaibani",
       "name_ar": "أسعد الشيباني",
