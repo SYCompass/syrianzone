@@ -507,7 +507,7 @@
       "description_ar": "وزير الخارجية السوري",
       "image": "images/public_figures/pf-asaad-alshaibani.webp",
       "socials": {
-        "twitter": "https://x.com/AssadAlshaibani",
+        "twitter": "https://x.com/AsaadHShaibani",
         "instagram": "https://www.instagram.com/asaad.alshaibani"
       }
     },
@@ -648,6 +648,19 @@
       "image": "images/public_figures/pf-nedal-alchaar.webp",
       "socials": {
         "facebook": "https://www.facebook.com/Drnedal.alchaar"
+      }
+    },
+    {
+      "id": "pf-nour-albaba",
+      "name": "Nour Al-Baba",
+      "name_ar": "نور الدين البابا",
+      "description": "Spokesman for the Syrian Ministry of Interior",
+      "description_ar": "المتحدث باسم وزارة الداخلية السورية",
+      "image": "images/public_figures/pf-nour-albaba.webp",
+      "socials": {
+        "telegram": "https://t.me/SyrianMoiSpokesman",
+        "twitter": "https://x.com/SyrianMoiSpokes",
+        "facebook": "https://www.facebook.com/share/1EeHEUoeJv/"
       }
     }
   ],
