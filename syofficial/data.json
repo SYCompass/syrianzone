@@ -662,6 +662,17 @@
         "twitter": "https://x.com/SyrianMoiSpokes",
         "facebook": "https://www.facebook.com/share/1EeHEUoeJv/"
       }
+    },
+    {
+      "id": "pf-mohamad-alahmad",
+      "name": "Dr. Mohamad Alahmad",
+      "name_ar": "د. محمد الأحمد",
+      "description": "Director of Arab Affairs at the Syrian Ministry of Foreign Affairs",
+      "description_ar": "مدير إدارة الشؤون العربية في وزارة الخارجية والمغتربين السورية",
+      "image": "images/public_figures/pf-mohamad-alahmad.webp",
+      "socials": {
+        "twitter": "https://x.com/Mohamad29169351"
+      }
     }
   ],
   "public_figures": [
@@ -1562,6 +1573,30 @@
       "image": "images/other/other-syrian-telecom.webp",
       "socials": {
         "facebook": "https://www.facebook.com/share/1ADPueMyFf/"
+      }
+    },
+    {
+      "id": "other-syrian-railways",
+      "name": "Syrian Railways",
+      "name_ar": "المؤسسة العامة للخطوط الحديدية السورية",
+      "description": "The national railway company of Syria",
+      "description_ar": "الشركة الوطنية للسكك الحديدية في سوريا",
+      "image": "images/other/other-syrian-railways.webp",
+      "socials": {
+        "facebook": "https://www.facebook.com/syrianrailways"
+      }
+    },
+    {
+      "id": "other-fly-cham",
+      "name": "Fly Cham",
+      "name_ar": "فلاي شام",
+      "description": "A Syrian airline company",
+      "description_ar": "شركة طيران سورية",
+      "image": "images/other/other-fly-cham.webp",
+      "socials": {
+        "facebook": "https://www.facebook.com/profile.php?id=61575817032233",
+        "instagram": "https://www.instagram.com/fly.cham",
+        "twitter": "https://x.com/fly_cham"
       }
     }
   ]
