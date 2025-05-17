@@ -673,6 +673,17 @@
       "socials": {
         "twitter": "https://x.com/Mohamad29169351"
       }
+    },
+    {
+      "id": "pf-murhaf-abuqasra",
+      "name": "Murhaf Abuqasra",
+      "name_ar": "مرحاب أبو قصرة",
+      "description": "Minister of Defense of the Syrian Arab Republic",
+      "description_ar": "وزير الدفاع في الجمهورية العربية السورية",
+      "image": "images/public_figures/pf-murhaf-abuqasra.webp",
+      "socials": {
+        "twitter": "https://x.com/Murhaf_abuqasra"
+      }
     }
   ],
   "public_figures": [
@@ -1597,6 +1608,17 @@
         "facebook": "https://www.facebook.com/profile.php?id=61575817032233",
         "instagram": "https://www.instagram.com/fly.cham",
         "twitter": "https://x.com/fly_cham"
+      }
+    },
+    {
+      "id": "other-national-it-services",
+      "name": "National Authority for IT Services",
+      "name_ar": "الهيئة الوطنية لخدمات تقانة لمعلومات",
+      "description": "The national authority responsible for IT services in Syria",
+      "description_ar": "الهيئة الوطنية المسؤولة عن خدمات تقانة المعلومات في سوريا",
+      "image": "images/other/other-national-it-services.webp",
+      "socials": {
+        "facebook": "https://www.facebook.com/national.authority.for.it.services"
       }
     }
   ]
