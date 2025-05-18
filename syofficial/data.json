@@ -651,6 +651,42 @@
       }
     },
     {
+      "id": "pf-murhaf-abuqasra",
+      "name": "Murhaf Abuqasra",
+      "name_ar": "المهندس مرهف أبو قصرة",
+      "description": "Minister of Defense of the Syrian Arab Republic",
+      "description_ar": "وزير الدفاع في الجمهورية العربية السورية",
+      "image": "images/public_figures/pf-murhaf-abuqasra.webp",
+      "socials": {
+        "twitter": "https://x.com/Murhaf_abuqasra"
+      }
+    },
+    {
+      "id": "pf-mohamad-anjrani",
+      "name": "Eng. Mohamad Anjrani",
+      "name_ar": "المهندس محمد عنجراني",
+      "description": "Minister of Local Administration and Environment",
+      "description_ar": "وزير الإدارة المحلية والبيئة",
+      "image": "images/public_figures/pf-mohamad-anjrani.webp",
+      "socials": {
+        "twitter": "https://x.com/mohamad_anjrani",
+        "facebook": "https://www.facebook.com/share/1AYiSrjwgt/",
+        "instagram": "https://www.instagram.com/mohamad.anjrani"
+      }
+    }
+  ],
+  "public_figures": [
+    {
+      "id": "pf-anas-airout",
+      "name": "Dr. Anas Airout",
+      "name_ar": "د. أنس عيروط",
+      "description": "عضو مجلس الإفتاء الأعلى في الجمهورية العربية السورية",
+      "image": "images/public_figures/pf-anas-airout.webp",
+      "socials": {
+        "twitter": "https://twitter.com/anasairout2"
+      }
+    },
+    {
       "id": "pf-nour-albaba",
       "name": "Nour Al-Baba",
       "name_ar": "نور الدين البابا",
@@ -672,29 +708,6 @@
       "image": "images/public_figures/pf-mohamad-alahmad.webp",
       "socials": {
         "twitter": "https://x.com/Mohamad29169351"
-      }
-    },
-    {
-      "id": "pf-murhaf-abuqasra",
-      "name": "Murhaf Abuqasra",
-      "name_ar": "مرهف أبو قصرة",
-      "description": "Minister of Defense of the Syrian Arab Republic",
-      "description_ar": "وزير الدفاع في الجمهورية العربية السورية",
-      "image": "images/public_figures/pf-murhaf-abuqasra.webp",
-      "socials": {
-        "twitter": "https://x.com/Murhaf_abuqasra"
-      }
-    }
-  ],
-  "public_figures": [
-    {
-      "id": "pf-anas-airout",
-      "name": "Dr. Anas Airout",
-      "name_ar": "د. أنس عيروط",
-      "description": "عضو مجلس الإفتاء الأعلى في الجمهورية العربية السورية",
-      "image": "images/public_figures/pf-anas-airout.webp",
-      "socials": {
-        "twitter": "https://twitter.com/anasairout2"
       }
     },
     {
