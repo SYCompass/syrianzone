@@ -1,5 +1,4 @@
 name: Image Optimizer
-
 on:
   push:
     branches:
@@ -7,11 +6,8 @@ on:
     paths:
       - syofficial/_unprocessed-images/**
       - syofficial/images/**  
-
-
 permissions:
   contents: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,24 +15,26 @@ jobs:
       # 1. Check out your code
       - name: Checkout repo
         uses: actions/checkout@v4
-
+        with:
+          fetch-depth: 0  
+          
       - name: Install magick
         run: sudo apt-get install -y imagemagick
-
+        
       - name: Get changed images
         id: changed-images
         run: |
-          git fetch origin ${{ github.event.before }}
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^syofficial/_unprocessed-images/.*\.(jpg\|jpeg\|png\|webp)$' > syofficial/changed_images.txt
-
+          git fetch origin
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^syofficial/_unprocessed-images/.*\.(jpg|jpeg|png|webp)$' > syofficial/changed_images.txt || true
+          
       - name: Run Image Optimizer Script
         run: |
           cd syofficial
           chmod +x _optimize-images.sh
           ./_optimize-images.sh changed_images.txt
-
+          
       - name: Commit the changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore(image-optimizer) - optimize images"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          file_pattern: 'syofficial/images/**'
