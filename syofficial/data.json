@@ -1633,6 +1633,31 @@
       "socials": {
         "facebook": "https://www.facebook.com/national.authority.for.it.services"
       }
+    },
+    {
+      "id": "other-transitional-justice",
+      "name": "National Authority for Transitional Justice",
+      "name_ar": "الهيئة الوطنية للعدالة الانتقالية",
+      "description": "The national authority responsible for transitional justice in Syria",
+      "description_ar": "الهيئة الوطنية المسؤولة عن العدالة الانتقالية في سوريا",
+      "image": "images/other/other-transitional-justice.webp",
+      "socials": {
+        "facebook": "https://www.facebook.com/SyTransitionalJustice",
+        "telegram": "https://t.me/SyTransitionalJustice",
+        "twitter": "https://x.com/SyTransitionalJ",
+        "youtube": "https://youtube.com/@sytransitionalj"
+      }
+    },
+    {
+      "id": "other-missing-persons",
+      "name": "National Authority for Missing Persons",
+      "name_ar": "الهيئة الوطنية للمفقودين",
+      "description": "The national authority responsible for missing persons in Syria",
+      "description_ar": "الهيئة الوطنية المسؤولة عن المفقودين في سوريا",
+      "image": "images/other/other-missing-persons.webp",
+      "socials": {
+        "facebook": "https://www.facebook.com/SyrMissing"
+      }
     }
   ]
 }
