@@ -929,12 +929,25 @@
     {
       "id": "pf-baraa-shukri",
       "name": "Baraa Shukri",
-      "name_ar": "براء شكر",
+      "name_ar": "براء شكري",
       "description": "Director of the Consular and Expatriates Department at the Syrian Ministry of Foreign Affairs",
       "description_ar": "مدير الإدارة القنصلية والمغتربين في الخارجية السورية",
       "image": "images/public_figures/pf-baraa-shukri.webp",
       "socials": {
         "twitter": "https://x.com/baraashukri/"
+      }
+    },
+    {
+      "id": "pf-abdul-qader-tahan",
+      "name": "General Abdul Qader Tahan",
+      "name_ar": "اللواء عبد القادر طحان",
+      "description": "Assistant Minister of Interior for Security Affairs",
+      "description_ar": "معاون وزير الداخلية للشؤون الأمنية",
+      "image": "images/public_figures/pf-abdul-qader-tahan.webp",
+      "socials": {
+        "facebook": "https://www.facebook.com/share/p/16a3xE63Y3/",
+        "instagram": "https://www.instagram.com/p/DKFC2qMNo0_/",
+        "twitter": "https://x.com/mgatahhan"
       }
     }
   ],
