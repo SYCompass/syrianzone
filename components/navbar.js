@@ -488,25 +488,25 @@ class NavBar extends HTMLElement {
               <i class="fas fa-home" style="color: #2d4d3c;"></i>
               الرئيسية
             </a>
-            <a target="_blank" href="https://forum.syrian.zone" class="nav-item">
-              <i class="fas fa-comments" style="color:rgb(255, 0, 0);"></i>
-              المنتدى
-            </a>
-            <a href="/tierlist" class="nav-item">
-              <i class="fas fa-list-ol" style="color: #2d4d3c;"></i>
-              تير ليست الوزراء
+            <a href="/syofficial" class="nav-item">
+              <i class="fas fa-check-circle" style="color:rgb(0, 128, 255);"></i>
+              الحسابات الرسمية السورية
             </a>
             <a href="/compass" class="nav-item">
               <i class="fas fa-compass" style="color: #7fbfff;"></i>
               البوصلة السياسية
             </a>
-            <a href="/syofficial" class="nav-item">
-              <i class="fas fa-check-circle" style="color:rgb(0, 128, 255);"></i>
-              الحسابات الرسمية السورية
+            <a target="_blank" href="https://forum.syrian.zone" class="nav-item">
+              <i class="fas fa-comments" style="color:rgb(255, 0, 0);"></i>
+              المنتدى
             </a>
             <a target="_blank" href="https://github.com/SYCompass/Twitter-SVG-Syrian-Flag-Replacer/releases/tag/1.0.1" class="nav-item">
               <i class="fas fa-th" style="color: #ffbf7f;"></i>
               مبدل العلم
+            </a>
+            <a href="/tierlist" class="nav-item">
+              <i class="fas fa-list-ol" style="color: #2d4d3c;"></i>
+              تير ليست الوزراء
             </a>
             ${isSyofficialPage ? `
             <div class="language-dropdown">
