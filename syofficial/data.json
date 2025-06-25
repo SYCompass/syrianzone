@@ -491,12 +491,24 @@
     {
       "id": "pf-albasheir",
       "name": "EM Albasheir",
-      "name_ar": "وزير الطاقة",
+      "name_ar": "وزير الطاقة محمد البشير",
       "description": "Minister of Energy in the Syrian Arab Republic",
       "description_ar": "وزير الطاقة في الجمهورية العربية السورية",
       "image": "images/public_figures/pf-albasheir.webp",
       "socials": {
         "twitter": "https://x.com/EMAlbasheir"
+      }
+    },
+    {
+      "id": "s",
+      "name": "Mustafa Abdelrazak",
+      "name_ar": "مصطفى عبد الرزاق",
+      "description": "Minister of Public Works and Housing in the Syrian Arab Republic",
+      "description_ar": "وزير الأشغال العامة والإسكان في الجمهورية العربية السورية",
+      "image": "images/public_figures/pf-mustafa.webp",
+      "socials": {
+        "twitter": "https://x.com/MustafaAR_sy",
+        "website": "https://www.mopwh.gov.sy/"
       }
     },
     {
@@ -865,6 +877,28 @@
       }
     },
     {
+      "id": "pf-mohammed-kahala",
+      "name": "Mohammed Kahala",
+      "name_ar": "محمد كحالة",
+      "description": "Director of the General Secretariat for Political Affairs",
+      "description_ar": "مدير الأمانة العامة للشؤون السياسية",
+      "image": "images/public_figures/pf-mohammed-kahala.webp",
+      "socials": {
+        "twitter": "https://x.com/Mhkahala"
+      }
+    },
+    {      
+    "id": "pf-mohammed-khalaf",
+    "name": "Mohammed Khalaf",
+    "name_ar": "محمد الخلف",
+    "description": "Director of the General Secretariat for Political Affairs in Idlib Governorate",
+    "description_ar": "مدير إدارة الشؤون السياسية في محافظة إدلب",
+    "image": "images/public_figures/pf-mohammed-khalaf.webp",
+    "socials": {
+      "twitter": "https://x.com/IdlebPolitical"
+    }
+  },
+  {
       "id": "pf-abdulrahman-aldabbagh",
       "name": "Abdul Rahman Al-Dabbagh",
       "name_ar": "عبد الرحمن الدباغ",
