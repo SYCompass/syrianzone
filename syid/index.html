@@ -4,417 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>عناصر الهوية البصرية السورية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="../components/navbar.js"></script>
+    <link rel="stylesheet" href="style.css">
     <style>
-        /* Font Face Declarations */
-        @font-face {
-            font-family: 'ITF Qomra Arabic';
-            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.eot');
-            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.eot?#iefix') format('embedded-opentype'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.woff2') format('woff2'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.woff') format('woff'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.ttf') format('truetype'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.svg#itfQomraArabic-Light') format('svg');
-            font-weight: 300;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'ITF Qomra Arabic';
-            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.eot');
-            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.eot?#iefix') format('embedded-opentype'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.woff2') format('woff2'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.woff') format('woff'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.ttf') format('truetype'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.svg#itfQomraArabic-Regular') format('svg');
-            font-weight: 400;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'ITF Qomra Arabic';
-            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.eot');
-            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.eot?#iefix') format('embedded-opentype'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.woff2') format('woff2'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.woff') format('woff'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.ttf') format('truetype'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.svg#itfQomraArabic-Medium') format('svg');
-            font-weight: 500;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'ITF Qomra Arabic';
-            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.eot');
-            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.eot?#iefix') format('embedded-opentype'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.woff2') format('woff2'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.woff') format('woff'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.ttf') format('truetype'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.svg#itfQomraArabic-Bold') format('svg');
-            font-weight: 700;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'ITF Qomra Arabic';
-            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.eot');
-            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.eot?#iefix') format('embedded-opentype'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.woff2') format('woff2'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.woff') format('woff'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.ttf') format('truetype'),
-                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.svg#itfQomraArabic-Black') format('svg');
-            font-weight: 900;
-            font-style: normal;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'ITF Qomra Arabic', Arial, sans-serif;
-            background-color: #f5f5f5;
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1270px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #428177 0%, #054239 100%);
-            color: white;
-            padding: 40px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 3em;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-
-        .header p {
-            opacity: 0.9;
-            font-size: 1.2em;
-            font-weight: 400;
-        }
-
-        .section {
-            padding: 40px;
-        }
-
-        .section-title {
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            color: #333;
-            font-weight: 700;
-            text-align: center;
-            border-bottom: 3px solid #428177;
-            padding-bottom: 15px;
-        }
-
-        /* Typography Section */
-        .typography-section {
-            margin-bottom: 50px;
-        }
-
-        .font-showcase {
-            background: linear-gradient(135deg, #edebe0 0%, #b9a779 100%);
-            padding: 40px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            text-align: center;
-            color: #333;
-        }
-
-        .font-weights {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .weight-demo {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .weight-demo h3 {
-            font-size: 1.2em;
-            margin-bottom: 15px;
-            color: #666;
-            font-weight: 400;
-        }
-
-        .arabic-sample {
-            font-size: 2em;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .weight-light { font-weight: 300; }
-        .weight-regular { font-weight: 400; }
-        .weight-medium { font-weight: 500; }
-        .weight-bold { font-weight: 700; }
-        .weight-black { font-weight: 900; }
-
-        /* Font Downloads */
-        .downloads-section {
-            background: #f8f9fa;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-        }
-
-        .downloads-title {
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            color: #333;
-            text-align: center;
-            font-weight: 600;
-        }
-
-                 .download-list {
-             margin-bottom: 20px;
-         }
-
-         .download-item {
-             background: white;
-             padding: 20px;
-             border-radius: 8px;
-             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-             margin-bottom: 15px;
-             transition: transform 0.2s ease;
-             display: flex;
-             align-items: center;
-             justify-content: space-between;
-         }
-
-         .download-item:hover {
-             transform: translateY(-2px);
-         }
-
-         .font-weight-info {
-             display: flex;
-             flex-direction: column;
-             flex: 1;
-         }
-
-         .font-weight-info h4 {
-             font-size: 1.3em;
-             margin-bottom: 8px;
-             color: #333;
-             font-weight: 600;
-         }
-
-         .font-weight-sample {
-             font-size: 1.5em;
-             color: #666;
-             margin-bottom: 5px;
-         }
-
-         .weight-technical {
-             font-size: 0.9em;
-             color: #888;
-         }
-
-                 .format-links {
-             display: flex;
-             flex-wrap: wrap;
-             gap: 8px;
-             justify-content: flex-end;
-         }
-
-        .format-link {
-            background: #428177;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-size: 0.85em;
-            font-weight: 500;
-            transition: background 0.2s ease;
-        }
-
-        .format-link:hover {
-            background: #054239;
-        }
-
-        .download-all {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .download-all-btn {
-            background: linear-gradient(135deg, #6b1f2a 0%, #4a151e 100%);
-            color: white;
-            padding: 15px 40px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1.2em;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: transform 0.2s ease;
-            font-family: 'ITF Qomra Arabic', Arial, sans-serif;
-        }
-
-        .download-all-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(107, 31, 42, 0.3);
-        }
-
-        /* Color Palette Section */
-        .palette-section {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .palette-group {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .palette-title {
-            text-align: center;
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            color: #333;
-            font-weight: 600;
-        }
-
-        .color-row {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            height: 900px;
-        }
-
-        .color-item {
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-        }
-
-        .color-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .color-item:active {
-            transform: translateX(0);
-        }
-
-        .color-item.first {
-            flex: 0 0 10%;
-        }
-
-        .color-item.second {
-            flex: 0 0 30%;
-        }
-
-        .color-item.third {
-            flex: 0 0 60%;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #4CAF50;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 6px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-            font-family: 'ITF Qomra Arabic', Arial, sans-serif;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        /* Adjust text color for light backgrounds */
-        .light-text {
-            color: #333 !important;
-            text-shadow: none !important;
-        }
-
-        .color-text {
-            text-align: center;
-            line-height: 1.3;
-        }
-
-        .hex-code {
-            font-size: 1.1em;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .cmyk-code {
-            font-size: 0.8em;
-            font-weight: 500;
-            opacity: 0.9;
-            line-height: 1.2;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .palette-section {
-                flex-direction: column;
-            }
-            
-            .palette-group {
-                min-width: auto;
-            }
-            
-            .color-row {
-                height: 400px;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .section-title {
-                font-size: 2em;
-            }
-        }
+      body {
+        font-family: "IBM Plex Sans Arabic", sans-serif !important;
+      }
     </style>
 </head>
-<body>
-    <div class="container">
+<body class="bg-gray-100 min-h-screen">
+    <nav-bar></nav-bar>
+    
+    <!-- Quick Jump Navigation -->
+    <div class="quick-nav" id="quickNav">
+        <a href="#typography" class="quick-nav-item" data-section="typography">
+            <i class="fas fa-font"></i>
+            <span class="quick-nav-tooltip">الخطوط</span>
+        </a>
+        <a href="#colors" class="quick-nav-item" data-section="colors">
+            <i class="fas fa-palette"></i>
+            <span class="quick-nav-tooltip">الألوان</span>
+        </a>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <div class="max-w-[1270px] mx-auto my-8 bg-white rounded-xl shadow-lg overflow-hidden">
         <div class="header">
             <h1>عناصر الهوية البصرية السورية</h1>
             <p>مجموعة شاملة من الخطوط والألوان للهوية البصرية السورية</p>
         </div>
 
         <!-- Typography Section -->
-        <div class="section typography-section">
+        <div class="section typography-section" id="typography">
             <h2 class="section-title">خط قُمرة العربي ITF</h2>
             
             <div class="font-showcase">
@@ -534,7 +162,7 @@
         </div>
 
         <!-- Color Palette Section -->
-        <div class="section">
+        <div class="section" id="colors">
             <h2 class="section-title">لوحة الألوان</h2>
             <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px; color: #666;">يمكنك النقر على اللون لنسخ الرمز مباشرةً</p>
             
@@ -638,85 +266,25 @@
         </div>
     </div>
 
-    <div id="notification" class="notification"></div>
+    <div id="notification"></div>
 
-    <script>
-        function copyToClipboard(text) {
-            // Try modern clipboard API first
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(function() {
-                    showNotification(`تم نسخ ${text} إلى الحافظة!`);
-                }).catch(function(err) {
-                    console.error('Clipboard API failed: ', err);
-                    fallbackCopyTextToClipboard(text);
-                });
-            } else {
-                // Use fallback method
-                fallbackCopyTextToClipboard(text);
-            }
-        }
+    <script src="script.js"></script>
 
-        function fallbackCopyTextToClipboard(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            
-            // Avoid scrolling to bottom
-            textArea.style.top = "0";
-            textArea.style.left = "0";
-            textArea.style.position = "fixed";
-            textArea.style.opacity = "0";
-            
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            
-            try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    showNotification(`تم نسخ ${text} إلى الحافظة!`);
-                } else {
-                    showNotification(`فشل في نسخ ${text}`, 'error');
-                }
-            } catch (err) {
-                console.error('Fallback: Could not copy text: ', err);
-                showNotification(`فشل في نسخ ${text}`, 'error');
-            }
-            
-            document.body.removeChild(textArea);
-        }
-
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            
-            // Change color based on type
-            if (type === 'error') {
-                notification.style.background = '#f44336';
-            } else {
-                notification.style.background = '#4CAF50';
-            }
-            
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-
-        // Wait for DOM to be fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add click event listeners to all color items
-            document.querySelectorAll('.color-item').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const hexCode = this.getAttribute('data-hex');
-                    console.log('Clicking color:', hexCode); // Debug log
-                    copyToClipboard(hexCode);
-                });
-            });
-            
-            console.log('Color palette loaded. Found', document.querySelectorAll('.color-item').length, 'color items.');
-        });
-    </script>
+    <footer class="bg-white py-6 mt-12 w-full">
+      <div class="container mx-auto px-4 text-center text-gray-600">
+        <p>&copy; 2025 syria.zone</p>
+        <p class="mt-2 text-sm">
+          تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span>
+        </p>
+        <div class="mt-2 flex justify-center gap-4">
+          <a href="http://hadealahmad.com/" target="_blank" rel="noopener" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+            <i class="fas fa-globe ml-1"></i> الموقع الشخصي
+          </a>
+          <a href="https://x.com/hadealahmad" target="_blank" rel="noopener" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+            <i class="fab fa-x-twitter ml-1"></i> حساب X
+          </a>
+        </div>
+      </div>
+    </footer>
 </body>
-</html>
+</html> 
