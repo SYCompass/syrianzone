@@ -492,6 +492,10 @@ class NavBar extends HTMLElement {
               <i class="fas fa-check-circle" style="color:rgb(0, 128, 255);"></i>
               الحسابات الرسمية السورية
             </a>
+            <a href="/syid" class="nav-item">
+              <i class="fas fa-palette" style="color: #8a2be2;"></i>
+              الهوية البصرية السورية
+            </a>
             <a href="/compass" class="nav-item">
               <i class="fas fa-compass" style="color: #7fbfff;"></i>
               البوصلة السياسية
