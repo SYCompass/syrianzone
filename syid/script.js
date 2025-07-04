@@ -139,16 +139,15 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeNavigation();
 
     // Add click event listeners to all color items
-    document.querySelectorAll('.color-item').forEach(item => {
+    document.querySelectorAll('[data-hex]').forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
             const hexCode = this.getAttribute('data-hex');
-            console.log('Clicking color:', hexCode); // Debug log
             copyToClipboard(hexCode);
         });
     });
     
-    console.log('Color palette loaded. Found', document.querySelectorAll('.color-item').length, 'color items.');
+    console.log('Color palette loaded. Found', document.querySelectorAll('[data-hex]').length, 'color items.');
 
     loadDynamicContent();
 }); 
