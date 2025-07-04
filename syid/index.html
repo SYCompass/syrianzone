@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عناصر الهوية البصرية السورية</title>
+    <style>
+        /* Font Face Declarations */
+        @font-face {
+            font-family: 'ITF Qomra Arabic';
+            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.eot');
+            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.eot?#iefix') format('embedded-opentype'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.woff2') format('woff2'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.woff') format('woff'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.ttf') format('truetype'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.svg#itfQomraArabic-Light') format('svg');
+            font-weight: 300;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'ITF Qomra Arabic';
+            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.eot');
+            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.eot?#iefix') format('embedded-opentype'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.woff2') format('woff2'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.woff') format('woff'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.ttf') format('truetype'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.svg#itfQomraArabic-Regular') format('svg');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'ITF Qomra Arabic';
+            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.eot');
+            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.eot?#iefix') format('embedded-opentype'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.woff2') format('woff2'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.woff') format('woff'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.ttf') format('truetype'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.svg#itfQomraArabic-Medium') format('svg');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'ITF Qomra Arabic';
+            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.eot');
+            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.eot?#iefix') format('embedded-opentype'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.woff2') format('woff2'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.woff') format('woff'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.ttf') format('truetype'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.svg#itfQomraArabic-Bold') format('svg');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'ITF Qomra Arabic';
+            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.eot');
+            src: url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.eot?#iefix') format('embedded-opentype'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.woff2') format('woff2'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.woff') format('woff'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.ttf') format('truetype'),
+                 url('./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.svg#itfQomraArabic-Black') format('svg');
+            font-weight: 900;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'ITF Qomra Arabic', Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1270px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #428177 0%, #054239 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.2em;
+            font-weight: 400;
+        }
+
+        .section {
+            padding: 40px;
+        }
+
+        .section-title {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #333;
+            font-weight: 700;
+            text-align: center;
+            border-bottom: 3px solid #428177;
+            padding-bottom: 15px;
+        }
+
+        /* Typography Section */
+        .typography-section {
+            margin-bottom: 50px;
+        }
+
+        .font-showcase {
+            background: linear-gradient(135deg, #edebe0 0%, #b9a779 100%);
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #333;
+        }
+
+        .font-weights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .weight-demo {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .weight-demo h3 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .arabic-sample {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .weight-light { font-weight: 300; }
+        .weight-regular { font-weight: 400; }
+        .weight-medium { font-weight: 500; }
+        .weight-bold { font-weight: 700; }
+        .weight-black { font-weight: 900; }
+
+        /* Font Downloads */
+        .downloads-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .downloads-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+            font-weight: 600;
+        }
+
+                 .download-list {
+             margin-bottom: 20px;
+         }
+
+         .download-item {
+             background: white;
+             padding: 20px;
+             border-radius: 8px;
+             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+             margin-bottom: 15px;
+             transition: transform 0.2s ease;
+             display: flex;
+             align-items: center;
+             justify-content: space-between;
+         }
+
+         .download-item:hover {
+             transform: translateY(-2px);
+         }
+
+         .font-weight-info {
+             display: flex;
+             flex-direction: column;
+             flex: 1;
+         }
+
+         .font-weight-info h4 {
+             font-size: 1.3em;
+             margin-bottom: 8px;
+             color: #333;
+             font-weight: 600;
+         }
+
+         .font-weight-sample {
+             font-size: 1.5em;
+             color: #666;
+             margin-bottom: 5px;
+         }
+
+         .weight-technical {
+             font-size: 0.9em;
+             color: #888;
+         }
+
+                 .format-links {
+             display: flex;
+             flex-wrap: wrap;
+             gap: 8px;
+             justify-content: flex-end;
+         }
+
+        .format-link {
+            background: #428177;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.85em;
+            font-weight: 500;
+            transition: background 0.2s ease;
+        }
+
+        .format-link:hover {
+            background: #054239;
+        }
+
+        .download-all {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .download-all-btn {
+            background: linear-gradient(135deg, #6b1f2a 0%, #4a151e 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s ease;
+            font-family: 'ITF Qomra Arabic', Arial, sans-serif;
+        }
+
+        .download-all-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(107, 31, 42, 0.3);
+        }
+
+        /* Color Palette Section */
+        .palette-section {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .palette-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .palette-title {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .color-row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: 900px;
+        }
+
+        .color-item {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .color-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-item:active {
+            transform: translateX(0);
+        }
+
+        .color-item.first {
+            flex: 0 0 10%;
+        }
+
+        .color-item.second {
+            flex: 0 0 30%;
+        }
+
+        .color-item.third {
+            flex: 0 0 60%;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            font-family: 'ITF Qomra Arabic', Arial, sans-serif;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Adjust text color for light backgrounds */
+        .light-text {
+            color: #333 !important;
+            text-shadow: none !important;
+        }
+
+        .color-text {
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .hex-code {
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .cmyk-code {
+            font-size: 0.8em;
+            font-weight: 500;
+            opacity: 0.9;
+            line-height: 1.2;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .palette-section {
+                flex-direction: column;
+            }
+            
+            .palette-group {
+                min-width: auto;
+            }
+            
+            .color-row {
+                height: 400px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .section-title {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>عناصر الهوية البصرية السورية</h1>
+            <p>مجموعة شاملة من الخطوط والألوان للهوية البصرية السورية</p>
+        </div>
+
+        <!-- Typography Section -->
+        <div class="section typography-section">
+            <h2 class="section-title">خط قُمرة العربي ITF</h2>
+            
+            <div class="font-showcase">
+                <h3 style="font-size: 2.5em; margin-bottom: 20px; font-weight: 700;">نموذج من خط قُمرة العربي</h3>
+                <p style="font-size: 1.5em; font-weight: 400;">خط عربي أنيق مستخدم في الهوية البصرية السورية</p>
+            </div>
+
+            <div class="font-weights">
+                <div class="weight-demo">
+                    <h3>خفيف - Light</h3>
+                    <div class="arabic-sample weight-light">سوريا الحبيبة</div>
+                    <div style="font-weight: 300; color: #666;">Font Weight: 300</div>
+                </div>
+                <div class="weight-demo">
+                    <h3>عادي - Regular</h3>
+                    <div class="arabic-sample weight-regular">سوريا الحبيبة</div>
+                    <div style="font-weight: 400; color: #666;">Font Weight: 400</div>
+                </div>
+                <div class="weight-demo">
+                    <h3>متوسط - Medium</h3>
+                    <div class="arabic-sample weight-medium">سوريا الحبيبة</div>
+                    <div style="font-weight: 500; color: #666;">Font Weight: 500</div>
+                </div>
+                <div class="weight-demo">
+                    <h3>سميك - Bold</h3>
+                    <div class="arabic-sample weight-bold">سوريا الحبيبة</div>
+                    <div style="font-weight: 700; color: #666;">Font Weight: 700</div>
+                </div>
+                <div class="weight-demo">
+                    <h3>أسود - Black</h3>
+                    <div class="arabic-sample weight-black">سوريا الحبيبة</div>
+                    <div style="font-weight: 900; color: #666;">Font Weight: 900</div>
+                </div>
+            </div>
+
+            <div class="downloads-section">
+                <h3 class="downloads-title">تحميل الخطوط</h3>
+                
+                <div class="download-list">
+                    <div class="download-item">
+                        <div class="font-weight-info">
+                            <h4>خفيف - Light</h4>
+                            <div class="font-weight-sample weight-light">سوريا الحبيبة</div>
+                            <div class="weight-technical">Font Weight: 300</div>
+                        </div>
+                        <div class="format-links">
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.ttf" class="format-link" download>TTF</a>
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.woff2" class="format-link" download>WOFF2</a>
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.woff" class="format-link" download>WOFF</a>
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.eot" class="format-link" download>EOT</a>
+                        </div>
+                    </div>
+                    
+                    <div class="download-item">
+                        <div class="font-weight-info">
+                            <h4>عادي - Regular</h4>
+                            <div class="font-weight-sample weight-regular">سوريا الحبيبة</div>
+                            <div class="weight-technical">Font Weight: 400</div>
+                        </div>
+                        <div class="format-links">
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.ttf" class="format-link" download>TTF</a>
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.woff2" class="format-link" download>WOFF2</a>
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.woff" class="format-link" download>WOFF</a>
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.eot" class="format-link" download>EOT</a>
+                        </div>
+                    </div>
+                    
+                    <div class="download-item">
+                        <div class="font-weight-info">
+                            <h4>متوسط - Medium</h4>
+                            <div class="font-weight-sample weight-medium">سوريا الحبيبة</div>
+                            <div class="weight-technical">Font Weight: 500</div>
+                        </div>
+                        <div class="format-links">
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.ttf" class="format-link" download>TTF</a>
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.woff2" class="format-link" download>WOFF2</a>
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.woff" class="format-link" download>WOFF</a>
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.eot" class="format-link" download>EOT</a>
+                        </div>
+                    </div>
+                    
+                    <div class="download-item">
+                        <div class="font-weight-info">
+                            <h4>سميك - Bold</h4>
+                            <div class="font-weight-sample weight-bold">سوريا الحبيبة</div>
+                            <div class="weight-technical">Font Weight: 700</div>
+                        </div>
+                        <div class="format-links">
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.ttf" class="format-link" download>TTF</a>
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.woff2" class="format-link" download>WOFF2</a>
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.woff" class="format-link" download>WOFF</a>
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.eot" class="format-link" download>EOT</a>
+                        </div>
+                    </div>
+                    
+                    <div class="download-item">
+                        <div class="font-weight-info">
+                            <h4>أسود - Black</h4>
+                            <div class="font-weight-sample weight-black">سوريا الحبيبة</div>
+                            <div class="weight-technical">Font Weight: 900</div>
+                        </div>
+                        <div class="format-links">
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.ttf" class="format-link" download>TTF</a>
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.woff2" class="format-link" download>WOFF2</a>
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.woff" class="format-link" download>WOFF</a>
+                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.eot" class="format-link" download>EOT</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="download-all">
+                    <a href="./fonts/itf_qomra_arabic_fonts.zip" class="download-all-btn" download>
+                        تحميل جميع الخطوط (ZIP)
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Color Palette Section -->
+        <div class="section">
+            <h2 class="section-title">لوحة الألوان</h2>
+            <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px; color: #666;">يمكنك النقر على اللون لنسخ الرمز مباشرةً</p>
+            
+            <div class="palette-section">
+                <div class="palette-group">
+                    <div class="palette-title">Forest</div>
+                    <div class="color-row">
+                        <div class="color-item first" style="background-color: #428177;" data-hex="#428177">
+                            <div class="color-text">
+                                <div class="hex-code">#428177</div>
+                                <div class="cmyk-code">C76% M32%<br/>Y54% K10%</div>
+                            </div>
+                        </div>
+                        <div class="color-item second" style="background-color: #054239;" data-hex="#054239">
+                            <div class="color-text">
+                                <div class="hex-code">#054239</div>
+                                <div class="cmyk-code">C89% M49%<br/>Y70% K50%</div>
+                            </div>
+                        </div>
+                        <div class="color-item third" style="background-color: #002623;" data-hex="#002623">
+                            <div class="color-text">
+                                <div class="hex-code">#002623</div>
+                                <div class="cmyk-code">C87% R0%<br/>M59% G38%<br/>Y68% B35%<br/>K71%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="palette-group">
+                    <div class="palette-title">Golden Wheat</div>
+                    <div class="color-row">
+                        <div class="color-item first light-text" style="background-color: #edebe0;" data-hex="#edebe0">
+                            <div class="color-text">
+                                <div class="hex-code">#edebe0</div>
+                                <div class="cmyk-code">C6% R237%<br/>M9% G235%<br/>Y19% B224%<br/>K0%</div>
+                            </div>
+                        </div>
+                        <div class="color-item second light-text" style="background-color: #b9a779;" data-hex="#b9a779">
+                            <div class="color-text">
+                                <div class="hex-code">#b9a779</div>
+                                <div class="cmyk-code">C20% R185%<br/>M29% G167%<br/>Y52% B121%<br/>K7%</div>
+                            </div>
+                        </div>
+                        <div class="color-item third" style="background-color: #988561;" data-hex="#988561">
+                            <div class="color-text">
+                                <div class="hex-code">#988561</div>
+                                <div class="cmyk-code">C39% R152%<br/>M46% G133%<br/>Y67% B97%<br/>K20%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="palette-group">
+                    <div class="palette-title">Deep Umber</div>
+                    <div class="color-row">
+                        <div class="color-item first" style="background-color: #6b1f2a;" data-hex="#6b1f2a">
+                            <div class="color-text">
+                                <div class="hex-code">#6b1f2a</div>
+                                <div class="cmyk-code">C35% R107%<br/>M92% G31%<br/>Y72% B42%<br/>K46%</div>
+                            </div>
+                        </div>
+                        <div class="color-item second" style="background-color: #4a151e;" data-hex="#4a151e">
+                            <div class="color-text">
+                                <div class="hex-code">#4a151e</div>
+                                <div class="cmyk-code">C44% R74%<br/>M86% G21%<br/>Y68% B30%<br/>K65%</div>
+                            </div>
+                        </div>
+                        <div class="color-item third" style="background-color: #260f14;" data-hex="#260f14">
+                            <div class="color-text">
+                                <div class="hex-code">#260f14</div>
+                                <div class="cmyk-code">C60% R38%<br/>M75% G15%<br/>Y64% B20%<br/>K79%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="palette-group">
+                    <div class="palette-title">Charcoal</div>
+                    <div class="color-row">
+                        <div class="color-item first light-text" style="background-color: #ffffff;" data-hex="#ffffff">
+                            <div class="color-text">
+                                <div class="hex-code">#ffffff</div>
+                                <div class="cmyk-code">C0% R255%<br/>M0% G255%<br/>Y0% B255%<br/>K0%</div>
+                            </div>
+                        </div>
+                        <div class="color-item second" style="background-color: #3d3a3b;" data-hex="#3d3a3b">
+                            <div class="color-text">
+                                <div class="hex-code">#3d3a3b</div>
+                                <div class="cmyk-code">C67% R61%<br/>M53% G58%<br/>Y60% B59%<br/>K50%</div>
+                            </div>
+                        </div>
+                        <div class="color-item third" style="background-color: #161616;" data-hex="#161616">
+                            <div class="color-text">
+                                <div class="hex-code">#161616</div>
+                                <div class="cmyk-code">C73% R22%<br/>M67% G22%<br/>Y65% B22%<br/>K80%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        function copyToClipboard(text) {
+            // Try modern clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(function() {
+                    showNotification(`تم نسخ ${text} إلى الحافظة!`);
+                }).catch(function(err) {
+                    console.error('Clipboard API failed: ', err);
+                    fallbackCopyTextToClipboard(text);
+                });
+            } else {
+                // Use fallback method
+                fallbackCopyTextToClipboard(text);
+            }
+        }
+
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            
+            // Avoid scrolling to bottom
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+            textArea.style.opacity = "0";
+            
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showNotification(`تم نسخ ${text} إلى الحافظة!`);
+                } else {
+                    showNotification(`فشل في نسخ ${text}`, 'error');
+                }
+            } catch (err) {
+                console.error('Fallback: Could not copy text: ', err);
+                showNotification(`فشل في نسخ ${text}`, 'error');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            
+            // Change color based on type
+            if (type === 'error') {
+                notification.style.background = '#f44336';
+            } else {
+                notification.style.background = '#4CAF50';
+            }
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click event listeners to all color items
+            document.querySelectorAll('.color-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const hexCode = this.getAttribute('data-hex');
+                    console.log('Clicking color:', hexCode); // Debug log
+                    copyToClipboard(hexCode);
+                });
+            });
+            
+            console.log('Color palette loaded. Found', document.querySelectorAll('.color-item').length, 'color items.');
+        });
+    </script>
+</body>
+</html>
