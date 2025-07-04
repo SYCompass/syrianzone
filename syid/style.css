@@ -58,7 +58,9 @@
     font-weight: 900;
     font-style: normal;
 }
-
+*{
+    font-family: "ITF Qomra Arabic", sans-serif;
+}
 .content-wrapper {
     max-width: 1270px;
     margin: 2rem auto;

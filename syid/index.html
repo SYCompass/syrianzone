@@ -6,7 +6,6 @@
     <title>عناصر الهوية البصرية السورية</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="../components/navbar.js"></script>
     <link rel="stylesheet" href="style.css">
     <style>
@@ -40,9 +39,12 @@
     </button>
 
     <div class="max-w-[1270px] mx-auto my-8 bg-white rounded-xl shadow-lg overflow-hidden">
-        <div class="header">
-            <h1>عناصر الهوية البصرية السورية</h1>
-            <p>مجموعة شاملة من الخطوط والألوان للهوية البصرية السورية</p>
+        <div class="header" style="position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(to right, rgba(0,38,35,1) 0%, rgba(0,38,35,0.3) 100%), url('./materials/pattern.svg');  opacity: 1;"></div>
+            <div style="position: relative; z-index: 1;">
+                <h1>عناصر الهوية البصرية السورية</h1>
+                <p>مجموعة شاملة من الخطوط والألوان للهوية البصرية السورية</p>
+            </div>
         </div>
 
         <!-- Typography Section -->
@@ -271,10 +273,10 @@
 
         <!-- Materials Section -->
         <div class="section" id="materials">
-            <h2 class="section-title">خلفيات الشاشة</h2>
-            <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px; color: #666;">خلفيات لسطح المكتب والهاتف متوافقة مع الهوية البصرية السورية الجديدة.</p>
+            <h2 class="section-title">خلفيات الشاشة والأنماط</h2>
+            <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px; color: #666;">خلفيات لسطح المكتب والهاتف والأنماط متوافقة مع الهوية البصرية السورية الجديدة.</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 py-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-8 py-4">
                 <!-- Desktop Wallpaper -->
                 <div class="bg-gray-50 p-6 rounded-lg shadow-md text-center flex flex-col items-center">
                     <h3 class="text-2xl font-semibold mb-4">خلفية سطح المكتب</h3>
@@ -296,6 +298,17 @@
                     <div class="flex justify-center gap-4 mt-auto">
                         <a href="./materials/الهوية السورية الجديدة - خلفية هاتف.png" class="download-all-btn" download>تحميل PNG</a>
                         <a href="./materials/الهوية السورية الجديدة - خلفية هاتف.svg" class="download-all-btn" download>تحميل SVG</a>
+                    </div>
+                </div>
+
+                <!-- Pattern -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md text-center flex flex-col items-center">
+                    <h3 class="text-2xl font-semibold mb-4">النمط الأساسي</h3>
+                    <div class="mb-4 w-full">
+                        <img src="./materials/pattern.svg" alt="النمط الأساسي" class="w-full h-auto rounded-lg border-2 border-gray-200">
+                    </div>
+                    <div class="flex justify-center gap-4 mt-auto">
+                        <a href="./materials/pattern.svg" class="download-all-btn" download>تحميل SVG</a>
                     </div>
                 </div>
             </div>
