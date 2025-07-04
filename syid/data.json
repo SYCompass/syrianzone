@@ -1,0 +1,155 @@
+{
+    "fonts": [
+        {
+            "name": "خفيف - Light",
+            "weight": 300,
+            "className": "weight-light",
+            "formats": [
+                { "type": "TTF", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.ttf" },
+                { "type": "WOFF2", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.woff2" },
+                { "type": "WOFF", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.woff" },
+                { "type": "EOT", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.eot" }
+            ]
+        },
+        {
+            "name": "عادي - Regular",
+            "weight": 400,
+            "className": "weight-regular",
+            "formats": [
+                { "type": "TTF", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.ttf" },
+                { "type": "WOFF2", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.woff2" },
+                { "type": "WOFF", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.woff" },
+                { "type": "EOT", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.eot" }
+            ]
+        },
+        {
+            "name": "متوسط - Medium",
+            "weight": 500,
+            "className": "weight-medium",
+            "formats": [
+                { "type": "TTF", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.ttf" },
+                { "type": "WOFF2", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.woff2" },
+                { "type": "WOFF", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.woff" },
+                { "type": "EOT", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.eot" }
+            ]
+        },
+        {
+            "name": "سميك - Bold",
+            "weight": 700,
+            "className": "weight-bold",
+            "formats": [
+                { "type": "TTF", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.ttf" },
+                { "type": "WOFF2", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.woff2" },
+                { "type": "WOFF", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.woff" },
+                { "type": "EOT", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.eot" }
+            ]
+        },
+        {
+            "name": "أسود - Black",
+            "weight": 900,
+            "className": "weight-black",
+            "formats": [
+                { "type": "TTF", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.ttf" },
+                { "type": "WOFF2", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.woff2" },
+                { "type": "WOFF", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.woff" },
+                { "type": "EOT", "url": "./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.eot" }
+            ]
+        }
+    ],
+    "wallpapers": [
+        {
+            "title": "الشعار الرسمي",
+            "imageSrc": "./materials/abdalhade/IMG_9403.jpg",
+            "downloadJpg": "./materials/abdalhade/IMG_9403.jpg",
+            "designerName": "@abdalhadealani"
+        },
+        {
+            "title": "النمط الأساسي",
+            "imageSrc": "./materials/pattern.svg",
+            "downloadSvg": "./materials/pattern.svg"
+        },
+        {
+            "title": "خلفية سطح المكتب",
+            "imageSrc": "./materials/الهوية السورية الجديدة - خلفية الكمبيوتر.png",
+            "downloadPng": "./materials/الهوية السورية الجديدة - خلفية الكمبيوتر.png",
+            "downloadSvg": "./materials/الهوية السورية الجديدة - خلفية الكمبيوتر.svg"
+        },
+        {
+            "title": "خلفية هاتف",
+            "imageSrc": "./materials/الهوية السورية الجديدة - خلفية هاتف.png",
+            "downloadPng": "./materials/الهوية السورية الجديدة - خلفية هاتف.png",
+            "downloadSvg": "./materials/الهوية السورية الجديدة - خلفية هاتف.svg"
+        },
+        {
+            "title": "خلفية من scrollexx",
+            "imageSrc": "./materials/scrollexx-wallpaper.png",
+            "downloadPng": "./materials/scrollexx-wallpaper.png",
+            "designerName": "@scrollexx",
+            "designerLink": "https://x.com/scrollexx"
+        },
+        {
+            "title": "خلفية من عبدالهادي العاني",
+            "imageSrc": "./materials/abdalhade/62EB27B4-E270-4D5C-BB9B-A77748201F7D.jpg",
+            "downloadJpg": "./materials/abdalhade/62EB27B4-E270-4D5C-BB9B-A77748201F7D.jpg",
+            "designerName": "@abdalhadealani",
+            "designerLink": "https://x.com/abdalhadealani"
+        },
+        
+        {
+            "title": "خلفية من عبدالهادي العاني",
+            "imageSrc": "./materials/abdalhade/IMG_9406.jpg",
+            "downloadJpg": "./materials/abdalhade/IMG_9406.jpg",
+            "designerName": "@abdalhadealani",
+            "designerLink": "https://x.com/abdalhadealani"
+        },
+        {
+            "title": "خلفية من عبدالهادي العاني",
+            "imageSrc": "./materials/abdalhade/IMG_9407.jpg",
+            "downloadJpg": "./materials/abdalhade/IMG_9407.jpg",
+            "designerName": "@abdalhadealani",
+            "designerLink": "https://x.com/abdalhadealani"
+        },
+        {
+            "title": "خلفية من عبدالهادي العاني",
+            "imageSrc": "./materials/abdalhade/IMG_9409.jpg",
+            "downloadJpg": "./materials/abdalhade/IMG_9409.jpg",
+            "designerName": "@abdalhadealani",
+            "designerLink": "https://x.com/abdalhadealani"
+        },
+        {
+            "title": "خلفية من عبدالهادي العاني",
+            "imageSrc": "./materials/abdalhade/IMG_9410.jpg",
+            "downloadJpg": "./materials/abdalhade/IMG_9410.jpg",
+            "designerName": "@abdalhadealani",
+            "designerLink": "https://x.com/abdalhadealani"
+        },
+        {
+            "title": "خلفية من عبدالهادي العاني",
+            "imageSrc": "./materials/abdalhade/IMG_9411.jpg",
+            "downloadJpg": "./materials/abdalhade/IMG_9411.jpg",
+            "designerName": "@abdalhadealani",
+            "designerLink": "https://x.com/abdalhadealani"
+        },
+        {
+            "title": "خلفية من عبدالهادي العاني",
+            "imageSrc": "./materials/abdalhade/IMG_9412.jpg",
+            "downloadJpg": "./materials/abdalhade/IMG_9412.jpg",
+            "designerName": "@abdalhadealani",
+            "designerLink": "https://x.com/abdalhadealani"
+        },
+        {
+            "title": "خلفية من عبدالهادي العاني",
+            "imageSrc": "./materials/abdalhade/IMG_9413.jpg",
+            "downloadJpg": "./materials/abdalhade/IMG_9413.jpg",
+            "designerName": "@abdalhadealani",
+            "designerLink": "https://x.com/abdalhadealani"
+        },
+        {
+            "title": "خلفية من عبدالهادي العاني",
+            "imageSrc": "./materials/abdalhade/IMG_9414.jpg",
+            "downloadJpg": "./materials/abdalhade/IMG_9414.jpg",
+            "designerName": "@abdalhadealani",
+            "designerLink": "https://x.com/abdalhadealani"
+        }
+    ]
+} 

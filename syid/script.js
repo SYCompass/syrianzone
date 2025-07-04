@@ -64,7 +64,7 @@ function showNotification(message, type = 'success') {
 function initializeNavigation() {
     const quickNav = document.getElementById('quickNav');
     const backToTop = document.getElementById('backToTop');
-    const sections = document.querySelectorAll('#typography, #colors');
+    const sections = document.querySelectorAll('#typography, #colors, #flag, #materials');
     const quickNavItems = document.querySelectorAll('.quick-nav-item');
 
     // Back to top functionality
@@ -149,4 +149,80 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     console.log('Color palette loaded. Found', document.querySelectorAll('.color-item').length, 'color items.');
+
+    loadDynamicContent();
 }); 
+
+async function loadDynamicContent() {
+    console.log('Starting to load dynamic content...');
+    try {
+        const response = await fetch('./data.json');
+        console.log('Fetch response received:', response);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log('Data parsed successfully:', data);
+
+        // Load wallpapers
+        const wallpaperContainer = document.getElementById('wallpaper-grid');
+        if (wallpaperContainer && data.wallpapers) {
+            wallpaperContainer.innerHTML = ''; // Clear existing
+            data.wallpapers.forEach(wallpaperData => {
+                const wallpaperItem = document.createElement('wallpaper-item');
+                
+                // Set attributes only if they exist in the data
+                for (const key in wallpaperData) {
+                    if (Object.prototype.hasOwnProperty.call(wallpaperData, key)) {
+                        const value = wallpaperData[key];
+                        if (value !== null && value !== undefined) {
+                            const attributeName = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+                            wallpaperItem.setAttribute(attributeName, value);
+                        }
+                    }
+                }
+
+                wallpaperContainer.appendChild(wallpaperItem);
+            });
+            console.log('Wallpapers loaded successfully.');
+        }
+
+        // Load fonts
+        const fontContainer = document.getElementById('font-download-list');
+        if (fontContainer && data.fonts) {
+            fontContainer.innerHTML = ''; // Clear existing
+            data.fonts.forEach(fontData => {
+                const fontItem = document.createElement('div');
+                fontItem.className = 'download-item';
+
+                const formatLinks = fontData.formats.map(format => 
+                    `<a href="${format.url}" class="format-link" download>${format.type}</a>`
+                ).join('');
+
+                fontItem.innerHTML = `
+                    <div class="font-weight-info">
+                        <h4>${fontData.name}</h4>
+                        <div class="font-weight-sample ${fontData.className}">سوريا الحبيبة</div>
+                        <div class="weight-technical">Font Weight: ${fontData.weight}</div>
+                    </div>
+                    <div class="format-links">
+                        ${formatLinks}
+                    </div>
+                `;
+                fontContainer.appendChild(fontItem);
+            });
+            console.log('Fonts loaded successfully.');
+        }
+
+    } catch (error) {
+        console.error('Failed to load dynamic content:', error);
+        const wallpaperContainer = document.getElementById('wallpaper-grid');
+        if(wallpaperContainer) {
+            wallpaperContainer.innerHTML = '<p class="text-red-500 text-center col-span-full">Failed to load wallpapers. Please try again later.</p>';
+        }
+        const fontContainer = document.getElementById('font-download-list');
+        if(fontContainer) {
+            fontContainer.innerHTML = '<p class="text-red-500 text-center col-span-full">Failed to load fonts. Please try again later.</p>';
+        }
+    }
+}

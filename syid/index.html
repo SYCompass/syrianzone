@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="../components/navbar.js"></script>
+    <script src="../components/wallpaper-item.js" defer></script>
     <link rel="stylesheet" href="style.css">
     <style>
       body {
@@ -53,130 +54,62 @@
     </button>
 
     <div class="max-w-[1270px] mx-auto my-8 bg-white rounded-xl shadow-lg overflow-hidden">
-        <div class="header" style="position: relative; overflow: hidden;">
+        <div class="p-10 text-center text-white" style="position: relative; overflow: hidden;">
             <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(to right, rgba(0,38,35,1) 30%, rgba(0,38,35,0.8) 100%), url('./materials/pattern.svg');  opacity: 1;"></div>
             <div style="position: relative; z-index: 1;">
-                <h1>عناصر الهوية البصرية السورية</h1>
-                <p>المواد المرتبطة بالهوية البصرية السورية - مجموعة غير رسمية ومجمّعة من أماكن متعددة بانتظار الإصدار الرسمي للهوية</p>
+                <h1 class="text-5xl font-bold mb-4">عناصر الهوية البصرية السورية</h1>
+                <p class="text-lg opacity-90">المواد المرتبطة بالهوية البصرية السورية - مجموعة غير رسمية ومجمّعة من أماكن متعددة بانتظار الإصدار الرسمي للهوية</p>
                 <br>
-                <a href="https://syrianidentity.sy" target="_blank" rel="noopener" class="download-all-btn">زيارة الموقع الرسمي للهوية البصرية السورية</a>
+                <a href="https://syrianidentity.sy" target="_blank" rel="noopener" class="inline-block bg-gradient-to-r from-[#6b1f2a] to-[#4a151e] text-white font-semibold text-lg py-4 px-10 rounded-full no-underline transition-transform hover:-translate-y-0.5 hover:shadow-lg">زيارة الموقع الرسمي للهوية البصرية السورية</a>
             </div>
         </div>
 
         <!-- Typography Section -->
-        <div class="section typography-section" id="typography">
-            <h2 class="section-title">خط قُمرة العربي ITF</h2>
+        <div class="p-10" id="typography">
+            <h2 class="text-4xl font-bold text-center text-gray-800 mb-8 pb-4 border-b-4 border-[#428177]">خط قُمرة العربي ITF</h2>
             
-            <div class="font-showcase">
-                <h3 style="font-size: 2.5em; margin-bottom: 20px; font-weight: 700;">نموذج من خط قُمرة العربي</h3>
-                <p style="font-size: 1.5em; font-weight: 400;">خط عربي أنيق مستخدم في الهوية البصرية السورية</p>
+            <div class="p-10 rounded-2xl mb-8 text-center text-gray-800 bg-gradient-to-r from-[#edebe0] to-[#b9a779]">
+                <h3 class="text-4xl font-bold mb-5">نموذج من خط قُمرة العربي</h3>
+                <p class="text-2xl">خط عربي أنيق مستخدم في الهوية البصرية السورية</p>
             </div>
 
-            <div class="font-weights">
-                <div class="weight-demo">
-                    <h3>خفيف - Light</h3>
-                    <div class="arabic-sample weight-light">سوريا الحبيبة</div>
-                    <div style="font-weight: 300; color: #666;">Font Weight: 300</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <h3 class="text-xl mb-4 text-gray-600">خفيف - Light</h3>
+                    <div class="text-4xl mb-2 text-gray-800 weight-light">سوريا الحبيبة</div>
+                    <div class="text-sm text-gray-500">Font Weight: 300</div>
                 </div>
-                <div class="weight-demo">
-                    <h3>عادي - Regular</h3>
-                    <div class="arabic-sample weight-regular">سوريا الحبيبة</div>
-                    <div style="font-weight: 400; color: #666;">Font Weight: 400</div>
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <h3 class="text-xl mb-4 text-gray-600">عادي - Regular</h3>
+                    <div class="text-4xl mb-2 text-gray-800 weight-regular">سوريا الحبيبة</div>
+                    <div class="text-sm text-gray-500">Font Weight: 400</div>
                 </div>
-                <div class="weight-demo">
-                    <h3>متوسط - Medium</h3>
-                    <div class="arabic-sample weight-medium">سوريا الحبيبة</div>
-                    <div style="font-weight: 500; color: #666;">Font Weight: 500</div>
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <h3 class="text-xl mb-4 text-gray-600">متوسط - Medium</h3>
+                    <div class="text-4xl mb-2 text-gray-800 weight-medium">سوريا الحبيبة</div>
+                    <div class="text-sm text-gray-500">Font Weight: 500</div>
                 </div>
-                <div class="weight-demo">
-                    <h3>سميك - Bold</h3>
-                    <div class="arabic-sample weight-bold">سوريا الحبيبة</div>
-                    <div style="font-weight: 700; color: #666;">Font Weight: 700</div>
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <h3 class="text-xl mb-4 text-gray-600">سميك - Bold</h3>
+                    <div class="text-4xl mb-2 text-gray-800 weight-bold">سوريا الحبيبة</div>
+                    <div class="text-sm text-gray-500">Font Weight: 700</div>
                 </div>
-                <div class="weight-demo">
-                    <h3>أسود - Black</h3>
-                    <div class="arabic-sample weight-black">سوريا الحبيبة</div>
-                    <div style="font-weight: 900; color: #666;">Font Weight: 900</div>
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <h3 class="text-xl mb-4 text-gray-600">أسود - Black</h3>
+                    <div class="text-4xl mb-2 text-gray-800 weight-black">سوريا الحبيبة</div>
+                    <div class="text-sm text-gray-500">Font Weight: 900</div>
                 </div>
             </div>
 
-            <div class="downloads-section">
-                <h3 class="downloads-title">تحميل الخطوط</h3>
+            <div class="bg-gray-50 p-8 rounded-2xl mb-8">
+                <h3 class="text-3xl font-bold text-center text-gray-800 mb-6">تحميل الخطوط</h3>
                 
-                <div class="download-list">
-                    <div class="download-item">
-                        <div class="font-weight-info">
-                            <h4>خفيف - Light</h4>
-                            <div class="font-weight-sample weight-light">سوريا الحبيبة</div>
-                            <div class="weight-technical">Font Weight: 300</div>
-                        </div>
-                        <div class="format-links">
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.ttf" class="format-link" download>TTF</a>
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.woff2" class="format-link" download>WOFF2</a>
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.woff" class="format-link" download>WOFF</a>
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Light.eot" class="format-link" download>EOT</a>
-                        </div>
-                    </div>
-                    
-                    <div class="download-item">
-                        <div class="font-weight-info">
-                            <h4>عادي - Regular</h4>
-                            <div class="font-weight-sample weight-regular">سوريا الحبيبة</div>
-                            <div class="weight-technical">Font Weight: 400</div>
-                        </div>
-                        <div class="format-links">
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.ttf" class="format-link" download>TTF</a>
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.woff2" class="format-link" download>WOFF2</a>
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.woff" class="format-link" download>WOFF</a>
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Regular.eot" class="format-link" download>EOT</a>
-                        </div>
-                    </div>
-                    
-                    <div class="download-item">
-                        <div class="font-weight-info">
-                            <h4>متوسط - Medium</h4>
-                            <div class="font-weight-sample weight-medium">سوريا الحبيبة</div>
-                            <div class="weight-technical">Font Weight: 500</div>
-                        </div>
-                        <div class="format-links">
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.ttf" class="format-link" download>TTF</a>
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.woff2" class="format-link" download>WOFF2</a>
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.woff" class="format-link" download>WOFF</a>
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Medium.eot" class="format-link" download>EOT</a>
-                        </div>
-                    </div>
-                    
-                    <div class="download-item">
-                        <div class="font-weight-info">
-                            <h4>سميك - Bold</h4>
-                            <div class="font-weight-sample weight-bold">سوريا الحبيبة</div>
-                            <div class="weight-technical">Font Weight: 700</div>
-                        </div>
-                        <div class="format-links">
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.ttf" class="format-link" download>TTF</a>
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.woff2" class="format-link" download>WOFF2</a>
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.woff" class="format-link" download>WOFF</a>
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Bold.eot" class="format-link" download>EOT</a>
-                        </div>
-                    </div>
-                    
-                    <div class="download-item">
-                        <div class="font-weight-info">
-                            <h4>أسود - Black</h4>
-                            <div class="font-weight-sample weight-black">سوريا الحبيبة</div>
-                            <div class="weight-technical">Font Weight: 900</div>
-                        </div>
-                        <div class="format-links">
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.ttf" class="format-link" download>TTF</a>
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.woff2" class="format-link" download>WOFF2</a>
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.woff" class="format-link" download>WOFF</a>
-                            <a href="./fonts/itf_qomra_arabic_fonts/itfQomraArabic-Black.eot" class="format-link" download>EOT</a>
-                        </div>
-                    </div>
+                <div id="font-download-list" class="mb-5">
+                    <!-- Font download items will be loaded dynamically here -->
                 </div>
 
-                <div class="download-all">
-                    <a href="./fonts/itf_qomra_arabic_fonts.zip" class="download-all-btn" download>
+                <div class="text-center mt-5">
+                    <a href="./fonts/itf_qomra_arabic_fonts.zip" class="inline-block bg-gradient-to-r from-[#6b1f2a] to-[#4a151e] text-white font-semibold text-lg py-4 px-10 rounded-full no-underline transition-transform hover:-translate-y-0.5 hover:shadow-lg" download>
                         تحميل جميع الخطوط (ZIP)
                     </a>
                 </div>
@@ -184,27 +117,27 @@
         </div>
 
         <!-- Color Palette Section -->
-        <div class="section" id="colors">
-            <h2 class="section-title">لوحة الألوان</h2>
-            <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px; color: #666;">يمكنك النقر على اللون لنسخ الرمز مباشرةً</p>
+        <div class="p-10" id="colors">
+            <h2 class="text-4xl font-bold text-center text-gray-800 mb-8 pb-4 border-b-4 border-[#428177]">لوحة الألوان</h2>
+            <p class="text-center text-lg mb-8 text-gray-600">يمكنك النقر على اللون لنسخ الرمز مباشرةً</p>
             
-            <div class="palette-section">
-                <div class="palette-group">
-                    <div class="palette-title">Forest</div>
-                    <div class="color-row">
-                        <div class="color-item first" style="background-color: #428177;" data-hex="#428177">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="mb-5">
+                    <div class="text-2xl font-semibold mb-2 text-center text-gray-700">Forest</div>
+                    <div class="flex rounded-lg overflow-hidden shadow-lg">
+                        <div class="flex-1 p-5 min-h-[140px] flex items-end text-white cursor-pointer transition-all duration-200 ease-in-out hover:scale-105" style="background-color: #428177;" data-hex="#428177">
                             <div class="color-text">
                                 <div class="hex-code">#428177</div>
                                 <div class="cmyk-code">C76% M32%<br/>Y54% K10%</div>
                             </div>
                         </div>
-                        <div class="color-item second" style="background-color: #054239;" data-hex="#054239">
+                        <div class="flex-1 p-5 min-h-[140px] flex items-end text-white cursor-pointer transition-all duration-200 ease-in-out hover:scale-105" style="background-color: #054239;" data-hex="#054239">
                             <div class="color-text">
                                 <div class="hex-code">#054239</div>
                                 <div class="cmyk-code">C89% M49%<br/>Y70% K50%</div>
                             </div>
                         </div>
-                        <div class="color-item third" style="background-color: #002623;" data-hex="#002623">
+                        <div class="flex-1 p-5 min-h-[140px] flex items-end text-white cursor-pointer transition-all duration-200 ease-in-out hover:scale-105" style="background-color: #002623;" data-hex="#002623">
                             <div class="color-text">
                                 <div class="hex-code">#002623</div>
                                 <div class="cmyk-code">C87% R0%<br/>M59% G38%<br/>Y68% B35%<br/>K71%</div>
@@ -213,22 +146,22 @@
                     </div>
                 </div>
 
-                <div class="palette-group">
-                    <div class="palette-title">Golden Wheat</div>
-                    <div class="color-row">
-                        <div class="color-item first light-text" style="background-color: #edebe0;" data-hex="#edebe0">
+                <div class="mb-5">
+                    <div class="text-2xl font-semibold mb-2 text-center text-gray-700">Golden Wheat</div>
+                    <div class="flex rounded-lg overflow-hidden shadow-lg">
+                        <div class="flex-1 p-5 min-h-[140px] flex items-end text-black cursor-pointer transition-all duration-200 ease-in-out hover:scale-105" style="background-color: #edebe0;" data-hex="#edebe0">
                             <div class="color-text">
                                 <div class="hex-code">#edebe0</div>
                                 <div class="cmyk-code">C6% R237%<br/>M9% G235%<br/>Y19% B224%<br/>K0%</div>
                             </div>
                         </div>
-                        <div class="color-item second light-text" style="background-color: #b9a779;" data-hex="#b9a779">
+                        <div class="flex-1 p-5 min-h-[140px] flex items-end text-black cursor-pointer transition-all duration-200 ease-in-out hover:scale-105" style="background-color: #b9a779;" data-hex="#b9a779">
                             <div class="color-text">
                                 <div class="hex-code">#b9a779</div>
                                 <div class="cmyk-code">C20% R185%<br/>M29% G167%<br/>Y52% B121%<br/>K7%</div>
                             </div>
                         </div>
-                        <div class="color-item third" style="background-color: #988561;" data-hex="#988561">
+                        <div class="flex-1 p-5 min-h-[140px] flex items-end text-white cursor-pointer transition-all duration-200 ease-in-out hover:scale-105" style="background-color: #988561;" data-hex="#988561">
                             <div class="color-text">
                                 <div class="hex-code">#988561</div>
                                 <div class="cmyk-code">C39% R152%<br/>M46% G133%<br/>Y67% B97%<br/>K20%</div>
@@ -237,22 +170,22 @@
                     </div>
                 </div>
 
-                <div class="palette-group">
-                    <div class="palette-title">Deep Umber</div>
-                    <div class="color-row">
-                        <div class="color-item first" style="background-color: #6b1f2a;" data-hex="#6b1f2a">
+                <div class="mb-5">
+                    <div class="text-2xl font-semibold mb-2 text-center text-gray-700">Deep Umber</div>
+                    <div class="flex rounded-lg overflow-hidden shadow-lg">
+                        <div class="flex-1 p-5 min-h-[140px] flex items-end text-white cursor-pointer transition-all duration-200 ease-in-out hover:scale-105" style="background-color: #6b1f2a;" data-hex="#6b1f2a">
                             <div class="color-text">
                                 <div class="hex-code">#6b1f2a</div>
                                 <div class="cmyk-code">C35% R107%<br/>M92% G31%<br/>Y72% B42%<br/>K46%</div>
                             </div>
                         </div>
-                        <div class="color-item second" style="background-color: #4a151e;" data-hex="#4a151e">
+                        <div class="flex-1 p-5 min-h-[140px] flex items-end text-white cursor-pointer transition-all duration-200 ease-in-out hover:scale-105" style="background-color: #4a151e;" data-hex="#4a151e">
                             <div class="color-text">
                                 <div class="hex-code">#4a151e</div>
                                 <div class="cmyk-code">C44% R74%<br/>M86% G21%<br/>Y68% B30%<br/>K65%</div>
                             </div>
                         </div>
-                        <div class="color-item third" style="background-color: #260f14;" data-hex="#260f14">
+                        <div class="flex-1 p-5 min-h-[140px] flex items-end text-white cursor-pointer transition-all duration-200 ease-in-out hover:scale-105" style="background-color: #260f14;" data-hex="#260f14">
                             <div class="color-text">
                                 <div class="hex-code">#260f14</div>
                                 <div class="cmyk-code">C60% R38%<br/>M75% G15%<br/>Y64% B20%<br/>K79%</div>
@@ -261,22 +194,22 @@
                     </div>
                 </div>
 
-                <div class="palette-group">
-                    <div class="palette-title">Charcoal</div>
-                    <div class="color-row">
-                        <div class="color-item first light-text" style="background-color: #ffffff;" data-hex="#ffffff">
+                <div class="mb-5">
+                    <div class="text-2xl font-semibold mb-2 text-center text-gray-700">Charcoal</div>
+                    <div class="flex rounded-lg overflow-hidden shadow-lg">
+                        <div class="flex-1 p-5 min-h-[140px] flex items-end text-black cursor-pointer transition-all duration-200 ease-in-out hover:scale-105" style="background-color: #ffffff;" data-hex="#ffffff">
                             <div class="color-text">
                                 <div class="hex-code">#ffffff</div>
                                 <div class="cmyk-code">C0% R255%<br/>M0% G255%<br/>Y0% B255%<br/>K0%</div>
                             </div>
                         </div>
-                        <div class="color-item second" style="background-color: #3d3a3b;" data-hex="#3d3a3b">
+                        <div class="flex-1 p-5 min-h-[140px] flex items-end text-white cursor-pointer transition-all duration-200 ease-in-out hover:scale-105" style="background-color: #3d3a3b;" data-hex="#3d3a3b">
                             <div class="color-text">
                                 <div class="hex-code">#3d3a3b</div>
                                 <div class="cmyk-code">C67% R61%<br/>M53% G58%<br/>Y60% B59%<br/>K50%</div>
                             </div>
                         </div>
-                        <div class="color-item third" style="background-color: #161616;" data-hex="#161616">
+                        <div class="flex-1 p-5 min-h-[140px] flex items-end text-white cursor-pointer transition-all duration-200 ease-in-out hover:scale-105" style="background-color: #161616;" data-hex="#161616">
                             <div class="color-text">
                                 <div class="hex-code">#161616</div>
                                 <div class="cmyk-code">C73% R22%<br/>M67% G22%<br/>Y65% B22%<br/>K80%</div>
@@ -288,8 +221,8 @@
         </div>
 
         <!-- Flag Proportions Section -->
-        <div class="section" id="flag">
-            <h2 class="section-title">العلم السوري ونسبه</h2>
+        <div class="p-10" id="flag">
+            <h2 class="text-4xl font-bold text-center text-gray-800 mb-8 pb-4 border-b-4 border-[#428177]">العلم السوري ونسبه</h2>
             <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px; color: #666;">النسب الدقيقة لتصميم العلم السوري الرسمي، كما هو موضح في المخطط أدناه.</p>
             
             <div class="flag-diagram-wrapper">
@@ -354,65 +287,18 @@
             </div>
 
             <div class="flex justify-center gap-4 mt-8">
-                <a href="./materials/العلم السوري بالنسب الصحيحة.png" class="download-all-btn" download>تحميل PNG</a>
-                <a href="./materials/العلم السوري بالنسب الصحيحة.svg" class="download-all-btn" download>تحميل SVG</a>
+                <a href="./materials/العلم السوري بالنسب الصحيحة.png" class="inline-block bg-gradient-to-r from-[#6b1f2a] to-[#4a151e] text-white font-semibold text-lg py-4 px-10 rounded-full no-underline transition-transform hover:-translate-y-0.5 hover:shadow-lg" download>تحميل PNG</a>
+                <a href="./materials/العلم السوري بالنسب الصحيحة.svg" class="inline-block bg-gradient-to-r from-[#6b1f2a] to-[#4a151e] text-white font-semibold text-lg py-4 px-10 rounded-full no-underline transition-transform hover:-translate-y-0.5 hover:shadow-lg" download>تحميل SVG</a>
             </div>
         </div>
 
         <!-- Materials Section -->
-        <div class="section" id="materials">
-            <h2 class="section-title">خلفيات الشاشة والأنماط</h2>
-            <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px; color: #666;">خلفيات لسطح المكتب والهاتف والأنماط متوافقة مع الهوية البصرية السورية الجديدة.</p>
+        <div class="p-10" id="materials">
+            <h2 class="text-4xl font-bold text-center text-gray-800 mb-8 pb-4 border-b-4 border-[#428177]">خلفيات الشاشة والأنماط</h2>
+            <p class="text-center text-lg mb-8 text-gray-600">خلفيات لسطح المكتب والهاتف والأنماط متوافقة مع الهوية البصرية السورية الجديدة.</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-8 py-4">
-                <!-- Desktop Wallpaper -->
-                <div class="bg-gray-50 p-6 rounded-lg shadow-md text-center flex flex-col items-center">
-                    <h3 class="text-2xl font-semibold mb-4">خلفية سطح المكتب</h3>
-                    <div class="mb-4 w-full">
-                         <img src="./materials/الهوية السورية الجديدة - خلفية الكمبيوتر.png" alt="خلفية سطح المكتب" class="w-full h-auto rounded-lg border-2 border-gray-200">
-                    </div>
-                    <div class="flex justify-center gap-4 mt-auto">
-                        <a href="./materials/الهوية السورية الجديدة - خلفية الكمبيوتر.png" class="download-all-btn" download>تحميل PNG</a>
-                        <a href="./materials/الهوية السورية الجديدة - خلفية الكمبيوتر.svg" class="download-all-btn" download>تحميل SVG</a>
-                    </div>
-                </div>
-        
-                <!-- Phone Wallpaper -->
-                <div class="bg-gray-50 p-6 rounded-lg shadow-md text-center flex flex-col items-center">
-                    <h3 class="text-2xl font-semibold mb-4">خلفية هاتف</h3>
-                    <div class="mb-4" style="max-width: 250px;">
-                        <img src="./materials/الهوية السورية الجديدة - خلفية هاتف.png" alt="خلفية هاتف" class="w-full h-auto rounded-lg border-2 border-gray-200">
-                    </div>
-                    <div class="flex justify-center gap-4 mt-auto">
-                        <a href="./materials/الهوية السورية الجديدة - خلفية هاتف.png" class="download-all-btn" download>تحميل PNG</a>
-                        <a href="./materials/الهوية السورية الجديدة - خلفية هاتف.svg" class="download-all-btn" download>تحميل SVG</a>
-                    </div>
-                </div>
-
-                <!-- Pattern -->
-                <div class="bg-gray-50 p-6 rounded-lg shadow-md text-center flex flex-col items-center">
-                    <h3 class="text-2xl font-semibold mb-4">النمط الأساسي</h3>
-                    <div class="mb-4 w-full">
-                        <img src="./materials/pattern.svg" alt="النمط الأساسي" class="w-full h-auto rounded-lg border-2 border-gray-200">
-                    </div>
-                    <div class="flex justify-center gap-4 mt-auto">
-                        <a href="./materials/pattern.svg" class="download-all-btn" download>تحميل SVG</a>
-                    </div>
-                </div>
-
-                <!-- Scrollexx Wallpaper -->
-                <div class="bg-gray-50 p-6 rounded-lg shadow-md text-center flex flex-col items-center">
-                    <h3 class="text-2xl font-semibold mb-4">خلفية من تصميم scrollexx</h3>
-                    <div class="mb-4 w-full">
-                        <img src="./materials/scrollexx-wallpaper.png" alt="خلفية scrollexx" class="w-full h-auto rounded-lg border-2 border-gray-200">
-                    </div>
-                    <div class="flex justify-center gap-4 mt-auto mb-2">
-                        <a href="./materials/scrollexx-wallpaper.png" class="download-all-btn" download>تحميل PNG</a>
-                    </div>
-                    <div class="text-xs text-gray-500 mt-1">
-                        تصميم: <a href="https://x.com/scrollexx" target="_blank" rel="noopener" class="underline hover:text-blue-600">@scrollexx</a>
-                    </div>
-                </div>
+            <div id="wallpaper-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-16 px-8 py-4">
+                <!-- Wallpaper items will be loaded dynamically here -->
             </div>
         </div>
     </div>
