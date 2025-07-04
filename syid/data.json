@@ -60,8 +60,11 @@
         {
             "title": "الشعار الرسمي",
             "imageSrc": "./materials/abdalhade/IMG_9403.jpg",
-            "downloadJpg": "./materials/abdalhade/IMG_9403.jpg",
-            "designerName": "@abdalhadealani"
+            "downloadJpg": "./materials/abdalhade/IMG_9403.jpg"
+        },        {
+            "title": "الشعار الرسمي مفرغ",
+            "imageSrc": "./materials/logo.ai.svg",
+            "downloadSvg": "./materials/logo.ai.svg"
         },
         {
             "title": "النمط الأساسي",
@@ -82,8 +85,20 @@
         },
         {
             "title": "خلفية من scrollexx",
-            "imageSrc": "./materials/scrollexx-wallpaper.png",
-            "downloadPng": "./materials/scrollexx-wallpaper.png",
+            "imageSrc": "./materials/scrollexx/scrollexx-wallpaper.png",
+            "downloadPng": "./materials/scrollexx/scrollexx-wallpaper.png",
+            "designerName": "@scrollexx",
+            "designerLink": "https://x.com/scrollexx"
+        },        {
+            "title": "خلفية من scrollexx",
+            "imageSrc": "./materials/scrollexx/scrollexx-wp-pc.png",
+            "downloadPng": "./materials/scrollexx/scrollexx-wp-pc.png",
+            "designerName": "@scrollexx",
+            "designerLink": "https://x.com/scrollexx"
+        },        {
+            "title": "خلفية من scrollexx",
+            "imageSrc": "./materials/scrollexx/scrollexx-wp-pc2.png",
+            "downloadPng": "./materials/scrollexx/scrollexx-wp-pc2.png",
             "designerName": "@scrollexx",
             "designerLink": "https://x.com/scrollexx"
         },
