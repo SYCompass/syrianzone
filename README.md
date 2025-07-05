@@ -54,6 +54,49 @@
 
 * **استضافة البريد الإلكتروني**: يتم توفير خدمة البريد الإلكتروني المرتبطة بالنطاق عبر **Zoho Mail**.
 
+## Development Guide
+
+### Prerequisites
+
+- Node.js (version 18 or later)
+- pnpm (version 10.4.1 or later)
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/SYCompass/syrianzone.git
+cd syrianzone
+```
+
+2. Install dependencies:
+```bash
+pnpm install
+```
+
+### Running the Project
+
+- **Development mode** (with Tailwind auto-updates):
+```bash
+pnpm run dev
+```
+
+- **Production mode**:
+```bash
+pnpm run start
+```
+
+- **Build Tailwind for production**:
+```bash
+pnpm run build:tailwind
+```
+
+### Accessing the Project
+
+after starting the server, you can access:
+- Main site: `http://localhost:3000`
+- Official Links page: `http://localhost:3000/syofficial`
+
 ## قادم قريبًا
 
 لدينا العديد من الأفكار المستقبلية لتطوير وتوسيع مشروع Syrian Zone. يمكنكم الاطلاع على الأفكار المقترحة والمشاريع المستقبلية التي نخطط للعمل عليها عبر لوحة الأفكار (Board) الخاصة بالمشروع:
