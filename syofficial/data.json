@@ -182,7 +182,7 @@
       "name_ar": "وزارة الداخلية السورية",
       "description": "The ministry responsible for internal security and civil affairs",
       "description_ar": "الوزارة المسؤولة عن الأمن الداخلي والشؤون المدنية",
-      "image": "images/ministries/min-interior.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "twitter": "https://twitter.com/syrianmoi",
         "facebook": "https://www.facebook.com/share/18cBGB8ZKj/",
@@ -195,7 +195,7 @@
       "name_ar": "وزارة الخارجية والمغتربين في الجمهورية العربية السورية",
       "description": "The ministry responsible for foreign relations and expatriate affairs",
       "description_ar": "الوزارة المسؤولة عن العلاقات الخارجية وشؤون المغتربين",
-      "image": "images/ministries/min-foreign.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "twitter": "https://x.com/syrianmofaex",
         "facebook": "https://www.facebook.com/Mofaexsy",
@@ -209,7 +209,7 @@
       "name_ar": "وزارة الدفاع السورية",
       "description": "The ministry responsible for national defense and military affairs",
       "description_ar": "الوزارة المسؤولة عن الدفاع الوطني والشؤون العسكرية",
-      "image": "images/ministries/min-defense.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "twitter": "https://twitter.com/Sy_Defense",
         "facebook": "https://www.facebook.com/share/16EFpKn3Sk/",
@@ -222,7 +222,7 @@
       "name_ar": "وزارة العدل السورية",
       "description": "The ministry responsible for judicial affairs and legal matters",
       "description_ar": "الوزارة المسؤولة عن الشؤون القضائية والمسائل القانونية",
-      "image": "images/ministries/min-justice.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "twitter": "https://twitter.com/al_dl79629",
         "facebook": "https://www.facebook.com/share/1ExHwmbSiH/",
@@ -235,7 +235,7 @@
       "name_ar": "وزارة الاقتصاد والصناعة السورية",
       "description": "The ministry responsible for economic and industrial affairs",
       "description_ar": "الوزارة المسؤولة عن الشؤون الاقتصادية والصناعية",
-      "image": "images/ministries/min-economy.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "telegram": "https://t.me/MOEAFT"
       }
@@ -246,7 +246,7 @@
       "name_ar": "وزارة الطاقة السورية",
       "description": "The ministry responsible for energy resources and power generation",
       "description_ar": "الوزارة المسؤولة عن موارد الطاقة وتوليد الكهرباء",
-      "image": "images/ministries/min-energy.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "twitter": "https://twitter.com/mopmr_syria",
         "facebook": "https://www.facebook.com/share/1AGLafKVQw/",
@@ -259,7 +259,7 @@
       "name_ar": "وزارة التربية والتعليم السورية",
       "description": "The ministry responsible for primary and secondary education",
       "description_ar": "الوزارة المسؤولة عن التعليم الأساسي والثانوي",
-      "image": "images/ministries/min-education.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "twitter": "https://twitter.com/TrbyaGov",
         "facebook": "https://www.facebook.com/share/18tXs9xxZw/",
@@ -272,7 +272,7 @@
       "name_ar": "وزارة التعليم العالي والبحث العلمي السورية",
       "description": "The ministry responsible for higher education and scientific research",
       "description_ar": "الوزارة المسؤولة عن التعليم العالي والبحث العلمي",
-      "image": "images/ministries/min-higher-education.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "twitter": "https://twitter.com/mohesyria1",
         "facebook": "https://www.facebook.com/share/15CNqFcnfc/",
@@ -285,7 +285,7 @@
       "name_ar": "وزارة الصحة السورية",
       "description": "The ministry responsible for healthcare and medical services",
       "description_ar": "الوزارة المسؤولة عن الرعاية الصحية والخدمات الطبية",
-      "image": "images/ministries/min-health.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "facebook": "https://www.facebook.com/share/18frAotGfp/",
         "telegram": "https://t.me/mohsyria",
@@ -298,7 +298,7 @@
       "name_ar": "وزارة الشؤون الاجتماعية والعمل السورية",
       "description": "The ministry responsible for social welfare and labor affairs",
       "description_ar": "الوزارة المسؤولة عن الرعاية الاجتماعية وشؤون العمل",
-      "image": "images/ministries/min-social-affairs.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "twitter": "https://twitter.com/mosal_syria",
         "facebook": "https://www.facebook.com/share/1AfW99wJTQ/",
@@ -311,7 +311,7 @@
       "name_ar": "وزارة الأشغال العامة والإسكان السورية",
       "description": "The ministry responsible for public works and housing projects",
       "description_ar": "الوزارة المسؤولة عن الأشغال العامة ومشاريع الإسكان",
-      "image": "images/ministries/min-public-works.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "telegram": "https://t.me/MOPWAH"
       }
@@ -322,7 +322,7 @@
       "name_ar": "وزارة النقل السورية",
       "description": "The ministry responsible for transportation and infrastructure",
       "description_ar": "الوزارة المسؤولة عن النقل والبنية التحتية",
-      "image": "images/ministries/min-transport.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "twitter": "https://twitter.com/AlnqlWzart",
         "facebook": "https://www.facebook.com/share/1685F3H6bp/",
@@ -335,7 +335,7 @@
       "name_ar": "وزارة الزراعة والإصلاح الزراعي السوري",
       "description": "The ministry responsible for agricultural development and reform",
       "description_ar": "الوزارة المسؤولة عن التنمية الزراعية والإصلاح الزراعي",
-      "image": "images/ministries/min-agriculture.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "facebook": "https://www.facebook.com/share/16M4y35ibi/",
         "telegram": "https://t.me/MinistryOfAgricultureS"
@@ -347,7 +347,7 @@
       "name_ar": "وزارة الثقافة السورية",
       "description": "The ministry responsible for cultural affairs and heritage",
       "description_ar": "الوزارة المسؤولة عن الشؤون الثقافية والتراث",
-      "image": "images/ministries/min-culture.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "telegram": "https://t.me/MinistryOfCultureS"
       }
@@ -358,7 +358,7 @@
       "name_ar": "وزارة الرياضة والشباب السورية",
       "description": "The ministry responsible for youth affairs and sports development",
       "description_ar": "الوزارة المسؤولة عن شؤون الشباب وتنمية الرياضة",
-      "image": "images/ministries/min-youth-sports.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "facebook": "https://www.facebook.com/share/1EPDgsxB2X/",
         "telegram": "https://t.me/GSportsFederation"
@@ -370,7 +370,7 @@
       "name_ar": "وزارة الطوارئ والكوارث",
       "description": "The ministry responsible for emergency response and disaster management",
       "description_ar": "الوزارة المسؤولة عن الاستجابة للطوارئ وإدارة الكوارث",
-      "image": "images/ministries/min-emergency.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "facebook": "https://www.facebook.com/share/1XNGuietPF/",
         "telegram": "https://t.me/MOEADMS",
@@ -383,7 +383,7 @@
       "name_ar": "وزارة الإعلام السورية",
       "description": "The ministry responsible for media and information affairs",
       "description_ar": "الوزارة المسؤولة عن شؤون الإعلام والمعلومات",
-      "image": "images/ministries/min-information.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "twitter": "https://twitter.com/moi_syria1",
         "facebook": "https://www.facebook.com/share/19LMr7oUQ5/",
@@ -396,7 +396,7 @@
       "name_ar": "وزارة الاتصالات وتقانة المعلومات السورية",
       "description": "The ministry responsible for communications and IT infrastructure",
       "description_ar": "الوزارة المسؤولة عن الاتصالات والبنية التحتية لتقنية المعلومات",
-      "image": "images/ministries/min-communications.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "twitter": "https://twitter.com/moctsyria",
         "facebook": "https://www.facebook.com/share/1ABqbSKr9R/",
@@ -409,7 +409,7 @@
       "name_ar": "وزارة المالية السورية",
       "description": "The ministry responsible for financial affairs and budget management",
       "description_ar": "الوزارة المسؤولة عن الشؤون المالية وإدارة الميزانية",
-      "image": "images/ministries/min-finance.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "twitter": "https://twitter.com/FinanceSYR",
         "facebook": "https://www.facebook.com/share/18ftW3ZKBz/",
@@ -422,7 +422,7 @@
       "name_ar": "وزارة الادارة المحلية والبيئة السورية",
       "description": "The ministry responsible for local governance and environmental affairs",
       "description_ar": "الوزارة المسؤولة عن الحكم المحلي والشؤون البيئية",
-      "image": "images/ministries/min-local-administration.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "twitter": "https://twitter.com/molasy19",
         "telegram": "https://t.me/molasy"
@@ -434,7 +434,7 @@
       "name_ar": "وزارة التنمية الإدارية السورية",
       "description": "The ministry responsible for administrative reform and development",
       "description_ar": "الوزارة المسؤولة عن الإصلاح الإداري والتنمية",
-      "image": "images/ministries/min-administrative-development.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "twitter": "https://twitter.com/tnmyaedarya",
         "telegram": "https://t.me/moa128"
@@ -446,7 +446,7 @@
       "name_ar": "وزارة الأوقاف السورية",
       "description": "The ministry responsible for religious endowments and affairs",
       "description_ar": "الوزارة المسؤولة عن الأوقاف والشؤون الدينية",
-      "image": "images/ministries/min-ministry-of-endowments.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "twitter": "https://twitter.com/MOfEndowments",
         "facebook": "https://www.facebook.com/share/1AQhpU6fbE/",
@@ -459,7 +459,7 @@
       "name_ar": "وزارة الصناعة السورية",
       "description": "The ministry responsible for industrial development and production",
       "description_ar": "الوزارة المسؤولة عن التنمية الصناعية والإنتاج",
-      "image": "images/ministries/min-industry.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "telegram": "https://t.me/tusrt"
       }
@@ -470,7 +470,7 @@
       "name_ar": "وزارة السياحة السورية",
       "description": "The ministry responsible for tourism development and promotion",
       "description_ar": "الوزارة المسؤولة عن تنمية السياحة والترويج",
-      "image": "images/ministries/min-tourism.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "telegram": "https://t.me/MinistryOfTourism"
       }
@@ -481,7 +481,7 @@
       "name_ar": "وزارة الكهرباء السورية",
       "description": "The ministry responsible for electricity generation and distribution",
       "description_ar": "الوزارة المسؤولة عن توليد وتوزيع الكهرباء",
-      "image": "images/ministries/min-electricity.webp",
+"image": "images/ministries/emblem.svg",
       "socials": {
         "telegram": "https://t.me/MinistryOfElectricity"
       }
@@ -887,18 +887,18 @@
         "twitter": "https://x.com/Mhkahala"
       }
     },
-    {      
-    "id": "pf-mohammed-khalaf",
-    "name": "Mohammed Khalaf",
-    "name_ar": "محمد الخلف",
-    "description": "Director of the General Secretariat for Political Affairs in Idlib Governorate",
-    "description_ar": "مدير إدارة الشؤون السياسية في محافظة إدلب",
-    "image": "images/public_figures/pf-mohammed-khalaf.webp",
-    "socials": {
-      "twitter": "https://x.com/IdlebPolitical"
-    }
-  },
-  {
+    {
+      "id": "pf-mohammed-khalaf",
+      "name": "Mohammed Khalaf",
+      "name_ar": "محمد الخلف",
+      "description": "Director of the General Secretariat for Political Affairs in Idlib Governorate",
+      "description_ar": "مدير إدارة الشؤون السياسية في محافظة إدلب",
+      "image": "images/public_figures/pf-mohammed-khalaf.webp",
+      "socials": {
+        "twitter": "https://x.com/IdlebPolitical"
+      }
+    },
+    {
       "id": "pf-abdulrahman-aldabbagh",
       "name": "Abdul Rahman Al-Dabbagh",
       "name_ar": "عبد الرحمن الدباغ",
