@@ -186,32 +186,6 @@ async function loadDynamicContent() {
             console.log('Wallpapers loaded successfully.');
         }
 
-        // Load fonts
-        const fontContainer = document.getElementById('font-download-list');
-        if (fontContainer && data.fonts) {
-            fontContainer.innerHTML = ''; // Clear existing
-            data.fonts.forEach(fontData => {
-                const fontItem = document.createElement('div');
-                fontItem.className = 'download-item';
-
-                const formatLinks = fontData.formats.map(format => 
-                    `<a href="${format.url}" class="format-link" download>${format.type}</a>`
-                ).join('');
-
-                fontItem.innerHTML = `
-                    <div class="font-weight-info">
-                        <h4>${fontData.name}</h4>
-                        <div class="font-weight-sample ${fontData.className}">سوريا الحبيبة</div>
-                        <div class="weight-technical">Font Weight: ${fontData.weight}</div>
-                    </div>
-                    <div class="format-links">
-                        ${formatLinks}
-                    </div>
-                `;
-                fontContainer.appendChild(fontItem);
-            });
-            console.log('Fonts loaded successfully.');
-        }
 
     } catch (error) {
         console.error('Failed to load dynamic content:', error);
