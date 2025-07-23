@@ -500,7 +500,7 @@ class NavBar extends HTMLElement {
               <i class="fas fa-compass" style="color: #7fbfff;"></i>
               البوصلة السياسية
             </a>
-            <a target="_blank" href="https://forum.syrian.zone" class="nav-item">
+            <a target="_blank" href="https://wrraq.com" class="nav-item">
               <i class="fas fa-comments" style="color:rgb(255, 0, 0);"></i>
               المنتدى
             </a>
