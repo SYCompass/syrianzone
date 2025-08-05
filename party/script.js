@@ -470,18 +470,18 @@ class SyrianPoliticalOrganizations {
                 
                 <div class="space-y-3">
                     ${location ? `<div class="flex items-center text-sm text-gray-600">
-                        <i class="fas fa-map-marker-alt ml-2 text-red-600"></i>
+                        <i class="fas fa-map-marker-alt ml-2 text-green-600"></i>
                         <span>${location}</span>
                     </div>` : ''}
                     
                     ${organization[CONFIG.COLUMNS.MVP_MEMBERS] ? `<div class="flex items-center text-sm text-gray-600">
-                        <i class="fas fa-users ml-2 text-red-600"></i>
+                        <i class="fas fa-users ml-2 text-green-600"></i>
                         <span>أعضاء بارزون: ${this.formatMVPMembers(organization[CONFIG.COLUMNS.MVP_MEMBERS])}</span>
                     </div>` : ''}
                     
                     ${organization[CONFIG.COLUMNS.WEBSITE] ? `
                         <div class="flex items-center text-sm">
-                            <i class="fas fa-globe ml-2 text-red-600"></i>
+                            <i class="fas fa-globe ml-2 text-green-600"></i>
                             <a href="${this.escapeHtml(organization[CONFIG.COLUMNS.WEBSITE])}" target="_blank" rel="noopener" class="text-blue-600 hover:underline">
                                 زيارة الموقع الإلكتروني
                             </a>
@@ -490,7 +490,7 @@ class SyrianPoliticalOrganizations {
                     
                     ${organization[CONFIG.COLUMNS.MANIFESTO_LINK] ? `
                         <div class="flex items-center text-sm">
-                            <i class="fas fa-file-alt ml-2 text-red-600"></i>
+                            <i class="fas fa-file-alt ml-2 text-green-600"></i>
                             <a href="${this.escapeHtml(organization[CONFIG.COLUMNS.MANIFESTO_LINK])}" target="_blank" rel="noopener" class="text-blue-600 hover:underline">
                                 البيان التأسيسي
                             </a>
@@ -499,7 +499,7 @@ class SyrianPoliticalOrganizations {
                     
                     ${organization[CONFIG.COLUMNS.EMAIL] ? `
                         <div class="flex items-center text-sm">
-                            <i class="fas fa-envelope ml-2 text-red-600"></i>
+                            <i class="fas fa-envelope ml-2 text-green-600"></i>
                             <a href="mailto:${this.escapeHtml(organization[CONFIG.COLUMNS.EMAIL])}" class="text-blue-600 hover:underline">
                                 ${this.escapeHtml(organization[CONFIG.COLUMNS.EMAIL])}
                             </a>
@@ -508,7 +508,7 @@ class SyrianPoliticalOrganizations {
                     
                     ${organization[CONFIG.COLUMNS.PHONE] ? `
                         <div class="flex items-center text-sm">
-                            <i class="fas fa-phone ml-2 text-red-600"></i>
+                            <i class="fas fa-phone ml-2 text-green-600"></i>
                             <a href="tel:${this.escapeHtml(organization[CONFIG.COLUMNS.PHONE])}" class="text-blue-600 hover:underline">
                                 ${this.escapeHtml(organization[CONFIG.COLUMNS.PHONE])}
                             </a>
@@ -516,7 +516,7 @@ class SyrianPoliticalOrganizations {
                     ` : ''}
                     
                     ${organization[CONFIG.COLUMNS.LANG] ? `<div class="flex items-center text-sm text-gray-600">
-                        <i class="fas fa-language ml-2 text-red-600"></i>
+                        <i class="fas fa-language ml-2 text-green-600"></i>
                         <span>اللغة: ${this.getLanguageName(organization[CONFIG.COLUMNS.LANG])}</span>
                     </div>` : ''}
                 </div>

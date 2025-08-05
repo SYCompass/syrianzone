@@ -512,6 +512,10 @@ class NavBar extends HTMLElement {
               <i class="fas fa-list-ol" style="color: #2d4d3c;"></i>
               تير ليست الوزراء
             </a>
+            <a href="/party" class="nav-item">
+              <i class="fas fa-users" style="color: #002623;"></i>
+              دليل المنظمات السياسية
+            </a>
             ${isSyofficialPage ? `
             <div class="language-dropdown">
               <button class="language-button">

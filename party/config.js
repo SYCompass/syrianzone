@@ -38,15 +38,15 @@ const CONFIG = {
     SOCIAL_PLATFORMS: {
         'social - x': {
             baseUrl: '',
-            color: '#1DA1F2'
+            color: '#002623'
         },
         'social - insta': {
             baseUrl: '',
-            color: '#E4405F'
+            color: '#002623'
         },
         'social - fb': {
             baseUrl: '',
-            color: '#1877F2'
+            color: '#002623'
         }
     },
     
