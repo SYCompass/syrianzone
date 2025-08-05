@@ -42,7 +42,7 @@
     }
     
     .political-badge {
-      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      background: linear-gradient(135deg, #002623, #004d47);
       color: white;
       font-size: 0.75rem;
       padding: 0.25rem 0.75rem;
@@ -75,7 +75,7 @@
     
     .loading-spinner {
       border: 3px solid #f3f3f3;
-      border-top: 3px solid #dc2626;
+      border-top: 3px solid #002623;
       border-radius: 50%;
       width: 2rem;
       height: 2rem;
@@ -95,11 +95,11 @@
   <!-- Main Content -->
   <main class="flex-1">
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-red-600 to-red-800 text-white py-16 md:py-24">
+    <section class="bg-gradient-to-br from-green-800 to-green-900 text-white py-16 md:py-24">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div class="max-w-3xl mx-auto">
           <h1 class="text-4xl md:text-5xl font-bold mb-6">دليل المنظمات السياسية السورية</h1>
-          <p class="text-xl text-red-100">تصفح واكتشف المنظمات والأحزاب والحركات السياسية السورية العاملة في مختلف أنحاء العالم</p>
+          <p class="text-xl text-green-100">تصفح واكتشف المنظمات والأحزاب والحركات السياسية السورية العاملة في مختلف أنحاء العالم</p>
         </div>
       </div>
     </section>
@@ -116,7 +116,7 @@
                 type="text" 
                 id="searchInput" 
                 placeholder="ابحث في المنظمات السياسية بالاسم أو النوع أو المكان..." 
-                class="w-full pr-10 pl-10 py-3 border border-gray-300 bg-white text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                class="w-full pr-10 pl-10 py-3 border border-gray-300 bg-white text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600"
               >
               <button id="clearSearch" class="absolute left-3 top-1/2 transform -translate-y-1/2 hidden">
                 <i class="fas fa-times h-4 w-4 text-gray-400 hover:text-gray-600"></i>
@@ -128,28 +128,28 @@
           <div class="flex flex-wrap gap-4 justify-center items-end">
             <div class="flex flex-col space-y-2">
               <label for="categoryFilter" class="text-sm font-medium">نوع المنظمة</label>
-              <select id="categoryFilter" class="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500">
+              <select id="categoryFilter" class="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600">
                 <option value="">جميع الأنواع</option>
               </select>
             </div>
             
             <div class="flex flex-col space-y-2">
               <label for="countryFilter" class="text-sm font-medium">البلد</label>
-              <select id="countryFilter" class="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500">
+              <select id="countryFilter" class="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600">
                 <option value="">جميع البلدان</option>
               </select>
             </div>
             
             <div class="flex flex-col space-y-2">
               <label for="cityFilter" class="text-sm font-medium">المدينة</label>
-              <select id="cityFilter" class="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500">
+              <select id="cityFilter" class="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600">
                 <option value="">جميع المدن</option>
               </select>
             </div>
             
             <div class="flex flex-col space-y-2">
               <label for="langFilter" class="text-sm font-medium">اللغة</label>
-              <select id="langFilter" class="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500">
+              <select id="langFilter" class="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600">
                 <option value="">جميع اللغات</option>
               </select>
             </div>
@@ -165,7 +165,7 @@
           <span id="resultsCount" class="text-sm font-medium">جاري تحميل المنظمات السياسية...</span>
           <div class="flex items-center space-x-2">
             <label for="sortSelect" class="text-sm text-gray-600">ترتيب حسب:</label>
-            <select id="sortSelect" class="flex h-8 rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500">
+            <select id="sortSelect" class="flex h-8 rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600">
               <option value="name">الاسم (أ-ي)</option>
               <option value="name-desc">الاسم (ي-أ)</option>
               <option value="category">النوع</option>
@@ -190,7 +190,7 @@
         <div id="errorMessage" class="flex flex-col items-center justify-center py-12" style="display: none;">
           <i class="fas fa-exclamation-triangle h-12 w-12 text-red-500 mb-4"></i>
           <p class="text-center text-gray-600 mb-4">فشل في تحميل المنظمات السياسية. يرجى المحاولة لاحقاً.</p>
-          <button id="retryButton" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-red-600 text-white hover:bg-red-700 h-10 px-4 py-2 transition-colors">
+          <button id="retryButton" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-green-700 text-white hover:bg-green-800 h-10 px-4 py-2 transition-colors">
             إعادة المحاولة
           </button>
         </div>
@@ -209,7 +209,7 @@
         
         <!-- Load More -->
         <div id="loadMoreContainer" class="flex justify-center mt-8" style="display: none;">
-          <button id="loadMoreBtn" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-red-600 text-white hover:bg-red-700 h-10 px-4 py-2 transition-colors">
+          <button id="loadMoreBtn" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-green-700 text-white hover:bg-green-800 h-10 px-4 py-2 transition-colors">
             <i class="fas fa-plus ml-2 h-4 w-4"></i> تحميل المزيد
           </button>
         </div>
@@ -223,6 +223,12 @@
           <h2 class="text-3xl font-bold mb-6 text-gray-900">حول دليل المنظمات السياسية السورية</h2>
           <p class="text-gray-600 mb-4">يعتبر دليل المنظمات السياسية السورية مرجعاً شاملاً للتعرف على المنظمات والأحزاب والحركات السياسية السورية العاملة في مختلف أنحاء العالم. تهدف هذه المنصة إلى توفير معلومات دقيقة ومحدثة حول الكيانات السياسية السورية.</p>
           <p class="text-gray-600">سواء كنت تبحث عن التواصل، أو التعاون، أو ببساطة التعرف على العمل السياسي السوري، تقدم هذه المنصة وصولاً سهلاً لمعلومات الاتصال وتفاصيل المنظمات.</p>
+          <div class="mt-8">
+            <a href="https://forms.gle/vLAxoz5RNt6z6qyj9" target="_blank" rel="noopener" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-green-700 text-white hover:bg-green-800 h-12 px-6 py-3 transition-colors">
+              <i class="fas fa-plus ml-2 h-4 w-4"></i>
+              ارسال طلب إضافة للقائمة
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -247,7 +253,7 @@
   </footer>
 
   <!-- Back to Top Button -->
-  <button id="backToTop" class="fixed bottom-6 left-6 z-50 h-10 w-10 rounded-full bg-red-600 text-white shadow-lg hover:bg-red-700 transition-colors" style="display: none;">
+  <button id="backToTop" class="fixed bottom-6 left-6 z-50 h-10 w-10 rounded-full bg-green-700 text-white shadow-lg hover:bg-green-800 transition-colors" style="display: none;">
     <i class="fas fa-arrow-up h-5 w-5 mx-auto"></i>
   </button>
 
