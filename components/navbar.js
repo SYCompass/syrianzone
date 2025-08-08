@@ -128,16 +128,42 @@ class NavBar extends HTMLElement {
             padding: 0.25rem;
             position: relative;
           }
-          .mobile-title {
+                  .mobile-title {
+          display: flex;
+          align-items: center;
+          font-weight: 500;
+          color: var(--sz-color-primary);
+          font-size: 1rem;
+        }
+        .mobile-title i {
+          margin-left: 0.5rem;
+        }
+        .logo {
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          color: var(--sz-color-primary);
+          font-weight: 600;
+          font-size: 1.1rem;
+        }
+        .logo img {
+          height: 2rem;
+          width: auto;
+          margin-left: 0.5rem;
+        }
+        .desktop-logo {
+          display: none;
+        }
+        @media (min-width: 769px) {
+          .desktop-logo {
             display: flex;
             align-items: center;
-            font-weight: 500;
-            color: var(--sz-color-primary);
-            font-size: 1rem;
+            margin-left: 1rem;
           }
-          .mobile-title i {
-            margin-left: 0.5rem;
+          .mobile-title {
+            display: none;
           }
+        }
           .mobile-actions {
             display: flex;
             align-items: center;
@@ -182,7 +208,9 @@ class NavBar extends HTMLElement {
       <nav class="navbar">
         <div class="container">
           <div class="mobile-header">
-            <div class="mobile-title"></div>
+            <a href="/" class="logo">
+              <img src="/logo.png" alt="Syrian Zone">
+            </a>
             <div class="mobile-actions">
               <button class="menu-button">
                 <i class="fas fa-bars"></i>
@@ -190,10 +218,12 @@ class NavBar extends HTMLElement {
             </div>
           </div>
           <div class="nav-items">
-            <a href="/" class="nav-item">
-              <i class="fas fa-home" style="color: var(--sz-color-primary);"></i>
-              الرئيسية
-            </a>
+            <div class="desktop-logo">
+              <a href="/" class="logo">
+                <img src="/logo.png" alt="Syrian Zone" style="height: 50px;">
+              </a>
+            </div>
+
             <a href="/syofficial" class="nav-item">
               <i class="fas fa-check-circle" style="color: var(--sz-color-ink);"></i>
               الحسابات الرسمية 
