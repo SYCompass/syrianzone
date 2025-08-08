@@ -25,6 +25,7 @@
 * **الحارث الموسى** - ([https://x.com/tirh25](https://x.com/tirh25)) قام بإضافة عدد كبير من الحسابات الرسمية لصفحة الحسابات الرسمية السورية.
 * قام **haiueida** ([https://x.com/haiueida](https://x.com/haiueida)) بتوفير الترجمة الكردية لصفحة الحسابات الرسمية السورية.
 * ساهم **Waleed Khamees** - ([https://github.com/WaleedKhamees](https://github.com/WaleedKhamees)) في ضغط الصور وتحسين الأداء للموقع.
+* **dandashi.de** - ([https://dandashi.de](https://dandashi.de)) قام بتصميم الشعار وأيقونة الموقع والهوية البصرية العامة.
 
 نقدر كل مساهمة، كبيرة كانت أم صغيرة، وندعوكم للانضمام والمساهمة في تطوير هذا المشروع.
 
@@ -53,49 +54,6 @@
 * **النطاق (Domain Name)**: نطاق الموقع `syrian.zone` محجوز ومُدار عبر **porkbun.com**.
 
 * **استضافة البريد الإلكتروني**: يتم توفير خدمة البريد الإلكتروني المرتبطة بالنطاق عبر **Zoho Mail**.
-
-## Development Guide
-
-### Prerequisites
-
-- Node.js (version 18 or later)
-- pnpm (version 10.4.1 or later)
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/SYCompass/syrianzone.git
-cd syrianzone
-```
-
-2. Install dependencies:
-```bash
-pnpm install
-```
-
-### Running the Project
-
-- **Development mode** (with Tailwind auto-updates):
-```bash
-pnpm run dev
-```
-
-- **Production mode**:
-```bash
-pnpm run start
-```
-
-- **Build Tailwind for production**:
-```bash
-pnpm run build:tailwind
-```
-
-### Accessing the Project
-
-after starting the server, you can access:
-- Main site: `http://localhost:3000`
-- Official Links page: `http://localhost:3000/syofficial`
 
 ## قادم قريبًا
 
