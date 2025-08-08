@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
+
+/* Global theme tokens for the monorepo */
+@theme {
+  /* Brand palette */
+  --color-primary: #556A4E; /* Reseda green */
+  --color-accent:  #A73F46; /* Redwood */
+  --color-surface: #FFFFFF; /* White */
+  --color-ink:     #0D1315; /* Night */
+
+  /* Typography and radii */
+  --font-sans: "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+  --radius: 0.5rem;
+}
+
+@layer base {
+  :root {
+    /* Expose as CSS variables for Shadow DOM components */
+    --sz-color-primary: var(--color-primary);
+    --sz-color-accent:  var(--color-accent);
+    --sz-color-surface: var(--color-surface);
+    --sz-color-ink:     var(--color-ink);
+  }
+  html { font-family: var(--font-sans); }
+  body { color: var(--color-ink); background: var(--color-surface); }
+}
+
+@layer components {
+  .container-page { @apply container mx-auto px-4; }
+
+  .card { @apply bg-white rounded-lg shadow p-6; }
+
+  .btn { @apply inline-flex items-center justify-center rounded-md px-4 py-2 font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2; }
+  .btn-primary { @apply bg-primary text-white hover:opacity-90 focus-visible:ring-primary; }
+  .btn-ghost { @apply text-ink/80 hover:bg-ink/5; }
+
+  .nav-root { @apply bg-surface/80 backdrop-blur border-b border-ink/10; }
+  .nav-link { @apply flex items-center gap-2 px-3 py-2 rounded-md text-ink/80 hover:bg-ink/5; }
+  .nav-link-active { @apply bg-primary/10 text-primary; }
+
+  .footer-root { @apply bg-surface border-t border-ink/10 text-ink/70; }
+  .footer-link { @apply text-ink/70 hover:text-primary; }
+}
+
+

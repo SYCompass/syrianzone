@@ -1,54 +1,103 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Syrian Zone</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="Syrian Zone - بوابة المشاريع السورية">
+  <meta name="keywords" content="سوريا, مشاريع, Syrian Zone, Syria">
+  <meta name="author" content="Syrian Zone">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Syrian Zone">
+  <meta property="og:description" content="بوابة المشاريع السورية">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://syria.zone">
+  <meta property="og:site_name" content="Syrian Zone">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Syrian Zone">
+  <meta name="twitter:description" content="بوابة المشاريع السورية">
+  
+  <title>Syrian Zone - بوابة المشاريع السورية</title>
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/styles/output.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="/components/navbar.js"></script>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-K4H98TC203"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-K4H98TC203');
-</script>
-
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K4H98TC203"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-K4H98TC203');
+  </script>
+  
+  <!-- PostHog Analytics -->
+  <script>
+    !function (t, e) { var o, n, p, r; e.__SV || (window.posthog = e, e._i = [], e.init = function (i, s, a) { function g(t, e) { var o = e.split("."); 2 == o.length && (t = t[o[0]], e = o[1]), t[e] = function () { t.push([e].concat(Array.prototype.slice.call(arguments, 0))) } } (p = t.createElement("script")).type = "text/javascript", p.crossOrigin = "anonymous", p.async = !0, p.src = s.api_host.replace(".i.posthog.com", "-assets.i.posthog.com") + "/static/array.js", (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(p, r); var u = e; for (void 0 !== a ? u = e[a] = [] : a = "posthog", u.people = u.people || [], u.toString = function (t) { var e = "posthog"; return "posthog" !== a && (e += "." + a), t || (e += " (stub)"), e }, u.people.toString = function () { return u.toString(1) + ".people (stub)" }, o = "init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId captureTraceFeedback captureTraceMetric".split(" "), n = 0; n < o.length; n++)g(u, o[n]); e._i.push([i, s, a]) }, e.__SV = 1) }(document, window.posthog || []);
+    posthog.init('phc_s3Ok4ZCZEF1Fgh5svZfhxKoFghHU2neSzdhjKKMG5I0', {
+      api_host: 'https://eu.i.posthog.com',
+      person_profiles: 'identified_only',
+    })
+  </script>
+  
+  <!-- Custom Styles -->
   <style>
     body {
       font-family: "IBM Plex Sans Arabic", sans-serif !important;
       direction: rtl;
     }
+    .card {
+      transition: transform 0.2s ease-in-out;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .navbar {
+      backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255, 0.8);
+    }
   </style>
+  
+  <!-- Components -->
+  <script type="module" src="/components/navbar.js"></script>
 </head>
+
 <body class="bg-gray-100 min-h-screen">
-  <!-- Navbar Web Component -->
+  <!-- Use the navbar component -->
   <nav-bar></nav-bar>
 
-  <!-- Your page content goes here -->
-  <div class="container mx-auto px-4 py-8">
-    <!-- Content -->
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 pt-24 pb-8">
+    <!-- Page Content Goes Here -->
+    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+      <h1 class="text-3xl font-bold text-gray-800 mb-4">عنوان الصفحة</h1>
+      <p class="text-gray-600">محتوى الصفحة يذهب هنا...</p>
+    </div>
   </div>
 
   <footer class="bg-white py-6 mt-12 w-full">
     <div class="container mx-auto px-4 text-center text-gray-600">
-      <p>&copy; 2025 syria.zone</p>
+      <p dir="ltr">&copy; 2025 <a href="https://syria.zone" target="_blank" rel="noopener"
+          class="text-gray-600 hover:text-blue-600 transition">Syrian.zone</a></p>
       <p class="mt-2 text-sm">
-        تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span>
+        تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span> و <span class="font-semibold">نور
+          صوفاناتي</span>
       </p>
       <div class="mt-2 flex justify-center gap-4">
-        <a href="http://hadealahmad.com/" target="_blank" rel="noopener" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+        <a href="http://hadealahmad.com/" target="_blank" rel="noopener"
+          class="text-gray-600 hover:text-blue-600 transition flex items-center">
           <i class="fas fa-globe ml-1"></i> الموقع الشخصي
         </a>
-        <a href="https://x.com/hadealahmad" target="_blank" rel="noopener" class="text-gray-600 hover:text-blue-600 transition flex items-center">
-          <i class="fab fa-x-twitter ml-1"></i> حساب X
+        <a href="https://x.com/hadealahmad" target="_blank" rel="noopener"
+          class="text-gray-600 hover:text-blue-600 transition flex items-center">
+          حساب <i class="fab fa-x-twitter ml-1"></i>
         </a>
       </div>
     </div>
   </footer>
 </body>
+
+</html> 
 </html> 

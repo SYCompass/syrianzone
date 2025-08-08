@@ -439,6 +439,44 @@ document.addEventListener('DOMContentLoaded', () => {
         return icons[platform.toLowerCase()] || 'fas fa-link';
     }
 
+    // Theme color variables for dynamic styling
+    const themeColors = {
+        primary: 'var(--sz-color-primary)',
+        accent: 'var(--sz-color-accent)',
+        surface: 'var(--sz-color-surface)',
+        ink: 'var(--sz-color-ink)'
+    };
+
+    // --- Language Switcher ---
+    function setupLanguageSwitcher() {
+        const langButtons = document.querySelectorAll('.lang-btn');
+        
+        langButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const lang = button.dataset.lang;
+                
+                // Update active state
+                langButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Update language
+                updatePageLanguage(lang);
+                
+                // Call global switchLanguage if available
+                if (window.switchLanguage) {
+                    window.switchLanguage(lang);
+                }
+            });
+        });
+        
+        // Set initial active state based on current language
+        const currentLangButton = document.querySelector(`.lang-btn[data-lang="${currentLanguage}"]`);
+        if (currentLangButton) {
+            langButtons.forEach(btn => btn.classList.remove('active'));
+            currentLangButton.classList.add('active');
+        }
+    }
+
     // --- Event Listeners ---
     function setupEventListeners() {
         viewToggle.addEventListener('click', () => {
@@ -452,10 +490,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         searchBar.addEventListener('input', filterAndSearch);
 
-        filterButtons.forEach(button => {
+                filterButtons.forEach(button => {
             button.addEventListener('click', () => {
-                filterButtons.forEach(btn => btn.classList.remove('bg-blue-500', 'text-white'));
-                button.classList.add('bg-blue-500', 'text-white');
+                // Remove active state from all buttons
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('bg-[var(--sz-color-primary)]', 'text-white');
+                    btn.classList.add('bg-gray-200', 'text-gray-700');
+                });
+                // Add active state to clicked button
+                button.classList.remove('bg-gray-200', 'text-gray-700');
+                button.classList.add('bg-[var(--sz-color-primary)]', 'text-white');
                 currentFilter = button.dataset.filter;
                 filterAndSearch();
             });
@@ -471,6 +515,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Initialization ---
     async function init() {
         setupEventListeners();
+        setupLanguageSwitcher();
         showLoading();
         try {
             const cachedData = getCachedData();

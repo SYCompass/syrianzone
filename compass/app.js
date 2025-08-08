@@ -560,11 +560,11 @@ document.addEventListener("DOMContentLoaded", function () {
         strengthDesc = "تأثير ضعيف";
       }
 
-      // تحديد لون التأثير بناءً على التأثير النهائي
+      // تحديد لون التأثير بناءً على التأثير النهائي - استخدام ألوان الثيم
       const effectColor =
         finalEffect > 0
-          ? "bg-blue-100 text-blue-800"
-          : "bg-red-100 text-red-800";
+          ? "bg-[var(--sz-color-primary)] bg-opacity-20 text-[var(--sz-color-primary)]"
+          : "bg-[var(--sz-color-accent)] bg-opacity-20 text-[var(--sz-color-accent)]";
 
       html += `
                 <div class="p-4 border rounded-lg">
@@ -663,14 +663,14 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.fillStyle = "#f8fafc";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // الألوان لكل مقياس
+    // الألوان لكل مقياس - استخدام ألوان الثيم
     const scaleColors = [
-      "#3b82f6", // أزرق
-      "#ef4444", // أحمر
-      "#10b981", // أخضر
-      "#f59e0b", // برتقالي
-      "#8b5cf6", // بنفسجي
-      "#ec4899", // وردي
+      "var(--sz-color-primary)", // أخضر أساسي
+      "var(--sz-color-accent)", // أحمر أساسي
+      "#556A4E", // أخضر فاتح
+      "#A73F46", // أحمر فاتح
+      "#428177", // أخضر غامق
+      "#6b1f2a", // أحمر غامق
     ];
 
     // تحديد حجم وموقع المخطط
@@ -829,7 +829,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const viewButton = document.createElement("button");
 
       viewButton.className =
-        "flex bg-blue-600 hover:bg-blue-800 text-white font-bold py-1 px-2 rounded-lg transition duration-300";
+        "flex bg-[var(--sz-color-primary)] hover:bg-[var(--sz-color-accent)] text-white font-bold py-1 px-2 rounded-lg transition duration-300";
 
       viewButton.textContent = "عرض النتائج";
 

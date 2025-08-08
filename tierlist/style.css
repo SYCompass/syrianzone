@@ -200,8 +200,8 @@ p {
     padding: 10px 20px;
     font-size: 1em;
     cursor: pointer;
-    background-color: #4285f4;
-    /* Green */
+    background-color: var(--sz-color-primary);
+    /* Theme primary color */
     color: white;
     border: none;
     border-radius: 5px;
@@ -209,7 +209,7 @@ p {
 }
 
 #save-button:hover {
-    background-color: #7fbfff;
+    background-color: var(--sz-color-accent);
 }
 
 /* Style for the item selected via click/tap on mobile */

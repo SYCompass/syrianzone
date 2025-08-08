@@ -9,8 +9,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "concurrently \"node server.js\" \"npm run dev:tailwind\"",
-    "dev:tailwind": "tailwindcss -i ./syofficial/tailwindcss.css -o ./syofficial/output.css --watch",
-    "build:tailwind": "tailwindcss -i ./syofficial/tailwindcss.css -o ./syofficial/output.min.css --minify"
+    "dev:tailwind": "tailwindcss -i ./styles/tailwind.css -o ./styles/output.css --watch",
+    "build:tailwind": "tailwindcss -i ./styles/tailwind.css -o ./styles/output.min.css --minify"
   },
   "dependencies": {
     "@octokit/rest": "^21.1.1",

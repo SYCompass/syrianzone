@@ -298,15 +298,15 @@ function createQuestionCard(question) {
     card.className = 'question-card bg-gray-50 border border-gray-200 rounded-md p-3 relative';
     card.dataset.id = question.id;
 
-    // تحديد لون التأثير
+    // تحديد لون التأثير - استخدام ألوان الثيم
     let effectColor = '';
     let effectText = '';
 
     if (question.effect < 0) {
-        effectColor = question.effect === -1 ? 'rgb(239 68 68)' : 'rgb(249 115 22)';
+        effectColor = question.effect === -1 ? 'var(--sz-color-accent)' : '#A73F46';
         effectText = question.effect === -1 ? 'اليسار تماماً' : 'اليسار المعتدل';
     } else {
-        effectColor = question.effect === 1 ? 'rgb(34 197 94)' : 'rgb(132 204 22)';
+        effectColor = question.effect === 1 ? 'var(--sz-color-primary)' : '#556A4E';
         effectText = question.effect === 1 ? 'اليمين تماماً' : 'اليمين المعتدل';
     }
 

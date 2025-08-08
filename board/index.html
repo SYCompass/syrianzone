@@ -1,17 +1,31 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="لوحة المعلومات - عرض البيانات والإحصائيات">
+    <meta name="keywords" content="سوريا, لوحة معلومات, إحصائيات, بيانات">
+    <meta name="author" content="Syrian Zone">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="لوحة المعلومات">
+    <meta property="og:description" content="عرض البيانات والإحصائيات">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://syria.zone/board">
+    <meta property="og:site_name" content="Syrian Zone">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="لوحة المعلومات">
+    <meta name="twitter:description" content="عرض البيانات والإحصائيات">
+    
     <title>Board App</title>
-    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/styles/output.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <!-- Google tag (gtag.js) -->
+    
+    <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-K4H98TC203"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -24,6 +38,25 @@
         body {
             font-family: "IBM Plex Sans Arabic", sans-serif !important;
             direction: rtl;
+        }
+        /* Theme color variables */
+        :root {
+          --sz-color-primary: #556A4E;
+          --sz-color-accent: #A73F46;
+          --sz-color-surface: #FFFFFF;
+          --sz-color-ink: #0D1315;
+        }
+        /* Footer styling */
+        .footer {
+          background-color: var(--sz-color-surface);
+          border-top: 1px solid #e5e7eb;
+        }
+        .footer-link {
+          color: var(--sz-color-ink);
+          transition: color 0.2s ease;
+        }
+        .footer-link:hover {
+          color: var(--sz-color-primary);
         }
     </style>
 </head>
@@ -74,21 +107,21 @@
         </div>
     </div>
 
-    <footer class="bg-white py-6 mt-12 w-full">
-        <div class="container mx-auto px-4 text-center text-gray-600">
-            <p dir="ltr">&copy; 2025 <a href="https://syria.zone" target="_blank" rel="noopener"
-                    class="text-gray-600 hover:text-blue-600 transition">Syrian.zone</a></p>
-            <p class="mt-2 text-sm">
+    <footer class="footer py-6 mt-12 w-full">
+        <div class="container mx-auto px-4 text-center">
+            <p dir="ltr" class="text-[var(--sz-color-ink)]">&copy; 2025 <a href="https://syria.zone" target="_blank" rel="noopener"
+                    class="footer-link">Syrian.zone</a></p>
+            <p class="mt-2 text-sm text-[var(--sz-color-ink)]">
                 تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span> و <span class="font-semibold">نور
                     صوفاناتي</span>
             </p>
             <div class="mt-2 flex justify-center gap-4">
                 <a href="http://hadealahmad.com/" target="_blank" rel="noopener"
-                    class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                    class="footer-link flex items-center">
                     <i class="fas fa-globe ml-1"></i> الموقع الشخصي
                 </a>
                 <a href="https://x.com/hadealahmad" target="_blank" rel="noopener"
-                    class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                    class="footer-link flex items-center">
                     <i class="fab fa-x-twitter ml-1"></i> حساب
                 </a>
             </div>

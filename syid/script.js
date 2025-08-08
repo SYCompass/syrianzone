@@ -46,11 +46,11 @@ function showNotification(message, type = 'success') {
     const notification = document.getElementById('notification');
     notification.textContent = message;
     
-    // Change color based on type
+    // Change color based on type using theme colors
     if (type === 'error') {
-        notification.style.background = '#f44336';
+        notification.style.background = 'var(--sz-color-accent)';
     } else {
-        notification.style.background = '#4CAF50';
+        notification.style.background = 'var(--sz-color-primary)';
     }
     
     notification.classList.add('show');

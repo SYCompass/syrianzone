@@ -2,8 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap');
 
 :root {
-    --primary-color: #3b82f6;
-    --hover-color: #2563eb;
+    --primary-color: var(--sz-color-primary);
+    --hover-color: var(--sz-color-accent);
 }
 
 body {

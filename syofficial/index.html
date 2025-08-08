@@ -3,64 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="روابط الجهات الرسمية السورية - دليل وسائل التواصل الاجتماعي للجهات السورية الرسمية">
+    <meta name="keywords" content="سوريا, رسمي, وزارات, محافظات, سفارات, روابط رسمية">
+    <meta name="author" content="Syrian Zone">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="روابط الجهات الرسمية السورية">
+    <meta property="og:description" content="دليل وسائل التواصل الاجتماعي للجهات السورية الرسمية">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://syria.zone/syofficial">
+    <meta property="og:site_name" content="Syrian Zone">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="روابط الجهات الرسمية السورية">
+    <meta name="twitter:description" content="دليل وسائل التواصل الاجتماعي للجهات السورية الرسمية">
+    
     <title data-i18n="app.title">روابط الجهات الرسمية السورية</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/styles/output.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'IBM Plex Sans Arabic', sans-serif!important;
-        }
-        /* Basic modal transition */
-        .modal { transition: opacity 0.25s ease; }
-        .modal-content { transition: transform 0.25s ease; }
-        /* Hide scrollbar when modal is open */
-        body.modal-active { overflow: hidden; }
-        /* Styling for better grid item appearance */
-        .grid-item {
-            @apply flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer;
-        }
-        .grid-item img {
-            @apply w-20 h-20 object-cover rounded-full mb-3;
-        }
-        .grid-item span {
-            @apply text-center text-sm font-medium text-gray-700;
-        }
-        /* Language switcher styles */
-        .language-switcher {
-            @apply flex justify-center items-center gap-2 py-2 bg-gray-100;
-        }
-        .language-switcher button {
-            @apply px-3 py-1 rounded-md transition-colors;
-        }
-        .language-switcher button.active {
-            @apply bg-blue-500 text-white;
-        }
-        .language-switcher button:not(.active) {
-            @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
-        }
-        /* Lazy loading styles */
-        img.lazy {
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-        img.lazy.loaded {
-            opacity: 1;
-        }
-        /* Add a subtle loading animation for images */
-        @keyframes shimmer {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
-        }
-        img.lazy {
-            background: linear-gradient(to right, #f6f7f8 8%, #edeef1 18%, #f6f7f8 33%);
-            background-size: 2000px 100%;
-            animation: shimmer 2s infinite linear;
-        }
-    </style>
-    <!-- Google tag (gtag.js) -->
+    
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-K4H98TC203"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -68,18 +33,126 @@
       gtag('js', new Date());
       gtag('config', 'G-K4H98TC203');
     </script>
+    
+    <!-- Custom Styles -->
+    <style>
+        body { font-family: 'IBM Plex Sans Arabic', sans-serif!important; }
+        /* Theme color variables */
+        :root {
+          --sz-color-primary: #556A4E;
+          --sz-color-accent: #A73F46;
+          --sz-color-surface: #FFFFFF;
+          --sz-color-ink: #0D1315;
+        }
+        /* Basic modal transition */
+        .modal { transition: opacity 0.25s ease; }
+        .modal-content { transition: transform 0.25s ease; }
+        /* Hide scrollbar when modal is open */
+        body.modal-active { overflow: hidden; }
+        /* Lazy loading styles */
+        img.lazy { opacity: 0; transition: opacity 0.3s ease-in-out; }
+        img.lazy.loaded { opacity: 1; }
+        /* Add a subtle loading animation for images */
+        @keyframes shimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }
+        img.lazy { background: linear-gradient(to right, #f6f7f8 8%, #edeef1 18%, #f6f7f8 33%); background-size: 2000px 100%; animation: shimmer 2s infinite linear; }
+        
+        /* Language Switcher Styles */
+        .language-switcher {
+            border: 1px solid #e5e7eb;
+        }
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            background: white;
+            color: #374151;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .lang-btn:hover {
+            background-color: #f9fafb;
+            border-color: #d1d5db;
+        }
+        .lang-btn.active {
+            background-color: var(--sz-color-primary);
+            color: white;
+            border-color: var(--sz-color-primary);
+        }
+        .lang-btn img {
+            object-fit: cover;
+        }
+        
+        /* Footer styling */
+        .footer {
+          background-color: var(--sz-color-surface);
+          border-top: 1px solid #e5e7eb;
+        }
+        .footer-link {
+          color: var(--sz-color-ink);
+          transition: color 0.2s ease;
+        }
+        .footer-link:hover {
+          color: var(--sz-color-primary);
+        }
+        
+        @media (max-width: 640px) {
+            .language-switcher {
+                padding: 0.75rem;
+            }
+            .lang-btn {
+                padding: 0.375rem 0.5rem;
+                font-size: 0.75rem;
+            }
+            .lang-btn span {
+                display: none;
+            }
+        }
+    </style>
+    
+    <!-- Components -->
     <script src="/components/navbar.js"></script>
 </head>
 <body class="bg-gray-100 font-sans">
     <nav-bar></nav-bar>
     
     <div class="container mx-auto px-4 py-8">
+        <!-- Language Switcher -->
+        <div class="flex justify-center mb-6">
+            <div class="language-switcher bg-white rounded-lg shadow-md p-4">
+                <div class="flex items-center gap-4">
+                    <span class="text-sm font-medium text-gray-700" data-i18n="language.select">اختر اللغة:</span>
+                    <div class="flex gap-2">
+                        <button class="lang-btn active" data-lang="ar">
+                            <img src="assets/flags/ar.svg" alt="العربية" class="w-6 h-4 rounded">
+                            <span>العربية</span>
+                        </button>
+                        <button class="lang-btn" data-lang="en">
+                            <img src="assets/flags/en.svg" alt="English" class="w-6 h-4 rounded">
+                            <span>English</span>
+                        </button>
+                        <button class="lang-btn" data-lang="tr">
+                            <img src="assets/flags/tr.svg" alt="Türkçe" class="w-6 h-4 rounded">
+                            <span>Türkçe</span>
+                        </button>
+                        <button class="lang-btn" data-lang="ku">
+                            <img src="assets/flags/ku.svg" alt="Kurmanji" class="w-6 h-4 rounded">
+                            <span>Kurmanji</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-8" data-i18n="app.title">دليل وسائل التواصل الاجتماعي للجهات السورية</h1>
         <p class="text-center text-gray-600 mb-8" data-i18n="app.description">اضغط على اسم الجهة للوصول إلى صفحاتها الرسمية على وسائل التواصل الاجتماعي</p>
         <div class="mb-8 p-4 bg-white rounded shadow-md">
             <div class="flex flex-col gap-4 items-center">
                 <div class="flex flex-wrap gap-2 justify-center w-full">
-                    <button data-filter="all" class="filter-btn bg-blue-500 text-white px-3 sm:px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 active text-sm sm:text-base" data-i18n="categories.all">الكل</button>
+                    <button data-filter="all" class="filter-btn bg-[var(--sz-color-primary)] text-white px-3 sm:px-4 py-2 rounded hover:bg-[var(--sz-color-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] active text-sm sm:text-base" data-i18n="categories.all">الكل</button>
                     <button data-filter="governorates" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.governorates">المحافظات</button>
                     <button data-filter="ministries" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.ministries">الوزارات</button>
                     <button data-filter="ministers" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.ministers">الوزراء</button>
@@ -200,21 +273,21 @@
 
     <script src="i18n.js"></script>
     <script src="script.js"></script>
-    <footer class="bg-white py-6 mt-8">
-        <div class="container mx-auto px-4 text-center text-gray-600">
-          <p data-i18n="footer.copyright">&copy; 2025 روابط الجهات الرسمية السورية</p>
+    <footer class="footer py-6 mt-8">
+        <div class="container mx-auto px-4 text-center">
+          <p data-i18n="footer.copyright" class="text-[var(--sz-color-ink)]">&copy; 2025 روابط الجهات الرسمية السورية</p>
     
-          <p class="mt-2 text-sm">
+          <p class="mt-2 text-sm text-[var(--sz-color-ink)]">
             <span data-i18n="footer.developedBy">تم التطوير بواسطة</span> <span class="font-semibold">هادي الأحمد</span>
           </p>
           <div class="mt-2 flex justify-center space-x-4 space-x-reverse">
             <a href="http://hadealahmad.com/" target="_blank" rel="noopener"
-              class="text-gray-600 hover:text-blue-600 transition flex items-center">
+              class="footer-link flex items-center">
               <i class="fas fa-globe ml-1"></i>
               <span data-i18n="footer.personalWebsite">الموقع الشخصي</span>
             </a>
             <a href="https://x.com/hadealahmad" target="_blank" rel="noopener"
-              class="text-gray-600 hover:text-blue-600 transition flex items-center">
+              class="footer-link flex items-center">
               <i class="fab fa-x-twitter ml-1"></i>
               <span data-i18n="footer.xAccount">حساب X</span>
             </a>

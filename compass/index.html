@@ -4,25 +4,63 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="بوصلة سوريا السياسية - اختبار لتحديد الميول السياسية">
+  <meta name="keywords" content="سوريا, سياسة, بوصلة, اختبار, ميول سياسية">
+  <meta name="author" content="Syrian Zone">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="بوصلة سوريا السياسية">
+  <meta property="og:description" content="اختبار لتحديد الميول السياسية">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://syria.zone/compass">
+  <meta property="og:site_name" content="Syrian Zone">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="بوصلة سوريا السياسية">
+  <meta name="twitter:description" content="اختبار لتحديد الميول السياسية">
+  
   <title>بوصلة سوريا | Syria Compass</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/styles/output.css" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K4H98TC203"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K4H98TC203');
+  </script>
+  <!-- Custom Styles -->
+  <style>
+    /* Theme color variables */
+    :root {
+      --sz-color-primary: #556A4E;
+      --sz-color-accent: #A73F46;
+      --sz-color-surface: #FFFFFF;
+      --sz-color-ink: #0D1315;
+    }
+    /* Footer styling */
+    .footer {
+      background-color: var(--sz-color-surface);
+      border-top: 1px solid #e5e7eb;
+    }
+    .footer-link {
+      color: var(--sz-color-ink);
+      transition: color 0.2s ease;
+    }
+    .footer-link:hover {
+      color: var(--sz-color-primary);
+    }
+  </style>
+  
+  <!-- Components -->
+  <script src="/components/navbar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/TextPlugin.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap"
-    rel="stylesheet">
-  <script src="/components/navbar.js"></script>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-K4H98TC203"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-K4H98TC203');
-</script>
+  
   <script>
     // Cookie consent functions
     function setCookie(name, value, days) {
@@ -372,21 +410,21 @@
     </div>
   </div>
 
-  <footer class="bg-white py-6 mt-8">
-    <div class="container mx-auto px-4 text-center text-gray-600">
-      <p>&copy; 2025 بوصلة سوريا | Syria Compass</p>
+  <footer class="footer py-6 mt-8">
+    <div class="container mx-auto px-4 text-center">
+      <p class="text-[var(--sz-color-ink)]">&copy; 2025 بوصلة سوريا | Syria Compass</p>
 
-      <p class="mt-2 text-sm">
+      <p class="mt-2 text-sm text-[var(--sz-color-ink)]">
         تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span>
       </p>
       <div class="mt-2 flex justify-center space-x-4 space-x-reverse">
         <a href="http://hadealahmad.com/" target="_blank" rel="noopener"
-          class="text-gray-600 hover:text-blue-600 transition flex items-center">
+          class="footer-link flex items-center">
           <i class="fas fa-globe ml-1"></i>
           الموقع الشخصي
         </a>
         <a href="https://x.com/hadealahmad" target="_blank" rel="noopener"
-          class="text-gray-600 hover:text-blue-600 transition flex items-center">
+          class="footer-link flex items-center">
           <i class="fab fa-x-twitter ml-1"></i>
           حساب X
         </a>
