@@ -2,13 +2,12 @@
 class Startpage {
     constructor() {
         this.settings = this.loadSettings();
-        this.weatherApiKey = '708d66aad78282dbfea1dcd2b5aea84f'; // Replace with your API key
-        this.currentLanguage = this.settings.language || 'ar'; // Default to Arabic
+        this.weatherWorkerUrl = 'https://syrianzone.hade-alahmad1.workers.dev/'; 
+        this.currentLanguage = this.settings.language || 'ar';
         this.isEditMode = false;
         this.init();
     }
-
-    init() {
+        init() {
         this.setupEventListeners();
         this.applyTheme();
         this.applyLanguage();
@@ -350,26 +349,26 @@ class Startpage {
         }
     }
 
-    async fetchWeather() {
-        let coordinates;
-        
-        if (this.settings.weather.locationType === 'governorate') {
-            coordinates = this.getGovernorateCoordinates(this.settings.weather.governorate);
-        } else {
-            coordinates = this.settings.weather.coordinates;
-        }
+// Inside your Startpage class
 
-        // Using OpenWeatherMap API (free tier)
-        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${this.weatherApiKey}&units=metric`;
-        
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error('Weather API request failed');
-        }
-        
-        return await response.json();
+async fetchWeather() {
+    let coordinates;
+    
+    if (this.settings.weather.locationType === 'governorate') {
+        coordinates = this.getGovernorateCoordinates(this.settings.weather.governorate);
+    } else {
+        coordinates = this.settings.weather.coordinates;
     }
 
+    const url = `${this.weatherWorkerUrl}?lat=${coordinates.lat}&lon=${coordinates.lon}`;
+    
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error('Weather API request failed');
+    }
+    
+    return await response.json();
+}
     getGovernorateCoordinates(governorate) {
         const coordinates = {
             damascus: { lat: 33.5138, lon: 36.2765 },
