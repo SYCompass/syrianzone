@@ -209,7 +209,7 @@ class NavBar extends HTMLElement {
         <div class="container">
           <div class="mobile-header">
             <a href="/" class="logo">
-              <img src="/logo.png" alt="Syrian Zone">
+              <img src="/logo-lightmode.svg" alt="Syrian Zone">
             </a>
             <div class="mobile-actions">
               <button class="menu-button">
@@ -220,7 +220,7 @@ class NavBar extends HTMLElement {
           <div class="nav-items">
             <div class="desktop-logo">
               <a href="/" class="logo">
-                <img src="/logo.png" alt="Syrian Zone" style="height: 50px;">
+                <img src="/logo-lightmode.svg" alt="Syrian Zone" style="height: 50px;">
               </a>
             </div>
 
@@ -245,7 +245,7 @@ class NavBar extends HTMLElement {
               البوصلة السياسية
             </a>
             <a target="_blank" href="https://github.com/SYCompass/Twitter-SVG-Syrian-Flag-Replacer/releases/tag/1.0.1" class="nav-item">
-              <i class="fas fa-th" style="color: var(--sz-color-accent);"></i>
+              <img src="/flag-replacer/1f1f8-1f1fe.svg" alt="Flag Replacer" style="height: 1.1rem; width: 1.1rem; margin-left: 0.5rem;">
               مبدل العلم
             </a>
             <a target="_blank" href="https://wrraq.com" class="nav-item">
