@@ -209,7 +209,7 @@ class NavBar extends HTMLElement {
         <div class="container">
           <div class="mobile-header">
             <a href="/" class="logo">
-              <img src="/logo-lightmode.svg" alt="Syrian Zone">
+              <img src="/assets/logo-lightmode.svg" alt="Syrian Zone">
             </a>
             <div class="mobile-actions">
               <button class="menu-button">
@@ -220,7 +220,7 @@ class NavBar extends HTMLElement {
           <div class="nav-items">
             <div class="desktop-logo">
               <a href="/" class="logo">
-                <img src="/logo-lightmode.svg" alt="Syrian Zone" style="height: 50px;">
+                <img src="/assets/logo-lightmode.svg" alt="Syrian Zone" style="height: 50px;">
               </a>
             </div>
 
