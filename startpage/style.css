@@ -267,7 +267,7 @@ body[dir="rtl"] .search-form {
 }
 
 .search-engine-dropdown {
-    padding: 15px 20px;
+    padding: 0px 20px;
     border: 4px solid var(--border-color);
     border-radius: var(--radius-lg);
     background: var(--bg-secondary);
@@ -301,7 +301,7 @@ body[dir="rtl"] .search-form {
 
 .search-input {
     flex: 1;
-    padding: 15px 20px;
+    padding: 0px 20px;
     border: 4px solid var(--border-color);
     border-radius: var(--radius-lg);
     background: var(--bg-secondary);
@@ -319,7 +319,7 @@ body[dir="rtl"] .search-form {
 }
 
 .search-button {
-    padding: 15px 25px;
+    padding: 0px 25px;
     background: var(--color-accent);
     color: white;
     border: 4px solid var(--border-color);
