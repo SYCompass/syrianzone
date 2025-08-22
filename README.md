@@ -22,10 +22,11 @@
 
 نخص بالذكر المساهمين التاليين لمجهوداتهم القيمة:
 
-* **الحارث الموسى** - ([https://x.com/tirh25](https://x.com/tirh25)) قام بإضافة عدد كبير من الحسابات الرسمية لصفحة الحسابات الرسمية السورية.
-* قام **haiueida** ([https://x.com/haiueida](https://x.com/haiueida)) بتوفير الترجمة الكردية لصفحة الحسابات الرسمية السورية.
-* ساهم **Waleed Khamees** - ([https://github.com/WaleedKhamees](https://github.com/WaleedKhamees)) في ضغط الصور وتحسين الأداء للموقع.
-* **dandashi.de** - ([https://dandashi.de](https://dandashi.de)) قام بتصميم الشعار وأيقونة الموقع والهوية البصرية العامة.
+* **الحارث الموسى** - ([@tirh25](https://x.com/tirh25)) قام بإضافة عدد كبير من الحسابات الرسمية لصفحة الحسابات الرسمية السورية.
+* قام **haiueida** ([@haiueida](https://x.com/haiueida)) بتوفير الترجمة الكردية لصفحة الحسابات الرسمية السورية.
+* ساهم **Waleed Khamees** - ([@WaleedKhamees](https://github.com/WaleedKhamees)) في ضغط الصور وتحسين الأداء للموقع.
+* **يوري دندشي** - ([@yuri.dandashi](https://www.instagram.com/yuri.dandashi/)) قام بتصميم الشعار وأيقونة الموقع والهوية البصرية العامة.
+تحميل ملفات الهوية البصرية: [حملها من هنا](https://syrian.zone/assets/BrandKit.zip)
 
 نقدر كل مساهمة، كبيرة كانت أم صغيرة، وندعوكم للانضمام والمساهمة في تطوير هذا المشروع.
 

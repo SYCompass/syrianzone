@@ -1,5 +1,6 @@
 /* Font Imports */
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
 /* CSS Variables for Theme Switching (aligned with Tailwind tokens) */
@@ -11,7 +12,7 @@
     --color-ink:     #0D1315; /* Night */
 
     /* Radius token to mirror Tailwind's --radius */
-    --radius: 8px;
+    --radius: 0px;
     --radius-sm: calc(var(--radius) * 0.75);
     --radius-md: var(--radius);
     --radius-lg: calc(var(--radius) * 2);
@@ -48,6 +49,39 @@
     --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
+/* Language-specific Font Rules */
+html[lang="en"] body,
+html[lang="en"] h1,
+html[lang="en"] h2,
+html[lang="en"] h3,
+html[lang="en"] h4,
+html[lang="en"] h5,
+html[lang="en"] h6,
+html[lang="en"] button,
+html[lang="en"] input,
+html[lang="en"] select,
+html[lang="en"] .link-text,
+html[lang="en"] .search-input,
+html[lang="en"] .search-button {
+    font-family: 'Raleway', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html[lang="ar"] body,
+html[lang="ar"] h1,
+html[lang="ar"] h2,
+html[lang="ar"] h3,
+html[lang="ar"] h4,
+html[lang="ar"] h5,
+html[lang="ar"] h6,
+html[lang="ar"] button,
+html[lang="ar"] input,
+html[lang="ar"] select,
+html[lang="ar"] .link-text,
+html[lang="ar"] .search-input,
+html[lang="ar"] .search-button {
+    font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 /* Global Styles */
 * {
     margin: 0;
@@ -56,7 +90,7 @@
 }
 
 body {
-    font-family: var(--font-sans, 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--bg-primary);
     color: var(--text-primary);
     transition: background-color 0.3s ease, color 0.3s ease;
@@ -110,7 +144,7 @@ body[dir="rtl"] .search-form {
     padding: 10px 20px;
     background: var(--bg-secondary);
     color: var(--text-primary);
-    border: 2px solid var(--border-color);
+    border: 4px solid var(--border-color);
     border-radius: var(--radius-md);
     font-size: 1rem;
     font-weight: 500;
@@ -128,8 +162,8 @@ body[dir="rtl"] .search-form {
 
 .theme-toggle {
     background: var(--bg-secondary);
-    border: 2px solid var(--border-color);
-    border-radius: 9999px; /* Tailwind rounded-full */
+    border: 4px solid var(--border-color);
+    border-radius: 0px; /* Tailwind rounded-full */
     width: 45px;
     height: 45px;
     cursor: pointer;
@@ -150,8 +184,8 @@ body[dir="rtl"] .search-form {
 .language-toggle {
     padding: 8px;
     background: var(--bg-secondary);
-    border: 2px solid var(--border-color);
-    border-radius: 9999px; /* Tailwind rounded-full */
+    border: 4px solid var(--border-color);
+    border-radius: 0px; /* Tailwind rounded-full */
     cursor: pointer;
     transition: all 0.3s ease;
     width: 45px;
@@ -165,7 +199,7 @@ body[dir="rtl"] .search-form {
     width: 24px;
     height: 16px;
     object-fit: cover;
-    border-radius: 2px;
+    border-radius: 0px;
 }
 
 .language-toggle:hover {
@@ -234,7 +268,7 @@ body[dir="rtl"] .search-form {
 
 .search-engine-dropdown {
     padding: 15px 20px;
-    border: 2px solid var(--border-color);
+    border: 4px solid var(--border-color);
     border-radius: var(--radius-lg);
     background: var(--bg-secondary);
     color: var(--text-primary);
@@ -253,7 +287,7 @@ body[dir="rtl"] .search-form {
 
 .custom-search-input {
     padding: 15px 20px;
-    border: 2px solid var(--border-color);
+    border: 4px solid var(--border-color);
     border-radius: var(--radius-lg);
     background: var(--bg-secondary);
     color: var(--text-primary);
@@ -268,7 +302,7 @@ body[dir="rtl"] .search-form {
 .search-input {
     flex: 1;
     padding: 15px 20px;
-    border: 2px solid var(--border-color);
+    border: 4px solid var(--border-color);
     border-radius: var(--radius-lg);
     background: var(--bg-secondary);
     color: var(--text-primary);
@@ -286,9 +320,9 @@ body[dir="rtl"] .search-form {
 
 .search-button {
     padding: 15px 25px;
-    background: var(--accent-color);
+    background: var(--color-accent);
     color: white;
-    border: none;
+    border: 4px solid var(--border-color);
     border-radius: var(--radius-lg);
     font-size: 1.1rem;
     font-weight: 600;
@@ -419,7 +453,7 @@ body[dir="rtl"] .search-form {
 .links-action-btn {
     padding: 6px 10px;
     background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--border-color);
     border-radius: var(--radius-sm);
     color: var(--text-primary);
     cursor: pointer;
@@ -481,7 +515,7 @@ body[dir="rtl"] .search-form {
     width: 22px;
     height: 22px;
     border: none;
-    border-radius: 9999px;
+    border-radius: 0px;
     background: #dc3545;
     color: #fff;
     font-size: 14px;
@@ -505,7 +539,7 @@ body[dir="rtl"] .search-form {
     width: 400px;
     height: 100vh;
     background: var(--bg-secondary);
-    border-left: 2px solid var(--border-color);
+    border-left: 4px solid var(--border-color);
     transition: right 0.3s ease;
     z-index: 1000;
     overflow-y: auto;
@@ -520,7 +554,7 @@ body[dir="rtl"] .search-form {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    border-bottom: 2px solid var(--border-color);
+    border-bottom: 4px solid var(--border-color);
     background: var(--bg-tertiary);
 }
 
@@ -554,7 +588,7 @@ body[dir="rtl"] .search-form {
     margin-bottom: 15px;
     font-size: 1.1rem;
     color: var(--text-primary);
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
     padding-bottom: 5px;
 }
 
@@ -572,7 +606,7 @@ body[dir="rtl"] .search-form {
 .setting-input {
     width: 100%;
     padding: 10px 15px;
-    border: 2px solid var(--border-color);
+    border: 4px solid var(--border-color);
     border-radius: var(--radius-md);
     background: var(--bg-primary);
     color: var(--text-primary);
@@ -589,7 +623,7 @@ body[dir="rtl"] .search-form {
     width: 100%;
     padding: 12px 20px;
     margin: 5px 0;
-    border: 2px solid var(--border-color);
+    border: 4px solid var(--border-color);
     border-radius: var(--radius-md);
     background: var(--bg-primary);
     color: var(--text-primary);
@@ -610,8 +644,8 @@ body[dir="rtl"] .search-form {
     height: 45px;
     background: var(--bg-secondary);
     color: var(--text-primary);
-    border: 2px solid var(--border-color);
-    border-radius: 9999px; /* Tailwind rounded-full */
+    border: 4px solid var(--border-color);
+    border-radius: 0px; /* Tailwind rounded-full */
     font-size: 1.1rem;
     cursor: pointer;
     box-shadow: var(--shadow);
@@ -653,7 +687,7 @@ body[dir="rtl"] .search-form {
 
 .modal-content {
     background: var(--bg-secondary);
-    border: 2px solid var(--border-color);
+    border: 4px solid var(--border-color);
     border-radius: var(--radius-lg);
     padding: 0;
     max-width: 500px;
@@ -667,7 +701,7 @@ body[dir="rtl"] .search-form {
     max-width: 800px;
     max-height: 90vh;
     background: var(--bg-secondary) !important;
-    border: 2px solid var(--border-color) !important;
+    border: 4px solid var(--border-color) !important;
     border-radius: var(--radius-lg) !important;
     box-shadow: var(--shadow-hover) !important;
     display: block !important;
@@ -689,7 +723,7 @@ body[dir="rtl"] .search-form {
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
     color: var(--accent-color);
-    border-bottom: 2px solid var(--border-color);
+    border-bottom: 4px solid var(--border-color);
     padding-bottom: 0.5rem;
 }
 
@@ -722,7 +756,7 @@ body[dir="rtl"] .search-form {
 .about-content a {
     color: var(--accent-color);
     text-decoration: none;
-    border-bottom: 1px solid var(--accent-color);
+    border-bottom: 2px solid var(--accent-color);
     transition: all 0.3s ease;
 }
 
@@ -754,7 +788,7 @@ body[dir="rtl"] .search-form {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    border-bottom: 2px solid var(--border-color);
+    border-bottom: 4px solid var(--border-color);
     background: var(--bg-tertiary);
 }
 
@@ -793,7 +827,7 @@ body[dir="rtl"] .search-form {
 
 .save-weather-btn, .cancel-weather-btn {
     padding: 10px 20px;
-    border: 2px solid var(--border-color);
+    border: 4px solid var(--border-color);
     border-radius: var(--radius-md);
     background: var(--bg-primary);
     color: var(--text-primary);
@@ -821,7 +855,7 @@ body[dir="rtl"] .search-form {
     gap: 10px;
     padding: 10px;
     background: var(--bg-primary);
-    border: 1px solid var(--border-color);
+    border: 4px solid var(--border-color);
     border-radius: var(--radius-md);
     margin-bottom: 10px;
 }
@@ -829,7 +863,7 @@ body[dir="rtl"] .search-form {
 .custom-link-item input {
     flex: 1;
     padding: 8px 12px;
-    border: 1px solid var(--border-color);
+    border: 4px solid var(--border-color);
     border-radius: var(--radius-sm);
     background: var(--bg-secondary);
     color: var(--text-primary);
