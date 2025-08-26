@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Configuration ---
     const CONFIG = {
         GOOGLE_SHEETS: {
-            CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTAtwovmqnk0722ikCNL1RAeoEWyJ2tec3L0-sGHe-0kbmKs0ZPOIyCxOP4e74ndkPooauvG9ZeLTWT/pub?output=csv',
+            CSV_URL: 'https://syrian.zone/syofficial/SYOFFICIALDB.csv',
             MAX_RETRIES: 3,
             RETRY_DELAY: 1000, // 1 second
             CACHE_DURATION: 30 * 60 * 1000 // 30 minutes
