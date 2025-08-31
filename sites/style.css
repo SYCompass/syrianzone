@@ -22,21 +22,6 @@
     transform: translateY(0);
 }
 
-.website-icon.favorite {
-    position: relative;
-}
-
-.website-icon.favorite::before {
-    content: '★';
-    position: absolute;
-    top: 0.25rem;
-    right: 0.25rem;
-    color: var(--sz-color-accent);
-    font-size: 1rem;
-    font-weight: bold;
-    z-index: 10;
-}
-
 /* Icon Container */
 .icon-container {
     width: 3.5rem;
@@ -108,23 +93,6 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-}
-
-/* Long Press Animation */
-.website-icon.long-press {
-    transform: scale(0.95);
-}
-
-/* Favorites Section */
-#favorites-section {
-    border: 2px dashed #d1d5db;
-    border-radius: 1rem;
-    padding: 1.5rem;
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 20%, #fef3c7 100%);
-}
-
-#favorites-section:empty {
-    display: none;
 }
 
 /* Filter Button Active State */

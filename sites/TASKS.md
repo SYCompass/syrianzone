@@ -21,6 +21,8 @@ A new section for displaying and organizing Syrian websites with an Android laun
 - [x] Add error handling and loading states
 - [x] Ensure Tailwind CSS build has all needed classes
 - [x] Implement sectioned layout by website type
+- [x] Remove favorites functionality
+- [x] Set personal blogs as first section
 
 ## In Progress Tasks
 
@@ -39,18 +41,19 @@ The websites section features:
 - Android launcher-style interface with website icons and names
 - Search bar for filtering websites
 - Categorization by website type (from CSV)
-- Favorites system with long-press to add/remove
+- **REMOVED**: Favorites system with long-press to add/remove
 - Mobile-responsive design using Tailwind CSS
 - Integration with existing navbar component
 - Data sourced from Google Sheets CSV
 - **NEW**: Sectioned layout organized by website type
+- **NEW**: Personal blogs section appears first
 
 ### Relevant Files
 
-- sites/index.html ✅ - Main HTML structure with sectioned layout
-- sites/script.js ✅ - JavaScript functionality with section creation
-- sites/style.css ✅ - Additional custom styles including section styling
-- sites/default-favorites.json ✅ - Default favorite websites
+- sites/index.html ✅ - Main HTML structure with sectioned layout (no favorites)
+- sites/script.js ✅ - JavaScript functionality with section creation (no favorites)
+- sites/style.css ✅ - Additional custom styles including section styling (no favorites)
+- sites/default-favorites.json ❌ - No longer needed
 - sites/TASKS.md ✅ - Task tracking file
 
 ## Features Implemented
@@ -58,20 +61,20 @@ The websites section features:
 ✅ **Core Functionality**
 - Website grid display with Android launcher style
 - Search and filtering by website type
-- Favorites system with local storage
-- Long-press to add/remove favorites
+- **REMOVED**: Favorites system with local storage
+- **REMOVED**: Long-press to add/remove favorites
 - Mobile responsive design
 
 ✅ **Data Management**
 - Google Sheets CSV integration
 - Fallback to sample data if CSV unavailable
-- Default favorites system
-- User favorites persistence
+- **REMOVED**: Default favorites system
+- **REMOVED**: User favorites persistence
 
 ✅ **User Experience**
-- Toast notifications for actions
+- **REMOVED**: Toast notifications for actions
 - Loading states and error handling
-- Long-press instructions modal
+- **REMOVED**: Long-press instructions modal
 - Smooth animations and transitions
 
 ✅ **Technical Implementation**
@@ -85,3 +88,4 @@ The websites section features:
 - **Section headers** with type icons and names
 - **Visual separation** between different website categories
 - **Enhanced filtering** that respects section organization
+- **Personal blogs section appears first** in the layout

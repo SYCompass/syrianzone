@@ -46,6 +46,12 @@
                     </button>
                     <button 
                         class="filter-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-700 font-medium transition-colors" 
+                        data-filter="مدونة شخصية (فرد واحد)"
+                    >
+                        المدونات الشخصية
+                    </button>
+                    <button 
+                        class="filter-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-700 font-medium transition-colors" 
                         data-filter="مدونة جماعية أو مجلة إلكترونيّة أو موقع إخباريّ"
                     >
                         المدونات والمواقع الإخبارية
@@ -56,24 +62,7 @@
                     >
                         المواقع التعريفية
                     </button>
-                    <button 
-                        class="filter-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-700 font-medium transition-colors" 
-                        data-filter="مدونة شخصية (فرد واحد)"
-                    >
-                        المدونات الشخصية
-                    </button>
                 </div>
-            </div>
-        </div>
-
-        <!-- Favorites Section -->
-        <div id="favorites-section" class="mb-8">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
-                <i class="fas fa-star text-yellow-500 ml-2"></i>
-                المفضلة
-            </h2>
-            <div id="favorites-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-4">
-                <!-- Favorites will be populated here -->
             </div>
         </div>
 
@@ -94,18 +83,6 @@
             <p class="mt-4 text-gray-600">جاري تحميل البيانات...</p>
         </div>
     </main>
-
-    <!-- Long Press Instructions Modal -->
-    <div id="long-press-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg p-6 max-w-sm mx-4 text-center">
-            <i class="fas fa-info-circle text-4xl text-blue-500 mb-4"></i>
-            <h3 class="text-lg font-semibold mb-2">كيفية إضافة للمفضلة</h3>
-            <p class="text-gray-600 mb-4">اضغط مطولاً على أيقونة الموقع لإضافتها أو إزالتها من المفضلة</p>
-            <button id="close-modal" class="bg-[var(--sz-color-primary)] text-white px-6 py-2 rounded-lg hover:opacity-90 transition-colors">
-                فهمت
-            </button>
-        </div>
-    </div>
 
     <!-- Scripts -->
     <script src="../components/navbar.js"></script>

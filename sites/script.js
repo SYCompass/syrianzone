@@ -2,22 +2,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- App State ---
     let allWebsites = [];
-    let userFavorites = [];
-    let defaultFavorites = [];
     let currentFilter = 'all';
     let currentSearchTerm = '';
-    let longPressTimer = null;
-    let longPressDelay = 500; // 500ms for long press
 
     // --- DOM Elements ---
     const searchBar = document.getElementById('search-bar');
     const filterButtons = document.querySelectorAll('.filter-btn');
-    const favoritesGrid = document.getElementById('favorites-grid');
     const websiteSections = document.getElementById('website-sections');
     const noResults = document.getElementById('no-results');
     const loading = document.getElementById('loading');
-    const longPressModal = document.getElementById('long-press-modal');
-    const closeModal = document.getElementById('close-modal');
 
     // --- Configuration ---
     const CONFIG = {
@@ -26,10 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
             MAX_RETRIES: 3,
             RETRY_DELAY: 1000,
             CACHE_DURATION: 30 * 60 * 1000 // 30 minutes
-        },
-        STORAGE_KEYS: {
-            USER_FAVORITES: 'syrian_zone_user_favorites',
-            LAST_VISIT: 'syrian_zone_last_visit'
         }
     };
 
@@ -79,70 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return typeIcons[type] || 'fas fa-globe';
     }
 
-    // --- Data Management ---
-    function loadDefaultFavorites() {
-        return fetch('./default-favorites.json')
-            .then(response => response.json())
-            .then(data => {
-                defaultFavorites = data.defaultFavorites;
-                return defaultFavorites;
-            })
-            .catch(error => {
-                console.warn('Could not load default favorites:', error);
-                return [];
-            });
-    }
 
-    function loadUserFavorites() {
-        try {
-            const stored = localStorage.getItem(CONFIG.STORAGE_KEYS.USER_FAVORITES);
-            userFavorites = stored ? JSON.parse(stored) : [];
-        } catch (error) {
-            console.warn('Could not load user favorites:', error);
-            userFavorites = [];
-        }
-    }
 
-    function saveUserFavorites() {
-        try {
-            localStorage.setItem(CONFIG.STORAGE_KEYS.USER_FAVORITES, JSON.stringify(userFavorites));
-        } catch (error) {
-            console.warn('Could not save user favorites:', error);
-        }
-    }
 
-    function isFavorite(websiteId) {
-        return userFavorites.includes(websiteId);
-    }
-
-    function addToFavorites(websiteId) {
-        if (!userFavorites.includes(websiteId)) {
-            userFavorites.push(websiteId);
-            saveUserFavorites();
-            return true;
-        }
-        return false;
-    }
-
-    function removeFromFavorites(websiteId) {
-        const index = userFavorites.indexOf(websiteId);
-        if (index > -1) {
-            userFavorites.splice(index, 1);
-            saveUserFavorites();
-            return true;
-        }
-        return false;
-    }
-
-    function toggleFavorite(websiteId) {
-        if (isFavorite(websiteId)) {
-            removeFromFavorites(websiteId);
-            return false;
-        } else {
-            addToFavorites(websiteId);
-            return true;
-        }
-    }
 
     // --- CSV Parsing ---
     function parseCSVLine(line) {
@@ -228,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- UI Rendering ---
     function createWebsiteIcon(website) {
         const icon = document.createElement('div');
-        icon.className = `website-icon ${isFavorite(website.id) ? 'favorite' : ''}`;
+        icon.className = 'website-icon';
         icon.dataset.id = website.id;
         icon.dataset.type = website.type;
         icon.dataset.name = website.name.toLowerCase();
@@ -259,29 +187,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return icon;
     }
 
-    function populateFavoritesGrid() {
-        favoritesGrid.innerHTML = '';
-        
-        const favoriteWebsites = allWebsites.filter(website => isFavorite(website.id));
-        
-        if (favoriteWebsites.length === 0) {
-            favoritesGrid.innerHTML = `
-                <div class="col-span-full empty-state">
-                    <i class="fas fa-star"></i>
-                    <p>لا توجد مواقع مفضلة</p>
-                    <p class="text-sm">اضغط مطولاً على أيقونة لإضافتها للمفضلة</p>
-                </div>
-            `;
-            return;
-        }
-
-        favoriteWebsites.forEach(website => {
-            const icon = createWebsiteIcon(website);
-            setupWebsiteIconEvents(icon, website);
-            favoritesGrid.appendChild(icon);
-        });
-    }
-
     function populateWebsitesGrid() {
         websiteSections.innerHTML = '';
         
@@ -294,8 +199,14 @@ document.addEventListener('DOMContentLoaded', () => {
             websitesByType[website.type].push(website);
         });
 
-        // Create sections for each type
-        Object.entries(websitesByType).forEach(([type, websites]) => {
+        // Sort sections by type order (personal blogs first)
+        const sortedTypes = Object.keys(websitesByType).sort((a, b) => {
+            return getTypeOrder(a) - getTypeOrder(b);
+        });
+
+        // Create sections for each type in order
+        sortedTypes.forEach(type => {
+            const websites = websitesByType[type];
             const section = document.createElement('div');
             section.className = 'website-section mb-8';
             section.dataset.type = type;
@@ -342,83 +253,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return typeNames[type] || type;
     }
 
+    function getTypeOrder(type) {
+        const order = {
+            'مدونة شخصية (فرد واحد)': 1,
+            'موقع تعريفي بشركة أو بخدمة أو بمبادرة': 2,
+            'مدونة جماعية أو مجلة إلكترونيّة أو موقع إخباريّ': 3
+        };
+        return order[type] || 4; // Default order for unknown types
+    }
+
     function setupWebsiteIconEvents(icon, website) {
-        let pressTimer;
-        let isLongPress = false;
-
         // Click to open website
-        icon.addEventListener('click', (e) => {
-            if (!isLongPress) {
-                window.open(website.url, '_blank');
-            }
-        });
-
-        // Long press to toggle favorite
-        icon.addEventListener('mousedown', () => {
-            pressTimer = setTimeout(() => {
-                isLongPress = true;
-                icon.classList.add('long-press');
-                
-                const wasFavorite = isFavorite(website.id);
-                const isNowFavorite = toggleFavorite(website.id);
-                
-                if (isNowFavorite) {
-                    icon.classList.add('favorite');
-                    showToast(`${website.name} أضيف للمفضلة`, 'success');
-                } else {
-                    icon.classList.remove('favorite');
-                    showToast(`${website.name} أزيل من المفضلة`, 'info');
-                }
-                
-                populateFavoritesGrid();
-                filterAndSearch();
-            }, longPressDelay);
-        });
-
-        icon.addEventListener('mouseup', () => {
-            clearTimeout(pressTimer);
-            setTimeout(() => {
-                icon.classList.remove('long-press');
-                isLongPress = false;
-            }, 100);
-        });
-
-        icon.addEventListener('mouseleave', () => {
-            clearTimeout(pressTimer);
-            icon.classList.remove('long-press');
-            isLongPress = false;
-        });
-
-        // Touch events for mobile
-        icon.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            pressTimer = setTimeout(() => {
-                isLongPress = true;
-                icon.classList.add('long-press');
-                
-                const wasFavorite = isFavorite(website.id);
-                const isNowFavorite = toggleFavorite(website.id);
-                
-                if (isNowFavorite) {
-                    icon.classList.add('favorite');
-                    showToast(`${website.name} أضيف للمفضلة`, 'success');
-                } else {
-                    icon.classList.remove('favorite');
-                    showToast(`${website.name} أزيل من المفضلة`, 'info');
-                }
-                
-                populateFavoritesGrid();
-                filterAndSearch();
-            }, longPressDelay);
-        });
-
-        icon.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            clearTimeout(pressTimer);
-            setTimeout(() => {
-                icon.classList.remove('long-press');
-                isLongPress = false;
-            }, 100);
+        icon.addEventListener('click', () => {
+            window.open(website.url, '_blank');
         });
     }
 
@@ -428,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentSearchTerm = searchTerm;
         
         let hasVisibleItems = false;
-        const allIcons = [...favoritesGrid.querySelectorAll('.website-icon'), ...websiteSections.querySelectorAll('.website-section .grid .website-icon')];
+        const allIcons = websiteSections.querySelectorAll('.website-section .grid .website-icon');
         
         allIcons.forEach(icon => {
             const matchesSearch = icon.dataset.name.includes(searchTerm) || 
@@ -441,18 +288,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (isVisible) hasVisibleItems = true;
         });
-
-        // Update favorites section visibility
-        const favoriteIcons = favoritesGrid.querySelectorAll('.website-icon');
-        const hasVisibleFavorites = Array.from(favoriteIcons).some(icon => 
-            icon.style.display !== 'none'
-        );
-        
-        if (hasVisibleFavorites) {
-            favoritesGrid.parentElement.style.display = 'block';
-        } else {
-            favoritesGrid.parentElement.style.display = 'none';
-        }
 
         // Update section visibility based on filter
         const sections = websiteSections.querySelectorAll('.website-section');
@@ -479,36 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Toast Notifications ---
-    function showToast(message, type = 'info') {
-        const toast = document.createElement('div');
-        toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium transform translate-x-full transition-transform duration-300`;
-        
-        const colors = {
-            success: 'bg-green-500',
-            error: 'bg-red-500',
-            info: 'bg-blue-500',
-            warning: 'bg-yellow-500'
-        };
-        
-        toast.classList.add(colors[type] || colors.info);
-        toast.textContent = message;
-        
-        document.body.appendChild(toast);
-        
-        // Animate in
-        setTimeout(() => {
-            toast.classList.remove('translate-x-full');
-        }, 100);
-        
-        // Remove after 3 seconds
-        setTimeout(() => {
-            toast.classList.add('translate-x-full');
-            setTimeout(() => {
-                document.body.removeChild(toast);
-            }, 300);
-        }, 3000);
-    }
+
 
     // --- Event Listeners ---
     function setupEventListeners() {
@@ -532,38 +338,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 filterAndSearch();
             });
         });
-
-        // Long press modal
-        closeModal.addEventListener('click', () => {
-            longPressModal.classList.add('hidden');
-        });
-
-        longPressModal.addEventListener('click', (e) => {
-            if (e.target === longPressModal) {
-                longPressModal.classList.add('hidden');
-            }
-        });
-
-        // Show long press instructions on first visit
-        const lastVisit = localStorage.getItem(CONFIG.STORAGE_KEYS.LAST_VISIT);
-        if (!lastVisit) {
-            setTimeout(() => {
-                longPressModal.classList.remove('hidden');
-                localStorage.setItem(CONFIG.STORAGE_KEYS.LAST_VISIT, Date.now().toString());
-            }, 2000);
-        }
     }
 
     // --- Initialization ---
     async function init() {
         setupEventListeners();
-        loadUserFavorites();
         
         try {
             showLoading();
-            
-            // Load default favorites first
-            await loadDefaultFavorites();
             
             // Try to fetch from Google Sheets
             try {
@@ -573,6 +355,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.warn('Could not fetch from Google Sheets, using sample data:', error);
                 // Fallback to sample data
                 allWebsites = [
+                    {
+                        id: 'salehram',
+                        name: 'Home of a SysEng and Cloud Nerd',
+                        url: 'https://salehram.com',
+                        type: 'مدونة شخصية (فرد واحد)',
+                        description: 'موقع تقني يهتم بمواضيع و تقنيات الحوسبة السحابية و يركز على Google Cloud مع عرض دورات تدريبية حول نفس المواضيع و التقنيات'
+                    },
                     {
                         id: 'syrmh',
                         name: 'التاريخ السوري المعاصر',
@@ -628,19 +417,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         url: 'https://sotour.net/',
                         type: 'مدونة جماعية أو مجلة إلكترونيّة أو موقع إخباريّ',
                         description: 'مدونات ومقالات سياسية واجتماعية متعلقة بالشأن العام السوري'
-                    },
-                    {
-                        id: 'salehram',
-                        name: 'Home of a SysEng and Cloud Nerd',
-                        url: 'https://salehram.com',
-                        type: 'مدونة شخصية (فرد واحد)',
-                        description: 'موقع تقني يهتم بمواضيع و تقنيات الحوسبة السحابية و يركز على Google Cloud مع عرض دورات تدريبية حول نفس المواضيع و التقنيات'
                     }
                 ];
             }
 
-            // Populate grids
-            populateFavoritesGrid();
+            // Populate websites grid
             populateWebsitesGrid();
             
             // Apply initial filter
@@ -648,7 +429,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
         } catch (error) {
             console.error('Initialization failed:', error);
-            showToast('فشل في تحميل البيانات', 'error');
         } finally {
             hideLoading();
         }
