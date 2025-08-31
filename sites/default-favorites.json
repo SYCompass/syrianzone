@@ -1,0 +1,32 @@
+{
+  "defaultFavorites": [
+    {
+      "id": "syrmh",
+      "name": "التاريخ السوري المعاصر",
+      "url": "https://syrmh.com",
+      "type": "مدونة جماعية أو مجلة إلكترونيّة أو موقع إخباريّ",
+      "description": "موقعي ارشيفي لوثائق من تاريخ سوريا المعاصر"
+    },
+    {
+      "id": "arageek",
+      "name": "أراجيك",
+      "url": "https://arageek.com",
+      "type": "مدونة جماعية أو مجلة إلكترونيّة أو موقع إخباريّ",
+      "description": "مجلة ثقافية اجتماعية تقنية"
+    },
+    {
+      "id": "syrianmemory",
+      "name": "الذاكرة السورية",
+      "url": "https://syrianmemory.org/",
+      "type": "موقع تعريفي بشركة أو بخدمة أو بمبادرة",
+      "description": "أرشيف يوم بيوم عن الثورة السوريه"
+    },
+    {
+      "id": "salehram",
+      "name": "Home of a SysEng and Cloud Nerd",
+      "url": "https://salehram.com",
+      "type": "مدونة شخصية (فرد واحد)",
+      "description": "موقع تقني يهتم بمواضيع و تقنيات الحوسبة السحابية"
+    }
+  ]
+}

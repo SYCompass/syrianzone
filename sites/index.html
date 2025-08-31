@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المواقع السورية - Syrian Zone</title>
+    <link rel="stylesheet" href="../styles/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navbar -->
+    <nav-bar></nav-bar>
+    
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">المواقع السورية</h1>
+            <p class="text-gray-600 text-lg">مجموعة من أفضل المواقع السورية على الإنترنت</p>
+        </div>
+
+        <!-- Search and Filter Bar -->
+        <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+            <div class="flex flex-col md:flex-row gap-4">
+                <!-- Search Bar -->
+                <div class="flex-1">
+                    <div class="relative">
+                        <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input 
+                            type="text" 
+                            id="search-bar" 
+                            placeholder="ابحث عن موقع..." 
+                            class="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-transparent"
+                        >
+                    </div>
+                </div>
+                
+                <!-- Filter Buttons -->
+                <div class="flex flex-wrap gap-2">
+                    <button 
+                        class="filter-btn px-4 py-2 rounded-lg bg-[var(--sz-color-primary)] text-white font-medium transition-colors" 
+                        data-filter="all"
+                    >
+                        الكل
+                    </button>
+                    <button 
+                        class="filter-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-700 font-medium transition-colors" 
+                        data-filter="مدونة جماعية أو مجلة إلكترونيّة أو موقع إخباريّ"
+                    >
+                        المدونات والمواقع الإخبارية
+                    </button>
+                    <button 
+                        class="filter-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-700 font-medium transition-colors" 
+                        data-filter="موقع تعريفي بشركة أو بخدمة أو بمبادرة"
+                    >
+                        المواقع التعريفية
+                    </button>
+                    <button 
+                        class="filter-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-700 font-medium transition-colors" 
+                        data-filter="مدونة شخصية (فرد واحد)"
+                    >
+                        المدونات الشخصية
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Favorites Section -->
+        <div id="favorites-section" class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-star text-yellow-500 ml-2"></i>
+                المفضلة
+            </h2>
+            <div id="favorites-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-4">
+                <!-- Favorites will be populated here -->
+            </div>
+        </div>
+
+        <!-- Website Sections -->
+        <div id="website-sections">
+            <!-- Sections will be dynamically created here -->
+        </div>
+
+        <!-- No Results Message -->
+        <div id="no-results" class="hidden text-center py-12">
+            <i class="fas fa-search text-6xl text-gray-300 mb-4"></i>
+            <p class="text-xl text-gray-500">لم يتم العثور على نتائج</p>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading" class="text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--sz-color-primary)]"></div>
+            <p class="mt-4 text-gray-600">جاري تحميل البيانات...</p>
+        </div>
+    </main>
+
+    <!-- Long Press Instructions Modal -->
+    <div id="long-press-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-sm mx-4 text-center">
+            <i class="fas fa-info-circle text-4xl text-blue-500 mb-4"></i>
+            <h3 class="text-lg font-semibold mb-2">كيفية إضافة للمفضلة</h3>
+            <p class="text-gray-600 mb-4">اضغط مطولاً على أيقونة الموقع لإضافتها أو إزالتها من المفضلة</p>
+            <button id="close-modal" class="bg-[var(--sz-color-primary)] text-white px-6 py-2 rounded-lg hover:opacity-90 transition-colors">
+                فهمت
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../components/navbar.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -44,4 +44,30 @@
   .footer-link { @apply text-ink/70 hover:text-primary; }
 }
 
+/* Ensure all needed utilities are included */
+@layer utilities {
+  /* Grid utilities */
+  .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .grid-cols-8 { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  .grid-cols-10 { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+  
+  /* Responsive grid utilities */
+  .sm\:grid-cols-4 { @media (min-width: 640px) { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .md\:grid-cols-6 { @media (min-width: 768px) { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+  .lg\:grid-cols-8 { @media (min-width: 1024px) { grid-template-columns: repeat(8, minmax(0, 1fr)); } }
+  .xl\:grid-cols-10 { @media (min-width: 1280px) { grid-template-columns: repeat(10, minmax(0, 1fr)); } }
+  
+  /* Max width utilities */
+  .max-w-7xl { max-width: 80rem; }
+  
+  /* Animation utilities */
+  .animate-spin { animation: spin 1s linear infinite; }
+  
+  /* Opacity utilities */
+  .opacity-90 { opacity: 0.9; }
+  .hover\:opacity-90:hover { opacity: 0.9; }
+}
+
 
