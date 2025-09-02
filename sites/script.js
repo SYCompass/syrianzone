@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- DOM Elements ---
     const searchBar = document.getElementById('search-bar');
-    const filterButtons = document.querySelectorAll('.filter-btn');
+    const filterButtonsContainer = document.getElementById('filter-buttons');
     const websiteSections = document.getElementById('website-sections');
     const noResults = document.getElementById('no-results');
     const loading = document.getElementById('loading');
@@ -262,6 +262,53 @@ document.addEventListener('DOMContentLoaded', () => {
         return order[type] || 4; // Default order for unknown types
     }
 
+    // --- Dynamic Filter Generation ---
+    function extractUniqueCategories(websites) {
+        const categories = new Set();
+        websites.forEach(website => {
+            if (website.type && website.type.trim()) {
+                categories.add(website.type.trim());
+            }
+        });
+        return Array.from(categories);
+    }
+
+    function generateFilterButtons(categories) {
+        // Clear existing buttons
+        filterButtonsContainer.innerHTML = '';
+        
+        // Add "All" button first
+        const allButton = createFilterButton('all', 'الكل', true);
+        filterButtonsContainer.appendChild(allButton);
+        
+        // Sort categories by type order
+        const sortedCategories = categories.sort((a, b) => {
+            return getTypeOrder(a) - getTypeOrder(b);
+        });
+        
+        // Add category buttons
+        sortedCategories.forEach(category => {
+            const displayName = getTypeDisplayName(category);
+            const button = createFilterButton(category, displayName, false);
+            filterButtonsContainer.appendChild(button);
+        });
+        
+        // Re-setup event listeners for new buttons
+        setupFilterButtonEvents();
+    }
+
+    function createFilterButton(filterValue, displayName, isActive) {
+        const button = document.createElement('button');
+        button.className = `filter-btn px-4 py-2 rounded-lg font-medium transition-colors ${
+            isActive 
+                ? 'bg-[var(--sz-color-primary)] text-white' 
+                : 'bg-gray-200 text-gray-700'
+        }`;
+        button.dataset.filter = filterValue;
+        button.textContent = displayName;
+        return button;
+    }
+
     function setupWebsiteIconEvents(icon, website) {
         // Click to open website
         icon.addEventListener('click', () => {
@@ -320,19 +367,22 @@ document.addEventListener('DOMContentLoaded', () => {
     function setupEventListeners() {
         // Search
         searchBar.addEventListener('input', filterAndSearch);
+    }
+
+    function setupFilterButtonEvents() {
+        const filterButtons = document.querySelectorAll('.filter-btn');
         
-        // Filter buttons
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
                 // Remove active state from all buttons
                 filterButtons.forEach(btn => {
-                    btn.classList.remove('active', 'bg-sz-color-primary', 'text-white');
+                    btn.classList.remove('active', 'bg-[var(--sz-color-primary)]', 'text-white');
                     btn.classList.add('bg-gray-200', 'text-gray-700');
                 });
                 
                 // Add active state to clicked button
                 button.classList.remove('bg-gray-200', 'text-gray-700');
-                button.classList.add('active', 'bg-sz-color-primary', 'text-white');
+                button.classList.add('active', 'bg-[var(--sz-color-primary)]', 'text-white');
                 
                 currentFilter = button.dataset.filter;
                 filterAndSearch();
@@ -421,6 +471,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ];
             }
 
+            // Generate dynamic filter buttons based on available categories
+            const categories = extractUniqueCategories(allWebsites);
+            generateFilterButtons(categories);
+            
             // Populate websites grid
             populateWebsitesGrid();
             
