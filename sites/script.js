@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Configuration ---
     const CONFIG = {
         GOOGLE_SHEETS: {
-            CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQJ75gH_aGaduB9njP71UkkMzbQm48bShuq_YWeMT1Y8AhzpxWj5uNak9mL0lPt3O8_Jgu3u8F-vmai/pub?output=csv',
+            CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCrz7GpfTDmtgKipQd3IqyMPle1ehoG77VO2SQRDqKC9zRRKO3FDI60VoYhA_XqlzoKQ6gZDrIuIjL/pub?output=csv',
             MAX_RETRIES: 3,
             RETRY_DELAY: 1000,
             CACHE_DURATION: 30 * 60 * 1000 // 30 minutes
