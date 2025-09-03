@@ -3,6 +3,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --sz-color-primary: #2563eb;
+  --sz-color-accent: #1d4ed8;
 }
 
 @theme inline {
@@ -16,6 +18,8 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --sz-color-primary: #3b82f6;
+    --sz-color-accent: #2563eb;
   }
 }
 

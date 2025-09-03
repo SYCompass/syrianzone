@@ -1,9 +1,19 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+:root {
+	--sz-color-primary: #2563eb;
+	--sz-color-accent: #1d4ed8;
+}
 
 html {
 	direction: rtl;
 	font-family: var(--font-alexandria), system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--sz-color-primary: #3b82f6;
+		--sz-color-accent: #2563eb;
+	}
 }
 
