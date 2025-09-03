@@ -244,6 +244,10 @@ class NavBar extends HTMLElement {
               <i class="fas fa-compass" style="color: var(--sz-color-ink);"></i>
               البوصلة السياسية
             </a>
+            <a href="/sites" class="nav-item">
+              <i class="fas fa-globe" style="color: var(--sz-color-ink);"></i>
+              المواقع السورية
+            </a>
             <a target="_blank" href="https://github.com/SYCompass/Twitter-SVG-Syrian-Flag-Replacer/releases/tag/1.0.1" class="nav-item">
               <img src="/flag-replacer/1f1f8-1f1fe.svg" alt="Flag Replacer" style="height: 1.1rem; width: 1.1rem; margin-left: 0.5rem;">
               مبدل العلم
