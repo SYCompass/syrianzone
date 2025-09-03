@@ -3,8 +3,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { Avatar } from "@/components/ui/avatar";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { CheckCircle2Icon, AlertCircleIcon } from "lucide-react";
 
 type Candidate = { id: string; name: string; imageUrl: string | null };
 
@@ -23,6 +24,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   const [bank, setBank] = useState<Candidate[]>(initialCandidates);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [submitStatus, setSubmitStatus] = useState<{ ok: boolean; message: string; description?: string } | null>(null);
 
   useEffect(() => {
     const url = new URL(window.location.origin + "/api/ws");
@@ -34,6 +36,12 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     };
     return () => ws.close();
   }, [pollId, voteDay]);
+
+  useEffect(() => {
+    if (!submitStatus) return;
+    const id = setTimeout(() => setSubmitStatus(null), 5000);
+    return () => clearTimeout(id);
+  }, [submitStatus]);
 
   function moveCandidateTo(candidateId: string, target: TierKey | "bank") {
     // find candidate anywhere
@@ -89,24 +97,51 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       headers: { "content-type": "application/json" },
       body: JSON.stringify(payload),
     });
-    if (!res.ok) alert("حدث خطأ أو تم التصويت اليوم");
-    else alert("تم تسجيل التصويت");
+    if (!res.ok) setSubmitStatus({ ok: false, message: "حدث خطأ أو تم التصويت اليوم" });
+    else setSubmitStatus({ ok: true, message: "تم تسجيل التصويت" });
   }
 
   async function saveImage() {
     if (!containerRef.current) return;
-    const canvas = await html2canvas(containerRef.current);
+    const el = containerRef.current;
+    const rect = el.getBoundingClientRect();
+    const width = Math.ceil(el.scrollWidth || el.offsetWidth);
+    const height = Math.ceil(el.scrollHeight || el.offsetHeight);
+
+    const canvas = await html2canvas(el, {
+      backgroundColor: "#ffffff",
+      useCORS: true,
+      foreignObjectRendering: false,
+      scrollX: -window.scrollX,
+      scrollY: -window.scrollY,
+      windowWidth: Math.max(document.documentElement.scrollWidth, rect.left + width),
+      windowHeight: Math.max(document.documentElement.scrollHeight, rect.top + height),
+      width,
+      height,
+      onclone: (doc) => {
+        doc.documentElement.classList.add("capture-safe");
+        doc.body.classList.add("capture-safe");
+        const root = doc.querySelector("[data-capture-root]") as HTMLElement | null;
+        if (root) {
+          root.classList.add("capture-safe");
+          root.style.backgroundColor = "#ffffff";
+        }
+      },
+      logging: false,
+      removeContainer: true,
+    });
+
     const link = document.createElement("a");
     link.download = "tierlist.png";
-    link.href = canvas.toDataURL();
+    link.href = canvas.toDataURL("image/png");
     link.click();
   }
 
   return (
-    <Card ref={containerRef as any} className="max-w-screen-lg mx-auto">
-      <CardHeader>
-        <p className="text-center">اسحب وافلت الأسماء ضمن S/A/B/C/D/F ثم اضغط إرسال</p>
-      </CardHeader>
+    <Card ref={containerRef as any} className="max-w-screen-lg mx-auto p-4" data-capture-root>
+      {/* <CardHeader> */}
+        {/* <p className="text-center">اسحب وافلت الأسماِء ضمن S/A/B/C/D/F ثم اضغط إرسال</p> */}
+      {/* </CardHeader> */}
       <div
         className="mb-4 p-2 bg-gray-100 border rounded"
         onDragOver={(e) => e.preventDefault()}
@@ -168,9 +203,24 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       <div className="flex gap-3 justify-center mt-6 p-4">
         <Button onClick={submit}>إرسال</Button>
         <Button variant="secondary" onClick={saveImage}>حفظ كصورة</Button>
-        <Link href="/leaderboard"><Button variant="secondary">لوحة المتصدرين</Button></Link>
       </div>
+      {submitStatus && (
+        <div className="px-4 pb-2">
+          <Alert variant={submitStatus.ok ? "default" : "destructive"}>
+            {submitStatus.ok ? (
+              <CheckCircle2Icon className="h-5 w-5" />
+            ) : (
+              <AlertCircleIcon className="h-5 w-5" />
+            )}
+            <AlertTitle>{submitStatus.message}</AlertTitle>
+            {submitStatus.description ? (
+              <AlertDescription>{submitStatus.description}</AlertDescription>
+            ) : null}
+          </Alert>
+        </div>
+      )}
     </Card>
+    
   );
 }
 

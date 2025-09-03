@@ -120,8 +120,6 @@ export default async function Page() {
             <Table>
               <Thead>
                 <Tr>
-                  <Th>#</Th>
-                  <Th>المرشح</Th>
                 </Tr>
               </Thead>
               <Tbody>

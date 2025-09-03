@@ -1,16 +1,25 @@
-import { HTMLAttributes } from "react";
+import { HTMLAttributes, forwardRef } from "react";
 import { cn } from "@/lib/utils";
 
-export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("bg-white rounded-lg border shadow-sm", className)} {...props} />;
-}
+export const Card = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(function Card(
+  { className, ...props },
+  ref
+) {
+  return <div ref={ref} className={cn("bg-white rounded-lg border shadow-sm", className)} {...props} />;
+});
 
-export function CardHeader({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("p-4 border-b", className)} {...props} />;
-}
+export const CardHeader = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(function CardHeader(
+  { className, ...props },
+  ref
+) {
+  return <div ref={ref} className={cn("p-4 border-b", className)} {...props} />;
+});
 
-export function CardContent({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("p-4", className)} {...props} />;
-}
+export const CardContent = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(function CardContent(
+  { className, ...props },
+  ref
+) {
+  return <div ref={ref} className={cn("p-4", className)} {...props} />;
+});
 
 
