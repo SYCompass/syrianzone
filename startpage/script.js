@@ -208,10 +208,13 @@ class Startpage {
                     case 4: // Political Compass
                         linkText.textContent = lang.politicalCompass;
                         break;
-                    case 5: // Flag Replacer
+                    case 5: // Syrian Websites
+                        linkText.textContent = lang.syrianWebsites;
+                        break;
+                    case 6: // Flag Replacer
                         linkText.textContent = lang.flagReplacer;
                         break;
-                    case 6: // Forum
+                    case 7: // Forum
                         linkText.textContent = lang.forum;
                         break;
                 }

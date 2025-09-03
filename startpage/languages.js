@@ -60,6 +60,7 @@ const languages = {
         partyGuide: "دليل الأحزاب",
         ministerTierlist: "تير ليست الوزراء",
         politicalCompass: "البوصلة السياسية",
+        syrianWebsites: "المواقع السورية",
         flagReplacer: "مبدل العلم",
         forum: "المنتدى",
         
@@ -162,6 +163,7 @@ const languages = {
         partyGuide: "Party Guide",
         ministerTierlist: "Minister Tierlist",
         politicalCompass: "Political Compass",
+        syrianWebsites: "Syrian Websites",
         flagReplacer: "Flag Replacer",
         forum: "Forum",
         
