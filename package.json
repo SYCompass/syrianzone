@@ -5,17 +5,21 @@
   "keywords": [],
   "author": "Hade Al-Ahmad <hade@hadealahmad.com>, Nour Sofanati <contact@nour-sofanati.com>",
   "license": "MIT",
-  "packageManager": "pnpm@10.4.1",
+  "packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af",
   "scripts": {
-    "start": "node server.js",
-    "dev": "concurrently \"node server.js\" \"npm run dev:tailwind\"",
+    "start": "concurrently \"node server.js\" \"npm run start:poll\"",
+    "dev": "concurrently \"node server.js\" \"npm run dev:tailwind\" \"npm run dev:poll\"",
     "dev:tailwind": "tailwindcss -i ./styles/tailwind.css -o ./styles/output.css --watch",
-    "build:tailwind": "tailwindcss -i ./styles/tailwind.css -o ./styles/output.min.css --minify"
+    "build:tailwind": "tailwindcss -i ./styles/tailwind.css -o ./styles/output.min.css --minify",
+    "dev:poll": "cd poll && PORT=4000 pnpm dev",
+    "start:poll": "cd poll && PORT=4000 pnpm start",
+    "build:poll": "cd poll && pnpm build"
   },
   "dependencies": {
     "@octokit/rest": "^21.1.1",
     "axios": "^1.9.0",
     "express": "^4.18.3",
+    "http-proxy-middleware": "^3.0.3",
     "tailwindcss": "^4.1.4"
   },
   "devDependencies": {
