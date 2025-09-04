@@ -1,6 +1,15 @@
 // Language translations for SyrianZone Startpage
 const languages = {
     ar: {
+        themeSettings: "إعدادات السمة",
+        themes: {
+        light: "فاتح",
+         dark: "داكن (افتراضي)",
+        "dark-blue": "أزرق داكن",
+        "dark-purple": "بنفسجي داكن",
+        "dark-green": "أخضر داكن",
+        "high-contrast": "تباين عالي"
+        },
         // Search Section
         searchPlaceholder: "ابحث في الويب...",
         searchButton: "بحث",
@@ -104,6 +113,16 @@ const languages = {
     },
     
     en: {
+
+        themeSettings: "Theme Settings",
+            themes: {
+                light: "Light",
+                dark: "Dark (Default)",
+                "dark-blue": "Dark Blue",
+                "dark-purple": "Dark Purple",
+                "dark-green": "Dark Green",
+                "high-contrast": "High Contrast"
+            },
         // Search Section
         searchPlaceholder: "Search the web...",
         searchButton: "Search",
