@@ -6,10 +6,20 @@ class SyrianHotels {
         this.currentPage = 1;
         this.isLoading = false;
         this.searchTimeout = null;
+        this.currentView = this.getDefaultView(); // Responsive default view
         
         this.initializeElements();
         this.bindEvents();
         this.loadHotels();
+    }
+    
+    // Get default view based on screen size
+    getDefaultView() {
+        if (window.innerWidth < 768) {
+            return 'grid'; // Mobile: grid view
+        } else {
+            return 'table'; // Tablet and desktop: table view
+        }
     }
     
     // Initialize DOM elements
@@ -23,6 +33,10 @@ class SyrianHotels {
             sortSelect: document.getElementById('sortSelect'),
             resultsCount: document.getElementById('resultsCount'),
             hotelsGrid: document.getElementById('hotelsGrid'),
+            hotelsTable: document.getElementById('hotelsTable'),
+            hotelsTableBody: document.getElementById('hotelsTableBody'),
+            tableViewBtn: document.getElementById('tableViewBtn'),
+            gridViewBtn: document.getElementById('gridViewBtn'),
             loadingSpinner: document.getElementById('loadingSpinner'),
             errorMessage: document.getElementById('errorMessage'),
             noResults: document.getElementById('noResults'),
@@ -82,6 +96,20 @@ class SyrianHotels {
             this.toggleBackToTop();
         });
         
+        // Window resize event for responsive view switching
+        window.addEventListener('resize', () => {
+            this.handleResize();
+        });
+        
+        // View toggle functionality
+        this.elements.tableViewBtn.addEventListener('click', () => {
+            this.switchView('table');
+        });
+        
+        this.elements.gridViewBtn.addEventListener('click', () => {
+            this.switchView('grid');
+        });
+        
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             this.handleKeyboardNavigation(e);
@@ -100,12 +128,13 @@ class SyrianHotels {
                 this.hotels = cachedData;
                 this.setupFilters();
                 this.clearAllFilters();
+                this.initializeView();
                 this.displayHotels();
                 return;
             }
             
-            // For now, use sample data if no Google Sheets URL is configured
-            if (CONFIG.GOOGLE_SHEETS.CSV_URL === 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRiqxupguALHTEo8qaY7YNi-kBCsy7sXlUIqYxxHQJrSr9nmNHZTgLZ7G7DAF-wQDnEDp5C8GngQyr1/pub?output=csv') {
+            // Check if CSV URL is configured and not the default placeholder
+            if (!CONFIG.GOOGLE_SHEETS.CSV_URL || CONFIG.GOOGLE_SHEETS.CSV_URL === 'YOUR_GOOGLE_SHEETS_CSV_URL_HERE') {
                 this.hotels = this.getSampleData();
             } else {
                 // Fetch from Google Sheets
@@ -119,6 +148,7 @@ class SyrianHotels {
             // Setup filters and display
             this.setupFilters();
             this.clearAllFilters();
+            this.initializeView();
             this.displayHotels();
             
         } catch (error) {
@@ -139,6 +169,12 @@ class SyrianHotels {
         } finally {
             this.hideLoading();
         }
+    }
+    
+    // Initialize view based on screen size
+    initializeView() {
+        const defaultView = this.getDefaultView();
+        this.switchView(defaultView);
     }
     
     // Get sample data for testing
@@ -240,9 +276,6 @@ class SyrianHotels {
                     csvText.includes('temporary redirect')) {
                     throw new Error('Received HTML redirect instead of CSV data');
                 }
-                
-                // Debug: Log first few lines of CSV
-                console.log('CSV Preview:', csvText.split('\n').slice(0, 3).join('\n'));
                 
                 return this.parseCSV(csvText);
                 
@@ -448,6 +481,33 @@ class SyrianHotels {
         this.displayHotels();
     }
     
+    // Handle window resize
+    handleResize() {
+        const newDefaultView = this.getDefaultView();
+        
+        // Only switch if the current view doesn't match the new default
+        // and we're not in the middle of loading
+        if (newDefaultView !== this.currentView && !this.isLoading) {
+            this.switchView(newDefaultView);
+        }
+    }
+    
+    // Switch between table and grid view
+    switchView(view) {
+        this.currentView = view;
+        
+        // Update button states
+        this.elements.tableViewBtn.classList.toggle('active', view === 'table');
+        this.elements.gridViewBtn.classList.toggle('active', view === 'grid');
+        
+        // Show/hide appropriate containers
+        this.elements.hotelsTable.style.display = view === 'table' ? 'block' : 'none';
+        this.elements.hotelsGrid.style.display = view === 'grid' ? 'grid' : 'none';
+        
+        // Refresh the display
+        this.displayHotels();
+    }
+    
     // Display hotels
     displayHotels() {
         const startIndex = (this.currentPage - 1) * CONFIG.APP.ITEMS_PER_PAGE;
@@ -465,20 +525,38 @@ class SyrianHotels {
             this.hideNoResults();
         }
         
-        // Clear grid if it's the first page
+        // Clear containers if it's the first page
         if (this.currentPage === 1) {
             this.elements.hotelsGrid.innerHTML = '';
+            this.elements.hotelsTableBody.innerHTML = '';
         }
         
-        // Add hotel cards
-        hotelsToShow.forEach(hotel => {
-            const card = this.createHotelCard(hotel);
-            this.elements.hotelsGrid.appendChild(card);
-        });
+        // Add hotels based on current view
+        if (this.currentView === 'table') {
+            this.displayHotelsTable(hotelsToShow);
+        } else {
+            this.displayHotelsGrid(hotelsToShow);
+        }
         
         // Show/hide load more button
         this.elements.loadMoreContainer.style.display = 
             endIndex < this.filteredHotels.length ? 'block' : 'none';
+    }
+    
+    // Display hotels in table format
+    displayHotelsTable(hotelsToShow) {
+        hotelsToShow.forEach(hotel => {
+            const row = this.createHotelTableRow(hotel);
+            this.elements.hotelsTableBody.appendChild(row);
+        });
+    }
+    
+    // Display hotels in grid format
+    displayHotelsGrid(hotelsToShow) {
+        hotelsToShow.forEach(hotel => {
+            const card = this.createHotelCard(hotel);
+            this.elements.hotelsGrid.appendChild(card);
+        });
     }
     
     // Create hotel card
@@ -500,8 +578,6 @@ class SyrianHotels {
                             `<span class="style-badge">${this.escapeHtml(hotel[CONFIG.COLUMNS.STYLE])}</span>` : ''}
                         ${hotel[CONFIG.COLUMNS.CITY] ? 
                             `<span class="city-badge">${this.escapeHtml(hotel[CONFIG.COLUMNS.CITY])}</span>` : ''}
-                        ${hotel[CONFIG.COLUMNS.RATING] ? 
-                            `<span class="city-badge">⭐ ${this.escapeHtml(hotel[CONFIG.COLUMNS.RATING])}</span>` : ''}
                         ${hotel[CONFIG.COLUMNS.PRICE_RANGE] ? 
                             `<span class="city-badge">${this.escapeHtml(hotel[CONFIG.COLUMNS.PRICE_RANGE])}</span>` : ''}
                     </div>
@@ -537,6 +613,132 @@ class SyrianHotels {
         return card;
     }
     
+    // Create hotel table row
+    createHotelTableRow(hotel) {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50';
+        
+        // Hotel name cell
+        const nameCell = document.createElement('td');
+        nameCell.className = 'px-6 py-4';
+        nameCell.innerHTML = `
+            <div class="hotel-name-cell">${this.escapeHtml(hotel[CONFIG.COLUMNS.HOTEL_NAME])}</div>
+            ${hotel[CONFIG.COLUMNS.DESCRIPTION] ? 
+                `<div class="text-sm text-gray-600 mt-1">${this.escapeHtml(hotel[CONFIG.COLUMNS.DESCRIPTION])}</div>` : ''}
+        `;
+        
+        // City cell
+        const cityCell = document.createElement('td');
+        cityCell.className = 'px-6 py-4';
+        cityCell.innerHTML = hotel[CONFIG.COLUMNS.CITY] ? 
+            `<span class="hotel-badge">${this.escapeHtml(hotel[CONFIG.COLUMNS.CITY])}</span>` : '';
+        
+        // Style cell
+        const styleCell = document.createElement('td');
+        styleCell.className = 'px-6 py-4';
+        styleCell.innerHTML = hotel[CONFIG.COLUMNS.STYLE] ? 
+            `<span class="hotel-badge primary">${this.escapeHtml(hotel[CONFIG.COLUMNS.STYLE])}</span>` : '';
+        
+        // Contact cell
+        const contactCell = document.createElement('td');
+        contactCell.className = 'px-6 py-4';
+        const phones = [
+            hotel[CONFIG.COLUMNS.PHONE_1],
+            hotel[CONFIG.COLUMNS.PHONE_2],
+            hotel[CONFIG.COLUMNS.PHONE_3]
+        ].filter(Boolean);
+        
+        const websites = [
+            hotel[CONFIG.COLUMNS.WEBSITE_1],
+            hotel[CONFIG.COLUMNS.WEBSITE_2],
+            hotel[CONFIG.COLUMNS.WEBSITE_3]
+        ].filter(Boolean);
+        
+        let contactHtml = '';
+        if (phones.length > 0) {
+            contactHtml += `<div class="hotel-contact-cell">`;
+            phones.forEach(phone => {
+                contactHtml += `<div class="hotel-contact-item">
+                    <a href="tel:${this.escapeHtml(phone)}" dir="ltr">${this.escapeHtml(phone)}</a>
+                </div>`;
+            });
+            contactHtml += `</div>`;
+        }
+        
+        if (websites.length > 0) {
+            contactHtml += `<div class="hotel-contact-cell mt-2">`;
+            websites.forEach(website => {
+                contactHtml += `<div class="hotel-contact-item">
+                    <a href="${this.escapeHtml(website)}" target="_blank" rel="noopener" class="website-link">
+                        <i class="fas fa-globe ml-1"></i> زيارة الموقع
+                    </a>
+                </div>`;
+            });
+            contactHtml += `</div>`;
+        }
+        
+        contactCell.innerHTML = contactHtml;
+        
+        // Location cell
+        const locationCell = document.createElement('td');
+        locationCell.className = 'px-6 py-4';
+        locationCell.innerHTML = hotel[CONFIG.COLUMNS.LOCATION] ? 
+            `<div class="text-sm text-gray-600">${this.escapeHtml(hotel[CONFIG.COLUMNS.LOCATION])}</div>` : '';
+        
+        // Social links cell
+        const socialCell = document.createElement('td');
+        socialCell.className = 'px-6 py-4';
+        const socialLinks = this.createTableSocialLinks(hotel);
+        socialCell.innerHTML = socialLinks;
+        
+        // Append all cells to row
+        row.appendChild(nameCell);
+        row.appendChild(cityCell);
+        row.appendChild(styleCell);
+        row.appendChild(contactCell);
+        row.appendChild(locationCell);
+        row.appendChild(socialCell);
+        
+        return row;
+    }
+    
+    // Create social links for table view
+    createTableSocialLinks(hotel) {
+        const links = [];
+        
+        // Instagram
+        if (hotel[CONFIG.COLUMNS.INSTAGRAM]) {
+            const url = this.formatSocialUrl(CONFIG.SOCIAL_PLATFORMS.instagram.baseUrl, hotel[CONFIG.COLUMNS.INSTAGRAM]);
+            links.push(`
+                <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
+                    <i class="fab fa-instagram ml-1"></i> زيارة صفحة الانستغرام
+                </a>
+            `);
+        }
+        
+        // Facebook
+        if (hotel[CONFIG.COLUMNS.FACEBOOK]) {
+            const url = this.formatSocialUrl(CONFIG.SOCIAL_PLATFORMS.facebook.baseUrl, hotel[CONFIG.COLUMNS.FACEBOOK]);
+            links.push(`
+                <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
+                    <i class="fab fa-facebook ml-1"></i> زيارة صفحة الفيسبوك
+                </a>
+            `);
+        }
+        
+        // X (Twitter)
+        if (hotel[CONFIG.COLUMNS.X_TWITTER]) {
+            const url = this.formatSocialUrl(CONFIG.SOCIAL_PLATFORMS.x_twitter.baseUrl, hotel[CONFIG.COLUMNS.X_TWITTER]);
+            links.push(`
+                <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
+                    <i class="fab fa-x-twitter ml-1"></i> زيارة صفحة X
+                </a>
+            `);
+        }
+        
+        return links.length > 0 ? `<div class="hotel-social-text-links">${links.join('')}</div>` : '';
+    }
+    
     // Format location string
     formatLocation(hotel) {
         return hotel[CONFIG.COLUMNS.LOCATION] || null;
@@ -564,7 +766,7 @@ class SyrianHotels {
                     </div>
                     ${phones.map(phone => `
                         <div class="contact-item">
-                            <a href="tel:${this.escapeHtml(phone)}" class="text-blue-600 hover:underline">
+                            <a href="tel:${this.escapeHtml(phone)}" class="text-blue-600 hover:underline" dir="ltr">
                                 ${this.escapeHtml(phone)}
                             </a>
                         </div>
@@ -591,8 +793,8 @@ class SyrianHotels {
                     </div>
                     ${websites.map(website => `
                         <div class="contact-item">
-                            <a href="${this.escapeHtml(website)}" target="_blank" rel="noopener" class="text-blue-600 hover:underline">
-                                ${this.escapeHtml(website)}
+                            <a href="${this.escapeHtml(website)}" target="_blank" rel="noopener" class="text-blue-600 hover:underline website-link">
+                                <i class="fas fa-globe ml-1"></i> زيارة الموقع
                             </a>
                         </div>
                     `).join('')}
@@ -607,20 +809,35 @@ class SyrianHotels {
     createSocialLinks(hotel) {
         const links = [];
         
-        Object.entries(CONFIG.SOCIAL_PLATFORMS).forEach(([column, platform]) => {
-            const account = hotel[column];
-            if (account) {
-                const url = this.formatSocialUrl(platform.baseUrl, account);
-                const iconName = platform.icon;
-                links.push(`
-                    <a href="${url}" target="_blank" rel="noopener" 
-                       class="contact-link bg-gray-200 hover:bg-[var(--sz-color-accent)] hover:text-white transition-colors" 
-                       title="${this.getSocialPlatformName(column)}">
-                        <i class="${iconName}"></i>
-                    </a>
-                `);
-            }
-        });
+        // Instagram
+        if (hotel[CONFIG.COLUMNS.INSTAGRAM]) {
+            const url = this.formatSocialUrl(CONFIG.SOCIAL_PLATFORMS.instagram.baseUrl, hotel[CONFIG.COLUMNS.INSTAGRAM]);
+            links.push(`
+                <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
+                    <i class="fab fa-instagram ml-1"></i> زيارة صفحة الانستغرام
+                </a>
+            `);
+        }
+        
+        // Facebook
+        if (hotel[CONFIG.COLUMNS.FACEBOOK]) {
+            const url = this.formatSocialUrl(CONFIG.SOCIAL_PLATFORMS.facebook.baseUrl, hotel[CONFIG.COLUMNS.FACEBOOK]);
+            links.push(`
+                <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
+                    <i class="fab fa-facebook ml-1"></i> زيارة صفحة الفيسبوك
+                </a>
+            `);
+        }
+        
+        // X (Twitter)
+        if (hotel[CONFIG.COLUMNS.X_TWITTER]) {
+            const url = this.formatSocialUrl(CONFIG.SOCIAL_PLATFORMS.x_twitter.baseUrl, hotel[CONFIG.COLUMNS.X_TWITTER]);
+            links.push(`
+                <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
+                    <i class="fab fa-x-twitter ml-1"></i> زيارة صفحة X
+                </a>
+            `);
+        }
         
         return links.join('');
     }
@@ -680,9 +897,11 @@ class SyrianHotels {
         this.displayHotels();
         
         // Scroll to show new content
-        const lastCard = this.elements.hotelsGrid.lastElementChild;
-        if (lastCard) {
-            lastCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        const lastElement = this.currentView === 'table' ? 
+            this.elements.hotelsTableBody.lastElementChild : 
+            this.elements.hotelsGrid.lastElementChild;
+        if (lastElement) {
+            lastElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
     }
     
@@ -719,13 +938,18 @@ class SyrianHotels {
         this.isLoading = true;
         this.elements.loadingSpinner.style.display = 'block';
         this.elements.hotelsGrid.style.display = 'none';
+        this.elements.hotelsTable.style.display = 'none';
     }
     
     // Hide loading state
     hideLoading() {
         this.isLoading = false;
         this.elements.loadingSpinner.style.display = 'none';
-        this.elements.hotelsGrid.style.display = 'grid';
+        if (this.currentView === 'table') {
+            this.elements.hotelsTable.style.display = 'block';
+        } else {
+            this.elements.hotelsGrid.style.display = 'grid';
+        }
     }
     
     // Show error message
@@ -733,6 +957,7 @@ class SyrianHotels {
         this.elements.errorMessage.querySelector('p').textContent = message;
         this.elements.errorMessage.style.display = 'block';
         this.elements.hotelsGrid.style.display = 'none';
+        this.elements.hotelsTable.style.display = 'none';
     }
     
     // Hide error message
@@ -744,13 +969,18 @@ class SyrianHotels {
     showNoResults() {
         this.elements.noResults.style.display = 'block';
         this.elements.hotelsGrid.style.display = 'none';
+        this.elements.hotelsTable.style.display = 'none';
         this.elements.loadMoreContainer.style.display = 'none';
     }
     
     // Hide no results message
     hideNoResults() {
         this.elements.noResults.style.display = 'none';
-        this.elements.hotelsGrid.style.display = 'grid';
+        if (this.currentView === 'table') {
+            this.elements.hotelsTable.style.display = 'block';
+        } else {
+            this.elements.hotelsGrid.style.display = 'grid';
+        }
     }
     
     // Cache data in localStorage
@@ -777,6 +1007,8 @@ class SyrianHotels {
                 const age = Date.now() - parseInt(timestamp);
                 if (age < CONFIG.GOOGLE_SHEETS.CACHE_DURATION) {
                     return JSON.parse(cachedData);
+                } else {
+                    this.clearCache();
                 }
             }
         } catch (error) {
@@ -784,6 +1016,16 @@ class SyrianHotels {
         }
         
         return null;
+    }
+    
+    // Clear cache
+    clearCache() {
+        try {
+            localStorage.removeItem(CONFIG.STORAGE_KEYS.CACHED_DATA);
+            localStorage.removeItem(CONFIG.STORAGE_KEYS.CACHE_TIMESTAMP);
+        } catch (error) {
+            console.warn('Failed to clear cache:', error);
+        }
     }
     
     // Toggle back to top button

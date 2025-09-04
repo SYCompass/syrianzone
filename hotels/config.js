@@ -3,11 +3,11 @@ const CONFIG = {
     // Google Sheets Configuration
     GOOGLE_SHEETS: {
         // The Google Sheets file ID from the URL (to be updated with actual hotels sheet)
-        SPREADSHEET_ID: 'YOUR_GOOGLE_SHEETS_ID_HERE',
+        SPREADSHEET_ID: '',
         
         // CSV Export URL (publicly accessible)
         // Syrian Hotels Database
-        CSV_URL: 'YOUR_GOOGLE_SHEETS_CSV_URL_HERE',
+        CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRiqxupguALHTEo8qaY7YNi-kBCsy7sXlUIqYxxHQJrSr9nmNHZTgLZ7G7DAF-wQDnEDp5C8GngQyr1/pub?output=csv',
         
         // Cache duration in milliseconds (5 minutes)
         CACHE_DURATION: 5 * 60 * 1000,

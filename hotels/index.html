@@ -162,6 +162,260 @@
     .footer-link:hover {
       color: var(--sz-color-primary);
     }
+    
+    /* View Toggle Styles */
+    .view-toggle-btn {
+      color: #6b7280;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+      white-space: nowrap;
+    }
+    
+    .view-toggle-btn:hover {
+      color: var(--sz-color-primary);
+      background: rgba(85, 106, 78, 0.1);
+    }
+    
+    .view-toggle-btn.active {
+      color: white;
+      background: var(--sz-color-primary);
+    }
+    
+    /* Mobile-specific toggle button styles */
+    @media (max-width: 640px) {
+      .view-toggle-btn {
+        min-width: 36px;
+        padding: 6px 8px;
+      }
+      
+      .view-toggle-btn i {
+        font-size: 0.875rem;
+      }
+    }
+    
+    /* Table Styles */
+    .hotels-table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    .hotels-table th,
+    .hotels-table td {
+      text-align: right;
+      padding: 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .hotels-table th {
+      background-color: #f9fafb;
+      font-weight: 600;
+      color: #374151;
+    }
+    
+    .hotels-table tbody tr:hover {
+      background-color: #f9fafb;
+    }
+    
+    .hotel-name-cell {
+      font-weight: 600;
+      color: var(--sz-color-primary);
+    }
+    
+    .hotel-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    
+    .hotel-badge {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: #f3f4f6;
+      color: #374151;
+    }
+    
+    .hotel-badge.primary {
+      background: var(--sz-color-primary);
+      color: white;
+    }
+    
+    .hotel-contact-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .hotel-contact-item {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+    
+    .hotel-contact-item a {
+      color: var(--sz-color-primary);
+      text-decoration: none;
+    }
+    
+    .hotel-contact-item a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Phone number styling for LTR display */
+    .hotel-contact-item a[dir="ltr"] {
+      direction: ltr;
+      text-align: left;
+      unicode-bidi: bidi-override;
+    }
+    
+    .contact-item a[dir="ltr"] {
+      direction: ltr;
+      text-align: left;
+      unicode-bidi: bidi-override;
+    }
+    
+    /* Social text links styling */
+    .social-text-link {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      margin: 4px 0;
+      background: #f3f4f6;
+      color: var(--sz-color-primary);
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+    }
+    
+    .social-text-link:hover {
+      background: var(--sz-color-primary);
+      color: white;
+      transform: translateY(-1px);
+    }
+    
+    .social-text-link i {
+      margin-left: 6px;
+    }
+    
+    .website-link {
+      display: inline-flex;
+      align-items: center;
+      color: var(--sz-color-primary);
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+    
+    .website-link:hover {
+      text-decoration: underline;
+    }
+    
+    .website-link i {
+      margin-left: 6px;
+    }
+    
+    .hotel-social-text-links {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    /* Responsive social links */
+    @media (max-width: 768px) {
+      .social-text-link {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+      }
+      
+      .hotel-social-text-links {
+        gap: 2px;
+      }
+    }
+    
+    .hotel-social-links {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .hotel-social-link {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #f3f4f6;
+      color: #6b7280;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    
+    .hotel-social-link:hover {
+      background: var(--sz-color-primary);
+      color: white;
+      transform: scale(1.1);
+    }
+    
+    /* Responsive table */
+    @media (max-width: 768px) {
+      .hotels-table {
+        font-size: 0.875rem;
+      }
+      
+      .hotels-table th,
+      .hotels-table td {
+        padding: 8px 4px;
+      }
+      
+      .hotel-social-links {
+        flex-direction: column;
+        gap: 4px;
+      }
+      
+      .hotel-social-link {
+        width: 28px;
+        height: 28px;
+        font-size: 0.75rem;
+      }
+      
+      /* Mobile view toggle improvements */
+      .view-toggle-btn {
+        font-size: 0.75rem;
+        padding: 4px 6px;
+      }
+      
+      /* Mobile results section */
+      .flex.flex-col.lg\\:flex-row {
+        gap: 1rem;
+      }
+      
+      .flex.flex-col.sm\\:flex-row {
+        gap: 0.75rem;
+      }
+    }
+    
+    /* Extra small mobile devices */
+    @media (max-width: 480px) {
+      .view-toggle-btn {
+        min-width: 32px;
+        padding: 4px 6px;
+        font-size: 0.7rem;
+      }
+      
+      .view-toggle-btn i {
+        font-size: 0.75rem;
+      }
+      
+      .hotels-table th,
+      .hotels-table td {
+        padding: 6px 2px;
+        font-size: 0.8rem;
+      }
+    }
   </style>
   
   <!-- Components -->
@@ -226,16 +480,32 @@
         </div>
         
         <!-- Results Info -->
-        <div class="flex justify-between items-center pt-6 border-t mt-6">
+        <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center pt-6 border-t mt-6 space-y-4 lg:space-y-0">
           <span id="resultsCount" class="text-sm font-medium">جاري تحميل الفنادق...</span>
-          <div class="flex items-center space-x-2">
-            <label for="sortSelect" class="text-sm text-gray-600">ترتيب حسب:</label>
-            <select id="sortSelect" class="flex h-8 rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
-              <option value="name">الاسم (أ-ي)</option>
-              <option value="name-desc">الاسم (ي-أ)</option>
-              <option value="city">المدينة</option>
-              <option value="style">النمط المعماري</option>
-            </select>
+          <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+            <!-- View Toggle -->
+            <div class="flex items-center space-x-2">
+              <label class="text-sm text-gray-600">عرض:</label>
+              <div class="flex bg-gray-100 rounded-lg p-1">
+                <button id="tableViewBtn" class="view-toggle-btn px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md transition-colors" data-view="table">
+                  <i class="fas fa-table ml-1"></i> <span class="hidden sm:inline">جدول</span>
+                </button>
+                <button id="gridViewBtn" class="view-toggle-btn px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md transition-colors" data-view="grid">
+                  <i class="fas fa-th ml-1"></i> <span class="hidden sm:inline">شبكة</span>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Sort -->
+            <div class="flex items-center space-x-2">
+              <label for="sortSelect" class="text-sm text-gray-600">ترتيب حسب:</label>
+              <select id="sortSelect" class="flex h-8 rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
+                <option value="name">الاسم (أ-ي)</option>
+                <option value="name-desc">الاسم (ي-أ)</option>
+                <option value="city">المدينة</option>
+                <option value="style">النمط المعماري</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -266,8 +536,27 @@
           <p class="text-gray-600">جرب تعديل كلمات البحث أو الفلاتر.</p>
         </div>
         
-        <!-- Hotels Grid -->
-        <div id="hotelsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Hotels Table View -->
+        <div id="hotelsTable" class="overflow-x-auto">
+          <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الفندق</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المدينة</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">النمط</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الهاتف</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الموقع</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الروابط</th>
+              </tr>
+            </thead>
+            <tbody id="hotelsTableBody" class="bg-white divide-y divide-gray-200">
+              <!-- Hotel rows will be dynamically inserted here -->
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Hotels Grid View -->
+        <div id="hotelsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style="display: none;">
           <!-- Hotel cards will be dynamically inserted here -->
         </div>
         
