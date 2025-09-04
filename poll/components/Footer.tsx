@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-export default function Footer(): JSX.Element {
+export default function Footer(): React.JSX.Element {
   return (
     <footer className="footer py-6 mt-12 w-full">
       <div className="container mx-auto px-4 text-center">
