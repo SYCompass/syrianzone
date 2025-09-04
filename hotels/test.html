@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotels Test Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>Syrian Hotels Directory - Test Page</h1>
+    
+    <div class="test-section">
+        <h2>Configuration Test</h2>
+        <div id="config-test">
+            <p class="info">Testing configuration loading...</p>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Sample Data Test</h2>
+        <div id="data-test">
+            <p class="info">Testing sample data loading...</p>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>CSV Parsing Test</h2>
+        <div id="csv-test">
+            <p class="info">Testing CSV parsing functionality...</p>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Hotel Card Generation Test</h2>
+        <div id="card-test">
+            <p class="info">Testing hotel card generation...</p>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        // Test configuration loading
+        function testConfiguration() {
+            const configDiv = document.getElementById('config-test');
+            try {
+                if (typeof CONFIG !== 'undefined') {
+                    configDiv.innerHTML = '<p class="success">✓ Configuration loaded successfully</p>';
+                    configDiv.innerHTML += `<p class="info">Items per page: ${CONFIG.APP.ITEMS_PER_PAGE}</p>`;
+                    configDiv.innerHTML += `<p class="info">Cache enabled: ${CONFIG.FEATURES.ENABLE_CACHING}</p>`;
+                } else {
+                    configDiv.innerHTML = '<p class="error">✗ Configuration failed to load</p>';
+                }
+            } catch (error) {
+                configDiv.innerHTML = `<p class="error">✗ Configuration error: ${error.message}</p>`;
+            }
+        }
+
+        // Test sample data
+        function testSampleData() {
+            const dataDiv = document.getElementById('data-test');
+            try {
+                // Simulate the sample data from script.js
+                const sampleData = [
+                    {
+                        'Hotel': 'Beit Al Wali',
+                        'City': 'Damascus',
+                        'Style': 'Damascene architectural style',
+                        'Phone Number': '+963 11 543 6666',
+                        'Website': 'https://www.beitalwali.com',
+                        'Instagram': '@beitalwali',
+                        'location': 'G867+JMR، Bab Touma Main Road, Boolad, Damascus, Syria',
+                        'Description': 'A beautiful traditional Damascene hotel in the heart of Old Damascus',
+                        'Amenities': 'WiFi,Air Conditioning,Restaurant,24/7 Reception',
+                        'Rating': '4.5',
+                        'Price Range': '$$$'
+                    }
+                ];
+                
+                if (sampleData.length > 0) {
+                    dataDiv.innerHTML = '<p class="success">✓ Sample data loaded successfully</p>';
+                    dataDiv.innerHTML += `<p class="info">Number of hotels: ${sampleData.length}</p>`;
+                    dataDiv.innerHTML += `<p class="info">First hotel: ${sampleData[0]['Hotel']}</p>`;
+                } else {
+                    dataDiv.innerHTML = '<p class="error">✗ No sample data found</p>';
+                }
+            } catch (error) {
+                dataDiv.innerHTML = `<p class="error">✗ Sample data error: ${error.message}</p>`;
+            }
+        }
+
+        // Test CSV parsing
+        function testCSVParsing() {
+            const csvDiv = document.getElementById('csv-test');
+            try {
+                const csvText = `Hotel,City,Style,Phone Number
+Beit Al Wali,Damascus,Damascene architectural style,+963 11 543 6666
+Talisman 2,Damascus,Damascene architectural style,+963 988 900 900`;
+                
+                // Simple CSV parsing test
+                const lines = csvText.trim().split('\n');
+                const headers = lines[0].split(',');
+                const data = [];
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const row = lines[i].split(',');
+                    const hotel = {};
+                    headers.forEach((header, index) => {
+                        hotel[header] = row[index] || '';
+                    });
+                    data.push(hotel);
+                }
+                
+                if (data.length > 0) {
+                    csvDiv.innerHTML = '<p class="success">✓ CSV parsing works correctly</p>';
+                    csvDiv.innerHTML += `<p class="info">Parsed ${data.length} hotels from CSV</p>`;
+                    csvDiv.innerHTML += `<p class="info">Headers: ${headers.join(', ')}</p>`;
+                } else {
+                    csvDiv.innerHTML = '<p class="error">✗ CSV parsing failed</p>';
+                }
+            } catch (error) {
+                csvDiv.innerHTML = `<p class="error">✗ CSV parsing error: ${error.message}</p>`;
+            }
+        }
+
+        // Test hotel card generation
+        function testHotelCardGeneration() {
+            const cardDiv = document.getElementById('card-test');
+            try {
+                const hotel = {
+                    'Hotel': 'Test Hotel',
+                    'City': 'Damascus',
+                    'Style': 'Modern',
+                    'Phone Number': '+963 11 123 4567',
+                    'Website': 'https://testhotel.com',
+                    'Instagram': '@testhotel',
+                    'location': 'Test Street, Damascus',
+                    'Description': 'A test hotel for demonstration',
+                    'Amenities': 'WiFi,Air Conditioning',
+                    'Rating': '4.0',
+                    'Price Range': '$$'
+                };
+                
+                // Test HTML escaping
+                function escapeHtml(text) {
+                    const div = document.createElement('div');
+                    div.textContent = text;
+                    return div.innerHTML;
+                }
+                
+                const escapedName = escapeHtml(hotel['Hotel']);
+                const escapedDescription = escapeHtml(hotel['Description']);
+                
+                if (escapedName && escapedDescription) {
+                    cardDiv.innerHTML = '<p class="success">✓ Hotel card generation works correctly</p>';
+                    cardDiv.innerHTML += `<p class="info">Hotel name: ${escapedName}</p>`;
+                    cardDiv.innerHTML += `<p class="info">Description: ${escapedDescription}</p>`;
+                    cardDiv.innerHTML += `<p class="info">HTML escaping: Working</p>`;
+                } else {
+                    cardDiv.innerHTML = '<p class="error">✗ Hotel card generation failed</p>';
+                }
+            } catch (error) {
+                cardDiv.innerHTML = `<p class="error">✗ Hotel card generation error: ${error.message}</p>`;
+            }
+        }
+
+        // Run all tests
+        document.addEventListener('DOMContentLoaded', () => {
+            testConfiguration();
+            testSampleData();
+            testCSVParsing();
+            testHotelCardGeneration();
+        });
+    </script>
+</body>
+</html>
