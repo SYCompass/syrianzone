@@ -105,7 +105,7 @@ class SyrianHotels {
             }
             
             // For now, use sample data if no Google Sheets URL is configured
-            if (CONFIG.GOOGLE_SHEETS.CSV_URL === 'YOUR_GOOGLE_SHEETS_CSV_URL_HERE') {
+            if (CONFIG.GOOGLE_SHEETS.CSV_URL === 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRiqxupguALHTEo8qaY7YNi-kBCsy7sXlUIqYxxHQJrSr9nmNHZTgLZ7G7DAF-wQDnEDp5C8GngQyr1/pub?output=csv') {
                 this.hotels = this.getSampleData();
             } else {
                 // Fetch from Google Sheets
