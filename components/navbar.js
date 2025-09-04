@@ -117,9 +117,10 @@ class NavBar extends HTMLElement {
             top: 0;
             right: 0;
             left: 0;
+            z-index: 1000;
           }
-          :host {
-            margin-bottom: 4rem;
+          .navbar-spacer {
+            padding-top: 3rem;
           }
           .mobile-header {
             display: flex;
@@ -259,6 +260,7 @@ class NavBar extends HTMLElement {
           </div>
         </div>
       </nav>
+      <div class="navbar-spacer"></div>
     `;
   }
 }
