@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+:root {
+	--sz-color-primary: #2563eb;
+	--sz-color-accent: #1d4ed8;
+	--sz-color-ink: #0f172a;
+	--sz-color-surface: #ffffff;
+}
+
+html {
+	direction: rtl;
+	font-family: var(--font-ibm-plex-sans-arabic), system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.dark {
+	--sz-color-primary: #3b82f6;
+	--sz-color-accent: #2563eb;
+	--sz-color-ink: #e5e7eb;
+	--sz-color-surface: #0b0b0b;
+}
+
+/* Capture-safe override for html2canvas: avoid lab()/oklch() colors by forcing hex */
+.capture-safe,
+.capture-safe body {
+	color: #111 !important;
+	background-color: #ffffff !important;
+}
+
+.capture-safe * {
+	color: #111 !important;
+	background: none !important;
+	background-color: transparent !important;
+	border-color: #e5e7eb !important;
+}
+
+.capture-safe [data-capture-root] {
+	background-color: #ffffff !important;
+}
+
+/* Common backgrounds used */
+.capture-safe .bg-white { background-color: #ffffff !important; }
+.capture-safe .bg-gray-50 { background-color: #f9fafb !important; }
+.capture-safe .bg-gray-100 { background-color: #f3f4f6 !important; }
+.capture-safe .bg-gray-700 { background-color: #374151 !important; }
+.capture-safe .text-white { color: #ffffff !important; }
+
