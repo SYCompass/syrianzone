@@ -46,9 +46,10 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   const [submitStatus, setSubmitStatus] = useState<{ ok: boolean; message: string; description?: string } | null>(null);
 
   useEffect(() => {
-    const url = new URL(window.location.origin + "/api/ws");
+    const url = new URL("/api/ws", window.location.origin);
     url.searchParams.set("channel", `poll:${pollId}:${voteDay}`);
-    const ws = new WebSocket(url);
+    url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
+    const ws = new WebSocket(url.toString());
     ws.onmessage = (ev) => {
       // In a real app, merge deltas into ranking UI. Keeping minimal here.
       // console.log(JSON.parse(ev.data));

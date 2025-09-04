@@ -1,7 +1,9 @@
 import "./globals.css";
-import { Alexandria } from "next/font/google";
+import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import { ReactNode } from "react";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -10,17 +12,21 @@ export const metadata = {
   description: "Vote S–F tiers for ministers",
 };
 
-const alexandria = Alexandria({
+const ibmPlex = IBM_Plex_Sans_Arabic({
   subsets: ["arabic"],
-  weight: ["100","200","300","400","500","600","700","800","900"],
-  variable: "--font-alexandria",
+  weight: ["100","200","300","400","500","600","700"],
+  variable: "--font-ibm-plex-sans-arabic",
 });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning className={alexandria.variable}>
+    <html lang="ar" dir="rtl" suppressHydrationWarning className={ibmPlex.variable}>
+      <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+      </head>
       <body className={`bg-gray-100 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100`}>
         <ThemeProvider>
+          <NavBar />
           <div className="container mx-auto px-4 py-4 flex justify-end gap-2 items-center">
             <Button asChild variant="outline">
               <Link href="/">تير ليست</Link>
@@ -30,6 +36,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </Button>
           </div>
           {children}
+          <Footer />
           {/* Turnstile hidden input for token retrieval */}
           <input id="cf-turnstile-token" type="hidden" />
           <script
