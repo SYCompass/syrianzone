@@ -259,7 +259,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
 
       <div className="flex gap-3 justify-center mt-6 p-4">
         <Button onClick={submit}>إرسال</Button>
-        <Button variant="secondary" onClick={saveImage}>حفظ كصورة</Button>
+        {/* <Button variant="secondary" onClick={saveImage}>حفظ كصورة</Button> */}
       </div>
       {submitStatus && (
         <div className="px-4 pb-2">
