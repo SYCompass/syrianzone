@@ -38,6 +38,9 @@ const tierHex: Record<TierKey, { label: string; area: string; border: string }> 
   F: { label: "#1f2937", area: "#f3f4f6", border: "#d1d5db" },
 };
 
+// Public base path used when the app is hosted under a sub-path (e.g., /tierlist)
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 export default function TierBoard({ initialCandidates, pollId, voteDay }: Props) {
   const [tiers, setTiers] = useState<Record<TierKey, Candidate[]>>({ S: [], A: [], B: [], C: [], D: [], F: [] });
   const [bank, setBank] = useState<Candidate[]>(initialCandidates);
@@ -46,7 +49,8 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   const [submitStatus, setSubmitStatus] = useState<{ ok: boolean; message: string; description?: string } | null>(null);
 
   useEffect(() => {
-    const url = new URL("/api/ws", window.location.origin);
+    const wsPath = `${BASE_PATH}/api/ws`;
+    const url = new URL(wsPath, window.location.href);
     url.searchParams.set("channel", `poll:${pollId}:${voteDay}`);
     url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
     const ws = new WebSocket(url.toString());
@@ -123,7 +127,8 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
         tierKeys.map((k) => [k, tiers[k].map((c, idx) => ({ candidateId: c.id, pos: idx }))])
       ),
     } as any;
-    const res = await fetch("/api/submit", {
+    const submitPath = `${BASE_PATH}/api/submit`;
+    const res = await fetch(submitPath, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(payload),
