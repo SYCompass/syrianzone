@@ -14,6 +14,7 @@ export const candidates = pgTable("candidates", {
   id: varchar("id", { length: 36 }).primaryKey(),
   pollId: varchar("poll_id", { length: 36 }).notNull().references(() => polls.id, { onDelete: "cascade" }),
   name: varchar("name", { length: 200 }).notNull(),
+  title: varchar("title", { length: 200 }),
   imageUrl: text("image_url"),
   sort: integer("sort").notNull().default(0),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

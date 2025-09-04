@@ -23,10 +23,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ThemeProvider>
           <div className="container mx-auto px-4 py-4 flex justify-end gap-2 items-center">
             <Button asChild variant="outline">
-              <Link href="/">تيرليست</Link>
+              <Link href="/">تير ليست</Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/leaderboard">لوحة الصدارة</Link>
+              <Link href="/leaderboard">قائمة الصدارة</Link>
             </Button>
           </div>
           {children}

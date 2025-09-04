@@ -1,13 +1,13 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
-import html2canvas from "html2canvas";
+import * as htmlToImage from "html-to-image";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle2Icon, AlertCircleIcon } from "lucide-react";
 
-type Candidate = { id: string; name: string; imageUrl: string | null };
+type Candidate = { id: string; name: string; title?: string | null; imageUrl: string | null };
 
 type Props = {
   initialCandidates: Candidate[];
@@ -18,6 +18,25 @@ type Props = {
 type TierKey = "S" | "A" | "B" | "C" | "D" | "F";
 
 const tierKeys: TierKey[] = ["S", "A", "B", "C", "D", "F"];
+
+const tierStyles: Record<TierKey, { label: string; area: string; border: string }> = {
+  S: { label: "bg-rose-600", area: "bg-rose-50", border: "border-rose-200" },
+  A: { label: "bg-amber-600", area: "bg-amber-50", border: "border-amber-200" },
+  B: { label: "bg-emerald-600", area: "bg-emerald-50", border: "border-emerald-200" },
+  C: { label: "bg-sky-600", area: "bg-sky-50", border: "border-sky-200" },
+  D: { label: "bg-violet-600", area: "bg-violet-50", border: "border-violet-200" },
+  F: { label: "bg-gray-800", area: "bg-gray-100", border: "border-gray-300" },
+};
+
+// Hex colors for safe capture (Tailwind equivalents)
+const tierHex: Record<TierKey, { label: string; area: string; border: string }> = {
+  S: { label: "#e11d48", area: "#fff1f2", border: "#fecdd3" },
+  A: { label: "#d97706", area: "#fffbeb", border: "#fde68a" },
+  B: { label: "#059669", area: "#ecfdf5", border: "#a7f3d0" },
+  C: { label: "#0284c7", area: "#f0f9ff", border: "#bae6fd" },
+  D: { label: "#7c3aed", area: "#f5f3ff", border: "#ddd6fe" },
+  F: { label: "#1f2937", area: "#f3f4f6", border: "#d1d5db" },
+};
 
 export default function TierBoard({ initialCandidates, pollId, voteDay }: Props) {
   const [tiers, setTiers] = useState<Record<TierKey, Candidate[]>>({ S: [], A: [], B: [], C: [], D: [], F: [] });
@@ -81,6 +100,17 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   }
 
   async function submit() {
+    // Prevent submitting if not all candidates are tierlisted
+    const remaining = bank.length;
+    if (remaining > 0) {
+      setSubmitStatus({
+        ok: false,
+        message: "يرجى توزيع جميع الأسماء قبل الإرسال",
+        description: `المتبقي: ${remaining} في قائمة الوزراء` ,
+      });
+      return;
+    }
+
     const cfToken = (document.getElementById("cf-turnstile-token") as HTMLInputElement | null)?.value || "";
     const deviceId = localStorage.getItem("deviceId") || crypto.randomUUID();
     localStorage.setItem("deviceId", deviceId);
@@ -103,38 +133,54 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
 
   async function saveImage() {
     if (!containerRef.current) return;
-    const el = containerRef.current;
-    const rect = el.getBoundingClientRect();
-    const width = Math.ceil(el.scrollWidth || el.offsetWidth);
-    const height = Math.ceil(el.scrollHeight || el.offsetHeight);
+    const src = containerRef.current;
 
-    const canvas = await html2canvas(el, {
-      backgroundColor: "#ffffff",
-      useCORS: true,
-      foreignObjectRendering: false,
-      scrollX: -window.scrollX,
-      scrollY: -window.scrollY,
-      windowWidth: Math.max(document.documentElement.scrollWidth, rect.left + width),
-      windowHeight: Math.max(document.documentElement.scrollHeight, rect.top + height),
-      width,
-      height,
-      onclone: (doc) => {
-        doc.documentElement.classList.add("capture-safe");
-        doc.body.classList.add("capture-safe");
-        const root = doc.querySelector("[data-capture-root]") as HTMLElement | null;
-        if (root) {
-          root.classList.add("capture-safe");
-          root.style.backgroundColor = "#ffffff";
-        }
-      },
-      logging: false,
-      removeContainer: true,
-    });
+    // Measure full content size
+    const contentWidth = Math.ceil(src.scrollWidth || src.offsetWidth);
+    const contentHeight = Math.ceil(src.scrollHeight || src.offsetHeight);
+    const pad = 16; // add padding to avoid edge cropping
 
-    const link = document.createElement("a");
-    link.download = "tierlist.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
+    // Create offscreen wrapper and clone
+    const wrapper = document.createElement("div");
+    wrapper.style.position = "fixed";
+    wrapper.style.top = "0";
+    wrapper.style.left = "-100000px";
+    wrapper.style.backgroundColor = "#ffffff";
+    wrapper.style.padding = `${pad}px`;
+    wrapper.style.width = `${contentWidth + pad * 2}px`;
+    wrapper.style.height = `${contentHeight + pad * 2}px`;
+    wrapper.style.boxSizing = "border-box";
+
+    const clone = src.cloneNode(true) as HTMLElement;
+    clone.style.margin = "0"; // prevent mx-auto centering from affecting layout
+    clone.style.width = `${contentWidth}px`;
+    clone.style.height = `${contentHeight}px`;
+    clone.style.maxWidth = "none";
+    clone.setAttribute("data-capture-root", "");
+    wrapper.appendChild(clone);
+    document.body.appendChild(wrapper);
+
+    try {
+      await (document as any).fonts?.ready;
+      const dataUrl = await htmlToImage.toPng(wrapper, {
+        cacheBust: true,
+        backgroundColor: "#ffffff",
+        pixelRatio: 2,
+        width: contentWidth + pad * 2,
+        height: contentHeight + pad * 2,
+        style: {
+          width: `${contentWidth + pad * 2}px`,
+          height: `${contentHeight + pad * 2}px`,
+          backgroundColor: "#ffffff",
+        },
+      });
+      const link = document.createElement("a");
+      link.download = "tierlist.png";
+      link.href = dataUrl;
+      link.click();
+    } finally {
+      document.body.removeChild(wrapper);
+    }
   }
 
   return (
@@ -146,9 +192,10 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
         className="mb-4 p-2 bg-gray-100 border rounded"
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => handleDrop(e, "bank")}
+        data-bank-area
       >
         <h2 className="font-bold text-center">قائمة الوزراء</h2>
-        <div className="flex flex-wrap gap-2 p-2">
+        <div className="flex flex-wrap justify-center gap-2 p-2">
           {bank.map((c) => {
             const selected = selectedId === c.id;
             return (
@@ -157,10 +204,14 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
                 draggable
                 onDragStart={(e) => handleDragStart(e, c.id)}
                 onClick={() => setSelectedId(selected ? null : c.id)}
-                className={`flex items-center gap-2 outline ${selected ? "outline-2 outline-blue-600" : "outline-none"}`}
+                className={`flex flex-col items-center gap-1 outline ${selected ? "!bg-gray-900 hover:!bg-gray-900 !text-white outline-2 outline-white" : "outline-none"} w-[120px]`}
+                data-selected={selected ? "1" : undefined}
               >
-                <Avatar src={c.imageUrl || ""} alt={c.name} size={36} />
-                <span className="text-xs text-right max-w-[160px] leading-tight">{c.name}</span>
+                <Avatar src={c.imageUrl || ""} alt={c.name} size={48} className="mb-1" />
+                <span className="text-xs text-center leading-tight">{c.name}</span>
+                {c.title ? (
+                  <span className={`text-[11px] text-gray-600 text-center leading-tight ${selected ? "!text-white" : ""}`}>{c.title}</span>
+                ) : null}
               </Button>
             );
           })}
@@ -169,11 +220,12 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
 
       {tierKeys.map((k) => (
         <div key={k} className="flex mb-1">
-          <div className="w-20 min-h-[165px] bg-gray-700 text-white text-xl font-bold flex items-center justify-center rounded-r">
+          <div data-tier-label={k} className={`w-20 min-h-[165px] ${tierStyles[k].label} text-white text-xl font-bold flex items-center justify-center rounded-r`}>
             {k}
           </div>
           <div
-            className="flex flex-wrap min-h-[165px] flex-grow p-2 border-2 border-dashed border-gray-300 bg-gray-50 rounded-l"
+            data-tier-area={k}
+            className={`flex flex-wrap justify-center min-h-[165px] flex-grow p-2 border-2 border-dashed ${tierStyles[k].border} ${tierStyles[k].area} rounded-l`}
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => handleDrop(e, k)}
             onClick={() => selectedId && moveCandidateTo(selectedId, k)}
@@ -189,10 +241,14 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
                     e.stopPropagation();
                     setSelectedId(selected ? null : c.id);
                   }}
-                  className={`flex items-center gap-2 mr-2 mb-2 outline ${selected ? "outline-2 outline-blue-600" : "outline-none"}`}
+                  className={`flex flex-col items-center gap-1 mr-2 mb-2 outline ${selected ? "!bg-gray-900 hover:!bg-gray-900 !text-white outline-2 outline-white" : "outline-none"} w-[120px]`}
+                  data-selected={selected ? "1" : undefined}
                 >
-                  <Avatar src={c.imageUrl || ""} alt={c.name} size={36} />
-                  <span className="text-xs text-right max-w-[160px] leading-tight">{c.name}</span>
+                  <Avatar src={c.imageUrl || ""} alt={c.name} size={48} className="mb-1" />
+                  <span className="text-xs text-center leading-tight">{c.name}</span>
+                  {c.title ? (
+                    <span className="text-[11px] text-gray-600 text-center leading-tight">{c.title}</span>
+                  ) : null}
                 </Button>
               );
             })}
@@ -220,7 +276,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
         </div>
       )}
     </Card>
-    
   );
 }
 
