@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle2Icon, AlertCircleIcon } from "lucide-react";
+import * as htmlToImage from "html-to-image";
 
 type Candidate = { id: string; name: string; title?: string | null; imageUrl: string | null };
 
@@ -101,17 +102,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   }
 
   async function submit() {
-    // Prevent submitting if not all candidates are tierlisted
-    const remaining = bank.length;
-    if (remaining > 0) {
-      setSubmitStatus({
-        ok: false,
-        message: "يرجى توزيع جميع الأسماء قبل الإرسال",
-        description: `المتبقي: ${remaining} في قائمة الوزراء` ,
-      });
-      return;
-    }
-
     setIsSubmitting(true);
     const cfToken = (document.getElementById("cf-turnstile-token") as HTMLInputElement | null)?.value || "";
     const deviceId = localStorage.getItem("deviceId") || crypto.randomUUID();
@@ -157,57 +147,31 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     }
   }
 
-  /* async function saveImage() {
+  async function saveImage() {
     if (!containerRef.current) return;
     const src = containerRef.current;
 
-    // Measure full content size
+    // Use the live node to avoid lazy-loading/offscreen clone issues.
     const contentWidth = Math.ceil(src.scrollWidth || src.offsetWidth);
     const contentHeight = Math.ceil(src.scrollHeight || src.offsetHeight);
-    const pad = 16; // add padding to avoid edge cropping
 
-    // Create offscreen wrapper and clone
-    const wrapper = document.createElement("div");
-    wrapper.style.position = "fixed";
-    wrapper.style.top = "0";
-    wrapper.style.left = "-100000px";
-    wrapper.style.backgroundColor = "#ffffff";
-    wrapper.style.padding = `${pad}px`;
-    wrapper.style.width = `${contentWidth + pad * 2}px`;
-    wrapper.style.height = `${contentHeight + pad * 2}px`;
-    wrapper.style.boxSizing = "border-box";
-
-    const clone = src.cloneNode(true) as HTMLElement;
-    clone.style.margin = "0"; // prevent mx-auto centering from affecting layout
-    clone.style.width = `${contentWidth}px`;
-    clone.style.height = `${contentHeight}px`;
-    clone.style.maxWidth = "none";
-    clone.setAttribute("data-capture-root", "");
-    wrapper.appendChild(clone);
-    document.body.appendChild(wrapper);
-
-    try {
-      await (document as any).fonts?.ready;
-      const dataUrl = await htmlToImage.toPng(wrapper, {
-        cacheBust: true,
+    await (document as any).fonts?.ready;
+    const dataUrl = await htmlToImage.toPng(src, {
+      cacheBust: true,
+      backgroundColor: "#ffffff",
+      pixelRatio: 2,
+      width: contentWidth,
+      height: contentHeight,
+      skipFonts: true,
+      style: {
         backgroundColor: "#ffffff",
-        pixelRatio: 2,
-        width: contentWidth + pad * 2,
-        height: contentHeight + pad * 2,
-        style: {
-          width: `${contentWidth + pad * 2}px`,
-          height: `${contentHeight + pad * 2}px`,
-          backgroundColor: "#ffffff",
-        },
-      });
-      const link = document.createElement("a");
-      link.download = "tierlist.png";
-      link.href = dataUrl;
-      link.click();
-    } finally {
-      document.body.removeChild(wrapper);
-    }
-  } */
+      },
+    });
+    const link = document.createElement("a");
+    link.download = "tierlist.png";
+    link.href = dataUrl;
+    link.click();
+  }
 
   return (
     <Card ref={containerRef} className="max-w-screen-lg mx-auto p-4" data-capture-root>
@@ -286,7 +250,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
 
       <div className="flex gap-3 justify-center mt-6 p-4">
         <Button onClick={submit} disabled={isSubmitting}>إرسال</Button>
-        {/* <Button variant="secondary" onClick={saveImage}>حفظ كصورة</Button> */}
+        <Button variant="secondary" onClick={saveImage} disabled={isSubmitting}>حفظ كصورة</Button>
       </div>
       {submitStatus && (
         <div className="px-4 pb-2">

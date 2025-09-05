@@ -12,6 +12,7 @@ export function Avatar({ className, size = 36, alt = "", src, ...rest }: Props) 
       height={size}
       src={src ?? ""}
       alt={alt}
+      unoptimized
       {...rest}
     />
   );
