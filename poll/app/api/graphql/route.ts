@@ -1,4 +1,5 @@
 import { createYoga, createSchema } from "graphql-yoga";
+import type { NextRequest } from "next/server";
 import { db } from "@/db";
 import { polls, candidates, dailyScores, dailyRanks } from "@/db/schema";
 import { and, desc, eq } from "drizzle-orm";
@@ -79,6 +80,12 @@ const yoga = createYoga({
   },
 });
 
-export { yoga as GET, yoga as POST };
+export async function GET(request: NextRequest) {
+  return yoga(request);
+}
+
+export async function POST(request: NextRequest) {
+  return yoga(request);
+}
 
 
