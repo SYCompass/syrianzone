@@ -1,0 +1,43 @@
+name: Build poll app
+
+on:
+  push:
+    paths:
+      - 'poll/**'
+      - '.github/workflows/poll-build.yml'
+  pull_request:
+    paths:
+      - 'poll/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: poll
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: poll/pnpm-lock.yaml
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build (Next.js)
+        env:
+          NODE_ENV: production
+          NEXT_TELEMETRY_DISABLED: '1'
+          # Provide a dummy DB URL to satisfy imports that read env during build
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+        run: pnpm run build
+
+
