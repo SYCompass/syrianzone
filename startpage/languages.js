@@ -47,6 +47,11 @@ const languages = {
             "fog": "ضباب كثيف",
             "haze": "ضباب خفيف"
         },
+
+        clockSettings: "إعدادات الساعة",
+        timeFormat: "تنسيق الوقت:",
+        format12: "12 ساعة",
+        format24: "24 ساعة",
         
         // Links Section
         quickLinks: "روابط سريعة",
@@ -160,6 +165,11 @@ const languages = {
             "fog": "fog",
             "haze": "haze"
         },
+
+        clockSettings: "Clock Settings",
+        timeFormat: "Time Format:",
+        format12: "12 Hour",
+        format24: "24 Hour",
         
         // Links Section
         quickLinks: "Quick Links",
