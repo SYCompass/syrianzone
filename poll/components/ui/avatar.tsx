@@ -7,7 +7,7 @@ export function Avatar({ className, size = 36, alt = "", src, ...rest }: Props) 
   return (
     <img
       className={cn("rounded-full object-cover", className)}
-      style={{ width: size, height: size, WebkitUserDrag: "none", userSelect: "none" as const, pointerEvents: "none" as const }}
+      style={{ width: size, height: size, userSelect: "none" as const, pointerEvents: "none" as const }}
       width={size}
       height={size}
       src={src ?? ""}
