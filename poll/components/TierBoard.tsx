@@ -326,6 +326,11 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       link.download = "tier-list.png";
       link.href = canvas.toDataURL("image/png");
       link.click();
+
+      // After successful save: reset tiers and return all candidates to bank
+      setBank(initialCandidates);
+      setTiers(createEmptyTiers());
+      setSelectedId(null);
     } catch (error) {
       console.error("Error generating canvas:", error);
       alert("عذراً، حدث خطأ أثناء حفظ الصورة.");
