@@ -32,7 +32,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert
   );
 });
 
-export const AlertTitle = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(function AlertTitle(
+export const AlertTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(function AlertTitle(
   { className, ...props },
   ref
 ) {
