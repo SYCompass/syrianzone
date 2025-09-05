@@ -159,6 +159,8 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     if (!tiersRef.current) return;
     const src = tiersRef.current;
 
+    const iOS = isIOSSafari();
+
     // Ensure all images inside the capture area are fully loaded
     const images = Array.from(src.querySelectorAll("img"));
     await Promise.all(
@@ -181,6 +183,34 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
 
     let dataUrl: string;
     if (isIOSSafari()) {
+      // Inline images as blob URLs to avoid iOS Safari canvas omissions
+      const imgs = Array.from(src.querySelectorAll<HTMLImageElement>("img[src]"));
+      const restorers: Array<() => void> = [];
+      try {
+        await Promise.all(
+          imgs.map(async (img) => {
+            const originalSrc = img.getAttribute("src") || "";
+            if (!originalSrc || originalSrc.startsWith("data:")) return;
+            try {
+              const absUrl = new URL(originalSrc, window.location.href).toString();
+              const resp = await fetch(absUrl, { mode: "cors", credentials: "omit", cache: "no-store" });
+              if (!resp.ok) return;
+              const blob = await resp.blob();
+              const blobUrl = URL.createObjectURL(blob);
+              img.setAttribute("data-original-src", originalSrc);
+              img.src = blobUrl;
+              restorers.push(() => {
+                try { URL.revokeObjectURL(blobUrl); } catch {}
+                img.src = originalSrc;
+                img.removeAttribute("data-original-src");
+              });
+            } catch {
+              // ignore and let html2canvas attempt CORS rendering
+            }
+          })
+        );
+      } catch {}
+
       const canvas = await html2canvas(src, {
         backgroundColor: "#ffffff",
         scale: 2,
@@ -193,6 +223,9 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
         windowHeight: contentHeight,
       });
       dataUrl = canvas.toDataURL("image/png");
+
+      // Restore original images and revoke object URLs
+      restorers.forEach((fn) => fn());
     } else {
       dataUrl = await htmlToImage.toPng(src, {
         cacheBust: true,
@@ -207,10 +240,15 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
         },
       });
     }
-    const link = document.createElement("a");
-    link.download = "tierlist.png";
-    link.href = dataUrl;
-    link.click();
+    if (iOS) {
+      // Open image in the same tab on iOS (no new tab)
+      window.location.href = dataUrl;
+    } else {
+      const link = document.createElement("a");
+      link.download = "tierlist.png";
+      link.href = dataUrl;
+      link.click();
+    }
   }
 
   return (
@@ -291,8 +329,8 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       </div>
 
       <div className="flex gap-3 justify-center mt-6 p-4">
-        <Button onClick={submit} disabled={isSubmitting}>إرسال</Button>
-        <Button variant="secondary" onClick={saveImage} disabled={isSubmitting}>حفظ كصورة</Button>
+        <Button type="button" onClick={submit} disabled={isSubmitting}>إرسال</Button>
+        <Button type="button" variant="secondary" onClick={saveImage} disabled={isSubmitting}>حفظ كصورة</Button>
       </div>
       {submitStatus && (
         <div className="px-4 pb-2">
