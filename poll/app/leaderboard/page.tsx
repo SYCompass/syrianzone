@@ -167,7 +167,7 @@ export default async function Page() {
       <div className="max-w-screen-md mx-auto">
         {/* Daily leaderboard */}
         <h2 className="font-semibold mb-2">ترتيب اليوم</h2>
-        <p className="text-sm text-gray-500 mb-2">{new Date().toLocaleDateString("ar-SA", { year: "numeric", month: "long", day: "numeric" })}</p>
+        <p className="text-sm text-gray-500 mb-2">{new Date().toLocaleDateString("ar-EG", { year: "numeric", month: "long", day: "numeric" })}</p>
         <Card>
           <CardContent>
             <Table>
@@ -203,7 +203,7 @@ export default async function Page() {
       {/* Top 3 of the month */}
       <div className="max-w-screen-md mx-auto mt-6">
         <h2 className="font-semibold mb-2">أفضل وزراء الشهر</h2>
-        <p className="text-sm text-gray-500 mb-2">{new Date().toLocaleDateString("ar-SA", { year: "numeric", month: "long" })}</p>
+        <p className="text-sm text-gray-500 mb-2">{new Date().toLocaleDateString("ar-EG", { year: "numeric", month: "long" })}</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {month.best.slice(0, 3).map((r) => (
             <Card key={r.candidateId}>
@@ -222,7 +222,7 @@ export default async function Page() {
       {/* Worst 3 of the month */}
       <div className="max-w-screen-md mx-auto mt-4">
         <h2 className="font-semibold mb-2">أسوأ وزراء الشهر</h2>
-        <p className="text-sm text-gray-500 mb-2">{new Date().toLocaleDateString("ar-SA", { year: "numeric", month: "long" })}</p>
+        <p className="text-sm text-gray-500 mb-2">{new Date().toLocaleDateString("ar-EG", { year: "numeric", month: "long" })}</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {month.worst.slice(0, 3).map((r) => (
             <Card key={r.candidateId}>
