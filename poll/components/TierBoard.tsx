@@ -38,6 +38,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   const [bank, setBank] = useState<Candidate[]>(initialCandidates);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const tiersRef = useRef<HTMLDivElement>(null);
   const [submitStatus, setSubmitStatus] = useState<{ ok: boolean; message: string; description?: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -147,8 +148,8 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   }
 
   async function saveImage() {
-    if (!containerRef.current) return;
-    const src = containerRef.current;
+    if (!tiersRef.current) return;
+    const src = tiersRef.current;
 
     // Use the live node to avoid lazy-loading/offscreen clone issues.
     const contentWidth = Math.ceil(src.scrollWidth || src.offsetWidth);
@@ -208,44 +209,46 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
         </div>
       </div>
 
-      {tierKeys.map((k) => (
-        <div key={k} className="flex mb-1">
-          <div data-tier-label={k} className={`w-20 min-h-[165px] ${tierStyles[k].label} text-white text-xl font-bold flex items-center justify-center rounded-r`}>
-            {k}
+      <div ref={tiersRef} data-capture-target>
+        {tierKeys.map((k) => (
+          <div key={k} className="flex mb-1">
+            <div data-tier-label={k} className={`w-20 min-h-[165px] ${tierStyles[k].label} text-white text-xl font-bold flex items-center justify-center rounded-r`}>
+              {k}
+            </div>
+            <div
+              data-tier-area={k}
+              className={`flex flex-wrap justify-center min-h-[165px] flex-grow p-2 border-2 border-dashed ${tierStyles[k].border} ${tierStyles[k].area} rounded-l`}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => handleDrop(e, k)}
+              onClick={() => selectedId && moveCandidateTo(selectedId, k)}
+            >
+              {tiers[k].map((c) => {
+                const selected = selectedId === c.id;
+                return (
+                  <Button
+                    key={c.id}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, c.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedId(selected ? null : c.id);
+                    }}
+                    className={`flex flex-col items-center gap-1 mr-2 mb-2 outline ${selected ? "!bg-gray-900 hover:!bg-gray-900 !text-white outline-2 outline-white" : "outline-none"} w-[120px]`}
+                    data-selected={selected ? "1" : undefined}
+                    disabled={isSubmitting}
+                  >
+                    <Avatar src={c.imageUrl || ""} alt={c.name} size={48} className="mb-1" />
+                    <span className="text-xs text-center leading-tight">{c.name}</span>
+                    {c.title ? (
+                      <span className="text-[11px] text-gray-600 text-center leading-tight">{c.title}</span>
+                    ) : null}
+                  </Button>
+                );
+              })}
+            </div>
           </div>
-          <div
-            data-tier-area={k}
-            className={`flex flex-wrap justify-center min-h-[165px] flex-grow p-2 border-2 border-dashed ${tierStyles[k].border} ${tierStyles[k].area} rounded-l`}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => handleDrop(e, k)}
-            onClick={() => selectedId && moveCandidateTo(selectedId, k)}
-          >
-            {tiers[k].map((c) => {
-              const selected = selectedId === c.id;
-              return (
-                <Button
-                  key={c.id}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, c.id)}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedId(selected ? null : c.id);
-                  }}
-                  className={`flex flex-col items-center gap-1 mr-2 mb-2 outline ${selected ? "!bg-gray-900 hover:!bg-gray-900 !text-white outline-2 outline-white" : "outline-none"} w-[120px]`}
-                  data-selected={selected ? "1" : undefined}
-                  disabled={isSubmitting}
-                >
-                  <Avatar src={c.imageUrl || ""} alt={c.name} size={48} className="mb-1" />
-                  <span className="text-xs text-center leading-tight">{c.name}</span>
-                  {c.title ? (
-                    <span className="text-[11px] text-gray-600 text-center leading-tight">{c.title}</span>
-                  ) : null}
-                </Button>
-              );
-            })}
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
       <div className="flex gap-3 justify-center mt-6 p-4">
         <Button onClick={submit} disabled={isSubmitting}>إرسال</Button>
