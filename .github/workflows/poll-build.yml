@@ -29,11 +29,14 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10
+          version: 10.15.1
           run_install: false
 
-      - name: Enable Corepack
-        run: corepack enable
+      - name: Ensure pnpm available
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.15.1 --activate
+          pnpm --version
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
