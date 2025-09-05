@@ -41,6 +41,10 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   const tiersRef = useRef<HTMLDivElement>(null);
   const [submitStatus, setSubmitStatus] = useState<{ ok: boolean; message: string; description?: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [nextSubmitAt, setNextSubmitAt] = useState<number | null>(null);
+  const [now, setNow] = useState<number>(Date.now());
+
+  const cooldownKey = `submitCooldown:${pollId}:${voteDay}`;
 
   
 
@@ -60,6 +64,35 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     };
     return () => ws.close();
   }, [pollId, voteDay]);
+
+  // Load existing cooldown from storage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem(cooldownKey);
+    if (stored) {
+      const ts = parseInt(stored, 10);
+      if (!Number.isNaN(ts) && ts > Date.now()) {
+        setNextSubmitAt(ts);
+      } else if (!Number.isNaN(ts)) {
+        localStorage.removeItem(cooldownKey);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Tick while cooldown is active
+  useEffect(() => {
+    if (!nextSubmitAt) return;
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [nextSubmitAt]);
+
+  // Auto-clear cooldown when it expires
+  useEffect(() => {
+    if (nextSubmitAt && now >= nextSubmitAt) {
+      setNextSubmitAt(null);
+      localStorage.removeItem(cooldownKey);
+    }
+  }, [now, nextSubmitAt, cooldownKey]);
 
   useEffect(() => {
     if (!submitStatus) return;
@@ -105,6 +138,20 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   }
 
   async function submit() {
+    // Require at least one candidate to be placed in any tier
+    const totalAssigned = tierKeys.reduce((acc, k) => acc + tiers[k].length, 0);
+    if (totalAssigned === 0) {
+      setSubmitStatus({ ok: false, message: "ضع وزيرًا واحدًا على الأقل ضمن أحد المستويات قبل الإرسال" });
+      return;
+    }
+    // Block if cooldown is active
+    if (nextSubmitAt && Date.now() < nextSubmitAt) {
+      const seconds = Math.ceil((nextSubmitAt - Date.now()) / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const rem = seconds % 60;
+      setSubmitStatus({ ok: false, message: `الرجاء الانتظار ${minutes}:${rem.toString().padStart(2, "0")} قبل إرسال تصويت آخر` });
+      return;
+    }
     setIsSubmitting(true);
     const cfToken = (document.getElementById("cf-turnstile-token") as HTMLInputElement | null)?.value || "";
     const deviceId = localStorage.getItem("deviceId") || crypto.randomUUID();
@@ -145,6 +192,10 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       setBank(initialCandidates);
       setTiers(createEmptyTiers());
       setSelectedId(null);
+      // Start cooldown for 3 minutes
+      const ts = Date.now() + 1 * 60 * 1000;
+      setNextSubmitAt(ts);
+      localStorage.setItem(cooldownKey, String(ts));
       setIsSubmitting(false);
     }
   }
