@@ -38,6 +38,11 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [submitStatus, setSubmitStatus] = useState<{ ok: boolean; message: string; description?: string } | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  function createEmptyTiers(): Record<TierKey, Candidate[]> {
+    return { S: [], A: [], B: [], C: [], D: [], F: [] };
+  }
 
   useEffect(() => {
     const wsPath = `${BASE_PATH}/api/ws`;
@@ -107,6 +112,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       return;
     }
 
+    setIsSubmitting(true);
     const cfToken = (document.getElementById("cf-turnstile-token") as HTMLInputElement | null)?.value || "";
     const deviceId = localStorage.getItem("deviceId") || crypto.randomUUID();
     localStorage.setItem("deviceId", deviceId);
@@ -137,8 +143,18 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       headers: { "content-type": "application/json" },
       body: JSON.stringify(payload),
     });
-    if (!res.ok) setSubmitStatus({ ok: false, message: "حدث خطأ أو تم التصويت اليوم" });
-    else setSubmitStatus({ ok: true, message: "تم تسجيل التصويت" });
+    if (!res.ok) {
+      setSubmitStatus({ ok: false, message: "حدث خطأ أو تم التصويت اليوم" });
+      setIsSubmitting(false);
+    } else {
+      setSubmitStatus({ ok: true, message: "تم تسجيل التصويت" });
+      // Reset: clear tiers only, keep candidates visible in bank for a new round
+      const allCandidates: Candidate[] = tierKeys.flatMap((k) => tiers[k]);
+      setBank(allCandidates);
+      setTiers(createEmptyTiers());
+      setSelectedId(null);
+      setIsSubmitting(false);
+    }
   }
 
   /* async function saveImage() {
@@ -216,6 +232,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
                 onClick={() => setSelectedId(selected ? null : c.id)}
                 className={`flex flex-col items-center gap-1 outline ${selected ? "!bg-gray-900 hover:!bg-gray-900 !text-white outline-2 outline-white" : "outline-none"} w-[120px]`}
                 data-selected={selected ? "1" : undefined}
+                disabled={isSubmitting}
               >
                 <Avatar src={c.imageUrl || ""} alt={c.name} size={48} className="mb-1" />
                 <span className="text-xs text-center leading-tight">{c.name}</span>
@@ -253,6 +270,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
                   }}
                   className={`flex flex-col items-center gap-1 mr-2 mb-2 outline ${selected ? "!bg-gray-900 hover:!bg-gray-900 !text-white outline-2 outline-white" : "outline-none"} w-[120px]`}
                   data-selected={selected ? "1" : undefined}
+                  disabled={isSubmitting}
                 >
                   <Avatar src={c.imageUrl || ""} alt={c.name} size={48} className="mb-1" />
                   <span className="text-xs text-center leading-tight">{c.name}</span>
@@ -267,7 +285,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       ))}
 
       <div className="flex gap-3 justify-center mt-6 p-4">
-        <Button onClick={submit}>إرسال</Button>
+        <Button onClick={submit} disabled={isSubmitting}>إرسال</Button>
         {/* <Button variant="secondary" onClick={saveImage}>حفظ كصورة</Button> */}
       </div>
       {submitStatus && (
