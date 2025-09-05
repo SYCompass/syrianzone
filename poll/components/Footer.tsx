@@ -9,14 +9,14 @@ export default function Footer(): React.JSX.Element {
          <a href="https://syrian.zone" target="_blank" rel="noopener">تير ليست الوزراء | Ministers Tier List 2025 &copy;</a>
         </p>
         <p className="mt-2 text-sm text-[var(--sz-color-ink)]">
-          تم التطوير بواسطة <span className="font-semibold">هادي الأحمد</span>
+         <span className="font-semibold">تم التطوير بواسطة</span>
         </p>
         <div className="mt-2 flex justify-center gap-4">
           <a href="http://hadealahmad.com/" target="_blank" rel="noopener" className="flex items-center">
-            <i className="fas fa-globe ml-1" /> الموقع الشخصي
+            <i className="fas fa-globe ml-1" />  هادي الأحمد
           </a>
-          <a href="https://x.com/hadealahmad" target="_blank" rel="noopener" className="flex items-center">
-            <i className="fab fa-x-twitter ml-1" /> حساب
+          <a href="https://x.com/macdoos" target="_blank" rel="noopener" className="flex items-center">
+            <i className="fab fa-x-twitter ml-1" />  مكدوس
           </a>
         </div>
       </div>
