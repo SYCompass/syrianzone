@@ -399,12 +399,22 @@ body[dir="rtl"] .search-form {
     box-shadow: var(--shadow-hover);
 }
 
+.top-info-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px; 
+    flex-wrap: wrap; 
+    width: 100%;
+    margin-bottom: 20px;
+}
+
 /* Weather Section - Above search, centered */
 .weather-section {
     display: flex;
     justify-content: center;
-    margin-bottom: 40px;
-    width: 100%;
+    margin-bottom: 0;
+    width: auto;
 }
 
 .weather-container {
@@ -471,6 +481,51 @@ body[dir="rtl"] .search-form {
 .weather-detail-value {
     font-weight: 600;
     color: var(--text-primary);
+}
+
+/* Clock Section */
+.clock-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0;
+    width: auto;
+}
+
+.clock-container {
+    text-align: center;
+    padding: 15px;
+}
+
+.clock-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.clock-time {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    letter-spacing: 0.05em;
+    font-variant-numeric: tabular-nums;
+}
+
+.clock-date {
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+    .clock-time {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .clock-time {
+        font-size: 2rem;
+    }
 }
 
 /* Links Section - Simplified Design */

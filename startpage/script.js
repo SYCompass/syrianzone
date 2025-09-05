@@ -14,6 +14,7 @@ class Startpage {
         this.loadCustomLinks();
         this.updateWeatherDisplay();
         this.setupSearchEngine();
+        this.initClock();
     }
 
     // Settings Management
@@ -31,6 +32,7 @@ class Startpage {
                     lon: 36.2765
                 }
             },
+            clockFormat: '12',
             customLinks: {
                 row1: []
             }
@@ -66,6 +68,41 @@ class Startpage {
     }
 
 
+    initClock() {
+    this.updateClock();
+    setInterval(() => this.updateClock(), 1000);
+}
+
+updateClock() {
+    const now = new Date();
+    const timeElement = document.getElementById('clockTime');
+    const dateElement = document.getElementById('clockDate');
+    
+    if (!timeElement || !dateElement) return;
+    
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+    let period = '';
+    
+    if (this.settings.clockFormat === '12') {
+        period = hours >= 12 ? ' PM' : ' AM';
+        hours = hours % 12 || 12;
+    }
+    
+    hours = hours.toString().padStart(2, '0');
+    minutes = minutes.toString().padStart(2, '0');    
+    timeElement.textContent = `${hours}:${minutes}${period}`;
+    
+    const dateOptions = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    };
+    
+    const locale = this.currentLanguage === 'ar' ? 'ar-SY' : 'en-US';
+    dateElement.textContent = now.toLocaleDateString(locale, dateOptions);
+}
 
     updateThemeIcon() {
     const themeIcon = document.querySelector('.theme-icon');
@@ -257,6 +294,23 @@ class Startpage {
                 }
             }
         }
+
+         const clockSettingsTitle = Array.from(document.querySelectorAll('.setting-group h4'))
+        .find(el => el.textContent.includes('Clock'));
+    if (clockSettingsTitle) {
+        clockSettingsTitle.textContent = lang.clockSettings;
+    }
+    
+    const clockFormatLabel = document.querySelector('label[for="clockFormat"]');
+    if (clockFormatLabel) {
+        clockFormatLabel.textContent = lang.timeFormat;
+    }
+    
+    const clockFormatSelect = document.getElementById('clockFormat');
+    if (clockFormatSelect) {
+        clockFormatSelect.options[0].textContent = lang.format12;
+        clockFormatSelect.options[1].textContent = lang.format24;
+    }
         // Update settings panel titles
         const settingsTitle = document.querySelector('.settings-header h3');
         if (settingsTitle) {
@@ -801,6 +855,10 @@ async fetchWeather() {
         const latitude = document.getElementById('latitude');
         const longitude = document.getElementById('longitude');
         const themeSelect = document.getElementById('themeSelect');
+        const clockFormat = document.getElementById('clockFormat');
+        if (clockFormat) {
+        clockFormat.value = this.settings.clockFormat;
+        }
         if (themeSelect) {
         themeSelect.value = this.settings.theme;
         }
@@ -937,6 +995,16 @@ async fetchWeather() {
         } else {
             console.error('About button not found');
         }
+
+        const clockFormat = document.getElementById('clockFormat');
+        if (clockFormat) {
+        clockFormat.value = this.settings.clockFormat;
+        clockFormat.addEventListener('change', (e) => {
+            this.settings.clockFormat = e.target.value;
+            this.saveSettings();
+            this.updateClock(); 
+        });
+    }
 
 
 
