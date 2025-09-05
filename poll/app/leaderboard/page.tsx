@@ -164,42 +164,6 @@ export default async function Page() {
         </div>
       ) : null}
 
-      <div className="max-w-screen-md mx-auto">
-        {/* Daily leaderboard */}
-        <h2 className="font-semibold mb-2">ترتيب اليوم</h2>
-        <p className="text-sm text-gray-500 mb-2">{new Date().toLocaleDateString("ar-EG", { year: "numeric", month: "long", day: "numeric" })}</p>
-        <Card>
-          <CardContent>
-            <Table>
-              <Thead>
-                <Tr>
-                  <Th className="w-10 text-right">#</Th>
-                  <Th className="w-full text-right">الوزير</Th>
-                  <Th className="w-10 text-right">الأصوات</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {rows.map((r) => (
-                  <Tr key={r.candidateId}>
-                    <Td>#{r.rank}</Td>
-                    <Td>
-                      <div className="flex items-center gap-2">
-                        <Avatar src={r.imageUrl || ""} alt={r.name} size={28} />
-                        <div className="leading-tight">
-                          <div className="text-sm">{r.name}</div>
-                          {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
-                        </div>
-                      </div>
-                    </Td>
-                    <Td>{r.votes}</Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </CardContent>
-        </Card>
-      </div>
-
       {/* Top 3 of the month */}
       <div className="max-w-screen-md mx-auto mt-6">
         <h2 className="font-semibold mb-2">أفضل وزراء الشهر</h2>
@@ -236,6 +200,42 @@ export default async function Page() {
             </Card>
           ))}
         </div>
+      </div>
+
+      <div className="max-w-screen-md mx-auto mt-4">
+        {/* Daily leaderboard */}
+        <h2 className="font-semibold mb-2">ترتيب اليوم</h2>
+        <p className="text-sm text-gray-500 mb-2">{new Date().toLocaleDateString("ar-EG", { year: "numeric", month: "long", day: "numeric" })}</p>
+        <Card>
+          <CardContent>
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th className="w-10 text-right">#</Th>
+                  <Th className="w-full text-right">الوزير</Th>
+                  <Th className="w-10 text-right">الأصوات</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {rows.map((r) => (
+                  <Tr key={r.candidateId}>
+                    <Td>#{r.rank}</Td>
+                    <Td>
+                      <div className="flex items-center gap-2">
+                        <Avatar src={r.imageUrl || ""} alt={r.name} size={28} />
+                        <div className="leading-tight">
+                          <div className="text-sm">{r.name}</div>
+                          {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
+                        </div>
+                      </div>
+                    </Td>
+                    <Td>{r.votes}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </CardContent>
+        </Card>
       </div>
     </main>
   );
