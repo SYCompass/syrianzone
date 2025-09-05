@@ -45,13 +45,13 @@ export const AlertTitle = React.forwardRef<HTMLElement, React.HTMLAttributes<HTM
   );
 });
 
-export const AlertDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(function AlertDescription(
+export const AlertDescription = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(function AlertDescription(
   { className, ...props },
   ref
 ) {
   return (
     <div
-      ref={ref as any}
+      ref={ref}
       className={cn("text-sm text-current/90 [&_p]:leading-relaxed", className)}
       {...props}
     />

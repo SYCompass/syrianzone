@@ -1,7 +1,6 @@
 "use client";
-import { useEffect, useMemo, useRef, useState } from "react";
-import * as htmlToImage from "html-to-image";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useEffect, useRef, useState } from "react";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -28,15 +27,7 @@ const tierStyles: Record<TierKey, { label: string; area: string; border: string 
   F: { label: "bg-gray-800", area: "bg-gray-100", border: "border-gray-300" },
 };
 
-// Hex colors for safe capture (Tailwind equivalents)
-const tierHex: Record<TierKey, { label: string; area: string; border: string }> = {
-  S: { label: "#e11d48", area: "#fff1f2", border: "#fecdd3" },
-  A: { label: "#d97706", area: "#fffbeb", border: "#fde68a" },
-  B: { label: "#059669", area: "#ecfdf5", border: "#a7f3d0" },
-  C: { label: "#0284c7", area: "#f0f9ff", border: "#bae6fd" },
-  D: { label: "#7c3aed", area: "#f5f3ff", border: "#ddd6fe" },
-  F: { label: "#1f2937", area: "#f3f4f6", border: "#d1d5db" },
-};
+// (colors reserved for future capture feature)
 
 // Public base path used when the app is hosted under a sub-path (e.g., /tierlist)
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -78,7 +69,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
 
     // remove from previous location
     setTiers((t) => {
-      const copy: Record<TierKey, Candidate[]> = { ...t } as any;
+      const copy: Record<TierKey, Candidate[]> = { ...t };
       for (const k of tierKeys) copy[k] = copy[k].filter((c) => c.id !== candidateId);
       return copy;
     });
@@ -119,14 +110,27 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     const cfToken = (document.getElementById("cf-turnstile-token") as HTMLInputElement | null)?.value || "";
     const deviceId = localStorage.getItem("deviceId") || crypto.randomUUID();
     localStorage.setItem("deviceId", deviceId);
-    const payload = {
+    const payload: {
+      pollSlug: string;
+      cfToken: string;
+      deviceId: string;
+      tiers: Record<TierKey, Array<{ candidateId: string; pos: number }>>;
+    } = {
       pollSlug: "best-ministers",
       cfToken,
       deviceId,
-      tiers: Object.fromEntries(
-        tierKeys.map((k) => [k, tiers[k].map((c, idx) => ({ candidateId: c.id, pos: idx }))])
-      ),
-    } as any;
+      tiers: tierKeys.reduce((acc, k) => {
+        acc[k] = tiers[k].map((c, idx) => ({ candidateId: c.id, pos: idx }));
+        return acc;
+      }, {
+        S: [] as Array<{ candidateId: string; pos: number }>,
+        A: [] as Array<{ candidateId: string; pos: number }>,
+        B: [] as Array<{ candidateId: string; pos: number }>,
+        C: [] as Array<{ candidateId: string; pos: number }>,
+        D: [] as Array<{ candidateId: string; pos: number }>,
+        F: [] as Array<{ candidateId: string; pos: number }>,
+      } as Record<TierKey, Array<{ candidateId: string; pos: number }>>),
+    };
     const submitPath = `${BASE_PATH}/api/submit`;
     const res = await fetch(submitPath, {
       method: "POST",
@@ -137,7 +141,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     else setSubmitStatus({ ok: true, message: "تم تسجيل التصويت" });
   }
 
-  async function saveImage() {
+  /* async function saveImage() {
     if (!containerRef.current) return;
     const src = containerRef.current;
 
@@ -187,10 +191,10 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     } finally {
       document.body.removeChild(wrapper);
     }
-  }
+  } */
 
   return (
-    <Card ref={containerRef as any} className="max-w-screen-lg mx-auto p-4" data-capture-root>
+    <Card ref={containerRef} className="max-w-screen-lg mx-auto p-4" data-capture-root>
       {/* <CardHeader> */}
         {/* <p className="text-center">اسحب وافلت الأسماِء ضمن S/A/B/C/D/F ثم اضغط إرسال</p> */}
       {/* </CardHeader> */}

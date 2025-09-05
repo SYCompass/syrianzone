@@ -25,7 +25,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(function Button(
   { className, variant = "default", size = "md", asChild = false, ...rest },
   ref
 ) {
-  const Comp: any = asChild ? Slot : "button";
+  const Comp = (asChild ? Slot : "button") as React.ElementType;
   return (
     <Comp ref={ref} className={cn("rounded transition cursor-pointer disabled:cursor-not-allowed", sizes[size], variants[variant], className)} {...rest} />
   );
