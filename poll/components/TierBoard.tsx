@@ -6,7 +6,6 @@ import { Avatar } from "@/components/ui/avatar";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle2Icon, AlertCircleIcon } from "lucide-react";
 import * as htmlToImage from "html-to-image";
-import html2canvas from "html2canvas";
 
 type Candidate = { id: string; name: string; title?: string | null; imageUrl: string | null };
 
@@ -43,12 +42,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   const [submitStatus, setSubmitStatus] = useState<{ ok: boolean; message: string; description?: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function isIOSSafari() {
-    const ua = navigator.userAgent;
-    const iOS = /iP(hone|od|ad)/.test(navigator.platform) || (/(Mac)/.test(navigator.platform) && "ontouchend" in document);
-    const isSafari = /Safari\//.test(ua) && !/CriOS|FxiOS|OPiOS|EdgiOS/.test(ua);
-    return iOS && isSafari;
-  }
+  
 
   function createEmptyTiers(): Record<TierKey, Candidate[]> {
     return { S: [], A: [], B: [], C: [], D: [], F: [] };
@@ -159,8 +153,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     if (!tiersRef.current) return;
     const src = tiersRef.current;
 
-    const iOS = isIOSSafari();
-
     // Ensure all images inside the capture area are fully loaded
     const images = Array.from(src.querySelectorAll("img"));
     await Promise.all(
@@ -180,75 +172,22 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     const contentHeight = Math.ceil(src.scrollHeight || src.offsetHeight);
 
     await (document as any).fonts?.ready;
-
-    let dataUrl: string;
-    if (isIOSSafari()) {
-      // Inline images as blob URLs to avoid iOS Safari canvas omissions
-      const imgs = Array.from(src.querySelectorAll<HTMLImageElement>("img[src]"));
-      const restorers: Array<() => void> = [];
-      try {
-        await Promise.all(
-          imgs.map(async (img) => {
-            const originalSrc = img.getAttribute("src") || "";
-            if (!originalSrc || originalSrc.startsWith("data:")) return;
-            try {
-              const absUrl = new URL(originalSrc, window.location.href).toString();
-              const resp = await fetch(absUrl, { mode: "cors", credentials: "omit", cache: "no-store" });
-              if (!resp.ok) return;
-              const blob = await resp.blob();
-              const blobUrl = URL.createObjectURL(blob);
-              img.setAttribute("data-original-src", originalSrc);
-              img.src = blobUrl;
-              restorers.push(() => {
-                try { URL.revokeObjectURL(blobUrl); } catch {}
-                img.src = originalSrc;
-                img.removeAttribute("data-original-src");
-              });
-            } catch {
-              // ignore and let html2canvas attempt CORS rendering
-            }
-          })
-        );
-      } catch {}
-
-      const canvas = await html2canvas(src, {
+    const dataUrl = await htmlToImage.toPng(src, {
+      cacheBust: true,
+      backgroundColor: "#ffffff",
+      pixelRatio: 2,
+      width: contentWidth,
+      height: contentHeight,
+      skipFonts: true,
+      fetchRequestInit: { mode: "cors", credentials: "omit", cache: "no-store" },
+      style: {
         backgroundColor: "#ffffff",
-        scale: 2,
-        useCORS: true,
-        allowTaint: false,
-        logging: false,
-        width: contentWidth,
-        height: contentHeight,
-        windowWidth: contentWidth,
-        windowHeight: contentHeight,
-      });
-      dataUrl = canvas.toDataURL("image/png");
-
-      // Restore original images and revoke object URLs
-      restorers.forEach((fn) => fn());
-    } else {
-      dataUrl = await htmlToImage.toPng(src, {
-        cacheBust: true,
-        backgroundColor: "#ffffff",
-        pixelRatio: 2,
-        width: contentWidth,
-        height: contentHeight,
-        skipFonts: true,
-        fetchRequestInit: { mode: "cors", credentials: "omit", cache: "no-store" },
-        style: {
-          backgroundColor: "#ffffff",
-        },
-      });
-    }
-    if (iOS) {
-      // Open image in the same tab on iOS (no new tab)
-      window.location.href = dataUrl;
-    } else {
-      const link = document.createElement("a");
-      link.download = "tierlist.png";
-      link.href = dataUrl;
-      link.click();
-    }
+      },
+    });
+    const link = document.createElement("a");
+    link.download = "tierlist.png";
+    link.href = dataUrl;
+    link.click();
   }
 
   return (
