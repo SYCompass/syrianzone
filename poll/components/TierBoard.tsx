@@ -6,6 +6,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle2Icon, AlertCircleIcon } from "lucide-react";
 import * as htmlToImage from "html-to-image";
+import html2canvas from "html2canvas";
 
 type Candidate = { id: string; name: string; title?: string | null; imageUrl: string | null };
 
@@ -41,6 +42,13 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   const tiersRef = useRef<HTMLDivElement>(null);
   const [submitStatus, setSubmitStatus] = useState<{ ok: boolean; message: string; description?: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  function isIOSSafari() {
+    const ua = navigator.userAgent;
+    const iOS = /iP(hone|od|ad)/.test(navigator.platform) || (/(Mac)/.test(navigator.platform) && "ontouchend" in document);
+    const isSafari = /Safari\//.test(ua) && !/CriOS|FxiOS|OPiOS|EdgiOS/.test(ua);
+    return iOS && isSafari;
+  }
 
   function createEmptyTiers(): Record<TierKey, Candidate[]> {
     return { S: [], A: [], B: [], C: [], D: [], F: [] };
@@ -170,18 +178,35 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     const contentHeight = Math.ceil(src.scrollHeight || src.offsetHeight);
 
     await (document as any).fonts?.ready;
-    const dataUrl = await htmlToImage.toPng(src, {
-      cacheBust: true,
-      backgroundColor: "#ffffff",
-      pixelRatio: 2,
-      width: contentWidth,
-      height: contentHeight,
-      skipFonts: true,
-      fetchRequestInit: { mode: "cors", credentials: "omit", cache: "no-store" },
-      style: {
+
+    let dataUrl: string;
+    if (isIOSSafari()) {
+      const canvas = await html2canvas(src, {
         backgroundColor: "#ffffff",
-      },
-    });
+        scale: 2,
+        useCORS: true,
+        allowTaint: false,
+        logging: false,
+        width: contentWidth,
+        height: contentHeight,
+        windowWidth: contentWidth,
+        windowHeight: contentHeight,
+      });
+      dataUrl = canvas.toDataURL("image/png");
+    } else {
+      dataUrl = await htmlToImage.toPng(src, {
+        cacheBust: true,
+        backgroundColor: "#ffffff",
+        pixelRatio: 2,
+        width: contentWidth,
+        height: contentHeight,
+        skipFonts: true,
+        fetchRequestInit: { mode: "cors", credentials: "omit", cache: "no-store" },
+        style: {
+          backgroundColor: "#ffffff",
+        },
+      });
+    }
     const link = document.createElement("a");
     link.download = "tierlist.png";
     link.href = dataUrl;
