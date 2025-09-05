@@ -7,6 +7,7 @@ import { and, desc, eq, gte } from "drizzle-orm";
 import { getLocalMidnightUTC, getMonthStartUTC } from "@/lib/time";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 async function fetchToday() {
   const [p] = await db.select().from(polls).where(eq(polls.slug, "best-ministers"));

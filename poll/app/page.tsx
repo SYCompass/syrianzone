@@ -3,6 +3,7 @@ import { appRouter } from "@/server/trpc/router";
 import { Card, CardContent } from "@/components/ui/card";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export default async function Page() {
   const caller = appRouter.createCaller({ ip: undefined, userAgent: undefined });
