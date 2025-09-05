@@ -138,9 +138,8 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       setIsSubmitting(false);
     } else {
       setSubmitStatus({ ok: true, message: "تم تسجيل التصويت" });
-      // Reset: clear tiers only, keep candidates visible in bank for a new round
-      const allCandidates: Candidate[] = tierKeys.flatMap((k) => tiers[k]);
-      setBank(allCandidates);
+      // Reset: move ALL candidates back to bank and clear tiers
+      setBank(initialCandidates);
       setTiers(createEmptyTiers());
       setSelectedId(null);
       setIsSubmitting(false);
