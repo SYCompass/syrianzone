@@ -10,14 +10,14 @@ export async function GET(req: Request) {
   if (upgradeHeader.toLowerCase() !== "websocket") {
     return new Response("Expected websocket", { status: 426 });
   }
+  // @ts-expect-error - WebSocketPair is available only in Edge runtime
   const { 0: client, 1: server } = Object.values(new WebSocketPair());
-  // @ts-expect-error - Cloudflare runtime
   const ws = server as WebSocket;
-  // @ts-expect-error - Cloudflare runtime
   const c = client as WebSocket;
-  ws.accept();
+  (ws as unknown as { accept: () => void }).accept();
   subscribe(channel, ws);
-  return new Response(null, { status: 101, webSocket: c });
+  // Cast to any to allow Edge-only 'webSocket' option without TS DOM type support
+  return new Response(null, { status: 101, webSocket: c } as any);
 }
 
 

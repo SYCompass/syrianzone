@@ -66,17 +66,9 @@ const yoga = createYoga({
   schema: createSchema({ typeDefs, resolvers }),
   graphqlEndpoint: "/api/graphql",
   cors: {
-    origin: (origin) => {
-      const allowed = process.env.NEXT_PUBLIC_BASE_URL || "";
-      if (!origin) return true; // server-to-server
-      try {
-        const u = new URL(allowed);
-        return origin === u.origin;
-      } catch {
-        return false;
-      }
-    },
-    credentials: false,
+    origin: process.env.NEXT_PUBLIC_BASE_URL && process.env.NEXT_PUBLIC_BASE_URL.length > 0
+      ? process.env.NEXT_PUBLIC_BASE_URL
+      : "*",
   },
 });
 
