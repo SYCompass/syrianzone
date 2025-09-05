@@ -50,18 +50,37 @@ class Startpage {
         this.updateThemeIcon();
     }
 
-    toggleTheme() {
-        this.settings.theme = this.settings.theme === 'light' ? 'dark' : 'light';
-        this.applyTheme();
-        this.saveSettings();
+    cycleTheme() {
+    const themes = ['light', 'dark', 'dark-blue', 'dark-purple', 'dark-green', 'high-contrast'];
+    const currentIndex = themes.indexOf(this.settings.theme);
+    const nextIndex = (currentIndex + 1) % themes.length;
+    this.settings.theme = themes[nextIndex];
+    this.applyTheme();
+    this.saveSettings();
     }
 
-    updateThemeIcon() {
-        const themeIcon = document.querySelector('.theme-icon');
-        if (themeIcon) {
-            themeIcon.textContent = this.settings.theme === 'light' ? '🌙' : '☀️';
-        }
+    setTheme(theme) {
+    this.settings.theme = theme;
+    this.applyTheme();
+    this.saveSettings();
     }
+
+
+
+    updateThemeIcon() {
+    const themeIcon = document.querySelector('.theme-icon');
+    if (themeIcon) {
+        const icons = {
+            'light': '☀️',
+            'dark': '🌙',
+            'dark-blue': '💙',
+            'dark-purple': '💜',
+            'dark-green': '💚',
+            'high-contrast': '⚡'
+        };
+        themeIcon.textContent = icons[this.settings.theme] || '🌙';
+    }
+}
 
     // Language Management
     applyLanguage() {
@@ -223,6 +242,21 @@ class Startpage {
     }
 
     translateSettingsPanel(lang) {
+        const themeSettingsTitle = document.querySelector('.setting-group h4');
+        if (themeSettingsTitle && themeSettingsTitle.textContent.includes('Theme')) {
+            themeSettingsTitle.textContent = lang.themeSettings;
+        }
+
+        const themeSelect = document.getElementById('themeSelect');
+        if (themeSelect) {
+            const options = themeSelect.options;
+            for (let i = 0; i < options.length; i++) {
+                const value = options[i].value;
+                if (lang.themes[value]) {
+                    options[i].textContent = lang.themes[value];
+                }
+            }
+        }
         // Update settings panel titles
         const settingsTitle = document.querySelector('.settings-header h3');
         if (settingsTitle) {
@@ -766,6 +800,10 @@ async fetchWeather() {
         const governorate = document.getElementById('governorate');
         const latitude = document.getElementById('latitude');
         const longitude = document.getElementById('longitude');
+        const themeSelect = document.getElementById('themeSelect');
+        if (themeSelect) {
+        themeSelect.value = this.settings.theme;
+        }
         
         if (locationType) locationType.value = this.settings.weather.locationType;
         if (governorate) governorate.value = this.settings.weather.governorate;
@@ -911,7 +949,7 @@ async fetchWeather() {
         // Theme toggle
         const themeToggle = document.getElementById('themeToggle');
         if (themeToggle) {
-            themeToggle.addEventListener('click', () => this.toggleTheme());
+        themeToggle.addEventListener('click', () => this.cycleTheme());
         }
 
         // Search form
@@ -936,6 +974,13 @@ async fetchWeather() {
         if (closeSettings) {
             closeSettings.addEventListener('click', () => this.closeSettings());
         }
+
+        const themeSelect = document.getElementById('themeSelect');
+        if (themeSelect) {
+        themeSelect.addEventListener('change', (e) => {
+        this.setTheme(e.target.value);
+        });
+}
 
         // About modal controls
         const closeAboutModal = document.getElementById('closeAboutModal');
