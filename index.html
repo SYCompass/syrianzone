@@ -51,14 +51,27 @@
         <button class="settings-btn" id="settingsBtn">⚙️</button>
       </div>
     </div>
-    <!-- Weather Widget -->
-    <section class="weather-section">
-      <div class="weather-container">
-        <div class="weather-content" id="weatherContent">
-          <div class="weather-loading">Loading weather...</div>
+        <!-- Wrapper for Weather and Clock -->
+    <div class="top-info-wrapper">
+      <!-- Weather Widget -->
+      <section class="weather-section">
+        <div class="weather-container">
+          <div class="weather-content" id="weatherContent">
+            <div class="weather-loading">Loading weather...</div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <!-- Clock Section -->
+      <section class="clock-section">
+        <div class="clock-container">
+            <div class="clock-display" id="clockDisplay">
+                <span class="clock-time" id="clockTime">--:--:--</span>
+                <span class="clock-date" id="clockDate"></span>
+            </div>
+        </div>
+      </section>
+    </div>
     <!-- Logo Section -->
     <section class="logo-section">
       <div class="logo-container">
@@ -165,6 +178,16 @@
               <option value="coordinates">Custom Coordinates</option>
             </select>
           </div>
+          <div class="setting-group">
+    <h4>Clock Settings</h4>
+    <div class="setting-item">
+        <label for="clockFormat">Time Format:</label>
+        <select id="clockFormat" class="setting-input">
+            <option value="12">12 Hour</option>
+            <option value="24">24 Hour</option>
+        </select>
+    </div>
+</div>
           <div class="setting-item" id="governorateSetting">
             <label for="governorate">Governorate:</label>
             <select id="governorate" class="setting-input">
