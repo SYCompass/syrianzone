@@ -151,6 +151,20 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     if (!tiersRef.current) return;
     const src = tiersRef.current;
 
+    // Ensure all images inside the capture area are fully loaded
+    const images = Array.from(src.querySelectorAll("img"));
+    await Promise.all(
+      images.map((img) =>
+        img.complete && img.naturalWidth !== 0
+          ? Promise.resolve()
+          : new Promise<void>((resolve) => {
+              const done = () => resolve();
+              img.addEventListener("load", done, { once: true });
+              img.addEventListener("error", done, { once: true });
+            })
+      )
+    );
+
     // Use the live node to avoid lazy-loading/offscreen clone issues.
     const contentWidth = Math.ceil(src.scrollWidth || src.offsetWidth);
     const contentHeight = Math.ceil(src.scrollHeight || src.offsetHeight);
@@ -163,6 +177,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       width: contentWidth,
       height: contentHeight,
       skipFonts: true,
+      fetchRequestInit: { mode: "cors", credentials: "omit", cache: "no-store" },
       style: {
         backgroundColor: "#ffffff",
       },
