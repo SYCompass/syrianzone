@@ -5,7 +5,7 @@ let translations = {};
 // Load translations for a specific language
 async function loadTranslations(lang) {
     try {
-        const response = await fetch(`languages/${lang}.json`);
+        const response = await fetch(`/syofficial/languages/${lang}.json`);
         if (!response.ok) {
             throw new Error(`Failed to load ${lang} translations`);
         }
