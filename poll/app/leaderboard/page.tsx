@@ -123,7 +123,7 @@ export default async function Page() {
 
   return (
     <main className="container mx-auto px-4 pt-8 pb-8">
-      <h1 className="text-2xl font-bold mb-4 text-center">قائمة الصدارة</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center">الإحصائيات</h1>
       <h2 className="font-semibold mb-4 text-center text-gray-500">الأفضل على الإطلاق</h2>
       {/* All-time best triad */}
       {first ? (

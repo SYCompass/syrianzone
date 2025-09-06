@@ -2,7 +2,7 @@ import "./globals.css";
 import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import { ReactNode } from "react";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import NavBar from "@/components/NavBar";
+import CustomNavBar from "@/components/CustomNavBar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -26,13 +26,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body className={`bg-gray-100 text-neutral-900`}>
         <ThemeProvider>
-          <NavBar />
+          <CustomNavBar />
           <div className="container mx-auto px-4 py-4 flex justify-end gap-2 items-center">
             <Button asChild variant="outline">
-              <Link href="/">تير ليست</Link>
+              <Link href="/">التصنيف</Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/leaderboard">قائمة الصدارة</Link>
+              <Link href="/leaderboard">الإحصائيات</Link>
             </Button>
           </div>
           {children}
