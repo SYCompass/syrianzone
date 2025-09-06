@@ -23,6 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="ar" dir="rtl" suppressHydrationWarning className={ibmPlex.variable}>
       <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+        <link rel="icon" href="/assets/favicon.png" type="image/png" />
       </head>
       <body className={`bg-gray-100 text-neutral-900`}>
         <ThemeProvider>
