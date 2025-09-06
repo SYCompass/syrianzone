@@ -286,7 +286,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
                     onDragStart={(e) => handleDragStart(e, c.id)}
                     onClick={(e) => {
                       e.stopPropagation();
-                      // multiselect only allowed from bank; ignore clicks here for selection
                     }}
                     className={`flex flex-col items-center gap-1 mr-2 mb-2 outline ${selected ? "!bg-gray-900 hover:!bg-gray-900 !text-white outline-2 outline-white" : "outline-none"} w-[120px]`}
                     data-selected={selected ? "1" : undefined}

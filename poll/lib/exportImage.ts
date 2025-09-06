@@ -104,57 +104,41 @@ export async function exportTierListImage(options: ExportOptions): Promise<void>
   textEl.textContent = watermarkText;
   footer.style.setProperty("color", "#111111", "important");
 
-  let appended = false;
+  let resolvedLogoDataUrl = "";
   try {
     const res = await fetch(logoSrc, { cache: "force-cache" });
     const contentType = res.headers.get("content-type") || "";
-    if (res.ok && (contentType.includes("image/svg") || logoSrc.endsWith(".svg"))) {
-      const svgText = await res.text();
-      const parser = new DOMParser();
-      const svgDoc = parser.parseFromString(svgText, "image/svg+xml");
-      const svgEl = svgDoc.documentElement as unknown as SVGElement;
-      const styleEl = svgDoc.createElementNS("http://www.w3.org/2000/svg", "style");
-      styleEl.textContent = "*{fill:#111111 !important; stroke:#111111 !important;}";
-      svgEl.insertBefore(styleEl, svgEl.firstChild);
-      (svgEl as unknown as HTMLElement).style.width = `${Math.max(150, Math.floor(wmFontSize * 1.25))}px`;
-      (svgEl as unknown as HTMLElement).style.height = "auto";
-      (svgEl as unknown as HTMLElement).style.display = "block";
-      const imported = document.importNode(svgEl, true);
-      footer.appendChild(textEl);
-      footer.appendChild(imported as unknown as Node);
-      appended = true;
+    if (res.ok) {
+      if (contentType.includes("image/svg") || logoSrc.endsWith(".svg")) {
+        const svgText = await res.text();
+        resolvedLogoDataUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgText)}`;
+      } else {
+        const blob = await res.blob();
+        resolvedLogoDataUrl = await new Promise<string>((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.readAsDataURL(blob);
+        });
+      }
     }
   } catch {}
-
-  if (!appended) {
-    let resolvedLogoSrc = logoSrc;
-    try {
-      if (!logoSrc.startsWith("data:")) {
-        const res = await fetch(logoSrc, { cache: "force-cache" });
-        if (res.ok) {
-          const blob = await res.blob();
-          resolvedLogoSrc = await new Promise<string>((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result as string);
-            reader.readAsDataURL(blob);
-          });
-        }
-      }
-    } catch {}
-
-    const logoImg = document.createElement("img");
-    logoImg.crossOrigin = "anonymous";
-    (logoImg as any).referrerPolicy = "no-referrer";
-    (logoImg as any).decoding = "sync";
-    (logoImg as any).loading = "eager";
-    logoImg.src = resolvedLogoSrc;
-    logoImg.alt = "Logo";
-    logoImg.style.width = `${Math.max(150, Math.floor(wmFontSize * 1.25))}px`;
-    logoImg.style.height = "auto";
-    logoImg.style.display = "block";
-    footer.appendChild(textEl);
-    footer.appendChild(logoImg);
+  if (!resolvedLogoDataUrl) {
+    resolvedLogoDataUrl = logoSrc;
   }
+
+  const logoImg = document.createElement("img");
+  logoImg.crossOrigin = "anonymous";
+  (logoImg as any).referrerPolicy = "no-referrer";
+  (logoImg as any).decoding = "sync";
+  (logoImg as any).loading = "eager";
+  logoImg.src = resolvedLogoDataUrl;
+  logoImg.alt = "Logo";
+  logoImg.style.width = `${Math.max(150, Math.floor(wmFontSize * 1.25))}px`;
+  logoImg.style.height = "auto";
+  logoImg.style.display = "block";
+
+  footer.appendChild(textEl);
+  footer.appendChild(logoImg);
   cloneContainer.appendChild(footer);
 
   try {
