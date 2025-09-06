@@ -1,6 +1,7 @@
 import "./globals.css";
 import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import { ReactNode } from "react";
+import Script from "next/script";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import CustomNavBar from "@/components/CustomNavBar";
 import Footer from "@/components/Footer";
@@ -24,6 +25,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
         <link rel="icon" href="/assets/favicon.png" type="image/png" />
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-K4H98TC203" strategy="afterInteractive" />
+        <Script id="ga-gtag" strategy="afterInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-K4H98TC203');
+        `}</Script>
       </head>
       <body className={`bg-gray-100 text-neutral-900`}>
         <ThemeProvider>
