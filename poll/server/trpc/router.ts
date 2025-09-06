@@ -66,7 +66,16 @@ export const appRouter = t.router({
 
         await db.insert(ballots).values({ id: ballotId, pollId: poll.id, voteDay, voterKey, ipHash, userAgent });
 
-        const weights: Record<string, number> = { S: 5, A: 4, B: 3, C: 2, D: 1, F: 0 };
+        // New hybrid scoring algorithm: tier minimums + tier-weighted position bonuses
+        const tierMinimums: Record<string, number> = { S: 50, A: 40, B: 30, C: 20, D: 10, F: 0 };
+        const tierPositionBonuses: Record<string, number[]> = {
+          S: [5, 3, 1, 0, 0, 0, 0, 0, 0, 0], // 1st=+5, 2nd=+3, 3rd=+1, 4th+=+0
+          A: [4, 2, 1, 0, 0, 0, 0, 0, 0, 0], // 1st=+4, 2nd=+2, 3rd=+1, 4th+=+0
+          B: [3, 2, 1, 0, 0, 0, 0, 0, 0, 0], // 1st=+3, 2nd=+2, 3rd=+1, 4th+=+0
+          C: [2, 1, 0, 0, 0, 0, 0, 0, 0, 0], // 1st=+2, 2nd=+1, 3rd=+0, 4th+=+0
+          D: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 1st=+1, 2nd=+0, 3rd=+0, 4th+=+0
+          F: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // all positions = +0
+        };
 
         const itemsToInsert: { id: string; ballotId: string; candidateId: string; tier: string; position: number }[] = [];
         const scoreDelta = new Map<string, { votes: number; score: number }>();
@@ -75,8 +84,8 @@ export const appRouter = t.router({
           const arr = input.tiers[tierKey];
           arr.forEach(({ candidateId, pos }, index) => {
             itemsToInsert.push({ id: uuidv4(), ballotId, candidateId, tier: tierKey, position: index });
-            const bonus = Math.max(0, 3 - index);
-            const delta = weights[tierKey] + bonus;
+            const positionBonus = tierPositionBonuses[tierKey][index] || 0;
+            const delta = tierMinimums[tierKey] + positionBonus;
             const prev = scoreDelta.get(candidateId) || { votes: 0, score: 0 };
             scoreDelta.set(candidateId, { votes: prev.votes + 1, score: prev.score + delta });
           });
