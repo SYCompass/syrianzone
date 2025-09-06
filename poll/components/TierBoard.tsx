@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle2Icon, AlertCircleIcon } from "lucide-react";
-import html2canvas from "html2canvas";
+import { exportTierListImage } from "@/lib/exportImage";
 
 type Candidate = { id: string; name: string; title?: string | null; imageUrl: string | null };
 
@@ -184,183 +184,20 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
 
   async function saveImage() {
     if (!tiersRef.current) return;
-    const src = tiersRef.current;
-
     const appEl = containerRef.current;
     const maxWidthStyle = appEl ? window.getComputedStyle(appEl).maxWidth : "";
     const targetWidthCss = maxWidthStyle && maxWidthStyle !== "none" ? maxWidthStyle : "1000px";
     const targetWidth = parseInt(targetWidthCss, 10) || 1000;
-
-    const cloneContainer = src.cloneNode(true) as HTMLElement;
-    cloneContainer.setAttribute("data-capture-export", "1");
-
-    const srcPadding = window.getComputedStyle(src).padding;
-    cloneContainer.style.position = "absolute";
-    cloneContainer.style.left = "-9999px";
-    cloneContainer.style.top = "0px";
-    cloneContainer.style.width = `${targetWidth}px`;
-    cloneContainer.style.height = "auto";
-    cloneContainer.style.display = "block";
-    cloneContainer.style.backgroundColor = "#ffffff";
-    cloneContainer.style.padding = srcPadding;
-    cloneContainer.style.boxShadow = "none";
-
-    cloneContainer.querySelectorAll<HTMLElement>("[data-tier-area]").forEach((zone) => {
-      zone.style.border = "1px solid #eee";
-      zone.style.backgroundColor = "#fdfdfd";
-      zone.style.borderStyle = "solid";
+    await exportTierListImage({
+      container: tiersRef.current,
+      targetWidthPx: targetWidth,
+      basePath: BASE_PATH,
+      watermarkText: "syrian.zone/tierlist",
+      fileName: "tier-list.png",
+      scale: 2,
     });
-
-    cloneContainer.querySelectorAll<HTMLElement>("button").forEach((item) => {
-      item.style.width = "100px";
-      item.style.height = "160px";
-      item.style.padding = "5px";
-      item.style.boxSizing = "border-box";
-      item.style.border = "1px solid #ddd";
-      item.style.borderRadius = "4px";
-      item.style.backgroundColor = "#ffffff";
-      item.style.display = "flex";
-      item.style.flexDirection = "column";
-      (item.style as any).justifyContent = "normal";
-      item.style.alignItems = "center";
-      item.style.overflow = "hidden";
-
-      const img = item.querySelector("img") as HTMLImageElement | null;
-      if (img) {
-        img.style.width = "95px";
-        img.style.height = "95px";
-        img.style.objectFit = "cover";
-        img.style.marginBottom = "5px";
-        (img.style as any).userSelect = "none";
-        (img.style as any).pointerEvents = "none";
-      }
-
-      item.querySelectorAll("span").forEach((p) => {
-        const el = p as HTMLElement;
-        el.style.fontSize = "0.75rem";
-        el.style.lineHeight = "1.2";
-        el.style.margin = "0";
-        el.style.textAlign = "center";
-        el.style.overflow = "visible";
-        (el.style as any).textOverflow = "ellipsis";
-        el.style.whiteSpace = "normal";
-        (el.style as any).wordBreak = "break-word";
-        el.style.maxHeight = "4em";
-      });
-    });
-
-    const tempStyle = document.createElement("style");
-    tempStyle.setAttribute("data-capture-style", "1");
-    tempStyle.textContent = `
-[data-capture-export] * { 
-  background: none !important;
-  background-image: none !important;
-  text-shadow: none !important;
-  box-shadow: none !important;
-}
-[data-capture-export], [data-capture-export] * {
-  background-color: #ffffff !important;
-  color: #111111 !important;
-  border-color: #e5e7eb !important;
-  outline-color: #e5e7eb !important;
-}`;
-    document.head.appendChild(tempStyle);
-
-    document.body.appendChild(cloneContainer);
-
-    try {
-      await (document as any).fonts?.ready;
-      const canvas = await html2canvas(cloneContainer, {
-        backgroundColor: "#ffffff",
-        logging: true,
-        useCORS: true,
-        width: targetWidth,
-        windowWidth: targetWidth,
-        scrollX: 0,
-        scrollY: 0,
-        allowTaint: false,
-        scale: 2,
-        imageTimeout: 2000,
-        onclone: (clonedDoc) => {
-          const styleEl = clonedDoc.createElement('style');
-          styleEl.textContent = `
-[data-capture-export] * { 
-  background: none !important;
-  background-image: none !important;
-  text-shadow: none !important;
-  box-shadow: none !important;
-}
-[data-capture-export], [data-capture-export] * {
-  background-color: #ffffff !important;
-  color: #111111 !important;
-  border-color: #e5e7eb !important;
-  outline-color: #e5e7eb !important;
-}`;
-          clonedDoc.head.appendChild(styleEl);
-          clonedDoc.documentElement.style.background = '#ffffff';
-          clonedDoc.body.style.background = '#ffffff';
-          const root = clonedDoc.querySelector('[data-capture-export="1"]') as HTMLElement | null;
-          const win = clonedDoc.defaultView || window;
-          const containsModern = (v: string | null) => !!v && (v.includes('lab(') || v.includes('oklch') || v.includes('color-mix(') || v.includes('color('));
-          const scrub = (el: HTMLElement) => {
-            const cs = win.getComputedStyle(el);
-            if (containsModern(cs.background) || containsModern(cs.backgroundImage) || containsModern(cs.backgroundColor)) {
-              el.style.setProperty('background', 'none', 'important');
-              el.style.setProperty('background-image', 'none', 'important');
-              el.style.setProperty('background-color', '#ffffff', 'important');
-            }
-            if (containsModern(cs.color)) {
-              el.style.setProperty('color', '#111111', 'important');
-            }
-            if (containsModern(cs.borderColor)) {
-              el.style.setProperty('border-color', '#e5e7eb', 'important');
-            }
-            if (containsModern(cs.outlineColor)) {
-              el.style.setProperty('outline-color', '#e5e7eb', 'important');
-            }
-          };
-          if (root) {
-            scrub(root);
-            root.querySelectorAll<HTMLElement>('*').forEach(scrub);
-            const labelColorMap: Record<string, string> = {
-              S: '#e11d48',
-              A: '#d97706',
-              B: '#059669',
-              C: '#0284c7',
-              D: '#7c3aed',
-              F: '#1f2937',
-            };
-            root.querySelectorAll<HTMLElement>('[data-tier-label]').forEach((el) => {
-              const key = el.getAttribute('data-tier-label') || '';
-              const color = labelColorMap[key] || '#111111';
-              el.style.setProperty('background', 'none', 'important');
-              el.style.setProperty('background-image', 'none', 'important');
-              el.style.setProperty('background-color', color, 'important');
-              el.style.setProperty('color', '#ffffff', 'important');
-            });
-          }
-        },
-      });
-
-      const link = document.createElement("a");
-      link.download = "tier-list.png";
-      link.href = canvas.toDataURL("image/png");
-      link.click();
-
-      setBank(initialCandidates);
-      setTiers(createEmptyTiers());
-    } catch (error) {
-      console.error("Error generating canvas:", error);
-      alert("عذراً، حدث خطأ أثناء حفظ الصورة.");
-    } finally {
-      if (document.body.contains(cloneContainer)) {
-        document.body.removeChild(cloneContainer);
-      }
-      const injected = document.querySelector('style[data-capture-style="1"]');
-      if (injected && injected.parentNode) {
-        injected.parentNode.removeChild(injected);
-      }
-    }
+    setBank(initialCandidates);
+    setTiers(createEmptyTiers());
   }
 
   return (
