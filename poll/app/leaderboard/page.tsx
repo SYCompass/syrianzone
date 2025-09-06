@@ -8,6 +8,7 @@ import { db } from "@/db";
 import { polls, candidates, dailyScores, dailyRanks } from "@/db/schema";
 import { and, desc, eq, gte } from "drizzle-orm";
 import { getLocalMidnightUTC, getMonthStartUTC } from "@/lib/time";
+import MonthlyLineChart from "@/components/MonthlyLineChart";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -154,6 +155,68 @@ export default async function Page() {
   const second = triad[1];
   const third = triad[2];
 
+  // Build monthly series over the last 6 months for the line chart
+  const [p] = await db.select().from(polls).where(eq(polls.slug, "best-ministers"));
+  let months: string[] = [];
+  if (p) {
+    const now = new Date();
+    const list: string[] = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1));
+      const yyyy = d.getUTCFullYear();
+      const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
+      list.push(`${yyyy}-${mm}`);
+    }
+    months = list;
+  }
+  let series: { name: string; values: number[]; color?: string; imageUrl?: string }[] = [];
+  if (p && months.length) {
+    const allRows = await db
+      .select({ candidateId: dailyScores.candidateId, day: dailyScores.day, score: dailyScores.score })
+      .from(dailyScores)
+      .where(eq(dailyScores.pollId, p.id))
+      .orderBy(desc(dailyScores.day));
+    const byCandidate = new Map<string, Map<string, number>>();
+    for (const r of allRows) {
+      const d = new Date(r.day as unknown as string);
+      const key = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
+      if (!months.includes(key)) continue;
+      const m = byCandidate.get(r.candidateId) || new Map();
+      m.set(key, (m.get(key) || 0) + r.score);
+      byCandidate.set(r.candidateId, m);
+    }
+    const cands = await db
+      .select()
+      .from(candidates)
+      .where(eq(candidates.pollId, p.id))
+      .orderBy(candidates.sort);
+    const raw = cands.map((c) => {
+      const values = months.map((m) => (byCandidate.get(c.id)?.get(m) || 0));
+      return { id: c.id, name: c.name, values, imageUrl: c.imageUrl || undefined };
+    });
+    // Build all-time totals to rank and assign shades of green
+    const totalsMap = new Map<string, number>();
+    for (const row of await db
+      .select({ candidateId: dailyScores.candidateId, score: dailyScores.score })
+      .from(dailyScores)
+      .where(eq(dailyScores.pollId, p.id))) {
+      totalsMap.set(row.candidateId, (totalsMap.get(row.candidateId) || 0) + row.score);
+    }
+    const ranked = [...raw].sort((a, b) => (totalsMap.get(b.id) || 0) - (totalsMap.get(a.id) || 0));
+    const GREEN_23 = Array.from({ length: 23 }, (_, i) => {
+      const hue = 145;
+      const saturation = 65;
+      const minLight = 30; // darkest for best
+      const maxLight = 78; // lightest for last
+      const light = minLight + ((maxLight - minLight) * i) / 22;
+      return `hsl(${hue} ${saturation}% ${Math.round(light)}%)`;
+    });
+    const colorById = new Map<string, string>();
+    ranked.forEach((s, i) => colorById.set(s.id, GREEN_23[Math.min(i, GREEN_23.length - 1)]));
+    // Ensure legend order matches scores: use ranked order
+    series = ranked.map((s) => ({ name: s.name, values: s.values, color: colorById.get(s.id), imageUrl: s.imageUrl }));
+  }
+
   return (
     <main className="container mx-auto px-4 pt-8 pb-8">
       <div className="max-w-screen-md mx-auto mb-4">
@@ -205,6 +268,12 @@ export default async function Page() {
               {third?.title && <div className="text-xs text-gray-500 text-center">{third.title}</div>}
             </div>
           </div>
+        </div>
+      ) : null}
+
+      {months.length && series.length ? (
+        <div className="max-w-screen-md mx-auto mb-6">
+          <MonthlyLineChart months={months} series={series} />
         </div>
       ) : null}
 
