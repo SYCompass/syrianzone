@@ -175,7 +175,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       setSubmitStatus({ ok: true, message: "تم تسجيل التصويت" });
       setBank(initialCandidates);
       setTiers(createEmptyTiers());
-      setSelectedId(null);
       const ts = Date.now() + 1 * 60 * 1000;
       setNextSubmitAt(ts);
       localStorage.setItem(cooldownKey, String(ts));
@@ -186,7 +185,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   async function saveImage() {
     if (!tiersRef.current) return;
     const src = tiersRef.current;
-    setSelectedId(null);
 
     const appEl = containerRef.current;
     const maxWidthStyle = appEl ? window.getComputedStyle(appEl).maxWidth : "";
@@ -351,7 +349,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
 
       setBank(initialCandidates);
       setTiers(createEmptyTiers());
-      setSelectedId(null);
     } catch (error) {
       console.error("Error generating canvas:", error);
       alert("عذراً، حدث خطأ أثناء حفظ الصورة.");
