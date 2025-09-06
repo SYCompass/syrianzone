@@ -33,7 +33,7 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 export default function TierBoard({ initialCandidates, pollId, voteDay }: Props) {
   const [tiers, setTiers] = useState<Record<TierKey, Candidate[]>>({ S: [], A: [], B: [], C: [], D: [], F: [] });
   const [bank, setBank] = useState<Candidate[]>(initialCandidates);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const containerRef = useRef<HTMLDivElement>(null);
   const tiersRef = useRef<HTMLDivElement>(null);
   const [submitStatus, setSubmitStatus] = useState<{ ok: boolean; message: string; description?: string } | null>(null);
@@ -110,7 +110,36 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     } else {
       setTiers((t) => ({ ...t, [target]: [...t[target], candidate!] }));
     }
-    setSelectedId(null);
+  }
+
+  function moveCandidatesTo(candidateIds: string[], target: TierKey | "bank") {
+    const idSet = new Set(candidateIds);
+    const found: Candidate[] = [
+      ...tierKeys.flatMap((k) => tiers[k].filter((c) => idSet.has(c.id))),
+      ...bank.filter((c) => idSet.has(c.id)),
+    ];
+    setTiers((prev) => {
+      const copy: Record<TierKey, Candidate[]> = { ...prev } as Record<TierKey, Candidate[]>;
+      for (const k of tierKeys) copy[k] = copy[k].filter((c) => !idSet.has(c.id));
+      if (target !== "bank") copy[target] = [...copy[target], ...found];
+      return copy;
+    });
+    setBank((prev) => {
+      const filtered = prev.filter((c) => !idSet.has(c.id));
+      return target === "bank" ? [...filtered, ...found] : filtered;
+    });
+    setSelectedIds(new Set());
+  }
+
+  function toggleSelected(id: string) {
+    setSelectedIds((prev) => {
+      const isInBank = bank.some((c) => c.id === id);
+      if (!isInBank) return prev;
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
   }
 
   function handleDrop(e: React.DragEvent, target: TierKey | "bank") {
@@ -211,13 +240,13 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
         <h2 className="font-bold text-center">قائمة الوزراء</h2>
         <div className="flex flex-wrap justify-center gap-2 p-2">
           {bank.map((c) => {
-            const selected = selectedId === c.id;
+            const selected = selectedIds.has(c.id);
             return (
               <Button
                 key={c.id}
                 draggable
                 onDragStart={(e) => handleDragStart(e, c.id)}
-                onClick={() => setSelectedId(selected ? null : c.id)}
+                onClick={(e) => { e.stopPropagation(); toggleSelected(c.id); }}
                 className={`flex flex-col items-center gap-1 outline ${selected ? "!bg-gray-900 hover:!bg-gray-900 !text-white outline-2 outline-white" : "outline-none"} w-[120px]`}
                 data-selected={selected ? "1" : undefined}
                 disabled={isSubmitting}
@@ -244,10 +273,12 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
               className={`flex flex-wrap justify-center min-h-[165px] flex-grow p-2 border-2 border-dashed ${tierStyles[k].border} ${tierStyles[k].area} rounded-l`}
               onDragOver={(e) => e.preventDefault()}
               onDrop={(e) => handleDrop(e, k)}
-              onClick={() => selectedId && moveCandidateTo(selectedId, k)}
+              onClick={() => {
+                if (selectedIds.size > 0) moveCandidatesTo(Array.from(selectedIds), k);
+              }}
             >
               {tiers[k].map((c) => {
-                const selected = selectedId === c.id;
+                const selected = selectedIds.has(c.id);
                 return (
                   <Button
                     key={c.id}
@@ -255,7 +286,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
                     onDragStart={(e) => handleDragStart(e, c.id)}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedId(selected ? null : c.id);
+                      // multiselect only allowed from bank; ignore clicks here for selection
                     }}
                     className={`flex flex-col items-center gap-1 mr-2 mb-2 outline ${selected ? "!bg-gray-900 hover:!bg-gray-900 !text-white outline-2 outline-white" : "outline-none"} w-[120px]`}
                     data-selected={selected ? "1" : undefined}
