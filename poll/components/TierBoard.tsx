@@ -126,8 +126,8 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
 
   async function submit() {
     const totalAssigned = tierKeys.reduce((acc, k) => acc + tiers[k].length, 0);
-    if (totalAssigned === 0) {
-      setSubmitStatus({ ok: false, message: "ضع وزيرًا واحدًا على الأقل ضمن أحد المستويات قبل الإرسال" });
+    if (totalAssigned < 3) {
+      setSubmitStatus({ ok: false, message: "الحد الأدنى للاختيار هو ٣ وزراء. الرجاء اختيار ٣ على الأقل." });
       return;
     }
     if (nextSubmitAt && Date.now() < nextSubmitAt) {

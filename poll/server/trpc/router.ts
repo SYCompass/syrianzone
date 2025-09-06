@@ -57,6 +57,15 @@ export const appRouter = t.router({
         if (!ok) throw new Error("Turnstile failed");
         // TODO: Add server-side rate limiting and per-device/IP daily caps
 
+        // Enforce minimum selections
+        const totalAssigned = (Object.keys(input.tiers) as Array<keyof typeof input.tiers>).reduce(
+          (acc, key) => acc + input.tiers[key].length,
+          0
+        );
+        if (totalAssigned < 3) {
+          throw new Error("Minimum selection is 3");
+        }
+
         const voteDay = getLocalMidnightUTC(poll.timezone);
         const voterKey = sha256(input.deviceId);
         const ipHash = ctx.ip ? sha256(ctx.ip) : undefined;
