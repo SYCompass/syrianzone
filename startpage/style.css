@@ -613,6 +613,16 @@ body[dir="rtl"] .search-form {
     color: var(--accent-color);
 }
 
+.sydf-icon {
+    -webkit-mask: url('/assets/sydf.svg') no-repeat center;
+    mask: url('/assets/sydf.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    background-color: var(--accent-color);
+    display: inline-block;
+}
+
+
 .link-text {
     font-weight: 500;
     font-size: 0.85rem;
@@ -1160,7 +1170,6 @@ button:focus, input:focus, select:focus {
 /* Donation Reminder Styles */
 .donation-highlight {
     animation: donationPulse 2s infinite;
-    background: linear-gradient(45deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.2));
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
 }
