@@ -28,6 +28,36 @@ async function fetchToday() {
   });
 }
 
+async function fetchAllTimeTotals() {
+  const [p] = await db.select().from(polls).where(eq(polls.slug, "best-ministers"));
+  if (!p) return [] as Array<{ candidateId: string; name: string; title?: string; imageUrl?: string; votes: number; score: number; rank: number }>;
+  const rows = await db
+    .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
+    .from(dailyScores)
+    .where(eq(dailyScores.pollId, p.id))
+    .orderBy(desc(dailyScores.score), desc(dailyScores.votes));
+  const agg = new Map<string, { votes: number; score: number }>();
+  for (const r of rows) {
+    const cur = agg.get(r.candidateId) || { votes: 0, score: 0 };
+    agg.set(r.candidateId, { votes: cur.votes + r.votes, score: cur.score + r.score });
+  }
+  const totals = Array.from(agg.entries()).map(([candidateId, v]) => ({ candidateId, ...v }));
+  totals.sort((a, b) => (b.score - a.score) || (b.votes - a.votes));
+  const cands = await db.select().from(candidates).where(eq(candidates.pollId, p.id));
+  return totals.map((t, i) => {
+    const c = cands.find((cc) => cc.id === t.candidateId);
+    return {
+      candidateId: t.candidateId,
+      name: c?.name || "",
+      title: c?.title || undefined,
+      imageUrl: c?.imageUrl || undefined,
+      votes: t.votes,
+      score: t.score,
+      rank: i + 1,
+    };
+  });
+}
+
 async function fetchMonthExtremes() {
   const [p] = await db.select().from(polls).where(eq(polls.slug, "best-ministers"));
   if (!p) return { best: [], worst: [] } as { best: any[]; worst: any[] };
@@ -116,7 +146,7 @@ async function fetchAllTimeExtremes() {
 }
 
 export default async function Page() {
-  const rows = await fetchToday();
+  const rows = await fetchAllTimeTotals();
   const month = await fetchMonthExtremes();
   const allTime = await fetchAllTimeExtremes();
   const triad = allTime.best.slice(0, 3);
@@ -217,9 +247,9 @@ export default async function Page() {
       </div>
 
       <div className="max-w-screen-md mx-auto mt-4">
-        {/* Daily leaderboard */}
-        <h2 className="font-semibold mb-2">ترتيب اليوم</h2>
-        <p className="text-sm text-gray-500 mb-2">{new Date().toLocaleDateString("ar-EG", { year: "numeric", month: "long", day: "numeric" })}</p>
+        {/* All-time leaderboard */}
+        <h2 className="font-semibold mb-2">قائمة التصنيف التفصيلية</h2>
+        <p className="text-sm text-gray-500 mb-2">مجموع النقاط والأصوات الإجمالي</p>
         <Card>
           <CardContent>
             <Table>
@@ -227,6 +257,7 @@ export default async function Page() {
                 <Tr>
                   <Th className="w-10 text-right">#</Th>
                   <Th className="w-full text-right">الوزير</Th>
+                  <Th className="w-20 text-right">النقاط</Th>
                   <Th className="w-10 text-right">الأصوات</Th>
                 </Tr>
               </Thead>
@@ -243,6 +274,7 @@ export default async function Page() {
                         </div>
                       </div>
                     </Td>
+                    <Td>{r.score}</Td>
                     <Td>{r.votes}</Td>
                   </Tr>
                 ))}
