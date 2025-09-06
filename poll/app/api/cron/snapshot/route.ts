@@ -6,6 +6,7 @@ import { getLocalMidnightUTC } from "@/lib/time";
 export const runtime = "nodejs";
 
 export async function GET() {
+  // TODO: Protect with secret header or IP allowlist
   const allPolls = await db.select().from(polls).where(eq(polls.isActive, true));
   for (const p of allPolls) {
     const yesterdayUTC = new Date(getLocalMidnightUTC(p.timezone).getTime() - 24 * 60 * 60 * 1000);

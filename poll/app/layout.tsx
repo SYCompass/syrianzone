@@ -38,7 +38,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           </div>
           {children}
           <Footer />
-          {/* Turnstile hidden input for token retrieval */}
           <input id="cf-turnstile-token" type="hidden" />
           <script
             src="https://challenges.cloudflare.com/turnstile/v0/api.js"

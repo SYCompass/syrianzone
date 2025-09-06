@@ -28,9 +28,6 @@ const tierStyles: Record<TierKey, { label: string; area: string; border: string 
   F: { label: "bg-gray-800", area: "bg-gray-100", border: "border-gray-300" },
 };
 
-// (colors reserved for future capture feature)
-
-// Public base path used when the app is hosted under a sub-path (e.g., /tierlist)
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export default function TierBoard({ initialCandidates, pollId, voteDay }: Props) {
@@ -58,14 +55,10 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     url.searchParams.set("channel", `poll:${pollId}:${voteDay}`);
     url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
     const ws = new WebSocket(url.toString());
-    ws.onmessage = (ev) => {
-      // In a real app, merge deltas into ranking UI. Keeping minimal here.
-      // console.log(JSON.parse(ev.data));
-    };
+    ws.onmessage = () => {};
     return () => ws.close();
   }, [pollId, voteDay]);
 
-  // Load existing cooldown from storage on mount
   useEffect(() => {
     const stored = localStorage.getItem(cooldownKey);
     if (stored) {
@@ -76,17 +69,14 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
         localStorage.removeItem(cooldownKey);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Tick while cooldown is active
   useEffect(() => {
     if (!nextSubmitAt) return;
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, [nextSubmitAt]);
 
-  // Auto-clear cooldown when it expires
   useEffect(() => {
     if (nextSubmitAt && now >= nextSubmitAt) {
       setNextSubmitAt(null);
@@ -101,7 +91,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   }, [submitStatus]);
 
   function moveCandidateTo(candidateId: string, target: TierKey | "bank") {
-    // find candidate anywhere
     const fromTierKey = tierKeys.find((k) => tiers[k].some((c) => c.id === candidateId));
     const fromBank = bank.some((c) => c.id === candidateId);
     let candidate: Candidate | undefined;
@@ -109,7 +98,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     if (!candidate && fromBank) candidate = bank.find((c) => c.id === candidateId);
     if (!candidate) return;
 
-    // remove from previous location
     setTiers((t) => {
       const copy: Record<TierKey, Candidate[]> = { ...t };
       for (const k of tierKeys) copy[k] = copy[k].filter((c) => c.id !== candidateId);
@@ -117,7 +105,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     });
     setBank((b) => b.filter((c) => c.id !== candidateId));
 
-    // add to target
     if (target === "bank") {
       setBank((b) => [...b, candidate!]);
     } else {
@@ -138,13 +125,11 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   }
 
   async function submit() {
-    // Require at least one candidate to be placed in any tier
     const totalAssigned = tierKeys.reduce((acc, k) => acc + tiers[k].length, 0);
     if (totalAssigned === 0) {
       setSubmitStatus({ ok: false, message: "ضع وزيرًا واحدًا على الأقل ضمن أحد المستويات قبل الإرسال" });
       return;
     }
-    // Block if cooldown is active
     if (nextSubmitAt && Date.now() < nextSubmitAt) {
       const seconds = Math.ceil((nextSubmitAt - Date.now()) / 1000);
       const minutes = Math.floor(seconds / 60);
@@ -188,11 +173,9 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       setIsSubmitting(false);
     } else {
       setSubmitStatus({ ok: true, message: "تم تسجيل التصويت" });
-      // Reset: move ALL candidates back to bank and clear tiers
       setBank(initialCandidates);
       setTiers(createEmptyTiers());
       setSelectedId(null);
-      // Start cooldown for 3 minutes
       const ts = Date.now() + 1 * 60 * 1000;
       setNextSubmitAt(ts);
       localStorage.setItem(cooldownKey, String(ts));
@@ -203,23 +186,19 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   async function saveImage() {
     if (!tiersRef.current) return;
     const src = tiersRef.current;
-    // Clear visual selection
     setSelectedId(null);
 
-    // Determine target width from container max-width or default
     const appEl = containerRef.current;
     const maxWidthStyle = appEl ? window.getComputedStyle(appEl).maxWidth : "";
     const targetWidthCss = maxWidthStyle && maxWidthStyle !== "none" ? maxWidthStyle : "1000px";
     const targetWidth = parseInt(targetWidthCss, 10) || 1000;
 
-    // 1) Clone the tiers container
     const cloneContainer = src.cloneNode(true) as HTMLElement;
     cloneContainer.setAttribute("data-capture-export", "1");
 
-    // 2) Style the clone for off-screen rendering at target width
     const srcPadding = window.getComputedStyle(src).padding;
     cloneContainer.style.position = "absolute";
-    cloneContainer.style.left = "-9999px"; // off-screen
+    cloneContainer.style.left = "-9999px";
     cloneContainer.style.top = "0px";
     cloneContainer.style.width = `${targetWidth}px`;
     cloneContainer.style.height = "auto";
@@ -228,14 +207,12 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     cloneContainer.style.padding = srcPadding;
     cloneContainer.style.boxShadow = "none";
 
-    // Remove dashed borders from dropzones within the clone
     cloneContainer.querySelectorAll<HTMLElement>("[data-tier-area]").forEach((zone) => {
       zone.style.border = "1px solid #eee";
       zone.style.backgroundColor = "#fdfdfd";
       zone.style.borderStyle = "solid";
     });
 
-    // Ensure items within the clone are styled consistently
     cloneContainer.querySelectorAll<HTMLElement>("button").forEach((item) => {
       item.style.width = "100px";
       item.style.height = "160px";
@@ -262,7 +239,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
 
       item.querySelectorAll("span").forEach((p) => {
         const el = p as HTMLElement;
-        el.style.fontSize = "0.75rem"; // text-xs
+        el.style.fontSize = "0.75rem";
         el.style.lineHeight = "1.2";
         el.style.margin = "0";
         el.style.textAlign = "center";
@@ -274,7 +251,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       });
     });
 
-    // 2.5) Inject a temporary stylesheet to neutralize modern color functions within the clone scope
     const tempStyle = document.createElement("style");
     tempStyle.setAttribute("data-capture-style", "1");
     tempStyle.textContent = `
@@ -292,11 +268,9 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
 }`;
     document.head.appendChild(tempStyle);
 
-    // 3) Append the clone off-screen
     document.body.appendChild(cloneContainer);
 
     try {
-      // 4) Capture the clone
       await (document as any).fonts?.ready;
       const canvas = await html2canvas(cloneContainer, {
         backgroundColor: "#ffffff",
@@ -325,10 +299,8 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   outline-color: #e5e7eb !important;
 }`;
           clonedDoc.head.appendChild(styleEl);
-          // Ensure clone document and body have safe background
           clonedDoc.documentElement.style.background = '#ffffff';
           clonedDoc.body.style.background = '#ffffff';
-          // Extra defensive pass to clear any computed lab/oklch values
           const root = clonedDoc.querySelector('[data-capture-export="1"]') as HTMLElement | null;
           const win = clonedDoc.defaultView || window;
           const containsModern = (v: string | null) => !!v && (v.includes('lab(') || v.includes('oklch') || v.includes('color-mix(') || v.includes('color('));
@@ -352,14 +324,13 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
           if (root) {
             scrub(root);
             root.querySelectorAll<HTMLElement>('*').forEach(scrub);
-            // Restore tier label background colors with safe RGB/HEX values
             const labelColorMap: Record<string, string> = {
-              S: '#e11d48', // rose-600
-              A: '#d97706', // amber-600
-              B: '#059669', // emerald-600
-              C: '#0284c7', // sky-600
-              D: '#7c3aed', // violet-600
-              F: '#1f2937', // gray-800
+              S: '#e11d48',
+              A: '#d97706',
+              B: '#059669',
+              C: '#0284c7',
+              D: '#7c3aed',
+              F: '#1f2937',
             };
             root.querySelectorAll<HTMLElement>('[data-tier-label]').forEach((el) => {
               const key = el.getAttribute('data-tier-label') || '';
@@ -378,7 +349,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       link.href = canvas.toDataURL("image/png");
       link.click();
 
-      // After successful save: reset tiers and return all candidates to bank
       setBank(initialCandidates);
       setTiers(createEmptyTiers());
       setSelectedId(null);
@@ -386,7 +356,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       console.error("Error generating canvas:", error);
       alert("عذراً، حدث خطأ أثناء حفظ الصورة.");
     } finally {
-      // 5) Remove the clone
       if (document.body.contains(cloneContainer)) {
         document.body.removeChild(cloneContainer);
       }
@@ -399,9 +368,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
 
   return (
     <Card ref={containerRef} className="max-w-screen-lg mx-auto p-4" data-capture-root>
-      {/* <CardHeader> */}
-        {/* <p className="text-center">اسحب وافلت الأسماِء ضمن S/A/B/C/D/F ثم اضغط إرسال</p> */}
-      {/* </CardHeader> */}
       <div
         className="mb-4 p-2 bg-gray-100 border rounded"
         onDragOver={(e) => e.preventDefault()}

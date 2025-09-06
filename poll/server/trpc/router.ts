@@ -55,8 +55,7 @@ export const appRouter = t.router({
 
         const ok = await verifyTurnstile(input.cfToken, ctx.ip);
         if (!ok) throw new Error("Turnstile failed");
-
-        // Rate limiting disabled for now during development
+        // TODO: Add server-side rate limiting and per-device/IP daily caps
 
         const voteDay = getLocalMidnightUTC(poll.timezone);
         const voterKey = sha256(input.deviceId);
@@ -65,7 +64,6 @@ export const appRouter = t.router({
 
         const ballotId = uuidv4();
 
-        // Insert ballot (multiple votes allowed now)
         await db.insert(ballots).values({ id: ballotId, pollId: poll.id, voteDay, voterKey, ipHash, userAgent });
 
         const weights: Record<string, number> = { S: 5, A: 4, B: 3, C: 2, D: 1, F: 0 };
@@ -86,7 +84,6 @@ export const appRouter = t.router({
 
         if (itemsToInsert.length) await db.insert(ballotItems).values(itemsToInsert);
 
-        // Upsert daily_scores
         for (const [candidateId, delta] of scoreDelta.entries()) {
           await db
             .insert(dailyScores)
@@ -101,7 +98,6 @@ export const appRouter = t.router({
             });
         }
 
-        // Publish realtime update
         const channel = `poll:${poll.id}:${voteDay.toISOString()}`;
         publish(channel, { type: "ballot", deltas: Array.from(scoreDelta.entries()) });
 
