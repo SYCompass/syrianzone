@@ -1,4 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircleIcon } from "lucide-react";
 import AlgorithmInfo from "@/components/AlgorithmInfo";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@/components/ui/table";
 import { Avatar } from "@/components/ui/avatar";
@@ -124,6 +126,17 @@ export default async function Page() {
 
   return (
     <main className="container mx-auto px-4 pt-8 pb-8">
+      <div className="max-w-screen-md mx-auto mb-4">
+        <Alert>
+          <AlertCircleIcon className="h-5 w-5" />
+          <div>
+            <AlertTitle>تنويه</AlertTitle>
+            <AlertDescription>
+              هذه منصّة تصويت مجتمعيّة ذات طابع ساخر، وغايتها الترفيه والمناقشة فحسب. وما يُنشر من نتائج ليس استطلاعاً علميّاً، ولا يُمثّل رأياً رسميّاً، ولا يرتبط بأي جهة حكوميّة. إلخ...
+            </AlertDescription>
+          </div>
+        </Alert>
+      </div>
       <h1 className="text-2xl font-bold mb-4 text-center">الإحصائيات</h1>
       <h2 className="font-semibold mb-4 text-center text-gray-500">الأفضل على الإطلاق</h2>
       {/* All-time best triad */}
