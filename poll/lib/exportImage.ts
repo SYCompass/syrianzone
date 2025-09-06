@@ -111,7 +111,32 @@ export async function exportTierListImage(options: ExportOptions): Promise<void>
     if (res.ok) {
       if (contentType.includes("image/svg") || logoSrc.endsWith(".svg")) {
         const svgText = await res.text();
-        resolvedLogoDataUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgText)}`;
+        try {
+          const svgBlob = new Blob([svgText], { type: "image/svg+xml;charset=utf-8" });
+          const svgUrl = URL.createObjectURL(svgBlob);
+          const img = new Image();
+          img.crossOrigin = "anonymous";
+          img.src = svgUrl;
+          await new Promise((resolve) => {
+            img.onload = () => resolve(null);
+            img.onerror = () => resolve(null);
+          });
+          const targetWidthPx = Math.max(150, Math.floor(wmFontSize * 1.25));
+          const naturalW = img.naturalWidth || targetWidthPx;
+          const naturalH = img.naturalHeight || targetWidthPx;
+          const ratio = targetWidthPx / naturalW;
+          const targetHeightPx = Math.max(1, Math.round(naturalH * ratio));
+          const c = document.createElement("canvas");
+          c.width = targetWidthPx;
+          c.height = targetHeightPx;
+          const ctx = c.getContext("2d");
+          if (ctx) {
+            ctx.clearRect(0, 0, c.width, c.height);
+            ctx.drawImage(img, 0, 0, c.width, c.height);
+            resolvedLogoDataUrl = c.toDataURL("image/png");
+          }
+          URL.revokeObjectURL(svgUrl);
+        } catch {}
       } else {
         const blob = await res.blob();
         resolvedLogoDataUrl = await new Promise<string>((resolve) => {
@@ -131,6 +156,8 @@ export async function exportTierListImage(options: ExportOptions): Promise<void>
   (logoImg as any).referrerPolicy = "no-referrer";
   (logoImg as any).decoding = "sync";
   (logoImg as any).loading = "eager";
+  (logoImg.style as any).userSelect = "none";
+  (logoImg.style as any).pointerEvents = "none";
   logoImg.src = resolvedLogoDataUrl;
   logoImg.alt = "Logo";
   logoImg.style.width = `${Math.max(150, Math.floor(wmFontSize * 1.25))}px`;
