@@ -114,6 +114,15 @@ const languages = {
             quneitra: "القنيطرة",
             sweida: "السويداء",
             "rural-damascus": "ريف دمشق"
+        },
+        
+        // Donation Reminder
+        donationReminder: {
+            title: "ادعم سوريا",
+            message: "تبرعك يساعد في إعادة بناء سوريا. كل مساهمة تحدث فرقاً.",
+            sectionTitle: "إعدادات التبرع",
+            settingLabel: "تذكير التبرع الشهري",
+            settingDescription: "عرض تذكير شهري للتبرع لصندوق التنمية السوري"
         }
     },
     
@@ -232,6 +241,15 @@ const languages = {
             quneitra: "Quneitra",
             sweida: "Sweida",
             "rural-damascus": "Rural Damascus"
+        },
+        
+        // Donation Reminder
+        donationReminder: {
+            title: "Support Syria",
+            message: "Your donation helps rebuild Syria. Every contribution makes a difference.",
+            sectionTitle: "Donation Settings",
+            settingLabel: "Monthly Donation Reminder",
+            settingDescription: "Show monthly reminder to donate to the Syrian Development Fund"
         }
     }
 };
