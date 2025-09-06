@@ -15,6 +15,7 @@ class Startpage {
         this.updateWeatherDisplay();
         this.setupSearchEngine();
         this.initClock();
+        this.checkDonationReminder();
     }
 
     // Settings Management
@@ -35,6 +36,12 @@ class Startpage {
             clockFormat: '12',
             customLinks: {
                 row1: []
+            },
+            donationReminder: {
+                enabled: true,
+                lastDismissed: null,
+                currentlyShowing: false,
+                firstShownAt: null
             }
         };
 
@@ -103,6 +110,108 @@ updateClock() {
     const locale = this.currentLanguage === 'ar' ? 'ar-SY' : 'en-US';
     dateElement.textContent = now.toLocaleDateString(locale, dateOptions);
 }
+
+    // Donation Reminder System
+    checkDonationReminder() {
+        if (!this.settings.donationReminder.enabled) return;
+
+        const now = new Date();
+        
+        // If currently showing, check if 24 hours passed since first shown
+        if (this.settings.donationReminder.currentlyShowing) {
+            const firstShownAt = this.settings.donationReminder.firstShownAt ? new Date(this.settings.donationReminder.firstShownAt) : null;
+            if (firstShownAt && (now.getTime() - firstShownAt.getTime()) > (24 * 60 * 60 * 1000)) {
+                this.hideDonationNotification();
+            } else {
+                this.showDonationReminder(); 
+            }
+            return;
+        }
+
+        // Check if we should show new reminder (never dismissed or new month)
+        const lastDismissed = this.settings.donationReminder.lastDismissed ? new Date(this.settings.donationReminder.lastDismissed) : null;
+        if (!lastDismissed || this.isNewMonth(now, lastDismissed)) {
+            this.showDonationReminder();
+        }
+    }
+
+    isNewMonth(now, lastDismissed) {
+        return (now.getFullYear() * 12 + now.getMonth()) > (lastDismissed.getFullYear() * 12 + lastDismissed.getMonth());
+    }
+
+    showDonationReminder() {
+        // Add animation to the donation link
+        const donationLink = document.querySelector('a[href*="syrfund.gov.sy"]');
+        if (donationLink) {
+            donationLink.classList.add('donation-highlight');
+        }
+
+        // Show notification
+        this.createDonationNotification();
+        
+        if (!this.settings.donationReminder.currentlyShowing) {
+            this.settings.donationReminder.firstShownAt = new Date().toISOString();
+        }
+        this.settings.donationReminder.currentlyShowing = true;
+        this.saveSettings();
+    }
+
+    createDonationNotification() {
+        if (document.querySelector('.donation-notification')) return;
+        
+        const lang = languages[this.currentLanguage];
+        const notification = document.createElement('div');
+        notification.className = 'donation-notification fade-in';
+        notification.innerHTML = `
+            <div class="donation-notification-content">
+                <i class="fas fa-hand-holding-heart link-icon"></i>
+                <div class="donation-notification-text">
+                    <strong>${lang.donationReminder?.title || 'Support Syria'}</strong>
+                    <p>${lang.donationReminder?.message || 'Your donation helps rebuild Syria. Every contribution makes a difference.'}</p>
+                </div>
+                <button class="donation-notification-close" onclick="startpage.closeDonationNotification()">&times;</button>
+            </div>
+        `;
+
+        document.body.appendChild(notification);
+    }
+
+    closeDonationNotification() {
+        this.hideDonationNotification();
+    }
+
+    hideDonationNotification() {
+        // Remove notification and animation
+        const notification = document.querySelector('.donation-notification');
+        const donationLink = document.querySelector('a[href*="syrfund.gov.sy"]');
+        
+        if (notification) notification.remove();
+        if (donationLink) donationLink.classList.remove('donation-highlight');
+        
+        this.settings.donationReminder.currentlyShowing = false;
+        this.settings.donationReminder.firstShownAt = null;
+        this.settings.donationReminder.lastDismissed = new Date().toISOString();
+        
+        this.saveSettings();
+    }
+
+    updateDonationNotificationText() {
+        const notification = document.querySelector('.donation-notification');
+        if (!notification) return;
+
+        const lang = languages[this.currentLanguage];
+        if (!lang?.donationReminder) return;
+
+        const titleElement = notification.querySelector('.donation-notification-text strong');
+        const messageElement = notification.querySelector('.donation-notification-text p');
+
+        if (titleElement) {
+            titleElement.textContent = lang.donationReminder.title;
+        }
+        if (messageElement) {
+            messageElement.textContent = lang.donationReminder.message;
+        }
+    }
 
     updateThemeIcon() {
     const themeIcon = document.querySelector('.theme-icon');
@@ -397,6 +506,26 @@ updateClock() {
         if (resetBtn) {
             resetBtn.textContent = lang.resetToDefaults;
         }
+
+        // donation settings section
+        const donationSettingsTitle = Array.from(document.querySelectorAll('.setting-group h4'))
+            .find(el => el.textContent.includes('Donation') || el.textContent.includes('إعدادات التبرع'));
+        if (donationSettingsTitle && lang.donationReminder) {
+            donationSettingsTitle.textContent = lang.donationReminder.sectionTitle;
+        }
+
+        const donationReminderLabel = document.querySelector('.donation-reminder-label');
+        if (donationReminderLabel && lang.donationReminder) {
+            donationReminderLabel.textContent = lang.donationReminder.settingLabel;
+        }
+
+        const donationDescription = document.querySelector('.setting-description');
+        if (donationDescription && lang.donationReminder) {
+            donationDescription.textContent = lang.donationReminder.settingDescription;
+        }
+
+        // Update notification text if currently visible
+        this.updateDonationNotificationText();
     }
 
     // Search Engine Management
@@ -1006,7 +1135,21 @@ async fetchWeather() {
         });
     }
 
-
+    // Donation reminder toggle
+    const donationReminderToggle = document.getElementById('donationReminderToggle');
+    if (donationReminderToggle) {
+        donationReminderToggle.checked = this.settings.donationReminder.enabled;
+        donationReminderToggle.addEventListener('change', (e) => {
+            this.settings.donationReminder.enabled = e.target.checked;
+            
+            // If disabled while showing, hide the notification
+            if (!e.target.checked && this.settings.donationReminder.currentlyShowing) {
+                this.closeDonationNotification();
+            }
+            
+            this.saveSettings();
+        });
+    }
 
         // Language toggle
         const languageToggle = document.getElementById('languageToggle');
