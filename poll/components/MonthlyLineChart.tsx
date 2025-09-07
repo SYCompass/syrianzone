@@ -75,6 +75,15 @@ export default function MonthlyLineChart({ months, series, height = 260 }: Props
 
   const visibleSeries = selected.size ? series.filter((s) => selected.has(s.name)) : series;
 
+  const firstDataIndex = React.useMemo(() => {
+    let earliest = months.length;
+    for (const s of series) {
+      const idx = s.values.findIndex((v) => (v || 0) > 0);
+      if (idx !== -1) earliest = Math.min(earliest, idx);
+    }
+    return earliest === months.length ? 0 : earliest;
+  }, [series, months]);
+
   return (
     <Card className="max-w-screen-md mx-auto">
       <div ref={setContainerRef} className="p-4">
@@ -118,9 +127,10 @@ export default function MonthlyLineChart({ months, series, height = 260 }: Props
                   const cy = yFor(v || 0);
                   const r = 9;
                   const clipId = `clip-${hashString(s.name)}-${i}`;
+                  const allowAvatar = i >= firstDataIndex;
                   return (
                     <g key={`pt-${s.name}-${i}`}>
-                      {s.imageUrl ? (
+                      {s.imageUrl && allowAvatar ? (
                         <>
                           <clipPath id={clipId}>
                             <circle cx={cx} cy={cy} r={r} />

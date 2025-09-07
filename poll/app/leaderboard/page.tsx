@@ -9,6 +9,7 @@ import { polls, candidates, dailyScores, dailyRanks } from "@/db/schema";
 import { and, desc, eq, gte } from "drizzle-orm";
 import { getLocalMidnightUTC, getMonthStartUTC } from "@/lib/time";
 import MonthlyLineChart from "@/components/MonthlyLineChart";
+import ClientOnly from "@/components/ClientOnly";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -273,14 +274,16 @@ export default async function Page() {
 
       {months.length && series.length ? (
         <div className="max-w-screen-md mx-auto mb-6">
-          <MonthlyLineChart months={months} series={series} />
+          <ClientOnly>
+            <MonthlyLineChart months={months} series={series} />
+          </ClientOnly>
         </div>
       ) : null}
 
       {/* Top 3 of the month */}
       <div className="max-w-screen-md mx-auto mt-6">
         <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر</h2>
-        <p className="text-sm text-gray-500 mb-2">{new Date().toLocaleDateString("ar-EG", { year: "numeric", month: "long" })}</p>
+        <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {month.best.slice(0, 3).map((r) => (
             <Card key={r.candidateId}>
@@ -299,7 +302,7 @@ export default async function Page() {
       {/* Worst 3 of the month */}
       <div className="max-w-screen-md mx-auto mt-4">
         <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر</h2>
-        <p className="text-sm text-gray-500 mb-2">{new Date().toLocaleDateString("ar-EG", { year: "numeric", month: "long" })}</p>
+        <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {month.worst.slice(0, 3).map((r) => (
             <Card key={r.candidateId}>
