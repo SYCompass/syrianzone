@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cell.dataset.name_ar = item.name_ar.toLowerCase();
             cell.innerHTML = `
                 <div class="w-full bg-gray-200"> 
-                    <img data-src="${item.image}" alt="${currentLanguage === 'ar' ? item.name_ar : item.name}" class="w-full h-full object-cover" style="aspect-ratio: 1/1;" onerror="this.onerror=null; this.src='images/placeholder.png';">
+                    <img data-src="/syofficial/${item.image}" alt="${currentLanguage === 'ar' ? item.name_ar : item.name}" class="w-full h-full object-cover" style="aspect-ratio: 1/1;" onerror="this.onerror=null; this.src='images/placeholder.png';">
                 </div>
                 <div class="p-3 flex-grow flex flex-col items-center justify-center"> 
                     <span class="block text-center text-xl font-medium text-gray-600 leading-snug mt-1">${currentLanguage === 'ar' ? item.name_ar : item.name}</span>

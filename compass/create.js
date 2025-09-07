@@ -6,7 +6,7 @@ let nextId = 1;
 async function loadExistingQuestions() {
     try {
         console.log("بدء تحميل الأسئلة...");
-        const response = await fetch('questions.js');
+        const response = await fetch('/compass/questions.js');
         if (!response.ok) {
             throw new Error(`فشل في تحميل الملف: ${response.status} ${response.statusText}`);
         }

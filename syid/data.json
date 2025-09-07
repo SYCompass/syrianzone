@@ -2,93 +2,93 @@
         "wallpapers": [
         {
             "title": "الشعار الرسمي",
-            "imageSrc": "./materials/abdalhade/IMG_9403.jpg",
-            "downloadJpg": "./materials/abdalhade/IMG_9403.jpg"
+            "imageSrc": "/syid/materials/abdalhade/IMG_9403.jpg",
+            "downloadJpg": "/syid/materials/abdalhade/IMG_9403.jpg"
         },        {
             "title": "الشعار الرسمي مفرغ",
-            "imageSrc": "./materials/logo.ai.svg",
-            "downloadSvg": "./materials/logo.ai.svg"
+            "imageSrc": "/syid/materials/logo.ai.svg",
+            "downloadSvg": "/syid/materials/logo.ai.svg"
         },
         {
             "title": "النمط الأساسي",
-            "imageSrc": "./materials/pattern.svg",
-            "downloadSvg": "./materials/pattern.svg"
+            "imageSrc": "/syid/materials/pattern.svg",
+            "downloadSvg": "/syid/materials/pattern.svg"
         },
         {
             "title": "خلفية سطح المكتب",
-            "imageSrc": "./materials/الهوية السورية الجديدة - خلفية الكمبيوتر.png",
-            "downloadPng": "./materials/الهوية السورية الجديدة - خلفية الكمبيوتر.png",
-            "downloadSvg": "./materials/الهوية السورية الجديدة - خلفية الكمبيوتر.svg"
+            "imageSrc": "/syid/materials/الهوية السورية الجديدة - خلفية الكمبيوتر.png",
+            "downloadPng": "/syid/materials/الهوية السورية الجديدة - خلفية الكمبيوتر.png",
+            "downloadSvg": "/syid/materials/الهوية السورية الجديدة - خلفية الكمبيوتر.svg"
         },
         {
             "title": "خلفية هاتف",
-            "imageSrc": "./materials/الهوية السورية الجديدة - خلفية هاتف.png",
-            "downloadPng": "./materials/الهوية السورية الجديدة - خلفية هاتف.png",
-            "downloadSvg": "./materials/الهوية السورية الجديدة - خلفية هاتف.svg"
+            "imageSrc": "/syid/materials/الهوية السورية الجديدة - خلفية هاتف.png",
+            "downloadPng": "/syid/materials/الهوية السورية الجديدة - خلفية هاتف.png",
+            "downloadSvg": "/syid/materials/الهوية السورية الجديدة - خلفية هاتف.svg"
         },
         {
             "title": "خلفية من scrollexx",
-            "imageSrc": "./materials/scrollexx/scrollexx-wallpaper.png",
-            "downloadPng": "./materials/scrollexx/scrollexx-wallpaper.png",
+            "imageSrc": "/syid/materials/scrollexx/scrollexx-wallpaper.png",
+            "downloadPng": "/syid/materials/scrollexx/scrollexx-wallpaper.png",
             "designerName": "@scrollexx",
             "designerLink": "https://x.com/scrollexx"
         },        {
             "title": "خلفية من scrollexx",
-            "imageSrc": "./materials/scrollexx/scrollexx-wp-pc.png",
-            "downloadPng": "./materials/scrollexx/scrollexx-wp-pc.png",
+            "imageSrc": "/syid/materials/scrollexx/scrollexx-wp-pc.png",
+            "downloadPng": "/syid/materials/scrollexx/scrollexx-wp-pc.png",
             "designerName": "@scrollexx",
             "designerLink": "https://x.com/scrollexx"
         },        {
             "title": "خلفية من scrollexx",
-            "imageSrc": "./materials/scrollexx/scrollexx-wp-pc2.png",
-            "downloadPng": "./materials/scrollexx/scrollexx-wp-pc2.png",
+            "imageSrc": "/syid/materials/scrollexx/scrollexx-wp-pc2.png",
+            "downloadPng": "/syid/materials/scrollexx/scrollexx-wp-pc2.png",
             "designerName": "@scrollexx",
             "designerLink": "https://x.com/scrollexx"
         },
         {
             "title": "خلفية",
-            "imageSrc": "./materials/abdalhade/62EB27B4-E270-4D5C-BB9B-A77748201F7D.jpg",
-            "downloadJpg": "./materials/abdalhade/62EB27B4-E270-4D5C-BB9B-A77748201F7D.jpg"
+            "imageSrc": "/syid/materials/abdalhade/62EB27B4-E270-4D5C-BB9B-A77748201F7D.jpg",
+            "downloadJpg": "/syid/materials/abdalhade/62EB27B4-E270-4D5C-BB9B-A77748201F7D.jpg"
         },
         
         {
             "title": "خلفية",
-            "imageSrc": "./materials/abdalhade/IMG_9406.jpg",
-            "downloadJpg": "./materials/abdalhade/IMG_9406.jpg"
+            "imageSrc": "/syid/materials/abdalhade/IMG_9406.jpg",
+            "downloadJpg": "/syid/materials/abdalhade/IMG_9406.jpg"
         },
         {
             "title": "خلفية",
-            "imageSrc": "./materials/abdalhade/IMG_9407.jpg",
-            "downloadJpg": "./materials/abdalhade/IMG_9407.jpg"
+            "imageSrc": "/syid/materials/abdalhade/IMG_9407.jpg",
+            "downloadJpg": "/syid/materials/abdalhade/IMG_9407.jpg"
         },
         {
             "title": "خلفية",
-            "imageSrc": "./materials/abdalhade/IMG_9409.jpg",
-            "downloadJpg": "./materials/abdalhade/IMG_9409.jpg"
+            "imageSrc": "/syid/materials/abdalhade/IMG_9409.jpg",
+            "downloadJpg": "/syid/materials/abdalhade/IMG_9409.jpg"
         },
         {
             "title": "خلفية",
-            "imageSrc": "./materials/abdalhade/IMG_9410.jpg",
+            "imageSrc": "/syid/materials/abdalhade/IMG_9410.jpg",
             "downloadJpg": "./materials/abdalhade/IMG_9410.jpg"
         },
         {
             "title": "خلفية",
-            "imageSrc": "./materials/abdalhade/IMG_9411.jpg",
+            "imageSrc": "/syid/materials/abdalhade/IMG_9411.jpg",
             "downloadJpg": "./materials/abdalhade/IMG_9411.jpg"
         },
         {
             "title": "خلفية",
-            "imageSrc": "./materials/abdalhade/IMG_9412.jpg",
-            "downloadJpg": "./materials/abdalhade/IMG_9412.jpg"
+            "imageSrc": "/syid/materials/abdalhade/IMG_9412.jpg",
+            "downloadJpg": "/syid/materials/abdalhade/IMG_9412.jpg"
         },
         {
             "title": "خلفية",
-            "imageSrc": "./materials/abdalhade/IMG_9413.jpg",
-            "downloadJpg": "./materials/abdalhade/IMG_9413.jpg"
+            "imageSrc": "/syid/materials/abdalhade/IMG_9413.jpg",
+            "downloadJpg": "/syid/materials/abdalhade/IMG_9413.jpg"
         },
         {
             "title": "خلفية",
-            "imageSrc": "./materials/abdalhade/IMG_9414.jpg",
-            "downloadJpg": "./materials/abdalhade/IMG_9414.jpg"        }
+            "imageSrc": "/syid/materials/abdalhade/IMG_9414.jpg",
+            "downloadJpg": "/syid/materials/abdalhade/IMG_9414.jpg"        }
     ]
 } 
