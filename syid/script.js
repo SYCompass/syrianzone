@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadDynamicContent() {
     console.log('Starting to load dynamic content...');
     try {
-        const response = await fetch('./data.json');
+        const response = await fetch('/syid/data.json');
         console.log('Fetch response received:', response);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
