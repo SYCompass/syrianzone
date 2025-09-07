@@ -161,14 +161,9 @@ export default async function Page() {
   let months: string[] = [];
   if (p) {
     const now = new Date();
-    const list: string[] = [];
-    for (let i = 5; i >= 0; i--) {
-      const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1));
-      const yyyy = d.getUTCFullYear();
-      const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
-      list.push(`${yyyy}-${mm}`);
-    }
-    months = list;
+    const yyyy = now.getUTCFullYear();
+    const mm = String(now.getUTCMonth() + 1).padStart(2, "0");
+    months = [`${yyyy}-${mm}`];
   }
   let series: { name: string; values: number[]; color?: string; imageUrl?: string }[] = [];
   if (p && months.length) {

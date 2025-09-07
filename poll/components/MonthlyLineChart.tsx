@@ -116,9 +116,12 @@ export default function MonthlyLineChart({ months, series, height = 260 }: Props
           {/* Lines */}
           {visibleSeries.map((s) => {
             const color = s.color || hashToColor(s.name);
-            const path = s.values
-              .map((v, i) => `${i === 0 ? "M" : "L"}${xFor(i)},${yFor(v || 0)}`)
-              .join(" ");
+            const originX = padding.left;
+            const originY = height - padding.bottom;
+            const path = [
+              `M${originX},${originY}`,
+              ...s.values.map((v, i) => `L${xFor(i)},${yFor(v || 0)}`),
+            ].join(" ");
             return (
               <g key={`s-${s.name}`}>
                 <path d={path} fill="none" stroke={color} strokeWidth={2.5} />
