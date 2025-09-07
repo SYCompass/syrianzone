@@ -323,7 +323,7 @@ export default async function Page() {
               <Thead>
                 <Tr>
                   <Th className="w-10 text-right">#</Th>
-                  <Th className="w-full text-right">الوزير</Th>
+                  <Th className="w-full text-right">المسؤول</Th>
                   <Th className="w-20 text-right">النقاط</Th>
                   <Th className="w-10 text-right">الأصوات</Th>
                 </Tr>
