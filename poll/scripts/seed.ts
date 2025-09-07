@@ -27,6 +27,9 @@ const MINISTERS: Array<{ id: string; name: string; imageUrl: string; title?: str
   { id: "item21", name: "مازن الصالحاني", imageUrl: "/tierlist/images/item21.webp", title: "وزير السياحة" },
   { id: "item22", name: "محمد حسان سكاف", imageUrl: "/tierlist/images/item22.webp", title: "وزير التنمية الإدارية" },
   { id: "item23", name: "محمد أبو الخير شكري", imageUrl: "/tierlist/images/item23.webp", title: "وزير الأوقاف" },
+  { id: "item24", name: "أحمد الشرع", imageUrl: "/tierlist/images/item24.jpeg", title: "رئيس الجمهورية" },
+  { id: "item25", name: "عبد القادر حصرية", imageUrl: "/tierlist/images/item25.jpg", title: "حاكم مصرف سوريا المركزي" },
+  { id: "item26", name: "محمد رسلان", imageUrl: "/tierlist/images/item26.png", title: "مدير عام صندوق التنمية السوري" },
 ];
 
 async function main() {
