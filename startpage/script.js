@@ -689,34 +689,128 @@ async fetchWeather() {
         });
     }
 
-    createLinkElement(link, index) {
-        const linkElement = document.createElement('a');
-        linkElement.href = this.isEditMode ? 'javascript:void(0)' : link.url;
-        linkElement.className = 'link-item';
-        linkElement.target = '_blank';
-        linkElement.rel = 'noopener';
-        
-        linkElement.innerHTML = `
-            <span class="link-icon">${link.icon || '🔗'}</span>
-            <span class="link-text">${link.name}</span>
-        `;
-        
-        if (this.isEditMode) {
-            linkElement.addEventListener('click', (e) => e.preventDefault());
-            const removeBtn = document.createElement('button');
-            removeBtn.className = 'link-remove-btn';
-            removeBtn.setAttribute('aria-label', 'Remove link');
-            removeBtn.textContent = '✕';
-            removeBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.removeCustomLink(index);
-            });
-            linkElement.appendChild(removeBtn);
-        }
-        
-        return linkElement;
+
+
+createLinkElement(link, index) {
+    const linkElement = document.createElement('a');
+    linkElement.href = this.isEditMode ? 'javascript:void(0)' : link.url;
+    linkElement.className = 'link-item';
+    linkElement.target = '_blank';
+    linkElement.rel = 'noopener';
+    
+    Object.assign(linkElement.style, {
+        background: 'var(--bg-secondary)',
+        borderRadius: 'var(--radius-md, 8px)',
+        boxShadow: 'var(--shadow)',
+        border: '1px solid var(--border-color)',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '12px',
+        minHeight: 'auto',
+        textDecoration: 'none',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+    });
+    
+    linkElement.addEventListener('mouseenter', () => {
+        linkElement.style.transform = 'translateY(-2px)';
+        linkElement.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+    });
+    
+    linkElement.addEventListener('mouseleave', () => {
+        linkElement.style.transform = 'translateY(0)';
+        linkElement.style.boxShadow = 'var(--shadow)';
+    });
+    
+    const iconContainer = document.createElement('div');
+    iconContainer.style.cssText = 'display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; flex-shrink: 0;';
+    
+    // Extract hostname for favicon
+    let hostname = '';
+    try {
+        const url = new URL(link.url);
+        hostname = url.hostname;
+    } catch (error) {
+        console.warn('Invalid URL for custom link:', link.url);
+        hostname = '';
     }
+    
+    const faviconImg = document.createElement('img');
+    faviconImg.style.cssText = 'width: 24px; height: 24px; border-radius: 4px; display: block;';
+    faviconImg.alt = `${link.name} favicon`;
+    
+    const fallbackIcon = document.createElement('span');
+    fallbackIcon.textContent = link.icon || '🔗';
+    fallbackIcon.style.cssText = 'font-size: 20px; display: none; line-height: 1;';
+    
+    const faviconSources = [
+        `https://www.google.com/s2/favicons?sz=32&domain_url=${hostname}`,
+        `https://icons.duckduckgo.com/ip3/${hostname}.ico`,
+        `https://${hostname}/favicon.ico`
+    ];
+    
+    let currentSourceIndex = 0;
+    
+    const tryNextSource = () => {
+        if (currentSourceIndex < faviconSources.length) {
+            faviconImg.src = faviconSources[currentSourceIndex];
+            currentSourceIndex++;
+        } else {
+            faviconImg.style.display = 'none';
+            fallbackIcon.style.display = 'block';
+        }
+    };
+    
+    faviconImg.addEventListener('error', tryNextSource);
+    
+    tryNextSource();
+    
+    if (!hostname) {
+        faviconImg.style.display = 'none';
+        fallbackIcon.style.display = 'block';
+    }
+    
+    iconContainer.appendChild(faviconImg);
+    iconContainer.appendChild(fallbackIcon);
+    
+    const textElement = document.createElement('span');
+    textElement.textContent = link.name;
+    textElement.style.cssText = 'color: var(--text-primary); font-weight: 500; font-size: 14px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;';
+    
+    linkElement.appendChild(iconContainer);
+    linkElement.appendChild(textElement);
+    
+    if (this.isEditMode) {
+        linkElement.addEventListener('click', (e) => e.preventDefault());
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'link-remove-btn';
+        removeBtn.setAttribute('aria-label', 'Remove link');
+        removeBtn.textContent = '✕';
+        removeBtn.style.cssText = 'background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-secondary); cursor: pointer; font-size: 12px; margin-left: auto; padding: 4px 6px; flex-shrink: 0;';
+        
+        removeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.removeCustomLink(index);
+        });
+        
+        removeBtn.addEventListener('mouseenter', () => {
+            removeBtn.style.background = 'var(--accent-color)';
+            removeBtn.style.color = 'white';
+        });
+        
+        removeBtn.addEventListener('mouseleave', () => {
+            removeBtn.style.background = 'var(--bg-primary)';
+            removeBtn.style.color = 'var(--text-secondary)';
+        });
+        
+        linkElement.appendChild(removeBtn);
+    }
+    
+    return linkElement;
+}
 
     addCustomLink() {
         this.openAddLinkModal();
