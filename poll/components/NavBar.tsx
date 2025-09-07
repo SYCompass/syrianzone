@@ -22,7 +22,7 @@ export default function NavBar(): React.ReactElement {
       { label: "الحسابات الرسمية", href: "https://syrian.zone/syofficial", external: false, icon: <i className="fas fa-check-circle" style={{ color: "var(--sz-color-ink)" }} /> },
       { label: "الهوية البصرية", href: "https://syrian.zone/syid", external: false, icon: <i className="fas fa-palette" style={{ color: "var(--sz-color-ink)" }} /> },
       { label: "دليل الأحزاب", href: "https://syrian.zone/party", external: false, icon: <i className="fas fa-users" style={{ color: "var(--sz-color-ink)" }} /> },
-      { label: "تير ليست الوزراء", href: "https://syrian.zone/tierlist", external: false, icon: <i className="fas fa-list-ol" style={{ color: "var(--sz-color-ink)" }} /> },
+      { label: "تير ليست الحكومة", href: "https://syrian.zone/tierlist", external: false, icon: <i className="fas fa-list-ol" style={{ color: "var(--sz-color-ink)" }} /> },
       { label: "البوصلة السياسية", href: "https://syrian.zone/compass", external: false, icon: <i className="fas fa-compass" style={{ color: "var(--sz-color-ink)" }} /> },
       { label: "المواقع السورية", href: "https://syrian.zone/sites", external: false, icon: <i className="fas fa-globe" style={{ color: "var(--sz-color-ink)" }} /> },
       { label: "مبدل العلم", href: "https://github.com/SYCompass/Twitter-SVG-Syrian-Flag-Replacer/releases/tag/1.0.1", external: true, useImageIcon: true, imageSrc: "/assets/logo-lightmode.svg" },

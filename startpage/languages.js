@@ -72,7 +72,7 @@ const languages = {
         officialAccounts: "الحسابات الرسمية",
         visualIdentity: "الهوية البصرية",
         partyGuide: "دليل الأحزاب",
-        ministerTierlist: "تير ليست الوزراء",
+        ministerTierlist: "تير ليست الحكومة",
         politicalCompass: "البوصلة السياسية",
         syrianWebsites: "المواقع السورية",
         flagReplacer: "مبدل العلم",

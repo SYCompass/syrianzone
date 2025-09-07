@@ -22,7 +22,7 @@ export default async function Page() {
           </div>
         </Alert>
       </div>
-      <h1 className="text-3xl font-extrabold text-center mb-4">تير ليست وزراء الحكومة السورية الجديدة</h1>
+      <h1 className="text-3xl font-extrabold text-center mb-4">تير ليست الحكومة السورية الجديدة</h1>
       <p className="text-center text-gray-600 mb-6">يمكن حفظ صورة جاهزة لمشاركتها على السوشال ميديا بسهولة من خلال الزر الموجود في آخر الصفحة</p>
       <Card className="max-w-screen-lg mx-auto mb-6">
         <CardContent className="p-4">

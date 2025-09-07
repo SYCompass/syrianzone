@@ -6,7 +6,7 @@ export default function Footer(): React.JSX.Element {
     <footer className="footer py-6 mt-12 w-full">
       <div className="container mx-auto px-4 text-center">
         <p dir="ltr" className="text-[var(--sz-color-ink)]">
-         <a href="https://syrian.zone" target="_blank" rel="noopener">تير ليست الوزراء | Ministers Tier List 2025 &copy;</a>
+         <a href="https://syrian.zone" target="_blank" rel="noopener">تير ليست الحكومة | Government Tier List 2025 &copy;</a>
         </p>
         <p className="mt-2 text-sm text-[var(--sz-color-ink)]">
          <span className="font-semibold">تم التطوير بواسطة</span>

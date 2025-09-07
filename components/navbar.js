@@ -239,7 +239,7 @@ class NavBar extends HTMLElement {
             </a>
             <a href="/tierlist" class="nav-item">
               <i class="fas fa-list-ol" style="color: var(--sz-color-ink);"></i>
-              تير ليست الوزراء
+              تير ليست الحكومة
             </a>
             <a href="/compass" class="nav-item">
               <i class="fas fa-compass" style="color: var(--sz-color-ink);"></i>

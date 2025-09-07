@@ -237,7 +237,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
         onDrop={(e) => handleDrop(e, "bank")}
         data-bank-area
       >
-        <h2 className="font-bold text-center">قائمة الوزراء</h2>
+        <h2 className="font-bold text-center">قائمة المسؤولين</h2>
         <div className="flex flex-wrap justify-center gap-2 p-2">
           {bank.map((c) => {
             const selected = selectedIds.has(c.id);

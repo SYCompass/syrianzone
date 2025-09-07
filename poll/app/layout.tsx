@@ -9,7 +9,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export const metadata = {
-  title: "تقييم الوزراء",
+  title: "تقييم الحكومة",
   description: "Vote S–F tiers for ministers",
 };
 
