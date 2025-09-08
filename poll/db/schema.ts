@@ -16,6 +16,7 @@ export const candidates = pgTable("candidates", {
   name: varchar("name", { length: 200 }).notNull(),
   title: varchar("title", { length: 200 }),
   imageUrl: text("image_url"),
+  category: varchar("category", { length: 32 }).notNull().default("minister"),
   sort: integer("sort").notNull().default(0),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
