@@ -214,7 +214,7 @@ class NavBar extends HTMLElement {
       <nav class="navbar">
         <div class="container">
           <div class="mobile-header">
-            <a href="${BASE}" class="logo">
+            <a href="https://syrian.zone" class="logo">
               <img src="${BASE}/assets/logo-lightmode.svg" alt="Syrian Zone">
             </a>
             <div class="mobile-actions">
@@ -225,7 +225,7 @@ class NavBar extends HTMLElement {
           </div>
           <div class="nav-items">
             <div class="desktop-logo">
-              <a href="${BASE}" class="logo">
+              <a href="https://syrian.zone" class="logo">
                 <img src="${BASE}/assets/logo-lightmode.svg" alt="Syrian Zone" style="height: 50px;">
               </a>
             </div>
