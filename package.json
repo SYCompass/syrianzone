@@ -12,7 +12,7 @@
     "dev:tailwind": "tailwindcss -i ./styles/tailwind.css -o ./styles/output.css --watch",
     "build:tailwind": "tailwindcss -i ./styles/tailwind.css -o ./styles/output.min.css --minify",
     "dev:poll": "cd poll && PORT=4000 pnpm dev",
-    "start:poll": "cd poll && PORT=4000 pnpm start",
+    "start:poll": "cd poll && PORT=4000 pnpm start:migrate",
     "build:poll": "cd poll && pnpm build"
   },
   "dependencies": {
