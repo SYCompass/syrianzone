@@ -262,6 +262,34 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
         </div>
       </div>
 
+      <div className="mb-3 text-sm text-gray-700 text-center flex flex-wrap gap-2 items-center justify-center">
+        <span className="font-semibold">شرح المستويات:</span>
+        <span className="inline-flex items-center gap-1">
+          <span className="px-2 py-0.5 rounded-md text-white bg-rose-600 font-semibold">S</span>
+          <span>ممتاز</span>
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <span className="px-2 py-0.5 rounded-md text-white bg-amber-600 font-semibold">A</span>
+          <span>جيد جدًا</span>
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <span className="px-2 py-0.5 rounded-md text-white bg-emerald-600 font-semibold">B</span>
+          <span>جيد</span>
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <span className="px-2 py-0.5 rounded-md text-white bg-sky-600 font-semibold">C</span>
+          <span>مقبول</span>
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <span className="px-2 py-0.5 rounded-md text-white bg-violet-600 font-semibold">D</span>
+          <span>ضعيف</span>
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <span className="px-2 py-0.5 rounded-md text-white bg-gray-800 font-semibold">F</span>
+          <span>سيئ</span>
+        </span>
+      </div>
+
       <div ref={tiersRef} data-capture-target>
         {tierKeys.map((k) => (
           <div key={k} className="flex mb-1">
