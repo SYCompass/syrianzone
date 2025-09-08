@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
@@ -32,7 +32,37 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export default function TierBoard({ initialCandidates, pollId, voteDay }: Props) {
   const [tiers, setTiers] = useState<Record<TierKey, Candidate[]>>({ S: [], A: [], B: [], C: [], D: [], F: [] });
-  const [bank, setBank] = useState<Candidate[]>(initialCandidates);
+  // Deterministic seeded shuffle to avoid SSR/CSR hydration mismatch
+  const shuffledInitial = useMemo(() => {
+    function xmur3(str: string): number {
+      let h = 1779033703 ^ str.length;
+      for (let i = 0; i < str.length; i++) {
+        h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
+        h = (h << 13) | (h >>> 19);
+      }
+      h = Math.imul(h ^ (h >>> 16), 2246822507);
+      h = Math.imul(h ^ (h >>> 13), 3266489909);
+      return (h ^= h >>> 16) >>> 0;
+    }
+    function mulberry32(a: number) {
+      return function () {
+        a |= 0;
+        a = (a + 0x6D2B79F5) | 0;
+        let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    const seedStr = `${pollId}|${voteDay}`;
+    const rng = mulberry32(xmur3(seedStr));
+    const copy = [...initialCandidates];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }, [initialCandidates, pollId, voteDay]);
+  const [bank, setBank] = useState<Candidate[]>(shuffledInitial);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const containerRef = useRef<HTMLDivElement>(null);
   const tiersRef = useRef<HTMLDivElement>(null);
@@ -335,7 +365,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
           type="button"
           variant="destructive"
           onClick={() => {
-            setBank(initialCandidates);
+            setBank(shuffledInitial);
             setTiers(createEmptyTiers());
             setSelectedIds(new Set());
           }}
