@@ -202,8 +202,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       setIsSubmitting(false);
     } else {
       setSubmitStatus({ ok: true, message: "تم تسجيل التصويت" });
-      setBank(initialCandidates);
-      setTiers(createEmptyTiers());
       const ts = Date.now() + 1 * 60 * 1000;
       setNextSubmitAt(ts);
       localStorage.setItem(cooldownKey, String(ts));
@@ -225,8 +223,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       fileName: "tier-list.png",
       scale: 2,
     });
-    setBank(initialCandidates);
-    setTiers(createEmptyTiers());
   }
 
   return (
@@ -333,8 +329,19 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       </div>
 
       <div className="flex gap-3 justify-center mt-6 p-4">
-        <Button type="button" onClick={submit} disabled={isSubmitting}>إرسال</Button>
-        <Button type="button" variant="secondary" onClick={saveImage} disabled={isSubmitting}>حفظ كصورة</Button>
+        <Button type="button" variant="secondary" onClick={submit} disabled={isSubmitting}>إرسال</Button>
+        <Button type="button" onClick={saveImage} disabled={isSubmitting}>حفظ كصورة</Button>
+        <Button
+          type="button"
+          variant="destructive"
+          onClick={() => {
+            setBank(initialCandidates);
+            setTiers(createEmptyTiers());
+            setSelectedIds(new Set());
+          }}
+        >
+          مسح الاختيارات
+        </Button>
       </div>
       {submitStatus && (
         <div className="px-4 pb-2">
