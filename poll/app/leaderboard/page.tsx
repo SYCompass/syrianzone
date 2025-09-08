@@ -156,17 +156,21 @@ export default async function Page() {
   const second = triad[1];
   const third = triad[2];
 
-  // Build monthly series over the last 6 months for the line chart
+  // Build monthly series and per-category breakdown
   const [p] = await db.select().from(polls).where(eq(polls.slug, "best-ministers"));
   let months: string[] = [];
+  let series: { name: string; values: number[]; color?: string; imageUrl?: string }[] = [];
+  let seriesMinisters: { name: string; values: number[]; color?: string; imageUrl?: string }[] = [];
+  let seriesGovernors: { name: string; values: number[]; color?: string; imageUrl?: string }[] = [];
+  let rowsGov: Array<{ candidateId: string; name: string; title?: string; imageUrl?: string; votes: number; score: number; rank: number }> = [];
+  let monthMinBest: any[] = [], monthMinWorst: any[] = [], monthGovBest: any[] = [], monthGovWorst: any[] = [];
+  let rowsMinOnly: Array<{ candidateId: string; name: string; title?: string; imageUrl?: string; votes: number; score: number; rank: number }> = [];
   if (p) {
     const now = new Date();
     const yyyy = now.getUTCFullYear();
     const mm = String(now.getUTCMonth() + 1).padStart(2, "0");
     months = [`${yyyy}-${mm}`];
-  }
-  let series: { name: string; values: number[]; color?: string; imageUrl?: string }[] = [];
-  if (p && months.length) {
+
     const allRows = await db
       .select({ candidateId: dailyScores.candidateId, day: dailyScores.day, score: dailyScores.score })
       .from(dailyScores)
@@ -181,24 +185,13 @@ export default async function Page() {
       m.set(key, (m.get(key) || 0) + r.score);
       byCandidate.set(r.candidateId, m);
     }
-    const cands = await db
+    const candsAll = await db
       .select()
       .from(candidates)
       .where(eq(candidates.pollId, p.id))
       .orderBy(candidates.sort);
-    const raw = cands.map((c) => {
-      const values = months.map((m) => (byCandidate.get(c.id)?.get(m) || 0));
-      return { id: c.id, name: c.name, values, imageUrl: c.imageUrl || undefined };
-    });
-    // Build all-time totals to rank and assign shades of green
-    const totalsMap = new Map<string, number>();
-    for (const row of await db
-      .select({ candidateId: dailyScores.candidateId, score: dailyScores.score })
-      .from(dailyScores)
-      .where(eq(dailyScores.pollId, p.id))) {
-      totalsMap.set(row.candidateId, (totalsMap.get(row.candidateId) || 0) + row.score);
-    }
-    const ranked = [...raw].sort((a, b) => (totalsMap.get(b.id) || 0) - (totalsMap.get(a.id) || 0));
+
+    // Colors
     const GREEN_23 = Array.from({ length: 23 }, (_, i) => {
       const hue = 145;
       const saturation = 65;
@@ -207,10 +200,91 @@ export default async function Page() {
       const light = minLight + ((maxLight - minLight) * i) / 22;
       return `hsl(${hue} ${saturation}% ${Math.round(light)}%)`;
     });
+
+    // All-time totals for ranking/colors
+    const totalsRows = await db
+      .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
+      .from(dailyScores)
+      .where(eq(dailyScores.pollId, p.id));
+    const totalsScore = new Map<string, number>();
+    const totalsVotes = new Map<string, number>();
+    for (const r of totalsRows) {
+      totalsScore.set(r.candidateId, (totalsScore.get(r.candidateId) || 0) + r.score);
+      totalsVotes.set(r.candidateId, (totalsVotes.get(r.candidateId) || 0) + r.votes);
+    }
+
+    function buildSeries(list: typeof candsAll) {
+      const ranked = [...list].sort((a, b) => (totalsScore.get(b.id) || 0) - (totalsScore.get(a.id) || 0));
+      const colorById = new Map<string, string>();
+      ranked.forEach((s, i) => colorById.set(s.id, GREEN_23[Math.min(i, GREEN_23.length - 1)]));
+      return ranked.map((c) => ({
+        name: c.name,
+        values: months.map((m) => byCandidate.get(c.id)?.get(m) || 0),
+        color: colorById.get(c.id),
+        imageUrl: c.imageUrl || undefined,
+      }));
+    }
+
+    const ministers = candsAll.filter((c: any) => c.category !== "governor");
+    const governors = candsAll.filter((c: any) => c.category === "governor");
+
+    seriesMinisters = buildSeries(ministers);
+    seriesGovernors = buildSeries(governors);
+
+    // Also keep combined series (optional)
     const colorById = new Map<string, string>();
-    ranked.forEach((s, i) => colorById.set(s.id, GREEN_23[Math.min(i, GREEN_23.length - 1)]));
-    // Ensure legend order matches scores: use ranked order
-    series = ranked.map((s) => ({ name: s.name, values: s.values, color: colorById.get(s.id), imageUrl: s.imageUrl }));
+    series = buildSeries(candsAll);
+
+    // Build governors table rows by totals
+    const govTotals = governors
+      .map((c) => ({ candidateId: c.id, name: c.name, title: c.title || undefined, imageUrl: c.imageUrl || undefined, votes: totalsVotes.get(c.id) || 0, score: totalsScore.get(c.id) || 0 }))
+      .sort((a, b) => (b.score - a.score) || (b.votes - a.votes));
+    rowsGov = govTotals.map((t, i) => ({ ...t, rank: i + 1 }));
+
+    // Build ministers-only rows including zero-score entries
+    const minTotals = ministers
+      .map((c) => ({
+        candidateId: c.id,
+        name: c.name,
+        title: c.title || undefined,
+        imageUrl: c.imageUrl || undefined,
+        votes: totalsVotes.get(c.id) || 0,
+        score: totalsScore.get(c.id) || 0,
+      }))
+      .sort((a, b) => (b.score - a.score) || (b.votes - a.votes));
+    rowsMinOnly = minTotals.map((t, i) => ({ ...t, rank: i + 1 }));
+
+    // Month extremes per category (best/worst)
+    const start = getMonthStartUTC(p.timezone);
+    const monthRows = await db
+      .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score, day: dailyScores.day })
+      .from(dailyScores)
+      .where(and(eq(dailyScores.pollId, p.id), gte(dailyScores.day, start)))
+      .orderBy(desc(dailyScores.score), desc(dailyScores.votes));
+    const monthAgg = new Map<string, { votes: number; score: number }>();
+    for (const r of monthRows) {
+      const cur = monthAgg.get(r.candidateId) || { votes: 0, score: 0 };
+      monthAgg.set(r.candidateId, { votes: cur.votes + r.votes, score: cur.score + r.score });
+    }
+    function pickExtremes(list: typeof candsAll) {
+      const totals = list.map((c) => ({ candidateId: c.id, score: monthAgg.get(c.id)?.score || 0, votes: monthAgg.get(c.id)?.votes || 0 }));
+      totals.sort((a, b) => (b.score - a.score) || (b.votes - a.votes));
+      const best = totals.slice(0, 3).map((t, i) => {
+        const c = (candsAll as any[]).find((cc) => cc.id === t.candidateId)!;
+        return { candidateId: t.candidateId, name: c.name as string, title: (c.title as string | null) || undefined, imageUrl: (c.imageUrl as string | null) || undefined, score: t.score, votes: t.votes, rank: i + 1 };
+      });
+      const worst = totals.slice(-3).reverse().map((t, i) => {
+        const c = (candsAll as any[]).find((cc) => cc.id === t.candidateId)!;
+        return { candidateId: t.candidateId, name: c.name as string, title: (c.title as string | null) || undefined, imageUrl: (c.imageUrl as string | null) || undefined, score: t.score, votes: t.votes, rank: i + 1 };
+      });
+      return { best, worst };
+    }
+    const mins = pickExtremes(ministers);
+    const govs = pickExtremes(governors);
+    monthMinBest = mins.best;
+    monthMinWorst = mins.worst;
+    monthGovBest = govs.best;
+    monthGovWorst = govs.worst;
   }
 
   return (
@@ -267,51 +341,94 @@ export default async function Page() {
         </div>
       ) : null}
 
-      {months.length && series.length ? (
-        <div className="max-w-screen-md mx-auto mb-6">
-          <ClientOnly>
-            <MonthlyLineChart months={months} series={series} />
-          </ClientOnly>
+      {months.length && (seriesMinisters.length || seriesGovernors.length) ? (
+        <div className="max-w-screen-md mx-auto mb-6 space-y-8">
+          <div>
+            <h3 className="font-semibold mb-2 text-center">إحصائيات الحكومة ورؤساء الهيئات</h3>
+            <ClientOnly>
+              <MonthlyLineChart months={months} series={seriesMinisters} />
+            </ClientOnly>
+          </div>
+          {/* Top 3 of the month (Ministers) */}
+          <div className="max-w-screen-md mx-auto mt-6">
+            <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر - الحكومة</h2>
+            <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {monthMinBest.slice(0, 3).map((r) => (
+                <Card key={r.candidateId}>
+                  <CardContent className="py-3 flex items-center gap-3">
+                    <Avatar src={r.imageUrl || ""} alt={r.name} size={36} />
+                    <div>
+                      <div className="font-medium text-sm">{r.name}</div>
+                      {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+          {/* Worst 3 of the month (Ministers) */}
+          <div className="max-w-screen-md mx-auto mt-4">
+            <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر - الحكومة</h2>
+            <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {monthMinWorst.slice(0, 3).map((r) => (
+                <Card key={r.candidateId}>
+                  <CardContent className="py-3 flex items-center gap-3">
+                    <Avatar src={r.imageUrl || ""} alt={r.name} size={36} />
+                    <div>
+                      <div className="font-medium text-sm">{r.name}</div>
+                      {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-2 text-center">إحصائيات المحافظين</h3>
+            <ClientOnly>
+              <MonthlyLineChart months={months} series={seriesGovernors} />
+            </ClientOnly>
+          </div>
+          {/* Top 3 of the month (Governors) */}
+          <div className="max-w-screen-md mx-auto mt-6">
+            <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر - المحافظون</h2>
+            <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {monthGovBest.slice(0, 3).map((r) => (
+                <Card key={r.candidateId}>
+                  <CardContent className="py-3 flex items-center gap-3">
+                    <Avatar src={r.imageUrl || ""} alt={r.name} size={36} />
+                    <div>
+                      <div className="font-medium text-sm">{r.name}</div>
+                      {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+          {/* Worst 3 of the month (Governors) */}
+          <div className="max-w-screen-md mx-auto mt-4">
+            <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر - المحافظون</h2>
+            <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {monthGovWorst.slice(0, 3).map((r) => (
+                <Card key={r.candidateId}>
+                  <CardContent className="py-3 flex items-center gap-3">
+                    <Avatar src={r.imageUrl || ""} alt={r.name} size={36} />
+                    <div>
+                      <div className="font-medium text-sm">{r.name}</div>
+                      {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
         </div>
       ) : null}
-
-      {/* Top 3 of the month */}
-      <div className="max-w-screen-md mx-auto mt-6">
-        <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر</h2>
-        <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {month.best.slice(0, 3).map((r) => (
-            <Card key={r.candidateId}>
-              <CardContent className="py-3 flex items-center gap-3">
-                <Avatar src={r.imageUrl || ""} alt={r.name} size={36} />
-                <div>
-                  <div className="font-medium text-sm">{r.name}</div>
-                  {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-
-      {/* Worst 3 of the month */}
-      <div className="max-w-screen-md mx-auto mt-4">
-        <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر</h2>
-        <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {month.worst.slice(0, 3).map((r) => (
-            <Card key={r.candidateId}>
-              <CardContent className="py-3 flex items-center gap-3">
-                <Avatar src={r.imageUrl || ""} alt={r.name} size={36} />
-                <div>
-                  <div className="font-medium text-sm">{r.name}</div>
-                  {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
 
       <div className="max-w-screen-md mx-auto mt-4">
         {/* All-time leaderboard */}
@@ -329,7 +446,7 @@ export default async function Page() {
                 </Tr>
               </Thead>
               <Tbody>
-                {rows.map((r) => (
+                {rowsMinOnly.map((r) => (
                   <Tr key={r.candidateId}>
                     <Td>#{r.rank}</Td>
                     <Td>
@@ -350,6 +467,45 @@ export default async function Page() {
           </CardContent>
         </Card>
       </div>
+
+      <div className="max-w-screen-md mx-auto mt-4">
+        {/* Governors-only leaderboard */}
+        <h2 className="font-semibold mb-2">قائمة المحافظين</h2>
+        <p className="text-sm text-gray-500 mb-2">مجموع النقاط والأصوات الإجمالي</p>
+        <Card>
+          <CardContent>
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th className="w-10 text-right">#</Th>
+                  <Th className="w-full text-right">المسؤول</Th>
+                  <Th className="w-20 text-right">النقاط</Th>
+                  <Th className="w-10 text-right">الأصوات</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {rowsGov.map((r) => (
+                  <Tr key={r.candidateId}>
+                    <Td>#{r.rank}</Td>
+                    <Td>
+                      <div className="flex items-center gap-2">
+                        <Avatar src={r.imageUrl || ""} alt={r.name} size={28} />
+                        <div className="leading-tight">
+                          <div className="text-sm">{r.name}</div>
+                          {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
+                        </div>
+                      </div>
+                    </Td>
+                    <Td>{r.score}</Td>
+                    <Td>{r.votes}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
+
       <AlgorithmInfo />
     </main>
   );

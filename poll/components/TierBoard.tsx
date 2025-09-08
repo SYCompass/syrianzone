@@ -7,7 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle2Icon, AlertCircleIcon } from "lucide-react";
 import { exportTierListImage } from "@/lib/exportImage";
 
-type Candidate = { id: string; name: string; title?: string | null; imageUrl: string | null };
+type Candidate = { id: string; name: string; title?: string | null; imageUrl: string | null; category?: string | null };
 
 type Props = {
   initialCandidates: Candidate[];
@@ -62,7 +62,8 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     }
     return copy;
   }, [initialCandidates, pollId, voteDay]);
-  const [bank, setBank] = useState<Candidate[]>(shuffledInitial);
+  const [bank, setBank] = useState<Candidate[]>(() => shuffledInitial.filter((c) => c.category !== "governor"));
+  const [selectedCategory, setSelectedCategory] = useState<"minister" | "governor">("minister");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const containerRef = useRef<HTMLDivElement>(null);
   const tiersRef = useRef<HTMLDivElement>(null);
@@ -119,6 +120,16 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     const id = setTimeout(() => setSubmitStatus(null), 5000);
     return () => clearTimeout(id);
   }, [submitStatus]);
+
+  // Switch between categories for the bank (does not remove already placed items from tiers)
+  useEffect(() => {
+    const inTiers = new Set<string>(tierKeys.flatMap((k) => tiers[k].map((c) => c.id)));
+    const filtered = shuffledInitial.filter(
+      (c) => (c.category === (selectedCategory === "governor" ? "governor" : c.category)) && (selectedCategory === "governor" ? c.category === "governor" : c.category !== "governor")
+    ).filter((c) => !inTiers.has(c.id));
+    setBank(filtered);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCategory, tiers, shuffledInitial]);
 
   function moveCandidateTo(candidateId: string, target: TierKey | "bank") {
     const fromTierKey = tierKeys.find((k) => tiers[k].some((c) => c.id === candidateId));
@@ -186,7 +197,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   async function submit() {
     const totalAssigned = tierKeys.reduce((acc, k) => acc + tiers[k].length, 0);
     if (totalAssigned < 3) {
-      setSubmitStatus({ ok: false, message: "الحد الأدنى للاختيار هو ٣ وزراء. الرجاء اختيار ٣ على الأقل." });
+      setSubmitStatus({ ok: false, message: "الحد الأدنى للاختيار هو ٣. الرجاء اختيار ٣ على الأقل." });
       return;
     }
     if (nextSubmitAt && Date.now() < nextSubmitAt) {
@@ -263,7 +274,31 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
         onDrop={(e) => handleDrop(e, "bank")}
         data-bank-area
       >
-        <h2 className="font-bold text-center">قائمة المسؤولين</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="font-bold text-center flex-1">قائمة المسؤولين</h2>
+          <div className="text-sm flex items-center gap-2">
+            <label className="flex items-center gap-1">
+              <input
+                type="radio"
+                name="category"
+                value="minister"
+                checked={selectedCategory === "minister"}
+                onChange={() => setSelectedCategory("minister")}
+              />
+              الحكومة
+            </label>
+            <label className="flex items-center gap-1">
+              <input
+                type="radio"
+                name="category"
+                value="governor"
+                checked={selectedCategory === "governor"}
+                onChange={() => setSelectedCategory("governor")}
+              />
+              المحافظون
+            </label>
+          </div>
+        </div>
         <div className="flex flex-wrap justify-center gap-2 p-2">
           {bank.map((c) => {
             const selected = selectedIds.has(c.id);
