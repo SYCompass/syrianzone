@@ -52,17 +52,84 @@
           --sz-color-surface: #FFFFFF;
           --sz-color-ink: #0D1315;
         }
-        /* Basic modal transition */
-        .modal { transition: opacity 0.25s ease; }
-        .modal-content { transition: transform 0.25s ease; }
-        /* Hide scrollbar when modal is open */
-        body.modal-active { overflow: hidden; }
         /* Lazy loading styles */
         img.lazy { opacity: 0; transition: opacity 0.3s ease-in-out; }
         img.lazy.loaded { opacity: 1; }
         /* Add a subtle loading animation for images */
         @keyframes shimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }
         img.lazy { background: linear-gradient(to right, #f6f7f8 8%, #edeef1 18%, #f6f7f8 33%); background-size: 2000px 100%; animation: shimmer 2s infinite linear; }
+        
+        /* Social icons in cards */
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .social-icon {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.375rem;
+            background-color: #f3f4f6;
+            color: #4b5563;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .social-icon:hover {
+            background-color: #e5e7eb;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .social-icon i {
+            font-size: 1rem;
+        }
+        
+        /* Tooltip styles */
+        .social-icon::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1f2937;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            margin-bottom: 0.25rem;
+            z-index: 10;
+        }
+        
+        .social-icon::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 4px solid transparent;
+            border-top-color: #1f2937;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            z-index: 10;
+        }
+        
+        .social-icon:hover::after,
+        .social-icon:hover::before {
+            opacity: 1;
+        }
         
         /* Language Switcher Styles */
         .language-switcher {
@@ -73,22 +140,23 @@
             align-items: center;
             gap: 0.5rem;
             padding: 0.5rem 0.75rem;
-            border: 1px solid #e5e7eb;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 0.375rem;
-            background: white;
-            color: #374151;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
             font-size: 0.875rem;
             cursor: pointer;
             transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
         }
         .lang-btn:hover {
-            background-color: #f9fafb;
-            border-color: #d1d5db;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
         }
         .lang-btn.active {
-            background-color: var(--sz-color-primary);
-            color: white;
-            border-color: var(--sz-color-primary);
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--sz-color-primary);
+            border-color: rgba(255, 255, 255, 0.9);
         }
         .lang-btn img {
             object-fit: cover;
@@ -127,36 +195,44 @@
 <body class="bg-gray-100 font-sans">
     <nav-bar></nav-bar>
     
-    <div class="container mx-auto px-4 py-8">
-        <!-- Language Switcher -->
-        <div class="flex justify-center mb-6">
-            <div class="language-switcher bg-white rounded-lg shadow-md p-4">
-                <div class="flex items-center gap-4">
-                    <span class="text-sm font-medium text-gray-700" data-i18n="language.select">اختر اللغة:</span>
-                    <div class="flex gap-2">
-                        <button class="lang-btn active" data-lang="ar">
-                            <img src="/syofficial/assets/flags/ar.svg" alt="العربية" class="w-6 h-4 rounded">
-                            <span>العربية</span>
-                        </button>
-                        <button class="lang-btn" data-lang="en">
-                            <img src="/syofficial/assets/flags/en.svg" alt="English" class="w-6 h-4 rounded">
-                            <span>English</span>
-                        </button>
-                        <button class="lang-btn" data-lang="tr">
-                            <img src="/syofficial/assets/flags/tr.svg" alt="Türkçe" class="w-6 h-4 rounded">
-                            <span>Türkçe</span>
-                        </button>
-                        <button class="lang-btn" data-lang="ku">
-                            <img src="/syofficial/assets/flags/ku.svg" alt="Kurmanji" class="w-6 h-4 rounded">
-                            <span>Kurmanji</span>
-                        </button>
-                    </div>
-                </div>
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="fixed bottom-6 left-6 z-50 h-10 w-10 rounded-full bg-[var(--sz-color-primary)] text-white shadow-lg hover:bg-[var(--sz-color-accent)] transition-colors" style="display: none;">
+        <i class="fas fa-arrow-up h-5 w-5 mx-auto"></i>
+    </button>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-[var(--sz-color-primary)] to-[var(--sz-color-ink)] text-white py-16 md:py-24">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="max-w-3xl mx-auto">
+          <h1 class="text-4xl md:text-5xl font-bold mb-6" data-i18n="app.title">روابط الحسابات الرسمية السورية</h1>
+          <p class="text-xl text-white opacity-90 mb-8" data-i18n="app.description">دليل وسائل التواصل الاجتماعي للجهات السورية الرسمية - اضغط على اسم الجهة للوصول إلى صفحاتها الرسمية</p>
+          
+          <!-- Language Switcher -->
+          <div class="flex justify-center">
+            <div class="flex gap-2">
+              <button class="lang-btn active" data-lang="ar">
+                <img src="/syofficial/assets/flags/ar.svg" alt="العربية" class="w-6 h-4 rounded">
+                <span>العربية</span>
+              </button>
+              <button class="lang-btn" data-lang="en">
+                <img src="/syofficial/assets/flags/en.svg" alt="English" class="w-6 h-4 rounded">
+                <span>English</span>
+              </button>
+              <button class="lang-btn" data-lang="tr">
+                <img src="/syofficial/assets/flags/tr.svg" alt="Türkçe" class="w-6 h-4 rounded">
+                <span>Türkçe</span>
+              </button>
+              <button class="lang-btn" data-lang="ku">
+                <img src="/syofficial/assets/flags/ku.svg" alt="Kurmanji" class="w-6 h-4 rounded">
+                <span>Kurmanji</span>
+              </button>
             </div>
+          </div>
         </div>
-        
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8" data-i18n="app.title">دليل وسائل التواصل الاجتماعي للجهات السورية</h1>
-        <p class="text-center text-gray-600 mb-8" data-i18n="app.description">اضغط على اسم الجهة للوصول إلى صفحاتها الرسمية على وسائل التواصل الاجتماعي</p>
+      </div>
+    </section>
+
+    <div class="container mx-auto px-4 py-8">
         <div class="mb-8 p-4 bg-white rounded shadow-md">
             <div class="flex flex-col gap-4 items-center">
                 <div class="flex flex-wrap gap-2 justify-center w-full">
@@ -265,19 +341,6 @@
 
     </div>
 
-    <div id="social-modal" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 opacity-0 pointer-events-none">
-        <div class="modal-content bg-white rounded-lg shadow-xl w-11/12 md:max-w-md mx-auto p-6 transform -translate-y-10">
-            <div class="flex justify-between items-center border-b pb-3 mb-4">
-                <h3 id="modal-title" class="text-xl font-semibold" data-i18n="modal.title">روابط التواصل الاجتماعي</h3>
-                <button id="close-modal-button" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-            </div>
-            <div id="modal-body" class="space-y-3">
-            </div>
-            <div class="text-left mt-4">
-                <button id="close-modal-button-footer" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400" data-i18n="modal.close">إغلاق</button>
-            </div>
-        </div>
-    </div>
 
     <script src="/syofficial/i18n.js?ver=1.1"></script>
     <script src="/syofficial/script.js?ver=1"></script>

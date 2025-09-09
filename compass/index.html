@@ -69,148 +69,28 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/TextPlugin.min.js"></script>
   
-  <script>
-    // Cookie consent functions
-    function setCookie(name, value, days) {
-      let expires = "";
-      if (days) {
-        const date = new Date();
-        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-        expires = "; expires=" + date.toUTCString();
-      }
-      document.cookie = name + "=" + (value || "") + expires + "; path=/";
-    }
-
-    function getCookie(name) {
-      const nameEQ = name + "=";
-      const ca = document.cookie.split(";");
-      for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == " ") c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0)
-          return c.substring(nameEQ.length, c.length);
-      }
-      return null;
-    }
-
-    // PostHog initialization function
-    function initPostHog() {
-      !(function (t, e) {
-        var o, n, p, r;
-        e.__SV ||
-          ((window.posthog = e),
-            (e._i = []),
-            (e.init = function (i, s, a) {
-              function g(t, e) {
-                var o = e.split(".");
-                2 == o.length && ((t = t[o[0]]), (e = o[1])),
-                  (t[e] = function () {
-                    t.push(
-                      [e].concat(Array.prototype.slice.call(arguments, 0))
-                    );
-                  });
-              }
-              ((p = t.createElement("script")).type = "text/javascript"),
-                (p.crossOrigin = "anonymous"),
-                (p.async = !0),
-                (p.src =
-                  s.api_host.replace(
-                    ".i.posthog.com",
-                    "-assets.i.posthog.com"
-                  ) + "/static/array.js"),
-                (r =
-                  t.getElementsByTagName("script")[0]).parentNode.insertBefore(
-                    p,
-                    r
-                  );
-              var u = e;
-              for (
-                void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
-                u.people = u.people || [],
-                u.toString = function (t) {
-                  var e = "posthog";
-                  return (
-                    "posthog" !== a && (e += "." + a),
-                    t || (e += " (stub)"),
-                    e
-                  );
-                },
-                u.people.toString = function () {
-                  return u.toString(1) + ".people (stub)";
-                },
-                o =
-                "init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId captureTraceFeedback captureTraceMetric".split(
-                  " "
-                ),
-                n = 0;
-                n < o.length;
-                n++
-              )
-                g(u, o[n]);
-              e._i.push([i, s, a]);
-            }),
-            (e.__SV = 1));
-      })(document, window.posthog || []);
-      posthog.init("phc_OycGLzkRpncoy03IF9ZoFO4ezTRxkqY1HUuhSoj7bMz", {
-        api_host: "https://eu.i.posthog.com",
-        person_profiles: "identified_only",
-      });
-    }
-
-    // Check for analytics consent on page load
-    window.addEventListener("DOMContentLoaded", function () {
-      const hasConsent = getCookie("analytics_consent");
-      if (hasConsent === "true") {
-        initPostHog();
-      } else if (hasConsent === null) {
-        // Show consent banner if no choice has been made
-        document.getElementById("consent-banner").classList.remove("hidden");
-      }
-    });
-
-    // Handle consent choice
-    function handleConsent(accepted) {
-      setCookie("analytics_consent", accepted, 365); // Store consent for 1 year
-      document.getElementById("consent-banner").classList.add("hidden");
-      if (accepted) {
-        initPostHog();
-      }
-    }
-  </script>
 </head>
 
 <body class="bg-gray-100">
   <!-- Navbar Web Component -->
   <nav-bar></nav-bar>
 
-  <!-- Cookie Consent Banner -->
-  <div id="consent-banner" class="hidden bg-white shadow-lg p-4 z-50">
-    <div class="container mx-auto max-w-4xl flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="text-gray-700">
-        <p class="mb-2">
-          نستخدم تقنيات التحليل لتحسين تجربة المستخدم وفهم كيفية استخدام
-          موقعنا.
-        </p>
-        <p class="text-sm">
-          يمكنك قبول أو رفض هذه التقنيات. يمكنك تغيير خيارك في أي وقت.
-        </p>
-      </div>
-      <div class="flex gap-3 animate-pulse">
-        <button onclick="handleConsent(false)" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition">
-          رفض
-        </button>
-        <button onclick="handleConsent(true)"
-          class="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition">
-          قبول
-        </button>
+  <!-- Back to Top Button -->
+  <button id="backToTop" class="fixed bottom-6 left-6 z-50 h-10 w-10 rounded-full bg-[var(--sz-color-primary)] text-white shadow-lg hover:bg-[var(--sz-color-accent)] transition-colors" style="display: none;">
+    <i class="fas fa-arrow-up h-5 w-5 mx-auto"></i>
+  </button>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-[var(--sz-color-primary)] to-[var(--sz-color-ink)] text-white py-16 md:py-24">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="max-w-3xl mx-auto">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">بوصلة سوريا</h1>
+        <p class="text-xl text-white opacity-90">اختبار البوصلة السياسية لسوريا - اكتشف ميولك السياسية على ستة محاور مختلفة</p>
       </div>
     </div>
-  </div>
+  </section>
+
   <div class="container mx-auto px-4 py-8">
-    <header class="text-center mb-10">
-      <h1 class="text-4xl font-bold text-gray-800 mb-2">بوصلة سوريا</h1>
-      <p class="text-xl text-gray-600">اختبار البوصلة السياسية لسوريا</p>
-    </header>
 
     <div id="previous-results" class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8 mb-8 hidden">
       <h2 class="text-2xl font-bold mb-4">نتائج الإختبارات السابقة</h2>
@@ -241,7 +121,7 @@
         </ul>
       </div>
       <button id="start-btn"
-        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 w-full">
+        class="bg-[var(--sz-color-primary)] hover:bg-[var(--sz-color-accent)] text-white font-bold py-3 px-6 rounded-lg transition duration-300 w-full">
         ابدأ الاختبار
       </button>
     </div>
@@ -250,8 +130,6 @@
       <div class="mb-4">
         <div class="flex justify-between items-center mb-2">
           <span id="question-number" class="text-gray-600">السؤال 1 من 30</span>
-          <span id="category" class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">سلطويّة مقابل
-            ليبرالية</span>
         </div>
         <h2 id="question-text" class="text-xl font-bold"></h2>
       </div>
@@ -290,12 +168,12 @@
           السابق
         </button>
         <button id="next-btn"
-          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+          class="bg-[var(--sz-color-primary)] hover:bg-[var(--sz-color-accent)] text-white font-bold py-2 px-4 rounded-lg transition duration-300">
           التالي
         </button>
       </div>
       <div class="mt-4 w-full bg-gray-200 rounded-full h-2.5">
-        <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+        <div id="progress-bar" class="bg-[var(--sz-color-primary)] h-2.5 rounded-full" style="width: 0%"></div>
       </div>
     </div>
 
@@ -407,11 +285,11 @@
 
       <div class="mt-8 text-center">
         <button id="restart-btn"
-          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+          class="bg-[var(--sz-color-primary)] hover:bg-[var(--sz-color-accent)] text-white font-bold py-3 px-6 rounded-lg transition duration-300">
           إعادة الاختبار
         </button>
         <button id="share-btn"
-          class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ml-4">
+          class="bg-[var(--sz-color-accent)] hover:opacity-90 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ml-4">
           مشاركة النتائج
         </button>
       </div>
@@ -457,8 +335,7 @@
     </div>
   </div>
 
-  <script src="/compass/questions.js"></script>
-  <script src="/compass/app.js"></script>
+  <script src="/compass/app.js?v=1.0.1"></script>
 </body>
 
 </html>

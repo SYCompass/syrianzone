@@ -6,8 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentLanguage = localStorage.getItem('preferredLanguage') || 'ar';
     let currentFilter = 'all';
     let currentSearchTerm = '';
-    let currentModalId = null;
-    let currentModalCategory = null;
 
     // --- DOM Elements ---
     const governoratesGrid = document.getElementById('governorates-grid');
@@ -18,11 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const syndicatesGrid = document.getElementById('syndicates-grid');
     const universitiesGrid = document.getElementById('universities-grid');
     const embassiesGrid = document.getElementById('embassies-grid');
-    const modal = document.getElementById('social-modal');
-    const modalTitle = document.getElementById('modal-title');
-    const modalBody = document.getElementById('modal-body');
-    const closeModalButton = document.getElementById('close-modal-button');
-    const closeModalButtonFooter = document.getElementById('close-modal-button-footer');
     const searchBar = document.getElementById('search-bar');
     const filterButtons = document.querySelectorAll('.filter-btn');
     const sections = document.querySelectorAll('.data-section');
@@ -227,11 +220,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const fragment = document.createDocumentFragment();
         items.forEach(item => {
             const cell = document.createElement('div');
-            cell.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 ease-in-out cursor-pointer flex flex-col';
+            cell.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 ease-in-out flex flex-col';
             cell.dataset.id = item.id;
             cell.dataset.category = category;
             cell.dataset.name = item.name.toLowerCase();
             cell.dataset.name_ar = item.name_ar.toLowerCase();
+            
+            // Generate social icons HTML
+            let socialIconsHTML = '';
+            if (item.socials && Object.keys(item.socials).length > 0) {
+                socialIconsHTML = `<div class="social-icons">`;
+                Object.entries(item.socials).forEach(([platform, link]) => {
+                    socialIconsHTML += `
+                        <a href="${link}" target="_blank" rel="noopener noreferrer" 
+                           class="social-icon" data-tooltip="${platform.charAt(0).toUpperCase() + platform.slice(1)}"
+                           onclick="event.stopPropagation()">
+                            <i class="${getSocialIcon(platform)}"></i>
+                        </a>`;
+                });
+                socialIconsHTML += `</div>`;
+            }
+            
             cell.innerHTML = `
                 <div class="w-full bg-gray-200"> 
                     <img data-src="/syofficial/${item.image}" alt="${currentLanguage === 'ar' ? item.name_ar : item.name}" class="w-full h-full object-cover" style="aspect-ratio: 1/1;" onerror="this.onerror=null; this.src='images/placeholder.png';">
@@ -239,8 +248,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="p-3 flex-grow flex flex-col items-center justify-center"> 
                     <span class="block text-center text-xl font-medium text-gray-600 leading-snug mt-1">${currentLanguage === 'ar' ? item.name_ar : item.name}</span>
                     ${item.description ? `<span class="block text-center text-xs text-gray-500 mt-1">${currentLanguage === 'ar' ? (item.description_ar || item.description) : item.description}</span>` : ''}
+                    ${socialIconsHTML}
                 </div>`;
-            cell.addEventListener('click', () => openModal(item.id, category));
+            
             const img = cell.querySelector('img');
             imageObserver.observe(img);
             fragment.appendChild(cell);
@@ -318,17 +328,6 @@ document.addEventListener('DOMContentLoaded', () => {
             populateAllGrids(); // Re-populates with new language
         }
 
-        // Update modal if it's open
-        if (!modal.classList.contains('pointer-events-none')) {
-            const currentItem = allData[currentModalCategory]?.find(i => i.id === currentModalId);
-            if (currentItem) {
-                modalTitle.textContent = currentLanguage === 'ar' ? currentItem.name_ar : currentItem.name;
-                const descriptionElement = modalBody.querySelector('p');
-                if (descriptionElement && currentItem.description) {
-                    descriptionElement.textContent = currentLanguage === 'ar' ? (currentItem.description_ar || currentItem.description) : currentItem.description;
-                }
-            }
-        }
         
         // General UI text update
         if (typeof translations !== 'undefined' && translations[currentLanguage]) {
@@ -387,48 +386,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Modal ---
-    function openModal(itemId, category) {
-        currentModalId = itemId;
-        currentModalCategory = category;
-        const item = allData[category]?.find(i => i.id === itemId);
-        if (!item) return;
-
-        modalTitle.textContent = currentLanguage === 'ar' ? item.name_ar : item.name;
-        modalBody.innerHTML = ''; 
-
-        if (item.description) {
-            const p = document.createElement('p');
-            p.className = 'text-gray-600 text-center mb-4';
-            p.textContent = currentLanguage === 'ar' ? (item.description_ar || item.description) : item.description;
-            modalBody.appendChild(p);
-        }
-
-        if (item.socials && Object.keys(item.socials).length > 0) {
-            Object.entries(item.socials).forEach(([platform, link]) => {
-                const a = document.createElement('a');
-                a.href = link;
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-                a.className = 'flex items-center space-x-3 p-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors';
-                a.innerHTML = `
-                    <i class="${getSocialIcon(platform)} fa-fw text-xl text-blue-600"></i>
-                    <span class="text-gray-800 capitalize">${platform}</span>
-                    <i class="fas fa-external-link-alt text-gray-400 ml-auto text-xs"></i>`;
-                modalBody.appendChild(a);
-            });
-        } else {
-            modalBody.innerHTML = `<p class="text-gray-500" data-i18n="modal.noSocialLinks">No social media links available.</p>`;
-        }
-
-        document.body.classList.add('modal-active');
-        modal.classList.remove('opacity-0', 'pointer-events-none');
-    }
-
-    function closeModal() {
-        document.body.classList.remove('modal-active');
-        modal.classList.add('opacity-0', 'pointer-events-none');
-    }
 
     function getSocialIcon(platform) {
         const icons = {
@@ -505,10 +462,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        closeModalButton.addEventListener('click', closeModal);
-        closeModalButtonFooter.addEventListener('click', closeModal);
-        modal.addEventListener('click', e => e.target === modal && closeModal());
-        document.addEventListener('keydown', e => e.key === 'Escape' && closeModal());
         document.addEventListener('languageChange', e => updatePageLanguage(e.detail.lang));
     }
 
@@ -541,6 +494,37 @@ document.addEventListener('DOMContentLoaded', () => {
             hideLoading();
         }
     }
+
+    // --- Back to Top Functionality ---
+    function initializeBackToTop() {
+        const backToTop = document.getElementById('backToTop');
+        
+        if (!backToTop) return;
+
+        // Back to top functionality
+        function toggleBackToTop() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            backToTop.style.display = scrollTop > 300 ? 'block' : 'none';
+        }
+
+        // Event listeners
+        window.addEventListener('scroll', () => {
+            toggleBackToTop();
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Initial call
+        toggleBackToTop();
+    }
+
+    // Initialize back to top functionality
+    initializeBackToTop();
 
     init();
 });
