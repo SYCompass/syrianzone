@@ -140,22 +140,23 @@
             align-items: center;
             gap: 0.5rem;
             padding: 0.5rem 0.75rem;
-            border: 1px solid #e5e7eb;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 0.375rem;
-            background: white;
-            color: #374151;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
             font-size: 0.875rem;
             cursor: pointer;
             transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
         }
         .lang-btn:hover {
-            background-color: #f9fafb;
-            border-color: #d1d5db;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
         }
         .lang-btn.active {
-            background-color: var(--sz-color-primary);
-            color: white;
-            border-color: var(--sz-color-primary);
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--sz-color-primary);
+            border-color: rgba(255, 255, 255, 0.9);
         }
         .lang-btn img {
             object-fit: cover;
@@ -194,36 +195,44 @@
 <body class="bg-gray-100 font-sans">
     <nav-bar></nav-bar>
     
-    <div class="container mx-auto px-4 py-8">
-        <!-- Language Switcher -->
-        <div class="flex justify-center mb-6">
-            <div class="language-switcher bg-white rounded-lg shadow-md p-4">
-                <div class="flex items-center gap-4">
-                    <span class="text-sm font-medium text-gray-700" data-i18n="language.select">اختر اللغة:</span>
-                    <div class="flex gap-2">
-                        <button class="lang-btn active" data-lang="ar">
-                            <img src="/syofficial/assets/flags/ar.svg" alt="العربية" class="w-6 h-4 rounded">
-                            <span>العربية</span>
-                        </button>
-                        <button class="lang-btn" data-lang="en">
-                            <img src="/syofficial/assets/flags/en.svg" alt="English" class="w-6 h-4 rounded">
-                            <span>English</span>
-                        </button>
-                        <button class="lang-btn" data-lang="tr">
-                            <img src="/syofficial/assets/flags/tr.svg" alt="Türkçe" class="w-6 h-4 rounded">
-                            <span>Türkçe</span>
-                        </button>
-                        <button class="lang-btn" data-lang="ku">
-                            <img src="/syofficial/assets/flags/ku.svg" alt="Kurmanji" class="w-6 h-4 rounded">
-                            <span>Kurmanji</span>
-                        </button>
-                    </div>
-                </div>
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="fixed bottom-6 left-6 z-50 h-10 w-10 rounded-full bg-[var(--sz-color-primary)] text-white shadow-lg hover:bg-[var(--sz-color-accent)] transition-colors" style="display: none;">
+        <i class="fas fa-arrow-up h-5 w-5 mx-auto"></i>
+    </button>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-[var(--sz-color-primary)] to-[var(--sz-color-ink)] text-white py-16 md:py-24">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="max-w-3xl mx-auto">
+          <h1 class="text-4xl md:text-5xl font-bold mb-6" data-i18n="app.title">روابط الحسابات الرسمية السورية</h1>
+          <p class="text-xl text-white opacity-90 mb-8" data-i18n="app.description">دليل وسائل التواصل الاجتماعي للجهات السورية الرسمية - اضغط على اسم الجهة للوصول إلى صفحاتها الرسمية</p>
+          
+          <!-- Language Switcher -->
+          <div class="flex justify-center">
+            <div class="flex gap-2">
+              <button class="lang-btn active" data-lang="ar">
+                <img src="/syofficial/assets/flags/ar.svg" alt="العربية" class="w-6 h-4 rounded">
+                <span>العربية</span>
+              </button>
+              <button class="lang-btn" data-lang="en">
+                <img src="/syofficial/assets/flags/en.svg" alt="English" class="w-6 h-4 rounded">
+                <span>English</span>
+              </button>
+              <button class="lang-btn" data-lang="tr">
+                <img src="/syofficial/assets/flags/tr.svg" alt="Türkçe" class="w-6 h-4 rounded">
+                <span>Türkçe</span>
+              </button>
+              <button class="lang-btn" data-lang="ku">
+                <img src="/syofficial/assets/flags/ku.svg" alt="Kurmanji" class="w-6 h-4 rounded">
+                <span>Kurmanji</span>
+              </button>
             </div>
+          </div>
         </div>
-        
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8" data-i18n="app.title">دليل وسائل التواصل الاجتماعي للجهات السورية</h1>
-        <p class="text-center text-gray-600 mb-8" data-i18n="app.description">اضغط على اسم الجهة للوصول إلى صفحاتها الرسمية على وسائل التواصل الاجتماعي</p>
+      </div>
+    </section>
+
+    <div class="container mx-auto px-4 py-8">
         <div class="mb-8 p-4 bg-white rounded shadow-md">
             <div class="flex flex-col gap-4 items-center">
                 <div class="flex flex-wrap gap-2 justify-center w-full">
