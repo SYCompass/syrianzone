@@ -36,11 +36,6 @@
         "socialLinks": "Girêdanên ragihandinê",
         "noLinks": "Girêdan tune"
     },
-    "modal": {
-        "title": "Girêdanên medya civakî",
-        "close": "girtin",
-        "noSocialLinks": "Girêdanên medya civakî tune."
-    },
     "view": {
         "grid": "Tora Dîtina",
         "table": "Tabloya dîtinê"
