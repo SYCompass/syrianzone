@@ -44,99 +44,31 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Utility Functions ---
-    function delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    function showLoading() { /* Can be implemented to show a spinner */ }
-    function hideLoading() { /* Can be implemented to hide a spinner */ }
-
-    function showError(message) {
-        console.error('Error:', message);
-        // This could be expanded to show a toast notification
-    }
+    function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+    function showLoading() { /* spinner */ }
+    function hideLoading() { /* spinner */ }
+    function showError(message) { console.error('Error:', message); }
 
     // --- Caching ---
     function getCachedData() {
-        try {
-            const cached = localStorage.getItem('syrian_official_data_cache');
-            if (!cached) return null;
-
-            const { data, timestamp } = JSON.parse(cached);
-            if (Date.now() - timestamp < CONFIG.GOOGLE_SHEETS.CACHE_DURATION) {
-                return data;
-            }
-            localStorage.removeItem('syrian_official_data_cache');
-            return null;
-        } catch (error) {
-            console.warn('Cache read error:', error);
-            return null;
-        }
+        const cache = window.SZ?.cache?.createCache('syofficial');
+        return cache?.get('data') || null;
     }
-
     function cacheData(data) {
-        try {
-            const cacheItem = { data, timestamp: Date.now() };
-            localStorage.setItem('syrian_official_data_cache', JSON.stringify(cacheItem));
-        } catch (error) {
-            console.warn('Cache write error:', error);
-        }
+        const cache = window.SZ?.cache?.createCache('syofficial');
+        cache?.set('data', data, CONFIG.GOOGLE_SHEETS.CACHE_DURATION);
     }
 
     // --- CSV Parsing ---
-    function parseCSVLine(line) {
-        const result = [];
-        let current = '';
-        let inQuotes = false;
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            if (char === '"') {
-                inQuotes = !inQuotes;
-            } else if (char === ',' && !inQuotes) {
-                result.push(current);
-                current = '';
-            } else {
-                current += char;
-            }
-        }
-        result.push(current);
-        return result;
-    }
-
-    function parseCSV(csvText) {
-        try {
-            const lines = csvText.split('\n');
-            const headers = lines[0].split(',').map(h => h.trim());
-            const data = [];
-            for (let i = 1; i < lines.length; i++) {
-                if (lines[i].trim() === '') continue;
-                const values = parseCSVLine(lines[i]);
-                if (values.length === headers.length) {
-                    const row = {};
-                    headers.forEach((header, index) => {
-                        row[header] = values[index] ? values[index].trim() : '';
-                    });
-                    data.push(row);
-                }
-            }
-            return data;
-        } catch (error) {
-            throw new Error(`CSV parsing error: ${error.message}`);
-        }
-    }
+    function parseCSV(csvText) { return window.SZ.csv.parseCSVToObjects(csvText); }
 
     // --- Data Transformation ---
     function convertCSVToStructuredData(csvData) {
         const structuredData = { governorates: [], ministries: [], ministers: [], public_figures: [], other: [], syndicates: [], universities: [], embassies: [] };
         const socialPlatforms = ['Facebook URL', 'Instagram URL', 'LinkedIn URL', 'Telegram URL', 'Telegram URL (Secondary)', 'Twitter/X URL', 'Website URL', 'WhatsApp URL', 'YouTube URL'];
-
         csvData.forEach(row => {
             const category = row['Category']?.toLowerCase().trim();
-            if (!category) {
-                console.warn('Row has no category, skipping:', row);
-                return;
-            }
-
+            if (!category) return;
             const item = {
                 id: row['ID'] || '',
                 name: row['Name (English)'] || '',
@@ -146,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 image: row['Image Path'] || '',
                 socials: {}
             };
-
             socialPlatforms.forEach(platform => {
                 const url = row[platform];
                 if (url && url.trim()) {
@@ -154,39 +85,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     item.socials[key] = url.trim();
                 }
             });
-
             const categoryKey = category.replace(/\s+/g, '_');
-            if (structuredData.hasOwnProperty(categoryKey)) {
-                structuredData[categoryKey].push(item);
-            } else {
-                console.warn(`Unknown category "${category}" for row:`, row);
-            }
+            if (structuredData.hasOwnProperty(categoryKey)) structuredData[categoryKey].push(item);
         });
         return structuredData;
     }
 
     // --- Data Fetching ---
     async function fetchFromGoogleSheets() {
-        const { CSV_URL, MAX_RETRIES, RETRY_DELAY } = CONFIG.GOOGLE_SHEETS;
-        let lastError;
-
-        for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-            try {
-                const response = await fetch(CSV_URL, { redirect: 'follow' });
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-                const csvText = await response.text();
-                if (!csvText || !csvText.trim()) throw new Error('Empty CSV data received');
-                if (csvText.trim().toLowerCase().startsWith('<html')) throw new Error('Received HTML redirect instead of CSV data');
-                
-                return parseCSV(csvText);
-            } catch (error) {
-                lastError = error;
-                console.warn(`Attempt ${attempt} failed:`, error.message);
-                if (attempt < MAX_RETRIES) await delay(RETRY_DELAY * attempt);
-            }
-        }
-        throw new Error(`Failed to fetch data after ${MAX_RETRIES} attempts: ${lastError.message}`);
+        const { CSV_URL, MAX_RETRIES } = CONFIG.GOOGLE_SHEETS;
+        const res = await window.SZ.http.fetchWithRetry(CSV_URL, { retries: MAX_RETRIES });
+        return parseCSV(res.text);
     }
 
     // --- UI Population ---
@@ -205,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!gridElement) return;
         gridElement.innerHTML = '';
         if (!items || items.length === 0) return;
-
         const imageObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -216,7 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }, { rootMargin: '50px 0px', threshold: 0.01 });
-
         const fragment = document.createDocumentFragment();
         items.forEach(item => {
             const cell = document.createElement('div');
@@ -225,8 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
             cell.dataset.category = category;
             cell.dataset.name = item.name.toLowerCase();
             cell.dataset.name_ar = item.name_ar.toLowerCase();
-            
-            // Generate social icons HTML
             let socialIconsHTML = '';
             if (item.socials && Object.keys(item.socials).length > 0) {
                 socialIconsHTML = `<div class="social-icons">`;
@@ -240,7 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 socialIconsHTML += `</div>`;
             }
-            
             cell.innerHTML = `
                 <div class="w-full bg-gray-200"> 
                     <img data-src="/syofficial/${item.image}" alt="${currentLanguage === 'ar' ? item.name_ar : item.name}" class="w-full h-full object-cover" style="aspect-ratio: 1/1;" onerror="this.onerror=null; this.src='images/placeholder.png';">
@@ -250,7 +154,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${item.description ? `<span class="block text-center text-xs text-gray-500 mt-1">${currentLanguage === 'ar' ? (item.description_ar || item.description) : item.description}</span>` : ''}
                     ${socialIconsHTML}
                 </div>`;
-            
             const img = cell.querySelector('img');
             imageObserver.observe(img);
             fragment.appendChild(cell);
@@ -261,7 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function populateTable() {
         if (!tableBody) return;
         tableBody.innerHTML = '';
-
         const sectionConfig = [
             { key: 'governorates', i18n: 'sections.governorates' },
             { key: 'ministries', i18n: 'sections.ministries' },
@@ -272,24 +174,20 @@ document.addEventListener('DOMContentLoaded', () => {
             { key: 'embassies', i18n: 'sections.embassies' },
             { key: 'other', i18n: 'sections.other' }
         ];
-
         const fragment = document.createDocumentFragment();
         sectionConfig.forEach(section => {
             const items = allData[section.key];
             if (!items || items.length === 0) return;
-
             const headerRow = document.createElement('tr');
             headerRow.className = 'bg-gray-100';
             headerRow.innerHTML = `<td colspan="3" class="px-6 py-3 text-sm font-semibold text-gray-900"><span data-i18n="${section.i18n}">${section.key}</span></td>`;
             fragment.appendChild(headerRow);
-
             items.forEach(item => {
                 const row = document.createElement('tr');
                 row.className = 'hover:bg-gray-50 flex flex-col sm:table-row border-b border-gray-200 sm:border-0';
                 row.dataset.name = item.name.toLowerCase();
                 row.dataset.name_ar = item.name_ar.toLowerCase();
                 row.dataset.category = section.key;
-
                 const socialLinksHTML = item.socials && Object.keys(item.socials).length > 0 ?
                     Object.entries(item.socials).map(([platform, link]) => `
                         <a href="${link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 transition-colors">
@@ -297,7 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span class="text-xs text-gray-700 mr-1">${platform}</span>
                         </a>`).join('') :
                     `<span class="text-sm text-gray-500" data-i18n="table.noLinks">No Links</span>`;
-
                 row.innerHTML = `
                     <td class="px-6 py-4 sm:whitespace-nowrap flex flex-col sm:table-cell">
                         <div class="text-xs text-gray-500 sm:hidden mb-1" data-i18n="table.name">Name</div>
@@ -321,15 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updatePageLanguage(lang) {
         currentLanguage = lang;
         localStorage.setItem('preferredLanguage', currentLanguage);
-        
-        if (isTableView) {
-            populateTable(); // Re-populates with new language
-        } else {
-            populateAllGrids(); // Re-populates with new language
-        }
-
-        
-        // General UI text update
+        if (isTableView) { populateTable(); } else { populateAllGrids(); }
         if (typeof translations !== 'undefined' && translations[currentLanguage]) {
             const langData = translations[currentLanguage];
             document.querySelectorAll('[data-i18n]').forEach(element => {
@@ -343,7 +232,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function filterAndSearch() {
         currentSearchTerm = searchBar.value.toLowerCase().trim();
         let hasVisibleItems = false;
-
         if (isTableView) {
             tableBody.querySelectorAll('tr[data-category]').forEach(row => {
                 const matchesSearch = row.dataset.name.includes(currentSearchTerm) || row.dataset.name_ar.includes(currentSearchTerm);
@@ -352,7 +240,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 row.style.display = isVisible ? '' : 'none';
                 if (isVisible) hasVisibleItems = true;
             });
-            // Also toggle section headers based on filter
             tableBody.querySelectorAll('tr:not([data-category])').forEach(headerRow => {
                  const sectionKey = headerRow.querySelector('span')?.getAttribute('data-i18n')?.split('.')[1];
                  if(sectionKey) {
@@ -364,19 +251,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const category = section.dataset.category;
                 let sectionHasVisibleItems = false;
                 const isSectionVisibleByFilter = currentFilter === 'all' || currentFilter === category;
-                
                 section.querySelectorAll('div[data-category]').forEach(item => {
                     const matchesSearch = item.dataset.name.includes(currentSearchTerm) || item.dataset.name_ar.includes(currentSearchTerm);
                     const isVisible = isSectionVisibleByFilter && matchesSearch;
                     item.style.display = isVisible ? 'flex' : 'none';
                     if (isVisible) sectionHasVisibleItems = true;
                 });
-
                 section.style.display = sectionHasVisibleItems ? 'block' : 'none';
                 if (sectionHasVisibleItems) hasVisibleItems = true;
             });
         }
-
         noResultsDiv.style.display = hasVisibleItems ? 'none' : 'block';
         if (!hasVisibleItems) {
             const noResultsElement = noResultsDiv.querySelector('[data-i18n]');
@@ -385,7 +269,6 @@ document.addEventListener('DOMContentLoaded', () => {
             noResultsElement.textContent = getNestedValue(langData, key) || 'No results found.';
         }
     }
-
 
     function getSocialIcon(platform) {
         const icons = {
@@ -396,37 +279,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return icons[platform.toLowerCase()] || 'fas fa-link';
     }
 
-    // Theme color variables for dynamic styling
-    const themeColors = {
-        primary: 'var(--sz-color-primary)',
-        accent: 'var(--sz-color-accent)',
-        surface: 'var(--sz-color-surface)',
-        ink: 'var(--sz-color-ink)'
-    };
-
     // --- Language Switcher ---
     function setupLanguageSwitcher() {
         const langButtons = document.querySelectorAll('.lang-btn');
-        
         langButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const lang = button.dataset.lang;
-                
-                // Update active state
                 langButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
-                
-                // Update language
                 updatePageLanguage(lang);
-                
-                // Call global switchLanguage if available
-                if (window.switchLanguage) {
-                    window.switchLanguage(lang);
-                }
+                if (window.switchLanguage) { window.switchLanguage(lang); }
             });
         });
-        
-        // Set initial active state based on current language
         const currentLangButton = document.querySelector(`.lang-btn[data-lang="${currentLanguage}"]`);
         if (currentLangButton) {
             langButtons.forEach(btn => btn.classList.remove('active'));
@@ -444,24 +308,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isTableView) populateTable();
             updatePageLanguage(currentLanguage);
         });
-
         searchBar.addEventListener('input', filterAndSearch);
-
-                filterButtons.forEach(button => {
+        filterButtons.forEach(button => {
             button.addEventListener('click', () => {
-                // Remove active state from all buttons
                 filterButtons.forEach(btn => {
                     btn.classList.remove('bg-[var(--sz-color-primary)]', 'text-white');
                     btn.classList.add('bg-gray-200', 'text-gray-700');
                 });
-                // Add active state to clicked button
                 button.classList.remove('bg-gray-200', 'text-gray-700');
                 button.classList.add('bg-[var(--sz-color-primary)]', 'text-white');
                 currentFilter = button.dataset.filter;
                 filterAndSearch();
             });
         });
-
         document.addEventListener('languageChange', e => updatePageLanguage(e.detail.lang));
     }
 
@@ -475,8 +334,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (cachedData) {
                 allData = cachedData;
             } else {
-                const csvData = await fetchFromGoogleSheets();
-                allData = convertCSVToStructuredData(csvData);
+                const loader = async () => {
+                    const csvRows = await fetchFromGoogleSheets();
+                    return convertCSVToStructuredData(csvRows);
+                };
+                allData = await window.SZ.offline.runWithOfflineRetry(loader, {
+                    onError: () => showError(CONFIG.ERROR_MESSAGES.FETCH_FAILED)
+                });
                 cacheData(allData);
             }
             populateAllGrids();
@@ -485,7 +349,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Initialization failed:', error);
             showError(CONFIG.ERROR_MESSAGES.FETCH_FAILED);
-            // Show error message in all grids
             const errorMessage = `<p class="text-red-500 col-span-full">${error.message}</p>`;
             [governoratesGrid, ministriesGrid, ministersGrid, publicFiguresGrid, otherGrid, syndicatesGrid, universitiesGrid, embassiesGrid].forEach(grid => {
                 if (grid) grid.innerHTML = errorMessage;
@@ -495,35 +358,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Back to Top Functionality ---
+    // Back to top
     function initializeBackToTop() {
         const backToTop = document.getElementById('backToTop');
-        
         if (!backToTop) return;
-
-        // Back to top functionality
         function toggleBackToTop() {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             backToTop.style.display = scrollTop > 300 ? 'block' : 'none';
         }
-
-        // Event listeners
-        window.addEventListener('scroll', () => {
-            toggleBackToTop();
-        });
-
-        backToTop.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-
-        // Initial call
+        window.addEventListener('scroll', () => { toggleBackToTop(); });
+        backToTop.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
         toggleBackToTop();
     }
-
-    // Initialize back to top functionality
     initializeBackToTop();
 
     init();

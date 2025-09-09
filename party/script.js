@@ -103,9 +103,9 @@ class SyrianPoliticalOrganizations {
         try {
             this.showLoading();
             this.hideError();
-            
-            // Check cache first
-            const cachedData = this.getCachedData();
+
+            const cache = window.SZ?.cache?.createCache('party') || null;
+            const cachedData = cache?.get('organizations') || null;
             if (cachedData) {
                 this.organizations = cachedData;
                 this.setupFilters();
@@ -113,34 +113,27 @@ class SyrianPoliticalOrganizations {
                 this.displayOrganizations();
                 return;
             }
-            
-            // Fetch from Google Sheets
-            const data = await this.fetchFromGoogleSheets();
+
+            const loader = async () => {
+                const { CSV_URL, MAX_RETRIES } = CONFIG.GOOGLE_SHEETS;
+                const res = await window.SZ.http.fetchWithRetry(CSV_URL, { retries: MAX_RETRIES });
+                const rows = window.SZ.csv.parseCSVToObjects(res.text);
+                return rows;
+            };
+
+            const data = await window.SZ.offline.runWithOfflineRetry(loader, {
+                onError: () => this.showError(CONFIG.ERROR_MESSAGES.FETCH_FAILED)
+            });
+
             this.organizations = this.processData(data);
-            
-            // Cache the data
-            this.cacheData(this.organizations);
-            
-            // Setup filters and display
+            cache?.set('organizations', this.organizations, CONFIG.GOOGLE_SHEETS.CACHE_DURATION);
+
             this.setupFilters();
             this.clearAllFilters();
             this.displayOrganizations();
-            
         } catch (error) {
             console.error('Error loading organizations:', error);
-            
-            // Show specific error messages based on error type
-            if (error.message.includes('CSV parsing error')) {
-                this.showError(CONFIG.ERROR_MESSAGES.PARSE_ERROR);
-            } else if (error.message.includes('HTML redirect')) {
-                this.showError(CONFIG.ERROR_MESSAGES.REDIRECT_ERROR);
-            } else if (error.message.includes('HTTP error')) {
-                this.showError(CONFIG.ERROR_MESSAGES.CSV_ERROR);
-            } else if (error.message.includes('Network')) {
-                this.showError(CONFIG.ERROR_MESSAGES.NETWORK_ERROR);
-            } else {
-                this.showError(CONFIG.ERROR_MESSAGES.FETCH_FAILED);
-            }
+            this.showError(error?.message || CONFIG.ERROR_MESSAGES.FETCH_FAILED);
         } finally {
             this.hideLoading();
         }
@@ -148,86 +141,14 @@ class SyrianPoliticalOrganizations {
     
     // Fetch data from Google Sheets CSV export
     async fetchFromGoogleSheets() {
-        const { CSV_URL, MAX_RETRIES, RETRY_DELAY } = CONFIG.GOOGLE_SHEETS;
-        
-        let lastError;
-        
-        for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-            try {
-                const response = await fetch(CSV_URL, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'text/csv, text/plain, */*',
-                        'Cache-Control': 'no-cache'
-                    },
-                    redirect: 'follow'
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const csvText = await response.text();
-                
-                if (!csvText || csvText.trim().length === 0) {
-                    throw new Error('Empty CSV data received');
-                }
-                
-                // Check if we received HTML instead of CSV (redirect page)
-                if (csvText.trim().toLowerCase().startsWith('<html') || 
-                    csvText.includes('<title>') || 
-                    csvText.includes('temporary redirect')) {
-                    throw new Error('Received HTML redirect instead of CSV data');
-                }
-                
-                // Debug: Log first few lines of CSV
-                console.log('CSV Preview:', csvText.split('\n').slice(0, 3).join('\n'));
-                
-                return this.parseCSV(csvText);
-                
-            } catch (error) {
-                lastError = error;
-                console.warn(`Attempt ${attempt} failed:`, error.message);
-                
-                if (attempt < MAX_RETRIES) {
-                    await this.delay(RETRY_DELAY * attempt); // Exponential backoff
-                }
-            }
-        }
-        
-        throw new Error(`Failed to fetch data after ${MAX_RETRIES} attempts: ${lastError.message}`);
+        const { CSV_URL, MAX_RETRIES } = CONFIG.GOOGLE_SHEETS;
+        const res = await window.SZ.http.fetchWithRetry(CSV_URL, { retries: MAX_RETRIES });
+        return window.SZ.csv.parseCSVToObjects(res.text);
     }
     
     // Parse CSV text into array of objects
     parseCSV(csvText) {
-        try {
-            const lines = csvText.trim().split('\n');
-            
-            if (lines.length < 2) {
-                throw new Error('CSV must have at least a header row and one data row');
-            }
-            
-            // Parse headers
-            const headers = this.parseCSVRow(lines[0]);
-            
-            // Parse data rows
-            const data = [];
-            for (let i = 1; i < lines.length; i++) {
-                const row = this.parseCSVRow(lines[i]);
-                if (row.length > 0 && row[0]) { // Skip empty rows
-                    const initiative = {};
-                    headers.forEach((header, index) => {
-                        initiative[header] = row[index] || '';
-                    });
-                    data.push(initiative);
-                }
-            }
-            
-            return data;
-            
-        } catch (error) {
-            throw new Error(`CSV parsing error: ${error.message}`);
-        }
+        return window.SZ.csv.parseCSVToObjects(csvText);
     }
     
     // Parse a single CSV row, handling quoted fields
@@ -556,10 +477,10 @@ class SyrianPoliticalOrganizations {
     createSocialLinks(organization) {
         const links = [];
         
-        Object.entries(CONFIG.SOCIAL_PLATFORMS).forEach(([column, platform]) => {
+        Object.entries(CONFIG.SOCIAL_PLATFORMS).forEach(([column]) => {
             const account = organization[column];
             if (account) {
-                const url = this.formatSocialUrl(platform.baseUrl, account);
+                const url = window.SZ.social.format(column, account);
                 const iconName = this.getFontAwesomeIconName(column);
                 links.push(`
                     <a href="${url}" target="_blank" rel="noopener" 

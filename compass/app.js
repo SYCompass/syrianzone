@@ -29,48 +29,22 @@ const CONFIG = {
 };
 
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
   // تسجيل مكونات GSAP الإضافية
   gsap.registerPlugin(TextPlugin);
 
-  const SCALES = [
-    {
-      id: "auth_lib",
-      name: "سلطويّة مقابل ليبرالية",
-      left: "تحررية",
-      right: "سلطوية"
-    },
-    {
-      id: "rel_sec",
-      name: "ديني مقابل علماني",
-      left: "علمانية",
-      right: "دينية"
-    },
-    {
-      id: "soc_cap",
-      name: "اقتصادي اشتراكي مقابل اقتصادي ليبرالي",
-      left: "رأسمالية",
-      right: "اشتراكية"
-    },
-    {
-      id: "nat_glob",
-      name: "وطنيّ مقابل عالمي",
-      left: "عالمية",
-      right: "وطنيّة"
-    },
-    {
-      id: "mil_pac",
-      name: "عسكري توسّعي مقابل سلمي انعزالي",
-      left: "سلميّ انعزالي",
-      right: "عسكري توسّعي"
-    },
-    {
-      id: "ret_rec",
-      name: "عدالة انتقالية انتقامية مقابل تصالحية",
-      left: "عدالة تصالحية",
-      right: "عدالة انتقامية"
-    }
+  let SCALES = [
+    { id: 'auth_lib', name: 'سلطويّة مقابل ليبرالية', left: 'تحررية', right: 'سلطوية' },
+    { id: 'rel_sec', name: 'ديني مقابل علماني', left: 'علمانية', right: 'دينية' },
+    { id: 'soc_cap', name: 'اقتصادي اشتراكي مقابل اقتصادي ليبرالي', left: 'رأسمالية', right: 'اشتراكية' },
+    { id: 'nat_glob', name: 'وطنيّ مقابل عالمي', left: 'عالمية', right: 'وطنيّة' },
+    { id: 'mil_pac', name: 'عسكري توسّعي مقابل سلمي انعزالي', left: 'سلميّ انعزالي', right: 'عسكري توسّعي' },
+    { id: 'ret_rec', name: 'عدالة انتقالية انتقامية مقابل تصالحية', left: 'عدالة تصالحية', right: 'عدالة انتقامية' }
   ];
+  try {
+    const res = await window.SZ.http.fetchWithRetry('/compass/scales.json', { retries: 3, acceptTypes: 'application/json, */*' });
+    SCALES = JSON.parse(res.text);
+  } catch (_) { /* fallback to defaults above */ }
 
   // تهيئة المتغيرات
   let currentQuestionIndex = 0;
@@ -208,86 +182,23 @@ document.addEventListener("DOMContentLoaded", function () {
    * Fetch data from local questions.csv
    */
   async function fetchFromLocalCSV() {
-    try {
-        const response = await fetch('/compass/questions.csv');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const csvText = await response.text();
-        if (!csvText || csvText.trim().length === 0) {
-          throw new Error('Empty local CSV data received');
-        }
-        return parseCSV(csvText);
-    } catch (error) {
-        console.error("Error fetching local CSV:", error);
-        throw error;
-    }
+    const res = await window.SZ.http.fetchWithRetry('/compass/questions.csv', { retries: 1 });
+    return parseCSV(res.text);
   }
 
   /**
    * Fetch data from Google Sheets CSV export
    */
   async function fetchFromGoogleSheets() {
-    const { CSV_URL, MAX_RETRIES, RETRY_DELAY } = CONFIG.GOOGLE_SHEETS;
-    let lastError;
-    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-      try {
-        const response = await fetch(CSV_URL, {
-          method: 'GET',
-          headers: {
-            'Accept': 'text/csv, text/plain, */*',
-            'Cache-Control': 'no-cache'
-          },
-          redirect: 'follow'
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const csvText = await response.text();
-        if (!csvText || csvText.trim().length === 0) {
-          throw new Error('Empty CSV data received');
-        }
-        if (csvText.trim().toLowerCase().startsWith('<html')) {
-          throw new Error('Received HTML redirect instead of CSV data');
-        }
-        return parseCSV(csvText);
-      } catch (error) {
-        lastError = error;
-        console.warn(`Attempt ${attempt} failed:`, error.message);
-        if (attempt < MAX_RETRIES) {
-          await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * attempt));
-        }
-      }
-    }
-    throw new Error(`Failed to fetch data after ${MAX_RETRIES} attempts: ${lastError.message}`);
+    const { CSV_URL, MAX_RETRIES } = CONFIG.GOOGLE_SHEETS;
+    const res = await window.SZ.http.fetchWithRetry(CSV_URL, { retries: MAX_RETRIES });
+    return parseCSV(res.text);
   }
 
   /**
    * Parse CSV text into array of objects
    */
-  function parseCSV(csvText) {
-    try {
-      const lines = csvText.trim().split(/\r\n|\n/);
-      if (lines.length < 2) {
-        throw new Error('CSV must have at least a header row and one data row');
-      }
-      const headers = parseCSVRow(lines[0]);
-      const data = [];
-      for (let i = 1; i < lines.length; i++) {
-        const row = parseCSVRow(lines[i]);
-        if (row.length > 0 && row[0]) { // Skip empty rows
-            const initiative = {};
-            headers.forEach((header, index) => {
-                initiative[header] = (row[index] || '').replace(/^"|"$/g, '');
-            });
-            data.push(initiative);
-        }
-      }
-      return data;
-    } catch (error) {
-      throw new Error(`CSV parsing error: ${error.message}`);
-    }
-  }
+  function parseCSV(csvText) { return window.SZ.csv.parseCSVToObjects(csvText); }
 
   /**
    * Parse a single CSV row, handling quoted fields
@@ -765,33 +676,25 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    // تحويل الكانفاس إلى URL للصورة
-    const imageURL = canvas.toDataURL("image/png");
+    // التحويل إلى صور متعددة الأحجام والأنواع
+    const png1200 = canvas.toDataURL("image/png");
+    const jpeg1200 = canvas.toDataURL("image/jpeg", 0.92);
+    const jpeg800 = scaleCanvasDataURL(canvas, 800, Math.round(800 * canvas.height / canvas.width), "image/jpeg", 0.9);
+    const jpeg600 = scaleCanvasDataURL(canvas, 600, Math.round(600 * canvas.height / canvas.width), "image/jpeg", 0.88);
 
-    // محاولة استخدام Web Share API إذا كانت متاحة
+    // محاولة استخدام Web Share API للصورة PNG الافتراضية
     if (navigator.share) {
-      // إنشاء ملف من URL الصورة
-      fetch(imageURL)
+      fetch(png1200)
         .then((res) => res.blob())
         .then((blob) => {
-          const file = new File([blob], "sycompass-results.png", {
-            type: "image/png",
-          });
-
+          const file = new File([blob], "sycompass-results.png", { type: "image/png" });
           navigator
-            .share({
-              title: "نتائجي في بوصلة سوريا",
-              text: "إليكم نتائجي في اختبار بوصلة سوريا",
-              files: [file],
-            })
-            .catch((err) => {
-              // في حالة فشل المشاركة، نعرض خيار التحميل
-              downloadImage(imageURL);
-            });
-        });
+            .share({ title: "نتائجي في بوصلة سوريا", text: "إليكم نتائجي في اختبار بوصلة سوريا", files: [file] })
+            .catch(() => openShareDialog({ png1200, jpeg1200, jpeg800, jpeg600 }));
+        })
+        .catch(() => openShareDialog({ png1200, jpeg1200, jpeg800, jpeg600 }));
     } else {
-      // إذا كانت Web Share API غير متاحة، نعرض خيار التحميل
-      downloadImage(imageURL);
+      openShareDialog({ png1200, jpeg1200, jpeg800, jpeg600 });
     }
   }
 
@@ -809,6 +712,79 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.removeChild(link);
 
     alert("تم تحميل صورة النتائج! يمكنك مشاركتها مع أصدقائك.");
+  }
+
+  // إنشاء نسخة مصغّرة (Scaled) وإرجاع DataURL
+  function scaleCanvasDataURL(srcCanvas, width, height, type = 'image/jpeg', quality = 0.9) {
+    const off = document.createElement('canvas');
+    off.width = width;
+    off.height = height;
+    const ctx = off.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+    ctx.drawImage(srcCanvas, 0, 0, srcCanvas.width, srcCanvas.height, 0, 0, width, height);
+    return off.toDataURL(type, quality);
+  }
+
+  // نسخ نص إلى الحافظة
+  function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => alert('تم نسخ الرابط إلى الحافظة')).catch(() => fallbackCopyText(text));
+    } else {
+      fallbackCopyText(text);
+    }
+  }
+
+  function fallbackCopyText(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try { document.execCommand('copy'); alert('تم نسخ الرابط إلى الحافظة'); } catch (_) {}
+    document.body.removeChild(ta);
+  }
+
+  // نافذة مشاركة بسيطة بخيارات تنزيل/نسخ
+  function openShareDialog(urls) {
+    const { png1200, jpeg1200, jpeg800, jpeg600 } = urls;
+    let container = document.querySelector('.share-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.className = 'share-container';
+      const content = document.createElement('div');
+      content.className = 'share-content';
+      content.innerHTML = `
+        <h3 class="text-lg font-bold mb-2">مشاركة النتائج</h3>
+        <p class="mb-3 text-sm text-gray-600">اختر التنسيق والحجم المناسبين:</p>
+        <div class="flex flex-col gap-2">
+          <a class="bg-[var(--sz-color-primary)] text-white px-3 py-2 rounded" href="#" data-dl="png1200">تحميل PNG (كبير)</a>
+          <a class="bg-[var(--sz-color-primary)] text-white px-3 py-2 rounded" href="#" data-dl="jpeg1200">تحميل JPEG 1200px</a>
+          <a class="bg-[var(--sz-color-primary)] text-white px-3 py-2 rounded" href="#" data-dl="jpeg800">تحميل JPEG 800px</a>
+          <a class="bg-[var(--sz-color-primary)] text-white px-3 py-2 rounded" href="#" data-dl="jpeg600">تحميل JPEG 600px</a>
+          <button class="bg-[var(--sz-color-accent)] text-white px-3 py-2 rounded" data-copy="jpeg800">نسخ رابط الصورة (JPEG 800px)</button>
+        </div>
+        <div class="mt-3 text-right">
+          <button class="px-3 py-2" data-close>إغلاق</button>
+        </div>`;
+      container.appendChild(content);
+      document.body.appendChild(container);
+    }
+    container.classList.add('active');
+    container.querySelector('[data-close]').onclick = () => container.classList.remove('active');
+    container.querySelectorAll('[data-dl]').forEach(a => {
+      a.onclick = (e) => {
+        e.preventDefault();
+        const key = a.getAttribute('data-dl');
+        const map = { png1200, jpeg1200, jpeg800, jpeg600 };
+        const url = map[key];
+        if (!url) return;
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `sycompass-results-${key}.` + (key.startsWith('png') ? 'png' : 'jpg');
+        document.body.appendChild(link); link.click(); document.body.removeChild(link);
+      };
+    });
+    const copyBtn = container.querySelector('[data-copy]');
+    if (copyBtn) copyBtn.onclick = () => copyToClipboard(jpeg800);
   }
 
   /**

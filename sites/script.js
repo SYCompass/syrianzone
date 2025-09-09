@@ -68,54 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return typeIcons[type] || 'fas fa-globe';
     }
 
-
-
-
-
-    // --- CSV Parsing ---
-    function parseCSVLine(line) {
-        const result = [];
-        let current = '';
-        let inQuotes = false;
-        
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            if (char === '"') {
-                inQuotes = !inQuotes;
-            } else if (char === ',' && !inQuotes) {
-                result.push(current);
-                current = '';
-            } else {
-                current += char;
-            }
-        }
-        result.push(current);
-        return result;
-    }
-
-    function parseCSV(csvText) {
-        try {
-            const lines = csvText.split('\n');
-            const headers = lines[0].split(',').map(h => h.trim());
-            const data = [];
-            
-            for (let i = 1; i < lines.length; i++) {
-                if (lines[i].trim() === '') continue;
-                
-                const values = parseCSVLine(lines[i]);
-                if (values.length === headers.length) {
-                    const row = {};
-                    headers.forEach((header, index) => {
-                        row[header] = values[index] ? values[index].trim() : '';
-                    });
-                    data.push(row);
-                }
-            }
-            return data;
-        } catch (error) {
-            throw new Error(`CSV parsing error: ${error.message}`);
-        }
-    }
+    // Use shared CSV utility
+    function parseCSV(csvText) { return window.SZ.csv.parseCSVToObjects(csvText); }
 
     function convertCSVToWebsites(csvData) {
         return csvData.map(row => ({
@@ -129,28 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Data Fetching ---
     async function fetchFromGoogleSheets() {
-        const { CSV_URL, MAX_RETRIES, RETRY_DELAY } = CONFIG.GOOGLE_SHEETS;
-        let lastError;
-
-        for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-            try {
-                const response = await fetch(CSV_URL, { redirect: 'follow' });
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-                const csvText = await response.text();
-                if (!csvText || !csvText.trim()) throw new Error('Empty CSV data received');
-                if (csvText.trim().toLowerCase().startsWith('<html')) {
-                    throw new Error('Received HTML redirect instead of CSV data');
-                }
-                
-                return parseCSV(csvText);
-            } catch (error) {
-                lastError = error;
-                console.warn(`Attempt ${attempt} failed:`, error.message);
-                if (attempt < MAX_RETRIES) await delay(RETRY_DELAY * attempt);
-            }
-        }
-        throw new Error(`Failed to fetch data after ${MAX_RETRIES} attempts: ${lastError.message}`);
+        const { CSV_URL, MAX_RETRIES } = CONFIG.GOOGLE_SHEETS;
+        const res = await window.SZ.http.fetchWithRetry(CSV_URL, { retries: MAX_RETRIES });
+        return parseCSV(res.text);
     }
 
     // --- UI Rendering ---
@@ -360,8 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
             showNoResults();
         }
     }
-
-
 
     // --- Event Listeners ---
     function setupEventListeners() {
