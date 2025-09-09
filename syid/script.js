@@ -60,57 +60,19 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
-// Quick Navigation and Back to Top functionality
+// Back to Top functionality
 function initializeNavigation() {
-    const quickNav = document.getElementById('quickNav');
     const backToTop = document.getElementById('backToTop');
-    const sections = document.querySelectorAll('#typography, #colors, #flag, #materials');
-    const quickNavItems = document.querySelectorAll('.quick-nav-item');
 
     // Back to top functionality
     function toggleBackToTop() {
-        if (window.scrollY > window.innerHeight) {
-            backToTop.classList.add('show');
-        } else {
-            backToTop.classList.remove('show');
-        }
-    }
-
-    // Update active quick nav item based on scroll position
-    function updateActiveNavItem() {
-        let activeSection = '';
-        sections.forEach(section => {
-            const rect = section.getBoundingClientRect();
-            if (rect.top <= 100 && rect.bottom >= 100) {
-                activeSection = section.id;
-            }
-        });
-
-        quickNavItems.forEach(item => {
-            if (item.dataset.section === activeSection) {
-                item.classList.add('active');
-            } else {
-                item.classList.remove('active');
-            }
-        });
-    }
-
-    // Smooth scroll to section
-    function scrollToSection(targetId) {
-        const target = document.getElementById(targetId);
-        if (target) {
-            const offsetTop = target.offsetTop - 100; // Account for navbar
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
-        }
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        backToTop.style.display = scrollTop > 300 ? 'block' : 'none';
     }
 
     // Event listeners
     window.addEventListener('scroll', () => {
         toggleBackToTop();
-        updateActiveNavItem();
     });
 
     backToTop.addEventListener('click', () => {
@@ -120,17 +82,8 @@ function initializeNavigation() {
         });
     });
 
-    quickNavItems.forEach(item => {
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetSection = item.dataset.section;
-            scrollToSection(targetSection);
-        });
-    });
-
-    // Initial calls
+    // Initial call
     toggleBackToTop();
-    updateActiveNavItem();
 }
 
 // Wait for DOM to be fully loaded
@@ -148,54 +101,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     console.log('Color palette loaded. Found', document.querySelectorAll('[data-hex]').length, 'color items.');
-
-    loadDynamicContent();
 }); 
 
-async function loadDynamicContent() {
-    console.log('Starting to load dynamic content...');
-    try {
-        const response = await fetch('/syid/data.json');
-        console.log('Fetch response received:', response);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        console.log('Data parsed successfully:', data);
-
-        // Load wallpapers
-        const wallpaperContainer = document.getElementById('wallpaper-grid');
-        if (wallpaperContainer && data.wallpapers) {
-            wallpaperContainer.innerHTML = ''; // Clear existing
-            data.wallpapers.forEach(wallpaperData => {
-                const wallpaperItem = document.createElement('wallpaper-item');
-                
-                // Set attributes only if they exist in the data
-                for (const key in wallpaperData) {
-                    if (Object.prototype.hasOwnProperty.call(wallpaperData, key)) {
-                        const value = wallpaperData[key];
-                        if (value !== null && value !== undefined) {
-                            const attributeName = key.replace(/([A-Z])/g, '-$1').toLowerCase();
-                            wallpaperItem.setAttribute(attributeName, value);
-                        }
-                    }
-                }
-
-                wallpaperContainer.appendChild(wallpaperItem);
-            });
-            console.log('Wallpapers loaded successfully.');
-        }
-
-
-    } catch (error) {
-        console.error('Failed to load dynamic content:', error);
-        const wallpaperContainer = document.getElementById('wallpaper-grid');
-        if(wallpaperContainer) {
-            wallpaperContainer.innerHTML = '<p class="text-red-500 text-center col-span-full">Failed to load wallpapers. Please try again later.</p>';
-        }
-        const fontContainer = document.getElementById('font-download-list');
-        if(fontContainer) {
-            fontContainer.innerHTML = '<p class="text-red-500 text-center col-span-full">Failed to load fonts. Please try again later.</p>';
-        }
-    }
-}
+// Dynamic content loading is no longer needed since we removed wallpapers

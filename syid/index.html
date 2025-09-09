@@ -74,41 +74,27 @@
 <body class="bg-gray-100 min-h-screen">
     <nav-bar></nav-bar>
     
-    <!-- Quick Jump Navigation -->
-    <div class="quick-nav" id="quickNav">
-        <a href="#typography" class="quick-nav-item" data-section="typography">
-            <i class="fas fa-font"></i>
-            <span class="quick-nav-tooltip">الخطوط</span>
-        </a>
-        <a href="#colors" class="quick-nav-item" data-section="colors">
-            <i class="fas fa-palette"></i>
-            <span class="quick-nav-tooltip">الألوان</span>
-        </a>
-        <a href="#flag" class="quick-nav-item" data-section="flag">
-            <i class="fas fa-flag"></i>
-            <span class="quick-nav-tooltip">العلم</span>
-        </a>
-        <a href="#materials" class="quick-nav-item" data-section="materials">
-            <i class="fas fa-image"></i>
-            <span class="quick-nav-tooltip">الخلفيات</span>
-        </a>
-    </div>
 
     <!-- Back to Top Button -->
-    <button class="back-to-top" id="backToTop">
-        <i class="fas fa-arrow-up"></i>
+    <button id="backToTop" class="fixed bottom-6 left-6 z-50 h-10 w-10 rounded-full bg-[var(--sz-color-primary)] text-white shadow-lg hover:bg-[var(--sz-color-accent)] transition-colors" style="display: none;">
+        <i class="fas fa-arrow-up h-5 w-5 mx-auto"></i>
     </button>
 
-    <div class="max-w-[1270px] mx-auto my-8 bg-white rounded-xl shadow-lg overflow-hidden">
-        <div class="p-10 text-center text-white" style="position: relative; overflow: hidden;">
-            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(to right, rgba(0,38,35,1) 30%, rgba(0,38,35,0.8) 100%), url('/syid/materials/pattern.svg');  opacity: 1;"></div>
-            <div style="position: relative; z-index: 1;">
-                <h1 class="text-5xl font-bold mb-4">عناصر الهوية البصرية السورية</h1>
-                <p class="text-lg opacity-90">المواد المرتبطة بالهوية البصرية السورية - مجموعة غير رسمية ومجمّعة من أماكن متعددة بانتظار الإصدار الرسمي للهوية</p>
-                <br>
-                <a href="https://syrianidentity.sy" target="_blank" rel="noopener" class="inline-block bg-gradient-to-r from-[#6b1f2a] to-[#4a151e] text-white font-semibold text-lg py-4 px-10 rounded-full no-underline transition-transform hover:-translate-y-0.5 hover:shadow-lg">زيارة الموقع الرسمي للهوية البصرية السورية</a>
-            </div>
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-[var(--sz-color-primary)] to-[var(--sz-color-ink)] text-white py-16 md:py-24">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="max-w-3xl mx-auto">
+          <h1 class="text-4xl md:text-5xl font-bold mb-6">عناصر الهوية البصرية السورية</h1>
+          <p class="text-xl text-white opacity-90 mb-8">المواد المرتبطة بالهوية البصرية السورية - مجموعة غير رسمية ومجمّعة من أماكن متعددة بانتظار الإصدار الرسمي للهوية</p>
+          <a href="https://syrianidentity.sy" target="_blank" rel="noopener" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-gradient-to-r from-[#6b1f2a] to-[#4a151e] text-white hover:from-[#4a151e] hover:to-[#3a1118] h-12 px-6 py-3 transition-all hover:-translate-y-0.5 hover:shadow-lg">
+            <i class="fas fa-external-link-alt ml-2 h-4 w-4"></i>
+            زيارة الموقع الرسمي للهوية البصرية السورية
+          </a>
         </div>
+      </div>
+    </section>
+
+    <div class="max-w-[1270px] mx-auto my-8 bg-white rounded-xl shadow-lg overflow-hidden">
 
         <!-- Color Palette Section -->
         <div class="p-10" id="colors">
@@ -297,19 +283,27 @@
                 </div>
             </div>
 
-            <div class="flex justify-center gap-4 mt-8">
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
                 <a href="/syid/materials/العلم السوري بالنسب الصحيحة.png" class="inline-block bg-gradient-to-r from-[#6b1f2a] to-[#4a151e] text-white font-semibold text-lg py-4 px-10 rounded-full no-underline transition-transform hover:-translate-y-0.5 hover:shadow-lg" download>تحميل PNG</a>
                 <a href="/syid/materials/العلم السوري بالنسب الصحيحة.svg" class="inline-block bg-gradient-to-r from-[#6b1f2a] to-[#4a151e] text-white font-semibold text-lg py-4 px-10 rounded-full no-underline transition-transform hover:-translate-y-0.5 hover:shadow-lg" download>تحميل SVG</a>
+                <a href="/syid/materials/علم سوريا.dwg" class="inline-block bg-gradient-to-r from-[#6b1f2a] to-[#4a151e] text-white font-semibold text-lg py-4 px-10 rounded-full no-underline transition-transform hover:-translate-y-0.5 hover:shadow-lg" download>تحميل DWG</a>
             </div>
         </div>
 
         <!-- Materials Section -->
         <div class="p-10" id="materials">
-            <h2 class="text-4xl font-bold text-center text-gray-800 mb-8 pb-4 border-b-4 border-[#428177]">خلفيات الشاشة والأنماط</h2>
-            <p class="text-center text-lg mb-8 text-gray-600">خلفيات لسطح المكتب والهاتف والأنماط متوافقة مع الهوية البصرية السورية الجديدة.</p>
+            <h2 class="text-4xl font-bold text-center text-gray-800 mb-8 pb-4 border-b-4 border-[#428177]">المواد والموارد</h2>
+            <p class="text-center text-lg mb-8 text-gray-600">تحميل المواد الرسمية والموارد المرئية للهوية البصرية السورية الجديدة.</p>
             
-            <div id="wallpaper-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-16 px-8 py-4">
-                <!-- Wallpaper items will be loaded dynamically here -->
+            <div class="text-center mb-8">
+                <img src="/syid/materials/logo.ai.svg" alt="شعار الهوية البصرية السورية" class="mx-auto max-w-full h-auto rounded-lg shadow-lg" style="max-height: 200px;">
+            </div>
+            
+            <div class="text-center">
+                <a href="https://syrianidentity.sy/media-and-press" target="_blank" rel="noopener" class="inline-block bg-gradient-to-r from-[#428177] to-[#054239] text-white font-semibold text-lg py-4 px-10 rounded-full no-underline transition-transform hover:-translate-y-0.5 hover:shadow-lg">
+                    <i class="fas fa-download ml-2"></i>
+                    تحميل المواد والموارد الرسمية
+                </a>
             </div>
         </div>
     </div>

@@ -27,6 +27,18 @@
     <link rel="icon" href="/assets/favicon.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        body { font-family: 'IBM Plex Sans Arabic', sans-serif!important; }
+        /* Theme color variables */
+        :root {
+          --sz-color-primary: #556A4E;
+          --sz-color-accent: #A73F46;
+          --sz-color-surface: #FFFFFF;
+          --sz-color-ink: #0D1315;
+        }
+    </style>
   
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-K4H98TC203"></script>
@@ -42,46 +54,50 @@
     <!-- Navbar -->
     <nav-bar></nav-bar>
     
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="fixed bottom-6 left-6 z-50 h-10 w-10 rounded-full bg-[var(--sz-color-primary)] text-white shadow-lg hover:bg-[var(--sz-color-accent)] transition-colors" style="display: none;">
+        <i class="fas fa-arrow-up h-5 w-5 mx-auto"></i>
+    </button>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-[var(--sz-color-primary)] to-[var(--sz-color-ink)] text-white py-16 md:py-24">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="max-w-3xl mx-auto">
+          <h1 class="text-4xl md:text-5xl font-bold mb-6">المواقع السورية</h1>
+          <p class="text-xl text-white opacity-90 mb-8">قاعدة بيانات المواقع السورية مصنفة حسب القطاعات</p>
+          
+          <!-- Add Site Button -->
+          <a 
+            href="https://docs.google.com/forms/d/e/1FAIpQLSdIu8TFwSmT7fHxzsVlOwt35X9Myfhg0RZ6jwEkIMxxvyctqA/viewform" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-gradient-to-r from-[#6b1f2a] to-[#4a151e] text-white hover:from-[#4a151e] hover:to-[#3a1118] h-12 px-6 py-3 transition-all hover:-translate-y-0.5 hover:shadow-lg"
+          >
+            <i class="fas fa-plus ml-2 h-4 w-4"></i>
+            إضافة موقع جديد
+          </a>
+        </div>
+      </div>
+    </section>
+
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8 max-w-7xl">
-        <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-gray-800 mb-2">المواقع السورية</h1>
-            <p class="text-gray-600 text-lg">قاعدة بيانات المواقع السورية مصنفة حسب القطاعات</p>
-            
-            <!-- Add Site Button -->
-            <div class="mt-6">
-                <a 
-                    href="https://docs.google.com/forms/d/e/1FAIpQLSdIu8TFwSmT7fHxzsVlOwt35X9Myfhg0RZ6jwEkIMxxvyctqA/viewform" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    class="inline-flex items-center gap-2 bg-[var(--sz-color-primary)] hover:bg-[var(--sz-color-primary)]/90 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg"
-                >
-                    <i class="fas fa-plus"></i>
-                    <span>إضافة موقع جديد</span>
-                </a>
-                <p class="text-sm text-gray-500 mt-2">استخدم هذا النموذج لإضافة موقعك لقاعدة البيانات</p>
-            </div>
-        </div>
-
         <!-- Search and Filter Bar -->
         <div class="bg-white rounded-lg shadow-md p-4 mb-6">
-            <div class="gap-4">
+            <div class="flex flex-col gap-4 items-center">
                 <!-- Search Bar -->
-                <div class="flex-1 py-4">
-                    <div class="relative">
-                        <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                        <input 
-                            type="text" 
-                            id="search-bar" 
-                            placeholder="ابحث عن موقع..." 
-                            class="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-transparent"
-                        >
-                    </div>
+                <div class="relative w-full">
+                    <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <input 
+                        type="text" 
+                        id="search-bar" 
+                        placeholder="ابحث عن موقع..." 
+                        class="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-transparent"
+                    >
                 </div>
                 
                 <!-- Filter Buttons -->
-                <div id="filter-buttons" class="flex flex-wrap gap-2">
+                <div id="filter-buttons" class="flex flex-wrap gap-2 justify-center w-full">
                     <!-- Dynamic filter buttons will be generated here -->
                 </div>
             </div>

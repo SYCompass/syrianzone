@@ -799,6 +799,37 @@ document.addEventListener("DOMContentLoaded", function () {
     );
   }
 
+  // --- Back to Top Functionality ---
+  function initializeBackToTop() {
+    const backToTop = document.getElementById('backToTop');
+    
+    if (!backToTop) return;
+
+    // Back to top functionality
+    function toggleBackToTop() {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      backToTop.style.display = scrollTop > 300 ? 'block' : 'none';
+    }
+
+    // Event listeners
+    window.addEventListener('scroll', () => {
+      toggleBackToTop();
+    });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Initial call
+    toggleBackToTop();
+  }
+
+  // Initialize back to top functionality
+  initializeBackToTop();
+
   // اضافة عناصر الواجهة للإختبارات المسبقة
 
   const results = JSON.parse(localStorage.getItem("results")) || [];
