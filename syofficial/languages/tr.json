@@ -36,11 +36,6 @@
         "socialLinks": "Sosyal Medya Bağlantıları",
         "noLinks": "Bağlantı mevcut değil"
     },
-    "modal": {
-        "title": "Sosyal Medya Bağlantıları",
-        "close": "Kapat",
-        "noSocialLinks": "Sosyal medya bağlantısı mevcut değil"
-    },
     "view": {
         "grid": "Izgara Görünümü",
         "table": "Tablo Görünümü"

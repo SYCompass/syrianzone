@@ -19,10 +19,6 @@ body {
     margin-left: 0;
 }
 
-/* RTL modal adjustments */
-.modal-content {
-    text-align: right;
-}
 
 /* RTL grid adjustments */
 .grid {
@@ -45,11 +41,6 @@ input {
     margin-right: 0;
 }
 
-/* RTL modal close button */
-#close-modal-button {
-    margin-left: 0;
-    margin-right: auto;
-}
 
 /* RTL filter buttons */
 #filter-buttons {
@@ -67,8 +58,3 @@ input {
     text-align: right;
 }
 
-/* RTL modal footer */
-#close-modal-button-footer {
-    margin-right: auto;
-    margin-left: 0;
-}
