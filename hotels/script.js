@@ -6,7 +6,7 @@ class SyrianHotels {
         this.currentPage = 1;
         this.isLoading = false;
         this.searchTimeout = null;
-        this.currentView = this.getDefaultView(); // Responsive default view
+        this.currentView = this.getPersistedView() || this.getDefaultView(); // Persisted or responsive default
         
         this.initializeElements();
         this.bindEvents();
@@ -20,6 +20,14 @@ class SyrianHotels {
         } else {
             return 'table'; // Tablet and desktop: table view
         }
+    }
+
+    // Persisted view helpers
+    getPersistedView() {
+        try { return localStorage.getItem('hotels-view') || null; } catch (_) { return null; }
+    }
+    setPersistedView(view) {
+        try { localStorage.setItem('hotels-view', view); } catch (_) {}
     }
     
     // Initialize DOM elements
@@ -121,9 +129,9 @@ class SyrianHotels {
         try {
             this.showLoading();
             this.hideError();
-            
-            // Check cache first
-            const cachedData = this.getCachedData();
+
+            const cache = window.SZ?.cache?.createCache('hotels') || null;
+            const cachedData = cache?.get('hotels') || null;
             if (cachedData) {
                 this.hotels = cachedData;
                 this.setupFilters();
@@ -132,40 +140,30 @@ class SyrianHotels {
                 this.displayHotels();
                 return;
             }
-            
-            // Check if CSV URL is configured and not the default placeholder
-            if (!CONFIG.GOOGLE_SHEETS.CSV_URL || CONFIG.GOOGLE_SHEETS.CSV_URL === 'YOUR_GOOGLE_SHEETS_CSV_URL_HERE') {
-                this.hotels = this.getSampleData();
-            } else {
-                // Fetch from Google Sheets
-                const data = await this.fetchFromGoogleSheets();
-                this.hotels = this.processData(data);
-            }
-            
-            // Cache the data
-            this.cacheData(this.hotels);
-            
-            // Setup filters and display
+
+            const loader = async () => {
+                if (!CONFIG.GOOGLE_SHEETS.CSV_URL || CONFIG.GOOGLE_SHEETS.CSV_URL === 'YOUR_GOOGLE_SHEETS_CSV_URL_HERE') {
+                    return this.getSampleData();
+                }
+                const { CSV_URL, MAX_RETRIES } = CONFIG.GOOGLE_SHEETS;
+                const res = await window.SZ.http.fetchWithRetry(CSV_URL, { retries: MAX_RETRIES });
+                return window.SZ.csv.parseCSVToObjects(res.text);
+            };
+
+            const data = await window.SZ.offline.runWithOfflineRetry(loader, {
+                onError: () => this.showError(CONFIG.ERROR_MESSAGES.FETCH_FAILED)
+            });
+
+            this.hotels = Array.isArray(data) ? this.processData(data) : data;
+            cache?.set('hotels', this.hotels, CONFIG.GOOGLE_SHEETS.CACHE_DURATION);
+
             this.setupFilters();
             this.clearAllFilters();
             this.initializeView();
             this.displayHotels();
-            
         } catch (error) {
             console.error('Error loading hotels:', error);
-            
-            // Show specific error messages based on error type
-            if (error.message.includes('CSV parsing error')) {
-                this.showError(CONFIG.ERROR_MESSAGES.PARSE_ERROR);
-            } else if (error.message.includes('HTML redirect')) {
-                this.showError(CONFIG.ERROR_MESSAGES.REDIRECT_ERROR);
-            } else if (error.message.includes('HTTP error')) {
-                this.showError(CONFIG.ERROR_MESSAGES.CSV_ERROR);
-            } else if (error.message.includes('Network')) {
-                this.showError(CONFIG.ERROR_MESSAGES.NETWORK_ERROR);
-            } else {
-                this.showError(CONFIG.ERROR_MESSAGES.FETCH_FAILED);
-            }
+            this.showError(error?.message || CONFIG.ERROR_MESSAGES.FETCH_FAILED);
         } finally {
             this.hideLoading();
         }
@@ -245,84 +243,13 @@ class SyrianHotels {
     
     // Fetch data from Google Sheets CSV export
     async fetchFromGoogleSheets() {
-        const { CSV_URL, MAX_RETRIES, RETRY_DELAY } = CONFIG.GOOGLE_SHEETS;
-        
-        let lastError;
-        
-        for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-            try {
-                const response = await fetch(CSV_URL, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'text/csv, text/plain, */*',
-                        'Cache-Control': 'no-cache'
-                    },
-                    redirect: 'follow'
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const csvText = await response.text();
-                
-                if (!csvText || csvText.trim().length === 0) {
-                    throw new Error('Empty CSV data received');
-                }
-                
-                // Check if we received HTML instead of CSV (redirect page)
-                if (csvText.trim().toLowerCase().startsWith('<html') || 
-                    csvText.includes('<title>') || 
-                    csvText.includes('temporary redirect')) {
-                    throw new Error('Received HTML redirect instead of CSV data');
-                }
-                
-                return this.parseCSV(csvText);
-                
-            } catch (error) {
-                lastError = error;
-                console.warn(`Attempt ${attempt} failed:`, error.message);
-                
-                if (attempt < MAX_RETRIES) {
-                    await this.delay(RETRY_DELAY * attempt); // Exponential backoff
-                }
-            }
-        }
-        
-        throw new Error(`Failed to fetch data after ${MAX_RETRIES} attempts: ${lastError.message}`);
+        const { CSV_URL, MAX_RETRIES } = CONFIG.GOOGLE_SHEETS;
+        const res = await window.SZ.http.fetchWithRetry(CSV_URL, { retries: MAX_RETRIES });
+        return window.SZ.csv.parseCSVToObjects(res.text);
     }
     
     // Parse CSV text into array of objects
-    parseCSV(csvText) {
-        try {
-            const lines = csvText.trim().split('\n');
-            
-            if (lines.length < 2) {
-                throw new Error('CSV must have at least a header row and one data row');
-            }
-            
-            // Parse headers
-            const headers = this.parseCSVRow(lines[0]);
-            
-            // Parse data rows
-            const data = [];
-            for (let i = 1; i < lines.length; i++) {
-                const row = this.parseCSVRow(lines[i]);
-                if (row.length > 0 && row[0]) { // Skip empty rows
-                    const hotel = {};
-                    headers.forEach((header, index) => {
-                        hotel[header] = row[index] || '';
-                    });
-                    data.push(hotel);
-                }
-            }
-            
-            return data;
-            
-        } catch (error) {
-            throw new Error(`CSV parsing error: ${error.message}`);
-        }
-    }
+    parseCSV(csvText) { return window.SZ.csv.parseCSVToObjects(csvText); }
     
     // Parse a single CSV row, handling quoted fields
     parseCSVRow(line) {
@@ -495,6 +422,7 @@ class SyrianHotels {
     // Switch between table and grid view
     switchView(view) {
         this.currentView = view;
+        this.setPersistedView(view);
         
         // Update button states
         this.elements.tableViewBtn.classList.toggle('active', view === 'table');
@@ -708,7 +636,7 @@ class SyrianHotels {
         
         // Instagram
         if (hotel[CONFIG.COLUMNS.INSTAGRAM]) {
-            const url = this.formatSocialUrl(CONFIG.SOCIAL_PLATFORMS.instagram.baseUrl, hotel[CONFIG.COLUMNS.INSTAGRAM]);
+            const url = window.SZ.social.format('instagram', hotel[CONFIG.COLUMNS.INSTAGRAM]);
             links.push(`
                 <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
                     <i class="fab fa-instagram ml-1"></i> زيارة صفحة الانستغرام
@@ -718,7 +646,7 @@ class SyrianHotels {
         
         // Facebook
         if (hotel[CONFIG.COLUMNS.FACEBOOK]) {
-            const url = this.formatSocialUrl(CONFIG.SOCIAL_PLATFORMS.facebook.baseUrl, hotel[CONFIG.COLUMNS.FACEBOOK]);
+            const url = window.SZ.social.format('facebook', hotel[CONFIG.COLUMNS.FACEBOOK]);
             links.push(`
                 <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
                     <i class="fab fa-facebook ml-1"></i> زيارة صفحة الفيسبوك
@@ -728,7 +656,7 @@ class SyrianHotels {
         
         // X (Twitter)
         if (hotel[CONFIG.COLUMNS.X_TWITTER]) {
-            const url = this.formatSocialUrl(CONFIG.SOCIAL_PLATFORMS.x_twitter.baseUrl, hotel[CONFIG.COLUMNS.X_TWITTER]);
+            const url = window.SZ.social.format('x', hotel[CONFIG.COLUMNS.X_TWITTER]);
             links.push(`
                 <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
                     <i class="fab fa-x-twitter ml-1"></i> زيارة صفحة X
@@ -811,7 +739,7 @@ class SyrianHotels {
         
         // Instagram
         if (hotel[CONFIG.COLUMNS.INSTAGRAM]) {
-            const url = this.formatSocialUrl(CONFIG.SOCIAL_PLATFORMS.instagram.baseUrl, hotel[CONFIG.COLUMNS.INSTAGRAM]);
+            const url = window.SZ.social.format('instagram', hotel[CONFIG.COLUMNS.INSTAGRAM]);
             links.push(`
                 <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
                     <i class="fab fa-instagram ml-1"></i> زيارة صفحة الانستغرام
@@ -821,7 +749,7 @@ class SyrianHotels {
         
         // Facebook
         if (hotel[CONFIG.COLUMNS.FACEBOOK]) {
-            const url = this.formatSocialUrl(CONFIG.SOCIAL_PLATFORMS.facebook.baseUrl, hotel[CONFIG.COLUMNS.FACEBOOK]);
+            const url = window.SZ.social.format('facebook', hotel[CONFIG.COLUMNS.FACEBOOK]);
             links.push(`
                 <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
                     <i class="fab fa-facebook ml-1"></i> زيارة صفحة الفيسبوك
@@ -831,7 +759,7 @@ class SyrianHotels {
         
         // X (Twitter)
         if (hotel[CONFIG.COLUMNS.X_TWITTER]) {
-            const url = this.formatSocialUrl(CONFIG.SOCIAL_PLATFORMS.x_twitter.baseUrl, hotel[CONFIG.COLUMNS.X_TWITTER]);
+            const url = window.SZ.social.format('x', hotel[CONFIG.COLUMNS.X_TWITTER]);
             links.push(`
                 <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
                     <i class="fab fa-x-twitter ml-1"></i> زيارة صفحة X
