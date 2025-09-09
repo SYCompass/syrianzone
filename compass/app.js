@@ -3,12 +3,79 @@
  * الملف الرئيسي للتطبيق
  */
 
+// Configuration
+const CONFIG = {
+  GOOGLE_SHEETS: {
+    // Please replace with your Google Sheets CSV URL
+    CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRE9l8EaQ7dzLWjQOMx5vrwaJWZ4MUPDSym9IB_wEmXDo-CsBofwOo20WfcQpHU1iwhMYkUjYtlv_tN/pub?gid=0&single=true&output=csv',
+    MAX_RETRIES: 3,
+    RETRY_DELAY: 1000,
+  },
+  APP: {
+    ENABLE_CACHING: true,
+    CACHE_DURATION: 1000 * 60 * 60 * 24, // 24 hours
+  },
+  STORAGE_KEYS: {
+    CACHED_DATA: 'compass_cached_questions',
+    CACHE_TIMESTAMP: 'compass_cache_timestamp',
+  },
+  COLUMNS: {
+    ID: 'id',
+    TEXT: 'text',
+    CATEGORY: 'category',
+    CATEGORY_TEXT: 'categoryText',
+    EFFECT: 'effect',
+  },
+};
+
+
 document.addEventListener("DOMContentLoaded", function () {
   // تسجيل مكونات GSAP الإضافية
   gsap.registerPlugin(TextPlugin);
+
+  const SCALES = [
+    {
+      id: "auth_lib",
+      name: "سلطويّة مقابل ليبرالية",
+      left: "تحررية",
+      right: "سلطوية"
+    },
+    {
+      id: "rel_sec",
+      name: "ديني مقابل علماني",
+      left: "علمانية",
+      right: "دينية"
+    },
+    {
+      id: "soc_cap",
+      name: "اقتصادي اشتراكي مقابل اقتصادي ليبرالي",
+      left: "رأسمالية",
+      right: "اشتراكية"
+    },
+    {
+      id: "nat_glob",
+      name: "وطنيّ مقابل عالمي",
+      left: "عالمية",
+      right: "وطنيّة"
+    },
+    {
+      id: "mil_pac",
+      name: "عسكري توسّعي مقابل سلمي انعزالي",
+      left: "سلميّ انعزالي",
+      right: "عسكري توسّعي"
+    },
+    {
+      id: "ret_rec",
+      name: "عدالة انتقالية انتقامية مقابل تصالحية",
+      left: "عدالة تصالحية",
+      right: "عدالة انتقامية"
+    }
+  ];
+
   // تهيئة المتغيرات
   let currentQuestionIndex = 0;
   let answers = {};
+  let QUESTIONS = []; // Will be loaded from CSV
 
   // عناصر واجهة المستخدم
   const introSection = document.getElementById("intro");
@@ -31,6 +98,26 @@ document.addEventListener("DOMContentLoaded", function () {
   const modalTitle = document.getElementById("modal-title");
   const modalContent = document.getElementById("modal-content");
   const closeModalButton = document.getElementById("close-modal");
+
+  // Show loading spinner initially
+  const loadingSpinner = document.createElement('div');
+  loadingSpinner.id = 'loadingSpinner';
+  loadingSpinner.className = 'flex justify-center items-center h-64';
+  loadingSpinner.innerHTML = `<div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[var(--sz-color-primary)]"></div>`;
+  introSection.parentNode.insertBefore(loadingSpinner, introSection);
+  introSection.classList.add('hidden');
+
+
+  // Load questions and then initialize the app
+  loadQuestions().then(() => {
+    loadingSpinner.style.display = 'none';
+    introSection.classList.remove('hidden');
+    initializeBackToTop();
+    loadPreviousResults();
+  }).catch(error => {
+    console.error("Failed to load questions:", error);
+    loadingSpinner.innerHTML = `<p class="text-red-500">Failed to load questions. Please try again later.</p>`;
+  });
 
   // الأحداث (Events)
   startButton.addEventListener("click", startTest);
@@ -61,6 +148,241 @@ document.addEventListener("DOMContentLoaded", function () {
       selectAnswer(button.dataset.value);
     });
   });
+
+  // Keyboard navigation for answers
+  document.addEventListener('keydown', (event) => {
+    if (questionContainer.classList.contains('hidden')) return;
+
+    const key = event.key;
+    if (key >= '1' && key <= '5') {
+      const value = parseInt(key, 10) - 3; // 1 -> -2, 2 -> -1, 3 -> 0, 4 -> 1, 5 -> 2
+      selectAnswer(value.toString());
+
+      // Optional: Add a visual feedback for key press
+      const button = document.querySelector(`.answer-btn[data-value="${value}"]`);
+      if (button) {
+        button.focus();
+      }
+    }
+  });
+
+  /**
+   * Load questions
+   */
+  async function loadQuestions() {
+    try {
+      // Check cache first
+      const cachedData = getCachedData();
+      if (cachedData) {
+        QUESTIONS = cachedData;
+        return;
+      }
+
+      let data;
+      const shouldUseGoogleSheets = CONFIG.GOOGLE_SHEETS.CSV_URL && CONFIG.GOOGLE_SHEETS.CSV_URL !== 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-Jp_1J-1J-1J-1J-1J-1J-1J-1J-1/pub?output=csv';
+
+      if (shouldUseGoogleSheets) {
+        try {
+          data = await fetchFromGoogleSheets();
+        } catch (error) {
+          console.warn("Failed to fetch from Google Sheets, falling back to local CSV.", error);
+          data = await fetchFromLocalCSV();
+        }
+      } else {
+        console.log("No Google Sheets URL provided, using local CSV.");
+        data = await fetchFromLocalCSV();
+      }
+
+      QUESTIONS = processData(data);
+      
+      // Cache the data
+      cacheData(QUESTIONS);
+      
+    } catch (error) {
+      console.error('Error loading questions:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Fetch data from local questions.csv
+   */
+  async function fetchFromLocalCSV() {
+    try {
+        const response = await fetch('/compass/questions.csv');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const csvText = await response.text();
+        if (!csvText || csvText.trim().length === 0) {
+          throw new Error('Empty local CSV data received');
+        }
+        return parseCSV(csvText);
+    } catch (error) {
+        console.error("Error fetching local CSV:", error);
+        throw error;
+    }
+  }
+
+  /**
+   * Fetch data from Google Sheets CSV export
+   */
+  async function fetchFromGoogleSheets() {
+    const { CSV_URL, MAX_RETRIES, RETRY_DELAY } = CONFIG.GOOGLE_SHEETS;
+    let lastError;
+    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+      try {
+        const response = await fetch(CSV_URL, {
+          method: 'GET',
+          headers: {
+            'Accept': 'text/csv, text/plain, */*',
+            'Cache-Control': 'no-cache'
+          },
+          redirect: 'follow'
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const csvText = await response.text();
+        if (!csvText || csvText.trim().length === 0) {
+          throw new Error('Empty CSV data received');
+        }
+        if (csvText.trim().toLowerCase().startsWith('<html')) {
+          throw new Error('Received HTML redirect instead of CSV data');
+        }
+        return parseCSV(csvText);
+      } catch (error) {
+        lastError = error;
+        console.warn(`Attempt ${attempt} failed:`, error.message);
+        if (attempt < MAX_RETRIES) {
+          await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * attempt));
+        }
+      }
+    }
+    throw new Error(`Failed to fetch data after ${MAX_RETRIES} attempts: ${lastError.message}`);
+  }
+
+  /**
+   * Parse CSV text into array of objects
+   */
+  function parseCSV(csvText) {
+    try {
+      const lines = csvText.trim().split(/\r\n|\n/);
+      if (lines.length < 2) {
+        throw new Error('CSV must have at least a header row and one data row');
+      }
+      const headers = parseCSVRow(lines[0]);
+      const data = [];
+      for (let i = 1; i < lines.length; i++) {
+        const row = parseCSVRow(lines[i]);
+        if (row.length > 0 && row[0]) { // Skip empty rows
+            const initiative = {};
+            headers.forEach((header, index) => {
+                initiative[header] = (row[index] || '').replace(/^"|"$/g, '');
+            });
+            data.push(initiative);
+        }
+      }
+      return data;
+    } catch (error) {
+      throw new Error(`CSV parsing error: ${error.message}`);
+    }
+  }
+
+  /**
+   * Parse a single CSV row, handling quoted fields
+   */
+  function parseCSVRow(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+    let i = 0;
+    
+    while (i < line.length) {
+        const char = line[i];
+        
+        if (char === '"') {
+            if (inQuotes && line[i + 1] === '"') {
+                // Escaped quote
+                current += '"';
+                i += 2;
+            } else {
+                // Toggle quote state
+                inQuotes = !inQuotes;
+                i++;
+            }
+        } else if (char === ',' && !inQuotes) {
+            // End of field
+            result.push(current.trim());
+            current = '';
+            i++;
+        } else {
+            current += char;
+            i++;
+        }
+    }
+    
+    // Add the last field
+    result.push(current.trim());
+    
+    return result;
+  }
+
+  /**
+   * Process raw data from CSV
+   */
+  function processData(rawData) {
+    let processed = rawData
+      .filter(q => q[CONFIG.COLUMNS.TEXT] && q[CONFIG.COLUMNS.TEXT].trim())
+      .map(q => ({
+        id: parseInt(q[CONFIG.COLUMNS.ID], 10),
+        text: q[CONFIG.COLUMNS.TEXT],
+        category: q[CONFIG.COLUMNS.CATEGORY],
+        categoryText: q[CONFIG.COLUMNS.CATEGORY_TEXT],
+        effect: parseFloat(q[CONFIG.COLUMNS.EFFECT])
+      }));
+    
+    // Randomize questions
+    for (let i = processed.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [processed[i], processed[j]] = [processed[j], processed[i]];
+    }
+    
+    return processed;
+  }
+
+    /**
+   * Cache data in localStorage
+   */
+  function cacheData(data) {
+    if (!CONFIG.APP.ENABLE_CACHING) return;
+    try {
+      localStorage.setItem(CONFIG.STORAGE_KEYS.CACHED_DATA, JSON.stringify(data));
+      localStorage.setItem(CONFIG.STORAGE_KEYS.CACHE_TIMESTAMP, Date.now().toString());
+    } catch (error) {
+      console.warn('Failed to cache data:', error);
+    }
+  }
+
+  /**
+   * Get cached data
+   */
+  function getCachedData() {
+    if (!CONFIG.APP.ENABLE_CACHING) return null;
+    try {
+      const cachedData = localStorage.getItem(CONFIG.STORAGE_KEYS.CACHED_DATA);
+      const timestamp = localStorage.getItem(CONFIG.STORAGE_KEYS.CACHE_TIMESTAMP);
+      if (cachedData && timestamp) {
+        const age = Date.now() - parseInt(timestamp);
+        if (age < CONFIG.APP.CACHE_DURATION) {
+          return JSON.parse(cachedData);
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to retrieve cached data:', error);
+    }
+    return null;
+  }
 
   /**
    * بدء الاختبار
@@ -94,7 +416,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const question = QUESTIONS[index];
     questionText.textContent = question.text;
     questionNumber.textContent = `السؤال ${index + 1} من ${QUESTIONS.length}`;
-    categoryLabel.textContent = question.categoryText;
 
     // تحديث زر العودة
     prevButton.disabled = index === 0;
@@ -645,8 +966,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const canvas = document.createElement("canvas");
       canvas.id = "results-canvas";
       canvas.className = "w-full";
-      canvas.width = 600;
-      canvas.height = 500; // زيادة ارتفاع الكانفاس ليستوعب 6 محاور
+      canvas.width = 1200; // Increased resolution
+      canvas.height = 1000; // Increased resolution
       canvasContainer.appendChild(canvas);
 
       // إضافة الكانفاس إلى حاوية النتائج
@@ -674,10 +995,10 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
 
     // تحديد حجم وموقع المخطط
-    const padding = { top: 40, right: 30, bottom: 30, left: 30 }; // تقليل المسافة على اليسار
+    const padding = { top: 80, right: 60, bottom: 60, left: 60 }; // Increased padding
     const chartWidth = canvas.width - padding.left - padding.right;
-    const axisHeight = 50; // ارتفاع كل محور
-    const axisSpacing = 15; // المسافة بين المحاور
+    const axisHeight = 80; // Increased height
+    const axisSpacing = 30; // Increased spacing
     const totalAxesHeight = (axisHeight + axisSpacing) * SCALES.length;
 
     // نقطة البداية للرسم
@@ -698,7 +1019,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // رسم علامات النسب المئوية
       ctx.fillStyle = "#94a3b8";
-      ctx.font = "10px Arial";
+      ctx.font = "16px Arial"; // Increased font size
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
 
@@ -718,17 +1039,17 @@ document.addEventListener("DOMContentLoaded", function () {
         // رسم نص النسبة
         if (i % 2 === 0) {
           // عرض كل قيمة ثانية لتجنب الازدحام
-          ctx.fillText(`${percent}%`, percentX, axisY + 8);
+          ctx.fillText(`${percent}%`, percentX, axisY + 12); // Adjusted position
         }
       }
 
       // رسم اسم الاتجاه على طرفي المقياس
-      ctx.font = "12px Arial";
+      ctx.font = "20px Arial"; // Increased font size
       ctx.textAlign = "left";
       ctx.fillStyle = "#475569";
-      ctx.fillText(scale.right, padding.left, axisY - 20);
+      ctx.fillText(scale.right, padding.left, axisY - 30); // Adjusted position
       ctx.textAlign = "right";
-      ctx.fillText(scale.left, padding.left + chartWidth, axisY - 20);
+      ctx.fillText(scale.left, padding.left + chartWidth, axisY - 30); // Adjusted position
 
       // حساب موقع نتيجة المستخدم على المقياس
       const value = results[scale.id];
@@ -738,16 +1059,16 @@ document.addEventListener("DOMContentLoaded", function () {
       // رسم مؤشر النتيجة
       // خلفية دائرية للمؤشر
       ctx.beginPath();
-      ctx.arc(xPos, axisY, 12, 0, Math.PI * 2);
+      ctx.arc(xPos, axisY, 18, 0, Math.PI * 2); // Increased size
       ctx.fillStyle = "#ffffff";
       ctx.fill();
       ctx.strokeStyle = scaleColors[index % scaleColors.length];
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 3; // Increased line width
       ctx.stroke();
 
       // المؤشر نفسه
       ctx.beginPath();
-      ctx.arc(xPos, axisY, 8, 0, Math.PI * 2);
+      ctx.arc(xPos, axisY, 12, 0, Math.PI * 2); // Increased size
       ctx.fillStyle = scaleColors[index % scaleColors.length];
       ctx.fill();
 
@@ -756,33 +1077,33 @@ document.addEventListener("DOMContentLoaded", function () {
       const percentage = Math.round(value * 100);
       const displayText = `${percentage > 0 ? "+" : ""}${percentage}%`;
 
-      ctx.font = "bold 12px Arial";
+      ctx.font = "bold 18px Arial"; // Increased font size
       ctx.fillStyle = scaleColors[index % scaleColors.length];
       ctx.textAlign = "center";
       ctx.textBaseline = "bottom";
-      ctx.fillText(displayText, xPos, axisY - 16);
+      ctx.fillText(displayText, xPos, axisY - 24); // Adjusted position
 
       // تحديد الاتجاه (يمين/يسار) بناءً على القيمة
       const directionPercentage = Math.round(Math.abs(value) * 100);
       const direction = value > 0 ? scale.left : scale.right;
       const directionText = `${direction} (${directionPercentage}%)`;
 
-      ctx.font = "11px Arial";
+      ctx.font = "16px Arial"; // Increased font size
       ctx.fillStyle = "#64748b";
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
-      ctx.fillText(directionText, xPos, axisY + 16);
+      ctx.fillText(directionText, xPos, axisY + 24); // Adjusted position
     });
 
     // إضافة عنوان توضيحي
-    ctx.font = "12px Arial";
+    ctx.font = "18px Arial"; // Increased font size
     ctx.fillStyle = "#64748b";
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
     ctx.fillText(
       "القيم من -100% (يمين) إلى +100% (يسار)",
       canvas.width / 2,
-      canvas.height - 20
+      canvas.height - 40 // Adjusted position
     );
 
     // إضافة انيميشن للكانفاس
@@ -827,63 +1148,62 @@ document.addEventListener("DOMContentLoaded", function () {
     toggleBackToTop();
   }
 
-  // Initialize back to top functionality
-  initializeBackToTop();
+  /**
+   * اضافة عناصر الواجهة للإختبارات المسبقة
+   */
+  function loadPreviousResults() {
+    const results = JSON.parse(localStorage.getItem("results")) || [];
 
-  // اضافة عناصر الواجهة للإختبارات المسبقة
+    if (results.length > 0) {
+      previousResultsContainer.classList.remove("hidden");
 
-  const results = JSON.parse(localStorage.getItem("results")) || [];
-
-  if (results.length > 0) {
-    previousResultsContainer.classList.remove("hidden");
-
-    const dtf = new Intl.DateTimeFormat("ar", {
-      dateStyle: "short",
-      timeStyle: "short",
-    });
-
-    // اضافة عنصر لكل نتيجة
-
-    results.forEach((result) => {
-      const date = dtf.format(new Date(result.createdAt));
-
-      const resultItem = document.createElement("li");
-      resultItem.className = "flex";
-
-      const dateEl = document.createElement("span");
-
-      dateEl.className = "flex-1 justify-end flex flex-row-reverse";
-      dateEl.textContent = date;
-
-      resultItem.appendChild(dateEl);
-
-      const viewButton = document.createElement("button");
-
-      viewButton.className =
-        "flex bg-[var(--sz-color-primary)] hover:bg-[var(--sz-color-accent)] text-white font-bold py-1 px-2 rounded-lg transition duration-300";
-
-      viewButton.textContent = "عرض النتائج";
-
-      viewButton.addEventListener("click", () => {
-        showResults(result.results);
-
-        setTimeout(() => {
-          resultsContainer.scrollIntoView({
-            behavior: "smooth",
-          });
-
-          // انتظار 400 ملي ثانية لأنميشن
-          // GSAP
-        }, 400);
+      const dtf = new Intl.DateTimeFormat("ar", {
+        dateStyle: "short",
+        timeStyle: "short",
       });
 
-      resultItem.appendChild(viewButton);
+      // Clear list before adding new items
+      const previousResultsList = document.getElementById("previous-results-list");
+      previousResultsList.innerHTML = '';
 
-      const previousResultsList = document.getElementById(
-        "previous-results-list"
-      );
+      // اضافة عنصر لكل نتيجة
+      results.forEach((result) => {
+        const date = dtf.format(new Date(result.createdAt));
 
-      previousResultsList.appendChild(resultItem);
-    });
+        const resultItem = document.createElement("li");
+        resultItem.className = "flex";
+
+        const dateEl = document.createElement("span");
+
+        dateEl.className = "flex-1 justify-end flex flex-row-reverse";
+        dateEl.textContent = date;
+
+        resultItem.appendChild(dateEl);
+
+        const viewButton = document.createElement("button");
+
+        viewButton.className =
+          "flex bg-[var(--sz-color-primary)] hover:bg-[var(--sz-color-accent)] text-white font-bold py-1 px-2 rounded-lg transition duration-300";
+
+        viewButton.textContent = "عرض النتائج";
+
+        viewButton.addEventListener("click", () => {
+          showResults(result.results);
+
+          setTimeout(() => {
+            resultsContainer.scrollIntoView({
+              behavior: "smooth",
+            });
+
+            // انتظار 400 ملي ثانية لأنميشن
+            // GSAP
+          }, 400);
+        });
+
+        resultItem.appendChild(viewButton);
+
+        previousResultsList.appendChild(resultItem);
+      });
+    }
   }
 });
