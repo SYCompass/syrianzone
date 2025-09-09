@@ -113,8 +113,8 @@ export default function MonthlyLineChart({ months, series, height = 260 }: Props
             </text>
           ))}
 
-          {/* Lines */}
-          {visibleSeries.map((s) => {
+          {/* Lines: draw lower-ranked first so top-ranked render on top */}
+          {[...visibleSeries].reverse().map((s) => {
             const color = s.color || hashToColor(s.name);
             const originX = padding.left;
             const originY = height - padding.bottom;

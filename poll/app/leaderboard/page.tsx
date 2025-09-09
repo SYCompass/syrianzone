@@ -385,6 +385,45 @@ export default async function Page() {
               ))}
             </div>
           </div>
+
+          <div className="max-w-screen-md mx-auto mt-4">
+        {/* All-time leaderboard */}
+        <h2 className="font-semibold mb-2">قائمة التصنيف التفصيلية</h2>
+        <p className="text-sm text-gray-500 mb-2">مجموع النقاط والأصوات الإجمالي</p>
+        <Card>
+          <CardContent>
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th className="w-10 text-right">#</Th>
+                  <Th className="w-full text-right">المسؤول</Th>
+                  <Th className="w-20 text-right">النقاط</Th>
+                  <Th className="w-10 text-right">الأصوات</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {rowsMinOnly.map((r) => (
+                  <Tr key={r.candidateId}>
+                    <Td>#{r.rank}</Td>
+                    <Td>
+                      <div className="flex items-center gap-2">
+                        <Avatar src={r.imageUrl || ""} alt={r.name} size={28} />
+                        <div className="leading-tight">
+                          <div className="text-sm">{r.name}</div>
+                          {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
+                        </div>
+                      </div>
+                    </Td>
+                    <Td>{r.score}</Td>
+                    <Td>{r.votes}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
+      
           <div>
             <h3 className="font-semibold mb-2 text-center">إحصائيات المحافظين</h3>
             <ClientOnly>
@@ -429,44 +468,6 @@ export default async function Page() {
           </div>
         </div>
       ) : null}
-
-      <div className="max-w-screen-md mx-auto mt-4">
-        {/* All-time leaderboard */}
-        <h2 className="font-semibold mb-2">قائمة التصنيف التفصيلية</h2>
-        <p className="text-sm text-gray-500 mb-2">مجموع النقاط والأصوات الإجمالي</p>
-        <Card>
-          <CardContent>
-            <Table>
-              <Thead>
-                <Tr>
-                  <Th className="w-10 text-right">#</Th>
-                  <Th className="w-full text-right">المسؤول</Th>
-                  <Th className="w-20 text-right">النقاط</Th>
-                  <Th className="w-10 text-right">الأصوات</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {rowsMinOnly.map((r) => (
-                  <Tr key={r.candidateId}>
-                    <Td>#{r.rank}</Td>
-                    <Td>
-                      <div className="flex items-center gap-2">
-                        <Avatar src={r.imageUrl || ""} alt={r.name} size={28} />
-                        <div className="leading-tight">
-                          <div className="text-sm">{r.name}</div>
-                          {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
-                        </div>
-                      </div>
-                    </Td>
-                    <Td>{r.score}</Td>
-                    <Td>{r.votes}</Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </CardContent>
-        </Card>
-      </div>
 
       <div className="max-w-screen-md mx-auto mt-4">
         {/* Governors-only leaderboard */}
