@@ -295,16 +295,16 @@ export default async function Page() {
         .sort((a, b) => (b.avg - a.avg) || (b.score - a.score) || (b.votes - a.votes))
         .slice(0, 3)
         .map((t, i) => {
-        const c = (candsAll as any[]).find((cc) => cc.id === t.candidateId)!;
-        return { candidateId: t.candidateId, name: c.name as string, title: (c.title as string | null) || undefined, imageUrl: (c.imageUrl as string | null) || undefined, score: t.score, votes: t.votes, rank: i + 1 };
-      });
+          const c = (candsAll as any[]).find((cc) => cc.id === t.candidateId)!;
+          return { candidateId: t.candidateId, name: c.name as string, title: (c.title as string | null) || undefined, imageUrl: (c.imageUrl as string | null) || undefined, score: t.score, votes: t.votes, rank: i + 1 };
+        });
       const worst = [...totals]
         .sort((a, b) => (a.avg - b.avg) || (a.score - b.score) || (a.votes - b.votes))
         .slice(0, 3)
         .map((t, i) => {
-        const c = (candsAll as any[]).find((cc) => cc.id === t.candidateId)!;
-        return { candidateId: t.candidateId, name: c.name as string, title: (c.title as string | null) || undefined, imageUrl: (c.imageUrl as string | null) || undefined, score: t.score, votes: t.votes, rank: i + 1 };
-      });
+          const c = (candsAll as any[]).find((cc) => cc.id === t.candidateId)!;
+          return { candidateId: t.candidateId, name: c.name as string, title: (c.title as string | null) || undefined, imageUrl: (c.imageUrl as string | null) || undefined, score: t.score, votes: t.votes, rank: i + 1 };
+        });
       return { best, worst };
     }
     const mins = pickExtremes(ministers);
@@ -341,7 +341,7 @@ export default async function Page() {
         </Alert>
       </div>
       <h1 className="text-2xl font-bold mb-4 text-center">الإحصائيات</h1>
-      <h2 className="font-semibold mb-4 text-center text-gray-500">أفضل ٣ على الإطلاق - الحكومة (بالمعدّل)</h2>
+      <h2 className="font-semibold mb-4 text-center text-gray-500">أفضل ٣ على الإطلاق</h2>
       {triadMinBestAvg.length ? (
         <div className="max-w-screen-md mx-auto mb-8">
           <div className="grid grid-cols-3 items-end justify-items-center gap-4">
@@ -386,7 +386,7 @@ export default async function Page() {
         <div className="max-w-screen-md mx-auto mb-6 space-y-8">
           {/* Best of month - Ministers */}
           <div className="max-w-screen-md mx-auto mt-6">
-            <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر - الحكومة (بالمعدّل)</h2>
+            <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر - الحكومة</h2>
             <ClientOnly>
               <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
             </ClientOnly>
@@ -406,7 +406,7 @@ export default async function Page() {
           </div>
           {/* Worst of month - Ministers */}
           <div className="max-w-screen-md mx-auto mt-4">
-            <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر - الحكومة (بالمعدّل)</h2>
+            <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر - الحكومة</h2>
             <ClientOnly>
               <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
             </ClientOnly>
@@ -424,57 +424,12 @@ export default async function Page() {
               ))}
             </div>
           </div>
-          {/* Best of month - Governors */}
-          <div className="max-w-screen-md mx-auto mt-6">
-            <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر - المحافظون (بالمعدّل)</h2>
-            <ClientOnly>
-              <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
-            </ClientOnly>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {monthGovBest.slice(0, 3).map((r) => (
-                <Card key={r.candidateId}>
-                  <CardContent className="py-3 flex items-center gap-3">
-                    <Avatar src={r.imageUrl || ""} alt={r.name} size={36} />
-                    <div>
-                      <div className="font-medium text-sm">{r.name}</div>
-                      {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-          {/* Worst of month - Governors */}
-          <div className="max-w-screen-md mx-auto mt-4">
-            <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر - المحافظون (بالمعدّل)</h2>
-            <ClientOnly>
-              <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
-            </ClientOnly>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {monthGovWorst.slice(0, 3).map((r) => (
-                <Card key={r.candidateId}>
-                  <CardContent className="py-3 flex items-center gap-3">
-                    <Avatar src={r.imageUrl || ""} alt={r.name} size={36} />
-                    <div>
-                      <div className="font-medium text-sm">{r.name}</div>
-                      {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
+
           {/* Charts placed after the requested sections */}
           <div>
             <h3 className="font-semibold mb-2 text-center">إحصائيات الحكومة ورؤساء الهيئات</h3>
             <ClientOnly>
               <MonthlyLineChart months={months} series={seriesMinisters} />
-            </ClientOnly>
-          </div>
-          <div>
-            <h3 className="font-semibold mb-2 text-center">إحصائيات المحافظين</h3>
-            <ClientOnly>
-              <MonthlyLineChart months={months} series={seriesGovernors} />
             </ClientOnly>
           </div>
           {/* Leaderboard by averages */}
@@ -518,6 +473,54 @@ export default async function Page() {
           </div>
         </div>
       ) : null}
+
+      <div>
+        <h3 className="font-semibold mb-2 text-center">إحصائيات المحافظين</h3>
+        <ClientOnly>
+          <MonthlyLineChart months={months} series={seriesGovernors} />
+        </ClientOnly>
+      </div>
+
+      {/* Best of month - Governors */}
+      <div className="max-w-screen-md mx-auto mt-6">
+        <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر - المحافظون</h2>
+        <ClientOnly>
+          <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+        </ClientOnly>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {monthGovBest.slice(0, 3).map((r) => (
+            <Card key={r.candidateId}>
+              <CardContent className="py-3 flex items-center gap-3">
+                <Avatar src={r.imageUrl || ""} alt={r.name} size={36} />
+                <div>
+                  <div className="font-medium text-sm">{r.name}</div>
+                  {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+      {/* Worst of month - Governors */}
+      <div className="max-w-screen-md mx-auto mt-4">
+        <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر - المحافظون</h2>
+        <ClientOnly>
+          <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+        </ClientOnly>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {monthGovWorst.slice(0, 3).map((r) => (
+            <Card key={r.candidateId}>
+              <CardContent className="py-3 flex items-center gap-3">
+                <Avatar src={r.imageUrl || ""} alt={r.name} size={36} />
+                <div>
+                  <div className="font-medium text-sm">{r.name}</div>
+                  {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
 
       <div className="max-w-screen-md mx-auto mt-4">
         {/* Governors-only leaderboard */}
