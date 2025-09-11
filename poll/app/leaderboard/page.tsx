@@ -165,6 +165,7 @@ export default async function Page() {
   let rowsGov: Array<{ candidateId: string; name: string; title?: string; imageUrl?: string; votes: number; score: number; avg: number; rank: number }> = [];
   let monthMinBest: any[] = [], monthMinWorst: any[] = [], monthGovBest: any[] = [], monthGovWorst: any[] = [];
   let rowsMinOnly: Array<{ candidateId: string; name: string; title?: string; imageUrl?: string; votes: number; score: number; avg: number; rank: number }> = [];
+  let triadMinBestAvg: Array<{ candidateId: string; name: string; title?: string; imageUrl?: string; avg: number }> = [];
   if (p) {
     const now = new Date();
     const yyyy = now.getUTCFullYear();
@@ -284,13 +285,23 @@ export default async function Page() {
       monthAgg.set(r.candidateId, { votes: cur.votes + r.votes, score: cur.score + r.score });
     }
     function pickExtremes(list: typeof candsAll) {
-      const totals = list.map((c) => ({ candidateId: c.id, score: monthAgg.get(c.id)?.score || 0, votes: monthAgg.get(c.id)?.votes || 0 }));
-      totals.sort((a, b) => (b.score - a.score) || (b.votes - a.votes));
-      const best = totals.slice(0, 3).map((t, i) => {
+      const totals = list.map((c) => {
+        const score = monthAgg.get(c.id)?.score || 0;
+        const votes = monthAgg.get(c.id)?.votes || 0;
+        const avg = votes > 0 ? score / votes : 0;
+        return { candidateId: c.id, score, votes, avg };
+      });
+      const best = [...totals]
+        .sort((a, b) => (b.avg - a.avg) || (b.score - a.score) || (b.votes - a.votes))
+        .slice(0, 3)
+        .map((t, i) => {
         const c = (candsAll as any[]).find((cc) => cc.id === t.candidateId)!;
         return { candidateId: t.candidateId, name: c.name as string, title: (c.title as string | null) || undefined, imageUrl: (c.imageUrl as string | null) || undefined, score: t.score, votes: t.votes, rank: i + 1 };
       });
-      const worst = totals.slice(-3).reverse().map((t, i) => {
+      const worst = [...totals]
+        .sort((a, b) => (a.avg - b.avg) || (a.score - b.score) || (a.votes - b.votes))
+        .slice(0, 3)
+        .map((t, i) => {
         const c = (candsAll as any[]).find((cc) => cc.id === t.candidateId)!;
         return { candidateId: t.candidateId, name: c.name as string, title: (c.title as string | null) || undefined, imageUrl: (c.imageUrl as string | null) || undefined, score: t.score, votes: t.votes, rank: i + 1 };
       });
@@ -302,6 +313,18 @@ export default async function Page() {
     monthMinWorst = mins.worst;
     monthGovBest = govs.best;
     monthGovWorst = govs.worst;
+
+    // Top 3 best of all time (ministers) by average score per vote
+    triadMinBestAvg = ministers
+      .map((c) => ({
+        candidateId: c.id,
+        name: c.name as string,
+        title: (c.title as string | null) || undefined,
+        imageUrl: (c.imageUrl as string | null) || undefined,
+        avg: avgScore.get(c.id) || 0,
+      }))
+      .sort((a, b) => (b.avg - a.avg))
+      .slice(0, 3);
   }
 
   return (
@@ -318,41 +341,42 @@ export default async function Page() {
         </Alert>
       </div>
       <h1 className="text-2xl font-bold mb-4 text-center">الإحصائيات</h1>
-      <h2 className="font-semibold mb-4 text-center text-gray-500">الأفضل على الإطلاق</h2>
-      {/* All-time best triad */}
-      {first ? (
+      <h2 className="font-semibold mb-4 text-center text-gray-500">أفضل ٣ على الإطلاق - الحكومة (بالمعدّل)</h2>
+      {triadMinBestAvg.length ? (
         <div className="max-w-screen-md mx-auto mb-8">
           <div className="grid grid-cols-3 items-end justify-items-center gap-4">
             {/* 2nd */}
             <div className="flex flex-col items-center">
-              {second && (
+              {triadMinBestAvg[1] && (
                 <div className="relative">
-                  <Avatar src={second.imageUrl || ""} alt={second.name} size={48} />
+                  <Avatar src={triadMinBestAvg[1].imageUrl || ""} alt={triadMinBestAvg[1].name} size={48} />
                   <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-green-900 text-white text-[10px] border border-white flex items-center justify-center">2</span>
                 </div>
               )}
-              {second && <div className="text-sm mt-1 text-center leading-tight mb-2">{second.name}</div>}
-              {second?.title && <div className="text-xs text-gray-500 text-center">{second.title}</div>}
+              {triadMinBestAvg[1] && <div className="text-sm mt-1 text-center leading-tight mb-2">{triadMinBestAvg[1].name}</div>}
+              {triadMinBestAvg[1]?.title && <div className="text-xs text-gray-500 text-center">{triadMinBestAvg[1].title}</div>}
             </div>
             {/* 1st */}
             <div className="flex flex-col items-center">
-              <div className="relative">
-                <Avatar src={first.imageUrl || ""} alt={first.name} size={64} />
-                <span className="absolute -top-1 -right-1 h-6 w-6 rounded-full bg-green-900 text-white text-[10px] border border-white flex items-center justify-center">1</span>
-              </div>
-              <div className="font-medium mt-1 text-center leading-tight mb-2">{first.name}</div>
-              {first.title && <div className="text-xs text-gray-500 text-center">{first.title}</div>}
+              {triadMinBestAvg[0] && (
+                <div className="relative">
+                  <Avatar src={triadMinBestAvg[0].imageUrl || ""} alt={triadMinBestAvg[0].name} size={64} />
+                  <span className="absolute -top-1 -right-1 h-6 w-6 rounded-full bg-green-900 text-white text-[10px] border border-white flex items-center justify-center">1</span>
+                </div>
+              )}
+              {triadMinBestAvg[0] && <div className="font-medium mt-1 text-center leading-tight mb-2">{triadMinBestAvg[0].name}</div>}
+              {triadMinBestAvg[0]?.title && <div className="text-xs text-gray-500 text-center">{triadMinBestAvg[0].title}</div>}
             </div>
             {/* 3rd */}
             <div className="flex flex-col items-center">
-              {third && (
+              {triadMinBestAvg[2] && (
                 <div className="relative">
-                  <Avatar src={third.imageUrl || ""} alt={third.name} size={48} />
+                  <Avatar src={triadMinBestAvg[2].imageUrl || ""} alt={triadMinBestAvg[2].name} size={48} />
                   <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-green-900 text-white text-[10px] border border-white flex items-center justify-center">3</span>
                 </div>
               )}
-              {third && <div className="text-sm mt-1 text-center leading-tight mb-2">{third.name}</div>}
-              {third?.title && <div className="text-xs text-gray-500 text-center">{third.title}</div>}
+              {triadMinBestAvg[2] && <div className="text-sm mt-1 text-center leading-tight mb-2">{triadMinBestAvg[2].name}</div>}
+              {triadMinBestAvg[2]?.title && <div className="text-xs text-gray-500 text-center">{triadMinBestAvg[2].title}</div>}
             </div>
           </div>
         </div>
@@ -360,15 +384,9 @@ export default async function Page() {
 
       {months.length && (seriesMinisters.length || seriesGovernors.length) ? (
         <div className="max-w-screen-md mx-auto mb-6 space-y-8">
-          <div>
-            <h3 className="font-semibold mb-2 text-center">إحصائيات الحكومة ورؤساء الهيئات</h3>
-            <ClientOnly>
-              <MonthlyLineChart months={months} series={seriesMinisters} />
-            </ClientOnly>
-          </div>
-          {/* Top 3 of the month (Ministers) */}
+          {/* Best of month - Ministers */}
           <div className="max-w-screen-md mx-auto mt-6">
-            <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر - الحكومة</h2>
+            <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر - الحكومة (بالمعدّل)</h2>
             <ClientOnly>
               <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
             </ClientOnly>
@@ -386,9 +404,9 @@ export default async function Page() {
               ))}
             </div>
           </div>
-          {/* Worst 3 of the month (Ministers) */}
+          {/* Worst of month - Ministers */}
           <div className="max-w-screen-md mx-auto mt-4">
-            <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر - الحكومة</h2>
+            <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر - الحكومة (بالمعدّل)</h2>
             <ClientOnly>
               <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
             </ClientOnly>
@@ -406,9 +424,61 @@ export default async function Page() {
               ))}
             </div>
           </div>
-
+          {/* Best of month - Governors */}
+          <div className="max-w-screen-md mx-auto mt-6">
+            <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر - المحافظون (بالمعدّل)</h2>
+            <ClientOnly>
+              <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+            </ClientOnly>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {monthGovBest.slice(0, 3).map((r) => (
+                <Card key={r.candidateId}>
+                  <CardContent className="py-3 flex items-center gap-3">
+                    <Avatar src={r.imageUrl || ""} alt={r.name} size={36} />
+                    <div>
+                      <div className="font-medium text-sm">{r.name}</div>
+                      {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+          {/* Worst of month - Governors */}
           <div className="max-w-screen-md mx-auto mt-4">
-            {/* Leaderboard by averages */}
+            <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر - المحافظون (بالمعدّل)</h2>
+            <ClientOnly>
+              <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+            </ClientOnly>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {monthGovWorst.slice(0, 3).map((r) => (
+                <Card key={r.candidateId}>
+                  <CardContent className="py-3 flex items-center gap-3">
+                    <Avatar src={r.imageUrl || ""} alt={r.name} size={36} />
+                    <div>
+                      <div className="font-medium text-sm">{r.name}</div>
+                      {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+          {/* Charts placed after the requested sections */}
+          <div>
+            <h3 className="font-semibold mb-2 text-center">إحصائيات الحكومة ورؤساء الهيئات</h3>
+            <ClientOnly>
+              <MonthlyLineChart months={months} series={seriesMinisters} />
+            </ClientOnly>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-2 text-center">إحصائيات المحافظين</h3>
+            <ClientOnly>
+              <MonthlyLineChart months={months} series={seriesGovernors} />
+            </ClientOnly>
+          </div>
+          {/* Leaderboard by averages */}
+          <div className="max-w-screen-md mx-auto mt-4">
             <h2 className="font-semibold mb-2">قائمة التصنيف التفصيلية</h2>
             <p className="text-sm text-gray-500 mb-2">الترتيب حسب المعدّل لكل صوت؛ عرض النقاط والأصوات الإجمالية</p>
             <Card>
@@ -445,53 +515,6 @@ export default async function Page() {
                 </Table>
               </CardContent>
             </Card>
-          </div>
-
-          <div>
-            <h3 className="font-semibold mb-2 text-center">إحصائيات المحافظين</h3>
-            <ClientOnly>
-              <MonthlyLineChart months={months} series={seriesGovernors} />
-            </ClientOnly>
-          </div>
-          {/* Top 3 of the month (Governors) */}
-          <div className="max-w-screen-md mx-auto mt-6">
-            <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر - المحافظون</h2>
-            <ClientOnly>
-              <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
-            </ClientOnly>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {monthGovBest.slice(0, 3).map((r) => (
-                <Card key={r.candidateId}>
-                  <CardContent className="py-3 flex items-center gap-3">
-                    <Avatar src={r.imageUrl || ""} alt={r.name} size={36} />
-                    <div>
-                      <div className="font-medium text-sm">{r.name}</div>
-                      {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-          {/* Worst 3 of the month (Governors) */}
-          <div className="max-w-screen-md mx-auto mt-4">
-            <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر - المحافظون</h2>
-            <ClientOnly>
-              <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
-            </ClientOnly>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {monthGovWorst.slice(0, 3).map((r) => (
-                <Card key={r.candidateId}>
-                  <CardContent className="py-3 flex items-center gap-3">
-                    <Avatar src={r.imageUrl || ""} alt={r.name} size={36} />
-                    <div>
-                      <div className="font-medium text-sm">{r.name}</div>
-                      {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
           </div>
         </div>
       ) : null}
