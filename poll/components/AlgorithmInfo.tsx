@@ -59,6 +59,17 @@ export default function AlgorithmInfo() {
           </tbody>
         </table>
 
+        <div className="mt-6 text-sm text-gray-700 space-y-2" dir="rtl">
+          <p>
+            يعتمد الترتيب في الجداول على «المعدّل»، وهو متوسط النقاط لكل صوت،
+            أي <span className="font-semibold">المعدّل = مجموع النقاط ÷ مجموع الأصوات</span>.
+            نعرض كذلك إجمالي النقاط والأصوات للشفافية، لكن الفرز يتم بحسب المعدّل أولاً.
+          </p>
+          <p className="text-gray-600">
+            إذا كان عدد الأصوات صفراً، يظهر المعدّل بقيمة 0 لتجنّب القسمة على صفر.
+          </p>
+        </div>
+
         <div className="mt-6 flex items-center gap-2 text-sm text-gray-600" dir="rtl">
         <a
           href="https://github.com/SYCompass/syrianzone/tree/main/poll"

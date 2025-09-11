@@ -162,9 +162,9 @@ export default async function Page() {
   let series: { name: string; values: number[]; color?: string; imageUrl?: string }[] = [];
   let seriesMinisters: { name: string; values: number[]; color?: string; imageUrl?: string }[] = [];
   let seriesGovernors: { name: string; values: number[]; color?: string; imageUrl?: string }[] = [];
-  let rowsGov: Array<{ candidateId: string; name: string; title?: string; imageUrl?: string; votes: number; score: number; rank: number }> = [];
+  let rowsGov: Array<{ candidateId: string; name: string; title?: string; imageUrl?: string; votes: number; score: number; avg: number; rank: number }> = [];
   let monthMinBest: any[] = [], monthMinWorst: any[] = [], monthGovBest: any[] = [], monthGovWorst: any[] = [];
-  let rowsMinOnly: Array<{ candidateId: string; name: string; title?: string; imageUrl?: string; votes: number; score: number; rank: number }> = [];
+  let rowsMinOnly: Array<{ candidateId: string; name: string; title?: string; imageUrl?: string; votes: number; score: number; avg: number; rank: number }> = [];
   if (p) {
     const now = new Date();
     const yyyy = now.getUTCFullYear();
@@ -203,14 +203,30 @@ export default async function Page() {
 
     // All-time totals for ranking/colors
     const totalsRows = await db
-      .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
+      .select({ candidateId: dailyScores.candidateId, day: dailyScores.day, votes: dailyScores.votes, score: dailyScores.score })
       .from(dailyScores)
       .where(eq(dailyScores.pollId, p.id));
     const totalsScore = new Map<string, number>();
     const totalsVotes = new Map<string, number>();
+    const daysByCandidate = new Map<string, Set<string>>();
     for (const r of totalsRows) {
       totalsScore.set(r.candidateId, (totalsScore.get(r.candidateId) || 0) + r.score);
       totalsVotes.set(r.candidateId, (totalsVotes.get(r.candidateId) || 0) + r.votes);
+      const d = new Date(r.day as unknown as string);
+      const key = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`;
+      const set = daysByCandidate.get(r.candidateId) || new Set<string>();
+      set.add(key);
+      daysByCandidate.set(r.candidateId, set);
+    }
+    const avgScore = new Map<string, number>();
+    const avgVotes = new Map<string, number>();
+    // Compute per-vote average score (score divided by votes)
+    const candidateIds = new Set<string>([...totalsScore.keys(), ...totalsVotes.keys(), ...daysByCandidate.keys()]);
+    for (const id of candidateIds) {
+      const totalS = totalsScore.get(id) || 0;
+      const totalV = totalsVotes.get(id) || 0;
+      avgScore.set(id, totalV > 0 ? totalS / totalV : 0);
+      avgVotes.set(id, 0);
     }
 
     function buildSeries(list: typeof candsAll) {
@@ -237,8 +253,8 @@ export default async function Page() {
 
     // Build governors table rows by totals
     const govTotals = governors
-      .map((c) => ({ candidateId: c.id, name: c.name, title: c.title || undefined, imageUrl: c.imageUrl || undefined, votes: totalsVotes.get(c.id) || 0, score: totalsScore.get(c.id) || 0 }))
-      .sort((a, b) => (b.score - a.score) || (b.votes - a.votes));
+      .map((c) => ({ candidateId: c.id, name: c.name, title: c.title || undefined, imageUrl: c.imageUrl || undefined, votes: totalsVotes.get(c.id) || 0, score: totalsScore.get(c.id) || 0, avg: avgScore.get(c.id) || 0 }))
+      .sort((a, b) => (b.avg - a.avg) || (b.score - a.score) || (b.votes - a.votes));
     rowsGov = govTotals.map((t, i) => ({ ...t, rank: i + 1 }));
 
     // Build ministers-only rows including zero-score entries
@@ -250,8 +266,9 @@ export default async function Page() {
         imageUrl: c.imageUrl || undefined,
         votes: totalsVotes.get(c.id) || 0,
         score: totalsScore.get(c.id) || 0,
+        avg: avgScore.get(c.id) || 0,
       }))
-      .sort((a, b) => (b.score - a.score) || (b.votes - a.votes));
+      .sort((a, b) => (b.avg - a.avg) || (b.score - a.score) || (b.votes - a.votes));
     rowsMinOnly = minTotals.map((t, i) => ({ ...t, rank: i + 1 }));
 
     // Month extremes per category (best/worst)
@@ -387,43 +404,45 @@ export default async function Page() {
           </div>
 
           <div className="max-w-screen-md mx-auto mt-4">
-        {/* All-time leaderboard */}
-        <h2 className="font-semibold mb-2">قائمة التصنيف التفصيلية</h2>
-        <p className="text-sm text-gray-500 mb-2">مجموع النقاط والأصوات الإجمالي</p>
-        <Card>
-          <CardContent>
-            <Table>
-              <Thead>
-                <Tr>
-                  <Th className="w-10 text-right">#</Th>
-                  <Th className="w-full text-right">المسؤول</Th>
-                  <Th className="w-20 text-right">النقاط</Th>
-                  <Th className="w-10 text-right">الأصوات</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {rowsMinOnly.map((r) => (
-                  <Tr key={r.candidateId}>
-                    <Td>#{r.rank}</Td>
-                    <Td>
-                      <div className="flex items-center gap-2">
-                        <Avatar src={r.imageUrl || ""} alt={r.name} size={28} />
-                        <div className="leading-tight">
-                          <div className="text-sm">{r.name}</div>
-                          {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
-                        </div>
-                      </div>
-                    </Td>
-                    <Td>{r.score}</Td>
-                    <Td>{r.votes}</Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </CardContent>
-        </Card>
-      </div>
-      
+            {/* Leaderboard by averages */}
+            <h2 className="font-semibold mb-2">قائمة التصنيف التفصيلية</h2>
+            <p className="text-sm text-gray-500 mb-2">الترتيب حسب المعدّل لكل صوت؛ عرض النقاط والأصوات الإجمالية</p>
+            <Card>
+              <CardContent>
+                <Table>
+                  <Thead>
+                    <Tr>
+                      <Th className="w-10 text-right">#</Th>
+                      <Th className="w-full text-right">المسؤول</Th>
+                      <Th className="w-20 text-right">النقاط</Th>
+                      <Th className="w-16 text-right">الأصوات</Th>
+                      <Th className="w-24 text-right">المعدّل</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {rowsMinOnly.map((r) => (
+                      <Tr key={r.candidateId}>
+                        <Td>#{r.rank}</Td>
+                        <Td>
+                          <div className="flex items-center gap-2">
+                            <Avatar src={r.imageUrl || ""} alt={r.name} size={28} />
+                            <div className="leading-tight">
+                              <div className="text-sm">{r.name}</div>
+                              {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
+                            </div>
+                          </div>
+                        </Td>
+                        <Td>{r.score}</Td>
+                        <Td>{r.votes}</Td>
+                        <Td>{r.avg.toFixed(2)}</Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </CardContent>
+            </Card>
+          </div>
+
           <div>
             <h3 className="font-semibold mb-2 text-center">إحصائيات المحافظين</h3>
             <ClientOnly>
@@ -472,7 +491,7 @@ export default async function Page() {
       <div className="max-w-screen-md mx-auto mt-4">
         {/* Governors-only leaderboard */}
         <h2 className="font-semibold mb-2">قائمة المحافظين</h2>
-        <p className="text-sm text-gray-500 mb-2">مجموع النقاط والأصوات الإجمالي</p>
+        <p className="text-sm text-gray-500 mb-2">الترتيب حسب المعدّل لكل صوت؛ عرض النقاط والأصوات الإجمالية</p>
         <Card>
           <CardContent>
             <Table>
@@ -481,7 +500,8 @@ export default async function Page() {
                   <Th className="w-10 text-right">#</Th>
                   <Th className="w-full text-right">المسؤول</Th>
                   <Th className="w-20 text-right">النقاط</Th>
-                  <Th className="w-10 text-right">الأصوات</Th>
+                  <Th className="w-16 text-right">الأصوات</Th>
+                  <Th className="w-24 text-right">المعدّل</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -499,6 +519,7 @@ export default async function Page() {
                     </Td>
                     <Td>{r.score}</Td>
                     <Td>{r.votes}</Td>
+                    <Td>{r.avg.toFixed(2)}</Td>
                   </Tr>
                 ))}
               </Tbody>
