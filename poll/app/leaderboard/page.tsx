@@ -3,6 +3,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon } from "lucide-react";
 import AlgorithmInfo from "@/components/AlgorithmInfo";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@/components/ui/table";
+import { formatNumberKM } from "@/lib/utils";
 import { Avatar } from "@/components/ui/avatar";
 import { db } from "@/db";
 import { polls, candidates, dailyScores, dailyRanks } from "@/db/schema";
@@ -461,8 +462,8 @@ export default async function Page() {
                             </div>
                           </div>
                         </Td>
-                        <Td>{r.score}</Td>
-                        <Td>{r.votes}</Td>
+                        <Td>{formatNumberKM(r.score)}</Td>
+                        <Td>{formatNumberKM(r.votes)}</Td>
                         <Td>{r.avg.toFixed(2)}</Td>
                       </Tr>
                     ))}
@@ -551,8 +552,8 @@ export default async function Page() {
                         </div>
                       </div>
                     </Td>
-                    <Td>{r.score}</Td>
-                    <Td>{r.votes}</Td>
+                    <Td>{formatNumberKM(r.score)}</Td>
+                    <Td>{formatNumberKM(r.votes)}</Td>
                     <Td>{r.avg.toFixed(2)}</Td>
                   </Tr>
                 ))}
