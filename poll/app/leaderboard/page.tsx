@@ -369,7 +369,9 @@ export default async function Page() {
           {/* Top 3 of the month (Ministers) */}
           <div className="max-w-screen-md mx-auto mt-6">
             <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر - الحكومة</h2>
-            <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+            <ClientOnly>
+              <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+            </ClientOnly>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {monthMinBest.slice(0, 3).map((r) => (
                 <Card key={r.candidateId}>
@@ -387,7 +389,9 @@ export default async function Page() {
           {/* Worst 3 of the month (Ministers) */}
           <div className="max-w-screen-md mx-auto mt-4">
             <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر - الحكومة</h2>
-            <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+            <ClientOnly>
+              <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+            </ClientOnly>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {monthMinWorst.slice(0, 3).map((r) => (
                 <Card key={r.candidateId}>
@@ -452,7 +456,9 @@ export default async function Page() {
           {/* Top 3 of the month (Governors) */}
           <div className="max-w-screen-md mx-auto mt-6">
             <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر - المحافظون</h2>
-            <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+            <ClientOnly>
+              <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+            </ClientOnly>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {monthGovBest.slice(0, 3).map((r) => (
                 <Card key={r.candidateId}>
@@ -470,7 +476,9 @@ export default async function Page() {
           {/* Worst 3 of the month (Governors) */}
           <div className="max-w-screen-md mx-auto mt-4">
             <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر - المحافظون</h2>
-            <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+            <ClientOnly>
+              <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+            </ClientOnly>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {monthGovWorst.slice(0, 3).map((r) => (
                 <Card key={r.candidateId}>
