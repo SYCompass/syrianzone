@@ -17,6 +17,7 @@
     --white: var(--bg-primary);
     /* Use shared border/shadow tokens from /styles/theme.css */
     --border-radius: 8px;
+    --radius: 0px; /* Sharp corners for consistency with party page */
     --transition: all 0.3s ease;
 }
 
@@ -342,7 +343,8 @@ body {
     background: var(--accent-color);
     color: var(--bg-primary);
     padding: 0.25rem 0.75rem;
-    border-radius: 20px;
+    border-radius: var(--radius);
+    border: 2px solid var(--border-color);
     font-size: 0.8rem;
     font-weight: 500;
     margin-right: 0.5rem;
@@ -354,7 +356,8 @@ body {
     background: var(--bg-secondary);
     color: var(--text-primary);
     padding: 0.25rem 0.75rem;
-    border-radius: 20px;
+    border-radius: var(--radius);
+    border: 2px solid var(--border-color);
     font-size: 0.8rem;
     font-weight: 500;
     margin-right: 0.5rem;
@@ -366,7 +369,8 @@ body {
     background: var(--bg-secondary);
     color: var(--text-primary);
     padding: 0.25rem 0.75rem;
-    border-radius: 20px;
+    border-radius: var(--radius);
+    border: 2px solid var(--border-color);
     font-size: 0.8rem;
     font-weight: 500;
     margin-right: 0.5rem;
@@ -378,7 +382,8 @@ body {
     background: var(--bg-secondary);
     color: var(--text-primary);
     padding: 0.25rem 0.75rem;
-    border-radius: 20px;
+    border-radius: var(--radius);
+    border: 2px solid var(--border-color);
     font-size: 0.8rem;
     font-weight: 500;
     margin-right: 0.5rem;

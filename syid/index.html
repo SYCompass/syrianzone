@@ -48,12 +48,58 @@
     body {
       font-family: "IBM Plex Sans Arabic", sans-serif !important;
     }
-    /* Theme color variables */
+    /* Theme color variables and sharp corners */
     :root {
       --sz-color-primary: #556A4E;
       --sz-color-accent: #A73F46;
       --sz-color-surface: #FFFFFF;
       --sz-color-ink: #0D1315;
+      --radius: 0px; /* Sharp corners for syid page */
+    }
+    
+    /* Override ALL Tailwind rounded classes to use sharp corners */
+    .rounded, .rounded-sm, .rounded-md, .rounded-lg, .rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-full {
+      border-radius: var(--radius) !important;
+    }
+    
+    /* Main container with sharp corners and theme-consistent border */
+    .container.mx-auto.my-8.bg-white {
+      border-radius: var(--radius) !important;
+      border: 4px solid var(--border-color) !important;
+    }
+    
+    /* All shadow elements get sharp corners and borders */
+    .shadow-lg, .shadow-md, .shadow-sm, .shadow {
+      border: 4px solid var(--border-color) !important;
+      border-radius: var(--radius) !important;
+    }
+    
+    /* Buttons and interactive elements */
+    button, .btn {
+      border-radius: var(--radius) !important;
+    }
+    
+    /* Images and media */
+    img {
+      border-radius: var(--radius) !important;
+    }
+    
+    /* Color palette sections */
+    .flex.rounded-lg {
+      border-radius: var(--radius) !important;
+      border: 4px solid var(--border-color) !important;
+    }
+    
+    /* Download buttons and gradient buttons */
+    .rounded-full {
+      border-radius: var(--radius) !important;
+      border: 4px solid var(--border-color) !important;
+    }
+    
+    /* Ensure all gradient buttons follow sharp corner theme */
+    .bg-gradient-to-r {
+      border-radius: var(--radius) !important;
+      border: 4px solid var(--border-color) !important;
     }
     /* Footer styling */
     .footer {
@@ -78,17 +124,21 @@
     <nav-bar></nav-bar>
     
 
-    <!-- Back to Top Button - Component will auto-initialize -->
-
-    <!-- Hero Section (static background) -->
+    <!-- Back to Top Button - Component will auto-initialize with syid styling -->
     <style>
-      .hero-static { background: linear-gradient(135deg, #556A4E, #0D1315) !important; }
+        /* Syid-specific back-to-top button styling */
+        #backToTop {
+            border: 4px solid var(--border-color) !important;
+            border-radius: 0px !important;
+        }
     </style>
-    <section class="hero-static text-white py-16 md:py-24">
+
+    <!-- Hero Section -->
+    <section class="bg-white py-8">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div class="max-w-3xl mx-auto">
           <h1 class="text-4xl md:text-5xl font-bold mb-6">عناصر الهوية البصرية السورية</h1>
-          <p class="text-xl text-white opacity-90 mb-8">المواد المرتبطة بالهوية البصرية السورية - مجموعة غير رسمية ومجمّعة من أماكن متعددة بانتظار الإصدار الرسمي للهوية</p>
+          <p class="text-xl text-gray-700 mb-8">المواد المرتبطة بالهوية البصرية السورية - مجموعة غير رسمية ومجمّعة من أماكن متعددة بانتظار الإصدار الرسمي للهوية</p>
           <a href="https://syrianidentity.sy" target="_blank" rel="noopener" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-gradient-to-r from-[#6b1f2a] to-[#4a151e] text-white hover:from-[#4a151e] hover:to-[#3a1118] h-12 px-6 py-3 transition-all hover:-translate-y-0.5 hover:shadow-lg">
             <i class="fas fa-external-link-alt ml-2 h-4 w-4"></i>
             زيارة الموقع الرسمي للهوية البصرية السورية
@@ -97,7 +147,7 @@
       </div>
     </section>
 
-    <div class="max-w-[1270px] mx-auto my-8 bg-white rounded-xl shadow-lg overflow-hidden">
+    <div class="container mx-auto my-8 bg-white rounded-xl shadow-lg overflow-hidden">
 
         <!-- Color Palette Section -->
         <div class="p-10" id="colors">

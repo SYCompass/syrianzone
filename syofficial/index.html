@@ -84,11 +84,6 @@
           border-radius: var(--radius) !important;
         }
         
-        /* Organization cards with sharp borders */
-        .bg-white {
-          border: 4px solid var(--border-color) !important;
-          border-radius: var(--radius) !important;
-        }
         
         /* Table hover styling for theme compatibility */
         .table-row-hover {
@@ -232,25 +227,13 @@
         .view-toggle-btn:hover {
           color: var(--sz-color-primary);
           background: rgba(85, 106, 78, 0.1);
-          border-radius: 0.375rem !important;
         }
         
         .view-toggle-btn.active {
           color: white;
           background: var(--sz-color-primary);
-          border-radius: 0.375rem !important;
         }
         
-        /* View toggle container should also have rounded corners */
-        .view-toggle-btn:first-child {
-          border-top-left-radius: 0.5rem !important;
-          border-bottom-left-radius: 0.5rem !important;
-        }
-        
-        .view-toggle-btn:last-child {
-          border-top-right-radius: 0.5rem !important;
-          border-bottom-right-radius: 0.5rem !important;
-        }
         
         /* Mobile-specific toggle button styles */
         @media (max-width: 640px) {
@@ -348,44 +331,37 @@
 <body class="bg-gray-100 font-sans">
     <nav-bar></nav-bar>
     
-    <!-- Back to Top Button - Component will auto-initialize -->
-
-    <!-- Hero Section -->
-    <section class="hero-static text-white py-16 md:py-24">
+    <!-- Search and Filter Section -->
+    <section class="bg-white py-8" id="search-section">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div class="max-w-3xl mx-auto">
-          <h1 class="text-4xl md:text-5xl font-bold mb-6" data-i18n="app.title">روابط الحسابات الرسمية السورية</h1>
-          <p class="text-xl text-white opacity-90 mb-8" data-i18n="app.description">دليل وسائل التواصل الاجتماعي للجهات السورية الرسمية - اضغط على اسم الجهة للوصول إلى صفحاتها الرسمية</p>
-          
-          <!-- Language Switcher -->
-          <div class="flex justify-center">
-            <div class="flex gap-2">
-              <button class="lang-btn active" data-lang="ar">
-                <img src="/syofficial/assets/flags/ar.svg" alt="العربية" class="w-6 h-4 rounded">
-                <span>العربية</span>
-              </button>
-              <button class="lang-btn" data-lang="en">
-                <img src="/syofficial/assets/flags/en.svg" alt="English" class="w-6 h-4 rounded">
-                <span>English</span>
-              </button>
-              <button class="lang-btn" data-lang="tr">
-                <img src="/syofficial/assets/flags/tr.svg" alt="Türkçe" class="w-6 h-4 rounded">
-                <span>Türkçe</span>
-              </button>
-              <button class="lang-btn" data-lang="ku">
-                <img src="/syofficial/assets/flags/ku.svg" alt="Kurmanji" class="w-6 h-4 rounded">
-                <span>Kurmanji</span>
-              </button>
+        <div class="space-y-6">
+          <div class="max-w-3xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6" data-i18n="app.title">روابط الحسابات الرسمية السورية</h1>
+            <p class="text-xl text-white opacity-90 mb-8" data-i18n="app.description">دليل وسائل التواصل الاجتماعي للجهات السورية الرسمية - اضغط على اسم الجهة للوصول إلى صفحاتها الرسمية</p>
+            
+            <!-- Language Switcher -->
+            <div class="flex justify-center">
+              <div class="flex gap-2">
+                <button class="lang-btn active" data-lang="ar">
+                  <img src="/syofficial/assets/flags/ar.svg" alt="العربية" class="w-6 h-4 rounded">
+                  <span>العربية</span>
+                </button>
+                <button class="lang-btn" data-lang="en">
+                  <img src="/syofficial/assets/flags/en.svg" alt="English" class="w-6 h-4 rounded">
+                  <span>English</span>
+                </button>
+                <button class="lang-btn" data-lang="tr">
+                  <img src="/syofficial/assets/flags/tr.svg" alt="Türkçe" class="w-6 h-4 rounded">
+                  <span>Türkçe</span>
+                </button>
+                <button class="lang-btn" data-lang="ku">
+                  <img src="/syofficial/assets/flags/ku.svg" alt="Kurmanji" class="w-6 h-4 rounded">
+                  <span>Kurmanji</span>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Search and Filter Section -->
-    <section class="bg-white border-b py-8" id="search-section">
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="space-y-6">
+  
           <!-- Search Box -->
           <div class="relative max-w-2xl mx-auto">
             <div class="relative">

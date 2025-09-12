@@ -56,16 +56,20 @@ class SyrianHotels {
         
         // Initialize ViewToggle component
         this.viewToggle = new window.SZ.ViewToggle({
-            tableViewBtn: this.elements.tableViewBtn,
-            gridViewBtn: this.elements.gridViewBtn,
-            tableContainer: this.elements.hotelsTable,
-            gridContainer: this.elements.hotelsGrid,
+            tableViewBtn: '#tableViewBtn',
+            gridViewBtn: '#gridViewBtn',
+            tableContainer: '#hotelsTable',
+            gridContainer: '#hotelsGrid',
             storageKey: 'hotels-view',
             onViewChange: (view) => {
                 this.currentView = view;
                 this.displayHotels();
+                // Re-apply current filters after view change
+                this.applyFilters();
             }
         });
+        
+        this.currentView = this.viewToggle.getCurrentView();
     }
     
     // Bind event listeners
@@ -467,7 +471,7 @@ class SyrianHotels {
         const mapEmbed = this.createMapEmbed(hotel);
         
         card.innerHTML = `
-            <div class="hotel-card p-6 bg-white rounded-lg shadow-sm">
+            <div class="hotel-card p-6 shadow-sm">
                 <div class="mb-4">
                     <h3 class="text-xl font-bold text-gray-900 mb-2">${this.escapeHtml(hotel[CONFIG.COLUMNS.HOTEL_NAME])}</h3>
                     <div class="flex flex-wrap gap-2 mb-3">
@@ -834,27 +838,21 @@ class SyrianHotels {
     showLoading() {
         this.isLoading = true;
         this.elements.loadingSpinner.style.display = 'block';
-        this.elements.hotelsGrid.style.display = 'none';
-        this.elements.hotelsTable.style.display = 'none';
+        // Don't manually hide containers - let ViewToggle component handle display styles
     }
     
     // Hide loading state
     hideLoading() {
         this.isLoading = false;
         this.elements.loadingSpinner.style.display = 'none';
-        if (this.currentView === 'table') {
-            this.elements.hotelsTable.style.display = 'block';
-        } else {
-            this.elements.hotelsGrid.style.display = 'grid';
-        }
+        // Let ViewToggle component handle display styles
     }
     
     // Show error message
     showError(message) {
         this.elements.errorMessage.querySelector('p').textContent = message;
         this.elements.errorMessage.style.display = 'block';
-        this.elements.hotelsGrid.style.display = 'none';
-        this.elements.hotelsTable.style.display = 'none';
+        // Don't manually hide containers - let ViewToggle component handle display styles
     }
     
     // Hide error message
@@ -865,19 +863,14 @@ class SyrianHotels {
     // Show no results message
     showNoResults() {
         this.elements.noResults.style.display = 'block';
-        this.elements.hotelsGrid.style.display = 'none';
-        this.elements.hotelsTable.style.display = 'none';
         this.elements.loadMoreContainer.style.display = 'none';
+        // Don't manually hide containers - let ViewToggle component handle display styles
     }
     
     // Hide no results message
     hideNoResults() {
         this.elements.noResults.style.display = 'none';
-        if (this.currentView === 'table') {
-            this.elements.hotelsTable.style.display = 'block';
-        } else {
-            this.elements.hotelsGrid.style.display = 'grid';
-        }
+        // Let ViewToggle component handle display styles
     }
     
     // Cache data in localStorage

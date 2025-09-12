@@ -67,7 +67,13 @@
       border-radius: var(--radius) !important;
     }
     
+    .search-filter-button {
+      border: 4px solid var(--border-color) !important;
+      border-radius: var(--radius) !important;
+    }
+    
     .search-filter-select {
+      padding-right: 30px!important;
       border: 4px solid var(--border-color) !important;
       border-radius: var(--radius) !important;
     }
@@ -110,31 +116,36 @@
     
     /* Custom styles for hotels */
     .hotel-card {
-      transition: all 0.3s ease;
-      border: 1px solid #e5e7eb;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 4px solid var(--border-color) !important;
+      border-radius: var(--radius) !important;
       height: 100%;
+      background-color: var(--bg-primary);
     }
     
     .hotel-card:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      border: 4px solid var(--border-color) !important;
     }
     
     .style-badge {
-      background: linear-gradient(135deg, var(--sz-color-primary), var(--sz-color-ink));
-      color: white;
+      background: linear-gradient(135deg, var(--sz-color-primary), var(--sz-color-surface));
+      color: var(--sz-color-ink);
       font-size: 0.75rem;
       padding: 0.25rem 0.75rem;
-      border-radius: 1rem;
+      border-radius: var(--radius);
+      border: 2px solid var(--border-color);
       display: inline-block;
     }
     
     .city-badge {
-      background: #f3f4f6;
-      color: #374151;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
       font-size: 0.75rem;
       padding: 0.25rem 0.75rem;
-      border-radius: 1rem;
+      border-radius: var(--radius);
+      border: 2px solid var(--border-color);
       display: inline-block;
     }
     
@@ -206,7 +217,6 @@
     /* Footer styling */
     .footer {
       background-color: var(--sz-color-surface);
-      border-top: 1px solid #e5e7eb;
     }
     .footer-link {
       color: var(--sz-color-ink);
@@ -300,15 +310,17 @@
     
     .hotel-badge {
       font-size: 0.75rem;
-      padding: 2px 8px;
-      border-radius: 12px;
-      background: #f3f4f6;
-      color: #374151;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius);
+      border: 2px solid var(--border-color);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
     }
     
     .hotel-badge.primary {
-      background: var(--sz-color-primary);
-      color: white;
+      background: linear-gradient(135deg, var(--sz-color-primary), var(--sz-color-surface));
+      color: var(--sz-color-ink);
+      border: 2px solid var(--border-color);
     }
     
     .hotel-contact-cell {
@@ -496,23 +508,17 @@
 
   <!-- Main Content -->
   <main class="flex-1">
-    <!-- Hero Section (static background) -->
-    <style>
-      .hero-static { background: linear-gradient(135deg, #556A4E, #0D1315) !important; }
-    </style>
-    <section class="hero-static text-white py-16 md:py-24">
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div class="max-w-3xl mx-auto">
-          <h1 class="text-4xl md:text-5xl font-bold mb-6">دليل الفنادق السورية</h1>
-          <p class="text-xl text-white opacity-90">تصفح واكتشف الفنادق في مختلف المدن السورية مع معلومات الاتصال والموقع</p>
-        </div>
-      </div>
-    </section>
-
     <!-- Search and Filter Section -->
     <section class="bg-white border-b py-8" id="hotels">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="space-y-6">
+          <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="max-w-3xl mx-auto">
+              <h1 class="text-4xl md:text-5xl font-bold mb-6">دليل الفنادق السورية</h1>
+              <p class="text-xl text-white opacity-90">تصفح واكتشف الفنادق في مختلف المدن السورية مع معلومات الاتصال والموقع</p>
+            </div>
+          </div>
+    
           <!-- Search Box -->
           <div class="relative max-w-2xl mx-auto">
             <div class="relative">
@@ -530,7 +536,7 @@
           </div>
           
           <!-- Filters -->
-          <div class="flex flex-wrap gap-4 justify-center items-end">
+          <div class="filter-container flex flex-wrap gap-4 justify-center items-end p-4">
             <div class="flex flex-col space-y-2">
               <label for="cityFilter" class="text-sm font-medium">المدينة</label>
               <select id="cityFilter" class="search-filter-select flex h-10 w-full bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
@@ -545,7 +551,7 @@
               </select>
             </div>
             
-            <button id="clearFilters" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 h-10 px-4 py-2 transition-colors">
+            <button id="clearFilters" class="search-filter-button inline-flex items-center justify-center whitespace-nowrap text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 h-10 px-4 py-2 transition-colors">
               <i class="fas fa-times ml-2 h-4 w-4"></i> مسح الفلاتر
             </button>
           </div>

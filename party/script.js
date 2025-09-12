@@ -46,6 +46,8 @@ class SyrianPoliticalOrganizations {
             onViewChange: (view) => {
                 this.currentView = view;
                 this.displayOrganizations();
+                // Re-apply current filters after view change
+                this.applyFilters();
             }
         });
         
@@ -738,21 +740,21 @@ class SyrianPoliticalOrganizations {
     showLoading() {
         this.isLoading = true;
         this.elements.loadingSpinner.style.display = 'block';
-        this.elements.organizationsGrid.style.display = 'none';
+        // Don't manually hide grid - let ViewToggle component handle display styles
     }
     
     // Hide loading state
     hideLoading() {
         this.isLoading = false;
         this.elements.loadingSpinner.style.display = 'none';
-        this.elements.organizationsGrid.style.display = 'grid';
+        // Let ViewToggle component handle display styles
     }
     
     // Show error message
     showError(message) {
         this.elements.errorMessage.querySelector('p').textContent = message;
         this.elements.errorMessage.style.display = 'block';
-        this.elements.organizationsGrid.style.display = 'none';
+        // Don't manually hide grid - let ViewToggle component handle display styles
     }
     
     // Hide error message
@@ -763,14 +765,14 @@ class SyrianPoliticalOrganizations {
     // Show no results message
     showNoResults() {
         this.elements.noResults.style.display = 'block';
-        this.elements.organizationsGrid.style.display = 'none';
         this.elements.loadMoreContainer.style.display = 'none';
+        // Don't manually hide grid - let ViewToggle component handle display styles
     }
     
     // Hide no results message
     hideNoResults() {
         this.elements.noResults.style.display = 'none';
-        this.elements.organizationsGrid.style.display = 'grid';
+        // Let ViewToggle component handle display styles
     }
     
     // Cache data in localStorage

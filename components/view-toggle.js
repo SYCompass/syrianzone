@@ -120,7 +120,12 @@ class ViewToggle {
             this.elements.tableContainer.style.display = view === 'table' ? 'block' : 'none';
         }
         if (this.elements.gridContainer) {
-            this.elements.gridContainer.style.display = view === 'grid' ? 'block' : 'none';
+            if (view === 'grid') {
+                // Remove display property to let CSS grid classes work
+                this.elements.gridContainer.style.display = '';
+            } else {
+                this.elements.gridContainer.style.display = 'none';
+            }
         }
 
         // Call callback if provided
