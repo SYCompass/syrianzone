@@ -49,12 +49,60 @@
         /* Keep hero background stable across themes */
         .hero-static { background: linear-gradient(135deg, #556A4E, #0D1315) !important; }
         body { font-family: 'IBM Plex Sans Arabic', sans-serif!important; }
-        /* Theme color variables */
+        
+        /* Sharp borders and consistent styling like startpage */
         :root {
           --sz-color-primary: #556A4E;
           --sz-color-accent: #A73F46;
           --sz-color-surface: #FFFFFF;
           --sz-color-ink: #0D1315;
+          --radius: 0px;
+          --radius-sm: calc(var(--radius) * 0.75);
+          --radius-md: var(--radius);
+          --radius-lg: calc(var(--radius) * 2);
+        }
+        
+        /* Override Tailwind rounded classes to use sharp borders */
+        .rounded, .rounded-md, .rounded-lg, .rounded-xl {
+          border-radius: var(--radius) !important;
+        }
+        
+        /* Search and filter elements with consistent border styling */
+        .search-filter-input {
+          border: 4px solid var(--border-color) !important;
+          border-radius: var(--radius) !important;
+        }
+        
+        .search-filter-button {
+          border: 4px solid var(--border-color) !important;
+          border-radius: var(--radius) !important;
+        }
+        
+        .search-filter-select {
+          padding-right: 30px;
+          border: 4px solid var(--border-color) !important;
+          border-radius: var(--radius) !important;
+        }
+        
+        /* Organization cards with sharp borders */
+        .bg-white {
+          border: 4px solid var(--border-color) !important;
+          border-radius: var(--radius) !important;
+        }
+        
+        /* Table hover styling for theme compatibility */
+        .table-row-hover {
+          background-color: var(--bg-primary);
+          transition: background-color 0.2s ease;
+        }
+        
+        .table-row-hover:hover {
+          background-color: var(--bg-tertiary) !important;
+        }
+        
+        /* Override Tailwind hover classes for theme compatibility */
+        .hover\:bg-gray-50:hover {
+          background-color: var(--bg-tertiary) !important;
         }
         /* Lazy loading styles */
         img.lazy { opacity: 0; transition: opacity 0.3s ease-in-out; }
@@ -79,7 +127,8 @@
             justify-content: center;
             width: 2rem;
             height: 2rem;
-            border-radius: 0.375rem;
+            border: 4px solid var(--border-color);
+            border-radius: var(--radius);
             background-color: var(--bg-secondary);
             color: var(--text-secondary);
             transition: all 0.2s ease;
@@ -144,8 +193,8 @@
             align-items: center;
             gap: 0.5rem;
             padding: 0.5rem 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.375rem;
+            border: 4px solid var(--border-color);
+            border-radius: var(--radius);
             background: var(--bg-secondary);
             color: var(--text-primary);
             font-size: 0.875rem;
@@ -166,10 +215,108 @@
             object-fit: cover;
         }
         
+        /* View Toggle Styles */
+        .view-toggle-btn {
+          color: #6b7280;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 40px;
+          white-space: nowrap;
+          border-radius: 0.375rem !important; /* Override sharp border setting for toggle buttons */
+        }
+        
+        .view-toggle-btn:hover {
+          color: var(--sz-color-primary);
+          background: rgba(85, 106, 78, 0.1);
+          border-radius: 0.375rem !important;
+        }
+        
+        .view-toggle-btn.active {
+          color: white;
+          background: var(--sz-color-primary);
+          border-radius: 0.375rem !important;
+        }
+        
+        /* View toggle container should also have rounded corners */
+        .view-toggle-btn:first-child {
+          border-top-left-radius: 0.5rem !important;
+          border-bottom-left-radius: 0.5rem !important;
+        }
+        
+        .view-toggle-btn:last-child {
+          border-top-right-radius: 0.5rem !important;
+          border-bottom-right-radius: 0.5rem !important;
+        }
+        
+        /* Mobile-specific toggle button styles */
+        @media (max-width: 640px) {
+          .view-toggle-btn {
+            min-width: 36px;
+            padding: 6px 8px;
+          }
+          
+          .view-toggle-btn i {
+            font-size: 0.875rem;
+          }
+        }
+        
+        /* Extra small mobile devices */
+        @media (max-width: 480px) {
+          .view-toggle-btn {
+            min-width: 32px;
+            padding: 4px 6px;
+            font-size: 0.7rem;
+          }
+          
+          .view-toggle-btn i {
+            font-size: 0.75rem;
+          }
+        }
+        
+        /* Filter button styles */
+        .filter-btn {
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+          font-weight: 500;
+          background-color: var(--bg-secondary);
+          color: var(--text-secondary);
+          transition: all 0.2s ease;
+          cursor: pointer;
+        }
+        
+        .filter-btn:hover {
+          background-color: var(--bg-tertiary);
+          color: var(--text-primary);
+          transform: translateY(-1px);
+        }
+        
+        .filter-btn.active {
+          background-color: var(--sz-color-primary);
+          color: white;
+          border-color: var(--sz-color-primary);
+        }
+        
+        .filter-btn.active:hover {
+          background-color: var(--sz-color-accent);
+          border-color: var(--sz-color-accent);
+        }
+        
+        /* Responsive filter buttons */
+        @media (max-width: 640px) {
+          .filter-btn {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.75rem;
+          }
+        }
+        
         /* Footer styling */
         .footer {
           background-color: var(--sz-color-surface);
-          border-top: 1px solid #e5e7eb;
+          border-top: 4px solid var(--border-color);
         }
         .footer-link {
           color: var(--sz-color-ink);
@@ -196,14 +343,12 @@
     <!-- Components -->
     <script src="/components/navbar.js"></script>
     <script src="/components/utils-theme.js" defer></script>
+    <script src="/components/back-to-top.js" defer></script>
 </head>
 <body class="bg-gray-100 font-sans">
     <nav-bar></nav-bar>
     
-    <!-- Back to Top Button -->
-    <button id="backToTop" class="fixed bottom-6 left-6 z-50 h-10 w-10 rounded-full bg-[var(--sz-color-primary)] text-white shadow-lg hover:bg-[var(--sz-color-accent)] transition-colors" style="display: none;">
-        <i class="fas fa-arrow-up h-5 w-5 mx-auto"></i>
-    </button>
+    <!-- Back to Top Button - Component will auto-initialize -->
 
     <!-- Hero Section -->
     <section class="hero-static text-white py-16 md:py-24">
@@ -237,54 +382,115 @@
       </div>
     </section>
 
-    <div class="container mx-auto px-4 py-8">
-        <div class="mb-8 p-4 bg-white rounded shadow-md">
-            <div class="flex flex-col gap-4 items-center">
-                <div class="flex flex-wrap gap-2 justify-center w-full">
-                    <button data-filter="all" class="filter-btn bg-[var(--sz-color-primary)] text-white px-3 sm:px-4 py-2 rounded hover:bg-[var(--sz-color-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] active text-sm sm:text-base" data-i18n="categories.all">الكل</button>
-                    <button data-filter="governorates" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.governorates">المحافظات</button>
-                    <button data-filter="ministries" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.ministries">الوزارات</button>
-                    <button data-filter="ministers" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.ministers">الوزراء</button>
-                    <button data-filter="public_figures" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.public_figures">الشخصيات العامة</button>
-                    <button data-filter="syndicates" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.syndicates">النقابات</button>
-                    <button data-filter="universities" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.universities">الجامعات</button>
-                    <button data-filter="embassies" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.embassies">السفارات</button>
-                    <button data-filter="other" class="filter-btn bg-gray-200 text-gray-700 px-3 sm:px-4 py-2 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 text-sm sm:text-base" data-i18n="categories.other">أخرى</button>
-                </div>
-                <div class="relative w-full">
-                    <span class="absolute inset-y-0 right-0 flex items-center pr-3">
-                        <i class="fas fa-search text-gray-400"></i>
-                    </span>
-                    <input type="text" id="search-bar" data-i18n="app.searchPlaceholder" placeholder="ابحث بالاسم..." class="w-full pr-10 pl-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
-                </div>
-                <div class="flex flex-wrap gap-2 justify-center w-full">
-                    <button id="view-toggle" class="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                        <i class="fas fa-th-large"></i>
-                        <span data-i18n="view.grid">عرض الشبكة</span>
-                    </button>
-                    <a href="https://x.com/i/lists/1906101934660174006" target="_blank" rel="noopener" class="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                        <i class="fab fa-x-twitter"></i>
-                        <span data-i18n="social.twitterList">قائمة تويتر</span>
-                    </a>
-                    <a href="https://t.me/addlist/fKrhEy2yNeEwODQ0" target="_blank" rel="noopener" class="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                        <i class="fab fa-telegram"></i>
-                        <span data-i18n="social.telegramList">قائمة تلغرام</span>
-                    </a>
-                </div>
+    <!-- Search and Filter Section -->
+    <section class="bg-white border-b py-8" id="search-section">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="space-y-6">
+          <!-- Search Box -->
+          <div class="relative max-w-2xl mx-auto">
+            <div class="relative">
+              <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"></i>
+              <input 
+                type="text" 
+                id="search-bar" 
+                placeholder="ابحث في الحسابات الرسمية بالاسم أو الوصف..." 
+                class="search-filter-input w-full pr-10 pl-10 py-3 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]"
+                data-i18n="app.searchPlaceholder"
+              >
+              <button id="clearSearch" class="absolute left-3 top-1/2 transform -translate-y-1/2 hidden">
+                <i class="fas fa-times h-4 w-4 text-gray-400 hover:text-gray-600"></i>
+              </button>
             </div>
+          </div>
+          
+          <!-- Filter Buttons -->
+          <div class="flex flex-wrap gap-2 justify-center mt-4">
+            <button class="filter-btn search-filter-button active" data-category="">
+              الكل
+            </button>
+            <button class="filter-btn search-filter-button" data-category="governorates">
+              المحافظات
+            </button>
+            <button class="filter-btn search-filter-button" data-category="ministries">
+              الوزارات
+            </button>
+            <button class="filter-btn search-filter-button" data-category="ministers">
+              الوزراء
+            </button>
+            <button class="filter-btn search-filter-button" data-category="public_figures">
+              الشخصيات العامة
+            </button>
+            <button class="filter-btn search-filter-button" data-category="syndicates">
+              النقابات
+            </button>
+            <button class="filter-btn search-filter-button" data-category="universities">
+              الجامعات
+            </button>
+            <button class="filter-btn search-filter-button" data-category="embassies">
+              السفارات
+            </button>
+            <button class="filter-btn search-filter-button" data-category="other">
+              أخرى
+            </button>
+          </div>
         </div>
+        
+        <!-- Results Info -->
+        <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center pt-6 border-t mt-6 space-y-4 lg:space-y-0">
+          <span id="resultsCount" class="text-sm font-medium">جاري تحميل الحسابات الرسمية...</span>
+          <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+            <!-- View Toggle -->
+            <div class="flex items-center space-x-2">
+              <label class="text-sm text-gray-600">عرض:</label>
+              <div class="flex bg-gray-100 rounded-lg p-1">
+                <button id="tableViewBtn" class="view-toggle-btn px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md transition-colors" data-view="table">
+                  <i class="fas fa-table ml-1"></i> <span class="hidden sm:inline">جدول</span>
+                </button>
+                <button id="gridViewBtn" class="view-toggle-btn px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md transition-colors" data-view="grid">
+                  <i class="fas fa-th ml-1"></i> <span class="hidden sm:inline">شبكة</span>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Sort -->
+            <div class="flex items-center space-x-2">
+              <label for="sortSelect" class="text-sm text-gray-600">ترتيب حسب:</label>
+              <select id="sortSelect" class="search-filter-select flex h-8 bg-white px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
+                <option value="name">الاسم (أ-ي)</option>
+                <option value="name-desc">الاسم (ي-أ)</option>
+                <option value="category">الفئة</option>
+              </select>
+            </div>
+            
+            <!-- Social Links -->
+            <div class="flex gap-2">
+              <a href="https://x.com/i/lists/1906101934660174006" target="_blank" rel="noopener" class="search-filter-button flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                <i class="fab fa-x-twitter"></i>
+                <span data-i18n="social.twitterList">قائمة تويتر</span>
+              </a>
+              <a href="https://t.me/addlist/fKrhEy2yNeEwODQ0" target="_blank" rel="noopener" class="search-filter-button flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                <i class="fab fa-telegram"></i>
+                <span data-i18n="social.telegramList">قائمة تلغرام</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container mx-auto px-4 py-8">
 
         <div id="table-view" class="hidden">
             <div class="overflow-x-auto">
-                <table class="min-w-full bg-white rounded-lg shadow">
-                    <thead class="bg-gray-50 hidden sm:table-header-group">
+                <table class="min-w-full shadow" style="background-color: var(--bg-primary); border: 4px solid var(--border-color); border-radius: var(--radius);">
+                    <thead class="hidden sm:table-header-group" style="background-color: var(--bg-secondary);">
                         <tr>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="table.name">الاسم</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="table.description">الوصف</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="table.socialLinks">روابط التواصل</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider" style="color: var(--text-secondary);" data-i18n="table.name">الاسم</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider" style="color: var(--text-secondary);" data-i18n="table.description">الوصف</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider" style="color: var(--text-secondary);" data-i18n="table.socialLinks">روابط التواصل</th>
                         </tr>
                     </thead>
-                    <tbody id="table-body" class="divide-y divide-gray-200">
+                    <tbody id="table-body" class="divide-y" style="border-color: var(--border-color);">
                     </tbody>
                 </table>
             </div>
@@ -339,8 +545,11 @@
                 </div>
             </section>
 
-            <div id="no-results" class="text-center text-gray-500 py-10 hidden" data-i18n="app.noResults">
-                لا توجد نتائج مطابقة
+            <!-- No Results -->
+            <div id="no-results" class="flex flex-col items-center justify-center py-12 hidden">
+              <i class="fas fa-search h-12 w-12 text-gray-400 mb-4"></i>
+              <h3 class="text-lg font-semibold mb-2">لم يتم العثور على حسابات رسمية</h3>
+              <p class="text-gray-600" data-i18n="app.noResults">جرب تعديل كلمات البحث أو الفلاتر.</p>
             </div>
         </div>
 
@@ -351,7 +560,39 @@
     <script src="/components/utils-http.js"></script>
     <script src="/components/utils-cache.js"></script>
     <script src="/components/utils-offline.js"></script>
+    <script src="/components/view-toggle.js"></script>
     <script src="/syofficial/i18n.js?ver=1.1"></script>
+    <script>
+      // Simple initialization script - create required hidden elements for main script compatibility
+      document.addEventListener('DOMContentLoaded', function() {
+        // Create hidden categoryFilter select for main script
+        if (!document.getElementById('categoryFilter')) {
+          const categoryFilter = document.createElement('select');
+          categoryFilter.id = 'categoryFilter';
+          categoryFilter.style.display = 'none';
+          categoryFilter.innerHTML = `
+            <option value="">جميع الفئات</option>
+            <option value="governorates">المحافظات</option>
+            <option value="ministries">الوزارات</option>
+            <option value="ministers">الوزراء</option>
+            <option value="public_figures">الشخصيات العامة</option>
+            <option value="syndicates">النقابات</option>
+            <option value="universities">الجامعات</option>
+            <option value="embassies">السفارات</option>
+            <option value="other">أخرى</option>
+          `;
+          document.body.appendChild(categoryFilter);
+        }
+        
+        // Create hidden clearFilters button for main script
+        if (!document.getElementById('clearFilters')) {
+          const clearFilters = document.createElement('button');
+          clearFilters.id = 'clearFilters';
+          clearFilters.style.display = 'none';
+          document.body.appendChild(clearFilters);
+        }
+      });
+    </script>
     <script src="/syofficial/script.js?ver=1"></script>
     <footer class="footer py-6 mt-8">
         <div class="container mx-auto px-4 text-center">

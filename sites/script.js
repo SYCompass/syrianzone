@@ -4,11 +4,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let allWebsites = [];
     let currentFilter = 'all';
     let currentSearchTerm = '';
+    let searchTimeout;
+    let viewToggle = null;
+    let currentView = 'grid';
 
     // --- DOM Elements ---
     const searchBar = document.getElementById('search-bar');
-    const filterButtonsContainer = document.getElementById('filter-buttons');
+    const clearSearch = document.getElementById('clearSearch');
+    const typeFilter = document.getElementById('typeFilter');
+    const clearFilters = document.getElementById('clearFilters');
+    const sortSelect = document.getElementById('sortSelect');
+    const resultsCount = document.getElementById('resultsCount');
+    const filterButtonsContainer = document.getElementById('filter-buttons'); // Legacy - may not exist
     const websiteSections = document.getElementById('website-sections');
+    const websitesTable = document.getElementById('websitesTable');
+    const websitesTableBody = document.getElementById('websitesTableBody');
     const noResults = document.getElementById('no-results');
     const loading = document.getElementById('loading');
 
@@ -25,6 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Utility Functions ---
     function delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
     function showLoading() {
@@ -96,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         icon.dataset.type = website.type;
         icon.dataset.name = website.name.toLowerCase();
         icon.dataset.description = website.description.toLowerCase();
+        icon.dataset.url = website.url.toLowerCase();
 
         const iconContainer = document.createElement('div');
         iconContainer.className = 'icon-container';
@@ -178,6 +195,106 @@ document.addEventListener('DOMContentLoaded', () => {
             websiteSections.appendChild(section);
         });
     }
+    
+    // Display websites in the current view (grid or table)
+    function displayWebsites() {
+        if (currentView === 'table') {
+            populateWebsitesTable();
+        } else {
+            populateWebsitesGrid();
+        }
+    }
+    
+    // Populate websites in table format
+    function populateWebsitesTable() {
+        websitesTableBody.innerHTML = '';
+        
+        // Filter and sort websites for table view
+        let filteredWebsites = allWebsites;
+        
+        // Apply search filter
+        if (currentSearchTerm) {
+            filteredWebsites = filteredWebsites.filter(website => 
+                website.name.toLowerCase().includes(currentSearchTerm) ||
+                website.description.toLowerCase().includes(currentSearchTerm) ||
+                website.url.toLowerCase().includes(currentSearchTerm) ||
+                website.type.toLowerCase().includes(currentSearchTerm)
+            );
+        }
+        
+        // Apply type filter
+        if (currentFilter !== 'all') {
+            filteredWebsites = filteredWebsites.filter(website => website.type === currentFilter);
+        }
+        
+        // Sort websites
+        const sortBy = sortSelect.value;
+        filteredWebsites.sort((a, b) => {
+            switch (sortBy) {
+                case 'name':
+                    return a.name.localeCompare(b.name);
+                case 'name-desc':
+                    return b.name.localeCompare(a.name);
+                case 'type':
+                    return a.type.localeCompare(b.type);
+                default:
+                    return 0;
+            }
+        });
+        
+        // Create table rows
+        filteredWebsites.forEach(website => {
+            const row = createWebsiteTableRow(website);
+            websitesTableBody.appendChild(row);
+        });
+        
+        // Update results count
+        updateResultsCount(filteredWebsites.length);
+        
+        // Show/hide no results
+        if (filteredWebsites.length === 0) {
+            showNoResults();
+        } else {
+            hideNoResults();
+        }
+    }
+    
+    // Create website table row
+    function createWebsiteTableRow(website) {
+        const row = document.createElement('tr');
+        row.className = 'table-row-hover';
+        row.dataset.type = website.type;
+        
+        // Website name cell (no icon in table mode)
+        const nameCell = document.createElement('td');
+        nameCell.className = 'px-6 py-4';
+        nameCell.innerHTML = `
+            <div class="font-semibold" style="color: var(--text-primary);">${escapeHtml(website.name)}</div>
+        `;
+        
+        // Description cell
+        const descCell = document.createElement('td');
+        descCell.className = 'px-6 py-4';
+        descCell.innerHTML = `<div class="text-sm max-w-xs truncate" style="color: var(--text-secondary);" title="${escapeHtml(website.description)}">${escapeHtml(website.description || 'لا يوجد وصف')}</div>`;
+        
+        // Type cell with sharp corners pill
+        const typeCell = document.createElement('td');
+        typeCell.className = 'px-6 py-4';
+        typeCell.innerHTML = `<span class="type-badge">${escapeHtml(getTypeDisplayName(website.type))}</span>`;
+        
+        // Link cell
+        const linkCell = document.createElement('td');
+        linkCell.className = 'px-6 py-4';
+        linkCell.innerHTML = `<a href="${escapeHtml(website.url)}" target="_blank" rel="noopener" class="text-sm hover:underline" style="color: var(--sz-color-primary);"><i class="fas fa-external-link-alt mr-1"></i>زيارة الموقع</a>`;
+        
+        // Append all cells to row
+        row.appendChild(nameCell);
+        row.appendChild(descCell);
+        row.appendChild(typeCell);
+        row.appendChild(linkCell);
+        
+        return row;
+    }
 
     function getTypeDisplayName(type) {
         const typeNames = {
@@ -207,13 +324,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         return Array.from(categories);
     }
+    
+    // Populate type filter dropdown
+    function populateTypeFilter(categories) {
+        if (!typeFilter) return;
+        
+        // Clear existing options except the first one
+        while (typeFilter.children.length > 1) {
+            typeFilter.removeChild(typeFilter.lastChild);
+        }
+        
+        // Sort categories by type order
+        const sortedCategories = categories.sort((a, b) => {
+            return getTypeOrder(a) - getTypeOrder(b);
+        });
+        
+        // Add category options
+        sortedCategories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = getTypeDisplayName(category);
+            typeFilter.appendChild(option);
+        });
+    }
 
     function generateFilterButtons(categories) {
+        // Skip filter button generation if container doesn't exist
+        if (!filterButtonsContainer) {
+            return;
+        }
+        
         // Clear existing buttons
         filterButtonsContainer.innerHTML = '';
         
         // Add "All" button first
-        const allButton = createFilterButton('all', 'الكل', true);
+        const allButton = createFilterButton('', 'الكل', true);
         filterButtonsContainer.appendChild(allButton);
         
         // Sort categories by type order
@@ -234,12 +379,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createFilterButton(filterValue, displayName, isActive) {
         const button = document.createElement('button');
-        button.className = `filter-btn px-4 py-2 rounded-lg font-medium transition-colors ${
-            isActive 
-                ? 'bg-[var(--sz-color-primary)] text-white' 
-                : 'bg-gray-200 text-gray-700'
-        }`;
-        button.dataset.filter = filterValue;
+        button.className = `filter-btn search-filter-button ${isActive ? 'active' : ''}`;
+        button.dataset.type = filterValue;
         button.textContent = displayName;
         return button;
     }
@@ -254,39 +395,64 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Filtering and Search ---
     function filterAndSearch() {
         const searchTerm = searchBar.value.toLowerCase().trim();
+        const typeFilterValue = typeFilter ? typeFilter.value : '';
         currentSearchTerm = searchTerm;
+        currentFilter = typeFilterValue || 'all';
+        
+        // Show/hide clear search button
+        if (clearSearch) {
+            clearSearch.style.display = searchTerm ? 'block' : 'none';
+        }
         
         let hasVisibleItems = false;
-        const allIcons = websiteSections.querySelectorAll('.website-section .grid .website-icon');
+        let totalVisibleItems = 0;
         
-        allIcons.forEach(icon => {
-            const matchesSearch = icon.dataset.name.includes(searchTerm) || 
-                                icon.dataset.description.includes(searchTerm);
-            const matchesFilter = currentFilter === 'all' || 
-                                icon.dataset.type === currentFilter;
+        if (currentView === 'table') {
+            // Handle table view filtering
+            populateWebsitesTable(); // This already applies search and filter
+            const visibleRows = websitesTableBody.querySelectorAll('tr[data-type]:not([style*="display: none"])');
+            totalVisibleItems = visibleRows.length;
+            hasVisibleItems = totalVisibleItems > 0;
+        } else {
+            // Handle grid view filtering
+            const allIcons = websiteSections.querySelectorAll('.website-section .grid .website-icon');
             
-            const isVisible = matchesSearch && matchesFilter;
-            icon.style.display = isVisible ? 'flex' : 'none';
-            
-            if (isVisible) hasVisibleItems = true;
-        });
+            allIcons.forEach(icon => {
+                const matchesSearch = !searchTerm || 
+                    icon.dataset.name.includes(searchTerm) || 
+                    icon.dataset.description.includes(searchTerm) ||
+                    (icon.dataset.url && icon.dataset.url.includes(searchTerm));
+                const matchesFilter = !typeFilterValue || icon.dataset.type === typeFilterValue;
+                
+                const isVisible = matchesSearch && matchesFilter;
+                icon.style.display = isVisible ? 'flex' : 'none';
+                
+                if (isVisible) {
+                    hasVisibleItems = true;
+                    totalVisibleItems++;
+                }
+            });
 
-        // Update section visibility based on filter
-        const sections = websiteSections.querySelectorAll('.website-section');
-        sections.forEach(section => {
-            const sectionType = section.dataset.type;
-            const sectionIcons = section.querySelectorAll('.website-icon');
-            const hasVisibleIcons = Array.from(sectionIcons).some(icon => 
-                icon.style.display !== 'none'
-            );
-            
-            // Show/hide sections based on filter and search
-            if (currentFilter === 'all' || sectionType === currentFilter) {
-                section.style.display = hasVisibleIcons ? 'block' : 'none';
-            } else {
-                section.style.display = 'none';
-            }
-        });
+            // Update section visibility based on filter
+            const sections = websiteSections.querySelectorAll('.website-section');
+            sections.forEach(section => {
+                const sectionType = section.dataset.type;
+                const sectionIcons = section.querySelectorAll('.website-icon');
+                const hasVisibleIcons = Array.from(sectionIcons).some(icon => 
+                    icon.style.display !== 'none'
+                );
+                
+                // Show/hide sections based on filter and search
+                if (!typeFilterValue || sectionType === typeFilterValue) {
+                    section.style.display = hasVisibleIcons ? 'block' : 'none';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        }
+
+        // Update results count
+        updateResultsCount(totalVisibleItems);
 
         // Show/hide no results
         if (hasVisibleItems) {
@@ -295,30 +461,147 @@ document.addEventListener('DOMContentLoaded', () => {
             showNoResults();
         }
     }
+    
+    // Update results count display
+    function updateResultsCount(count) {
+        if (resultsCount) {
+            resultsCount.textContent = count === 0 ? 'لم يتم العثور على مواقع سورية' : 
+                `عرض ${count} موقع سوري`;
+        }
+    }
+    
+    // Handle search input with debouncing
+    function handleSearch() {
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+        }
+        
+        searchTimeout = setTimeout(() => {
+            filterAndSearch();
+        }, 300);
+    }
+    
+    // Clear search functionality
+    function clearSearchInput() {
+        if (searchBar) {
+            searchBar.value = '';
+        }
+        if (clearSearch) {
+            clearSearch.style.display = 'none';
+        }
+        filterAndSearch();
+    }
+    
+    // Clear all filters
+    function clearAllFilters() {
+        if (searchBar) {
+            searchBar.value = '';
+        }
+        if (typeFilter) {
+            typeFilter.value = '';
+        }
+        if (clearSearch) {
+            clearSearch.style.display = 'none';
+        }
+        filterAndSearch();
+    }
+    
+    // Apply sorting
+    function applySorting() {
+        if (!sortSelect) return;
+        
+        const sortBy = sortSelect.value;
+        
+        if (currentView === 'table') {
+            // For table view, just trigger filterAndSearch which calls populateWebsitesTable with sorting
+            filterAndSearch();
+        } else {
+            // For grid view, sort icons within each section
+            const allSections = Array.from(websiteSections.querySelectorAll('.website-section'));
+            
+            allSections.forEach(section => {
+                const grid = section.querySelector('.grid');
+                if (!grid) return;
+                
+                const icons = Array.from(grid.querySelectorAll('.website-icon'));
+                
+                icons.sort((a, b) => {
+                    let aValue, bValue;
+                    
+                    switch (sortBy) {
+                        case 'name':
+                            aValue = a.dataset.name.toLowerCase();
+                            bValue = b.dataset.name.toLowerCase();
+                            return aValue.localeCompare(bValue);
+                            
+                        case 'name-desc':
+                            aValue = a.dataset.name.toLowerCase();
+                            bValue = b.dataset.name.toLowerCase();
+                            return bValue.localeCompare(aValue);
+                            
+                        case 'type':
+                            aValue = a.dataset.type.toLowerCase();
+                            bValue = b.dataset.type.toLowerCase();
+                            return aValue.localeCompare(bValue);
+                            
+                        default:
+                            return 0;
+                    }
+                });
+                
+                // Re-append sorted icons to grid
+                grid.innerHTML = '';
+                icons.forEach(icon => grid.appendChild(icon));
+            });
+            
+            // Re-apply filters after sorting
+            filterAndSearch();
+        }
+    }
 
     // --- Event Listeners ---
     function setupEventListeners() {
-        // Search
-        searchBar.addEventListener('input', filterAndSearch);
+        // Enhanced search functionality
+        if (searchBar) {
+            searchBar.addEventListener('input', handleSearch);
+        }
+        
+        // Clear search button
+        if (clearSearch) {
+            clearSearch.addEventListener('click', clearSearchInput);
+        }
+        
+        // Type filter
+        if (typeFilter) {
+            typeFilter.addEventListener('change', filterAndSearch);
+        }
+        
+        // Clear filters button
+        if (clearFilters) {
+            clearFilters.addEventListener('click', clearAllFilters);
+        }
+        
+        // Sort functionality
+        if (sortSelect) {
+            sortSelect.addEventListener('change', applySorting);
+        }
     }
 
     function setupFilterButtonEvents() {
+        // Set up unified filter button event handling
         const filterButtons = document.querySelectorAll('.filter-btn');
-        
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
-                // Remove active state from all buttons
-                filterButtons.forEach(btn => {
-                    btn.classList.remove('active', 'bg-[var(--sz-color-primary)]', 'text-white');
-                    btn.classList.add('bg-gray-200', 'text-gray-700');
-                });
+                // Update button states
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
                 
-                // Add active state to clicked button
-                button.classList.remove('bg-gray-200', 'text-gray-700');
-                button.classList.add('active', 'bg-[var(--sz-color-primary)]', 'text-white');
-                
-                currentFilter = button.dataset.filter;
-                filterAndSearch();
+                // Update type filter and trigger main filtering
+                const type = button.dataset.type;
+                if (typeFilter) {
+                    typeFilter.value = type;
+                    typeFilter.dispatchEvent(new Event('change'));
+                }
             });
         });
     }
@@ -326,6 +609,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Initialization ---
     async function init() {
         setupEventListeners();
+        
+        // Initialize ViewToggle component
+        viewToggle = new window.SZ.ViewToggle({
+            tableViewBtn: '#tableViewBtn',
+            gridViewBtn: '#gridViewBtn',
+            tableContainer: '#websitesTable',
+            gridContainer: '#website-sections',
+            storageKey: 'sites-view-preference',
+            onViewChange: (view) => {
+                currentView = view;
+                displayWebsites();
+                // Re-apply current filters after view change
+                filterAndSearch();
+            }
+        });
+        
+        currentView = viewToggle.getCurrentView();
         
         try {
             showLoading();
@@ -404,14 +704,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 ];
             }
 
-            // Generate dynamic filter buttons based on available categories
+            // Generate dynamic filter buttons and populate type filter based on available categories
             const categories = extractUniqueCategories(allWebsites);
             generateFilterButtons(categories);
+            populateTypeFilter(categories);
             
-            // Populate websites grid
-            populateWebsitesGrid();
+            // Display websites in current view
+            displayWebsites();
             
-            // Apply initial filter
+            // Initialize results count and apply initial filter
+            updateResultsCount(allWebsites.length);
             filterAndSearch();
             
         } catch (error) {
@@ -421,36 +723,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Back to Top Functionality ---
-    function initializeBackToTop() {
-        const backToTop = document.getElementById('backToTop');
-        
-        if (!backToTop) return;
-
-        // Back to top functionality
-        function toggleBackToTop() {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            backToTop.style.display = scrollTop > 300 ? 'block' : 'none';
-        }
-
-        // Event listeners
-        window.addEventListener('scroll', () => {
-            toggleBackToTop();
-        });
-
-        backToTop.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-
-        // Initial call
-        toggleBackToTop();
-    }
-
-    // Initialize back to top functionality
-    initializeBackToTop();
+    // --- Back to Top Functionality is now handled by the back-to-top component ---
 
     // Start the application
     init();

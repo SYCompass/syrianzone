@@ -58,7 +58,7 @@
     /* Footer styling */
     .footer {
       background-color: var(--sz-color-surface);
-      border-top: 1px solid #e5e7eb;
+      border-top: 4px solid var(--border-color);
     }
     .footer-link {
       color: var(--sz-color-ink);
@@ -72,16 +72,13 @@
     <!-- Components -->
     <script src="/components/navbar.js"></script>
     <script src="/components/utils-theme.js" defer></script>
-    <script src="../components/wallpaper-item.js" defer></script>
+    <script src="/components/back-to-top.js" defer></script>
 </head>
 <body class="bg-gray-100 min-h-screen">
     <nav-bar></nav-bar>
     
 
-    <!-- Back to Top Button -->
-    <button id="backToTop" class="fixed bottom-6 left-6 z-50 h-10 w-10 rounded-full bg-[var(--sz-color-primary)] text-white shadow-lg hover:bg-[var(--sz-color-accent)] transition-colors" style="display: none;">
-        <i class="fas fa-arrow-up h-5 w-5 mx-auto"></i>
-    </button>
+    <!-- Back to Top Button - Component will auto-initialize -->
 
     <!-- Hero Section (static background) -->
     <style>

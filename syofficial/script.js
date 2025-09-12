@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- App State ---
     let allData = { governorates: [], ministries: [], ministers: [], public_figures: [], other: [], syndicates: [], universities: [], embassies: [] };
-    let isTableView = false;
+    let viewToggle = null;
     let currentLanguage = localStorage.getItem('preferredLanguage') || 'ar';
     let currentFilter = 'all';
     let currentSearchTerm = '';
@@ -17,10 +17,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const universitiesGrid = document.getElementById('universities-grid');
     const embassiesGrid = document.getElementById('embassies-grid');
     const searchBar = document.getElementById('search-bar');
+    const clearSearch = document.getElementById('clearSearch');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const clearFilters = document.getElementById('clearFilters');
+    const sortSelect = document.getElementById('sortSelect');
+    const resultsCount = document.getElementById('resultsCount');
     const filterButtons = document.querySelectorAll('.filter-btn');
     const sections = document.querySelectorAll('.data-section');
     const noResultsDiv = document.getElementById('no-results');
-    const viewToggle = document.getElementById('view-toggle');
+    // ViewToggle will be initialized after DOM elements are ready
     const contentSections = document.getElementById('content-sections');
     const tableView = document.getElementById('table-view');
     const tableBody = document.getElementById('table-body');
@@ -127,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const fragment = document.createDocumentFragment();
         items.forEach(item => {
             const cell = document.createElement('div');
-            cell.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 ease-in-out flex flex-col';
+            cell.className = 'bg-white shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 ease-in-out flex flex-col';
             cell.dataset.id = item.id;
             cell.dataset.category = category;
             cell.dataset.name = item.name.toLowerCase();
@@ -179,33 +184,35 @@ document.addEventListener('DOMContentLoaded', () => {
             const items = allData[section.key];
             if (!items || items.length === 0) return;
             const headerRow = document.createElement('tr');
-            headerRow.className = 'bg-gray-100';
-            headerRow.innerHTML = `<td colspan="3" class="px-6 py-3 text-sm font-semibold text-gray-900"><span data-i18n="${section.i18n}">${section.key}</span></td>`;
+            headerRow.className = '';
+            headerRow.style.backgroundColor = 'var(--bg-secondary)';
+            headerRow.innerHTML = `<td colspan="3" class="px-6 py-3 text-sm font-semibold" style="color: var(--text-primary);"><span data-i18n="${section.i18n}">${section.key}</span></td>`;
             fragment.appendChild(headerRow);
             items.forEach(item => {
                 const row = document.createElement('tr');
-                row.className = 'hover:bg-gray-50 flex flex-col sm:table-row border-b border-gray-200 sm:border-0';
+                row.className = 'table-row-hover flex flex-col sm:table-row border-b sm:border-0';
+                row.style.borderColor = 'var(--border-color)';
                 row.dataset.name = item.name.toLowerCase();
                 row.dataset.name_ar = item.name_ar.toLowerCase();
                 row.dataset.category = section.key;
                 const socialLinksHTML = item.socials && Object.keys(item.socials).length > 0 ?
                     Object.entries(item.socials).map(([platform, link]) => `
-                        <a href="${link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 transition-colors">
-                            <i class="${getSocialIcon(platform)} fa-fw text-blue-600"></i>
-                            <span class="text-xs text-gray-700 mr-1">${platform}</span>
+                        <a href="${link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-2 py-1 transition-colors" style="border-radius: var(--radius); background-color: var(--bg-secondary); color: var(--text-primary);">
+                            <i class="${getSocialIcon(platform)} fa-fw" style="color: var(--sz-color-primary);"></i>
+                            <span class="text-xs mr-1" style="color: var(--text-secondary);">${platform}</span>
                         </a>`).join('') :
-                    `<span class="text-sm text-gray-500" data-i18n="table.noLinks">No Links</span>`;
+                    `<span class="text-sm" style="color: var(--text-secondary);" data-i18n="table.noLinks">No Links</span>`;
                 row.innerHTML = `
                     <td class="px-6 py-4 sm:whitespace-nowrap flex flex-col sm:table-cell">
-                        <div class="text-xs text-gray-500 sm:hidden mb-1" data-i18n="table.name">Name</div>
-                        <div class="text-sm font-medium text-gray-900" data-name="${item.name}" data-name-ar="${item.name_ar}">${currentLanguage === 'ar' ? item.name_ar : item.name}</div>
+                        <div class="text-xs sm:hidden mb-1" style="color: var(--text-secondary);" data-i18n="table.name">Name</div>
+                        <div class="text-sm font-medium" style="color: var(--text-primary);" data-name="${item.name}" data-name-ar="${item.name_ar}">${currentLanguage === 'ar' ? item.name_ar : item.name}</div>
                     </td>
                     <td class="px-6 py-4 sm:whitespace-nowrap flex flex-col sm:table-cell">
-                        <div class="text-xs text-gray-500 sm:hidden mb-1" data-i18n="table.description">Description</div>
-                        <div class="text-sm text-gray-500" data-desc="${item.description}" data-desc-ar="${item.description_ar || item.description}">${currentLanguage === 'ar' ? (item.description_ar || item.description) : item.description}</div>
+                        <div class="text-xs sm:hidden mb-1" style="color: var(--text-secondary);" data-i18n="table.description">Description</div>
+                        <div class="text-sm" style="color: var(--text-secondary);" data-desc="${item.description}" data-desc-ar="${item.description_ar || item.description}">${currentLanguage === 'ar' ? (item.description_ar || item.description) : item.description}</div>
                     </td>
                     <td class="px-6 py-4 sm:whitespace-nowrap flex flex-col sm:table-cell">
-                        <div class="text-xs text-gray-500 sm:hidden mb-1" data-i18n="table.socialLinks">Social Links</div>
+                        <div class="text-xs sm:hidden mb-1" style="color: var(--text-secondary);" data-i18n="table.socialLinks">Social Links</div>
                         <div class="flex flex-wrap gap-2">${socialLinksHTML}</div>
                     </td>`;
                 fragment.appendChild(row);
@@ -218,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updatePageLanguage(lang) {
         currentLanguage = lang;
         localStorage.setItem('preferredLanguage', currentLanguage);
-        if (isTableView) { populateTable(); } else { populateAllGrids(); }
+        if (viewToggle && viewToggle.getCurrentView() === 'table') { populateTable(); } else { populateAllGrids(); }
         if (typeof translations !== 'undefined' && translations[currentLanguage]) {
             const langData = translations[currentLanguage];
             document.querySelectorAll('[data-i18n]').forEach(element => {
@@ -231,44 +238,172 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function filterAndSearch() {
         currentSearchTerm = searchBar.value.toLowerCase().trim();
+        const categoryFilterValue = categoryFilter.value;
+        
+        // Show/hide clear search button
+        clearSearch.style.display = currentSearchTerm ? 'block' : 'none';
+        
         let hasVisibleItems = false;
-        if (isTableView) {
+        let totalVisibleItems = 0;
+        
+        if (viewToggle && viewToggle.getCurrentView() === 'table') {
             tableBody.querySelectorAll('tr[data-category]').forEach(row => {
-                const matchesSearch = row.dataset.name.includes(currentSearchTerm) || row.dataset.name_ar.includes(currentSearchTerm);
-                const matchesFilter = currentFilter === 'all' || currentFilter === row.dataset.category;
+                const matchesSearch = !currentSearchTerm || 
+                    row.dataset.name.includes(currentSearchTerm) || 
+                    row.dataset.name_ar.includes(currentSearchTerm);
+                const matchesFilter = !categoryFilterValue || categoryFilterValue === row.dataset.category;
                 const isVisible = matchesSearch && matchesFilter;
                 row.style.display = isVisible ? '' : 'none';
-                if (isVisible) hasVisibleItems = true;
+                if (isVisible) {
+                    hasVisibleItems = true;
+                    totalVisibleItems++;
+                }
             });
             tableBody.querySelectorAll('tr:not([data-category])').forEach(headerRow => {
                  const sectionKey = headerRow.querySelector('span')?.getAttribute('data-i18n')?.split('.')[1];
                  if(sectionKey) {
-                    headerRow.style.display = (currentFilter === 'all' || currentFilter === sectionKey) ? '' : 'none';
+                    headerRow.style.display = (!categoryFilterValue || categoryFilterValue === sectionKey) ? '' : 'none';
                  }
             });
         } else {
             sections.forEach(section => {
                 const category = section.dataset.category;
                 let sectionHasVisibleItems = false;
-                const isSectionVisibleByFilter = currentFilter === 'all' || currentFilter === category;
+                const isSectionVisibleByFilter = !categoryFilterValue || categoryFilterValue === category;
+                
                 section.querySelectorAll('div[data-category]').forEach(item => {
-                    const matchesSearch = item.dataset.name.includes(currentSearchTerm) || item.dataset.name_ar.includes(currentSearchTerm);
+                    const matchesSearch = !currentSearchTerm || 
+                        item.dataset.name.includes(currentSearchTerm) || 
+                        item.dataset.name_ar.includes(currentSearchTerm);
                     const isVisible = isSectionVisibleByFilter && matchesSearch;
                     item.style.display = isVisible ? 'flex' : 'none';
-                    if (isVisible) sectionHasVisibleItems = true;
+                    if (isVisible) {
+                        sectionHasVisibleItems = true;
+                        totalVisibleItems++;
+                    }
                 });
                 section.style.display = sectionHasVisibleItems ? 'block' : 'none';
                 if (sectionHasVisibleItems) hasVisibleItems = true;
             });
         }
+        
+        // Update results count
+        updateResultsCount(totalVisibleItems);
+        
+        // Show/hide no results
         noResultsDiv.style.display = hasVisibleItems ? 'none' : 'block';
         if (!hasVisibleItems) {
-            const noResultsElement = noResultsDiv.querySelector('[data-i18n]');
-            const key = noResultsElement.getAttribute('data-i18n');
-            const langData = (typeof translations !== 'undefined') ? translations[currentLanguage] : null;
-            noResultsElement.textContent = getNestedValue(langData, key) || 'No results found.';
+            const noResultsElement = noResultsDiv.querySelector('p[data-i18n]');
+            if (noResultsElement) {
+                const key = noResultsElement.getAttribute('data-i18n');
+                const langData = (typeof translations !== 'undefined') ? translations[currentLanguage] : null;
+                noResultsElement.textContent = getNestedValue(langData, key) || 'جرب تعديل كلمات البحث أو الفلاتر.';
+            }
         }
     }
+    
+    // Update results count display
+    function updateResultsCount(count) {
+        if (resultsCount) {
+            resultsCount.textContent = count === 0 ? 'لم يتم العثور على حسابات رسمية' : 
+                `عرض ${count} حساب رسمي`;
+        }
+    }
+    
+    // Handle search input with debouncing
+    function handleSearch() {
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+        }
+        
+        searchTimeout = setTimeout(() => {
+            filterAndSearch();
+        }, 300);
+    }
+    
+    // Clear search functionality
+    function clearSearchInput() {
+        searchBar.value = '';
+        clearSearch.style.display = 'none';
+        filterAndSearch();
+    }
+    
+    // Clear all filters
+    function clearAllFilters() {
+        searchBar.value = '';
+        categoryFilter.value = '';
+        clearSearch.style.display = 'none';
+        filterAndSearch();
+    }
+    
+    // Apply sorting
+    function applySorting() {
+        const sortBy = sortSelect.value;
+        
+        if (viewToggle && viewToggle.getCurrentView() === 'table') {
+            // Sort table rows
+            const tableBody = document.getElementById('table-body');
+            if (!tableBody) return;
+            
+            const rows = Array.from(tableBody.querySelectorAll('tr[data-category]'));
+            
+            rows.sort((a, b) => {
+                let aValue, bValue;
+                
+                switch (sortBy) {
+                    case 'name':
+                        aValue = currentLanguage === 'ar' ? a.dataset.name_ar : a.dataset.name;
+                        bValue = currentLanguage === 'ar' ? b.dataset.name_ar : b.dataset.name;
+                        return aValue.localeCompare(bValue);
+                    case 'name-desc':
+                        aValue = currentLanguage === 'ar' ? a.dataset.name_ar : a.dataset.name;
+                        bValue = currentLanguage === 'ar' ? b.dataset.name_ar : b.dataset.name;
+                        return bValue.localeCompare(aValue);
+                    case 'category':
+                        return a.dataset.category.localeCompare(b.dataset.category);
+                    default:
+                        return 0;
+                }
+            });
+            
+            // Re-append sorted rows
+            rows.forEach(row => tableBody.appendChild(row));
+        } else {
+            // For grid view, re-populate with sorted data
+            const sortedData = {};
+            Object.keys(allData).forEach(category => {
+                sortedData[category] = [...allData[category]].sort((a, b) => {
+                    let aValue, bValue;
+                    
+                    switch (sortBy) {
+                        case 'name':
+                            aValue = currentLanguage === 'ar' ? a.name_ar : a.name;
+                            bValue = currentLanguage === 'ar' ? b.name_ar : b.name;
+                            return aValue.localeCompare(bValue);
+                        case 'name-desc':
+                            aValue = currentLanguage === 'ar' ? a.name_ar : a.name;
+                            bValue = currentLanguage === 'ar' ? b.name_ar : b.name;
+                            return bValue.localeCompare(aValue);
+                        case 'category':
+                            return 0; // No sorting needed by category in grid view
+                        default:
+                            return 0;
+                    }
+                });
+            });
+            
+            // Temporarily store sorted data and repopulate
+            const originalData = allData;
+            allData = sortedData;
+            populateAllGrids();
+            allData = originalData; // Restore original data
+        }
+        
+        // Re-apply filters after sorting
+        filterAndSearch();
+    }
+    
+    let searchTimeout;
 
     function getSocialIcon(platform) {
         const icons = {
@@ -300,25 +435,59 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
     function setupEventListeners() {
-        viewToggle.addEventListener('click', () => {
-            isTableView = !isTableView;
-            contentSections.classList.toggle('hidden', isTableView);
-            tableView.classList.toggle('hidden', !isTableView);
-            viewToggle.innerHTML = isTableView ? `<i class="fas fa-th-large"></i><span data-i18n="view.grid">Grid View</span>` : `<i class="fas fa-table"></i><span data-i18n="view.table">Table View</span>`;
-            if (isTableView) populateTable();
-            updatePageLanguage(currentLanguage);
+        // Initialize ViewToggle component
+        viewToggle = new window.SZ.ViewToggle({
+            tableViewBtn: '#tableViewBtn',
+            gridViewBtn: '#gridViewBtn', 
+            tableContainer: '#table-view',
+            gridContainer: '#content-sections',
+            storageKey: 'syofficial-view-preference',
+            onViewChange: (view) => {
+                if (view === 'table') {
+                    populateTable();
+                } else {
+                    populateAllGrids();
+                }
+                // Re-apply current filters after view change
+                filterAndSearch();
+            }
         });
-        searchBar.addEventListener('input', filterAndSearch);
+        // Enhanced search functionality
+        searchBar.addEventListener('input', handleSearch);
+        
+        // Clear search button
+        if (clearSearch) {
+            clearSearch.addEventListener('click', clearSearchInput);
+        }
+        
+        // Category filter
+        if (categoryFilter) {
+            categoryFilter.addEventListener('change', filterAndSearch);
+        }
+        
+        // Clear filters button
+        if (clearFilters) {
+            clearFilters.addEventListener('click', clearAllFilters);
+        }
+        
+        // Sort functionality
+        if (sortSelect) {
+            sortSelect.addEventListener('change', applySorting);
+        }
+        
+        // Filter buttons - unified approach
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
-                filterButtons.forEach(btn => {
-                    btn.classList.remove('bg-[var(--sz-color-primary)]', 'text-white');
-                    btn.classList.add('bg-gray-200', 'text-gray-700');
-                });
-                button.classList.remove('bg-gray-200', 'text-gray-700');
-                button.classList.add('bg-[var(--sz-color-primary)]', 'text-white');
-                currentFilter = button.dataset.filter;
-                filterAndSearch();
+                // Update button states
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Update category filter and trigger main filtering
+                const category = button.dataset.category;
+                if (categoryFilter) {
+                    categoryFilter.value = category;
+                    categoryFilter.dispatchEvent(new Event('change'));
+                }
             });
         });
         document.addEventListener('languageChange', e => updatePageLanguage(e.detail.lang));
@@ -345,6 +514,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             populateAllGrids();
             updatePageLanguage(currentLanguage);
+            
+            // Initialize results count and apply initial filter
+            const totalItems = Object.values(allData).reduce((sum, category) => sum + category.length, 0);
+            updateResultsCount(totalItems);
             filterAndSearch();
         } catch (error) {
             console.error('Initialization failed:', error);
@@ -358,19 +531,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Back to top
-    function initializeBackToTop() {
-        const backToTop = document.getElementById('backToTop');
-        if (!backToTop) return;
-        function toggleBackToTop() {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            backToTop.style.display = scrollTop > 300 ? 'block' : 'none';
-        }
-        window.addEventListener('scroll', () => { toggleBackToTop(); });
-        backToTop.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
-        toggleBackToTop();
-    }
-    initializeBackToTop();
+    // Back to top functionality is now handled by the back-to-top component
 
     init();
 });

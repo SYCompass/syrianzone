@@ -50,12 +50,22 @@
     body {
       font-family: "IBM Plex Sans Arabic", sans-serif !important;
     }
-    /* Theme color variables */
+    
+    /* Sharp borders and consistent styling like startpage */
     :root {
       --sz-color-primary: #556A4E;
       --sz-color-accent: #A73F46;
       --sz-color-surface: #FFFFFF;
       --sz-color-ink: #0D1315;
+      --radius: 0px;
+      --radius-sm: calc(var(--radius) * 0.75);
+      --radius-md: var(--radius);
+      --radius-lg: calc(var(--radius) * 2);
+    }
+    
+    /* Override Tailwind rounded classes to use sharp borders */
+    .rounded, .rounded-md, .rounded-lg, .rounded-xl {
+      border-radius: var(--radius) !important;
     }
 
     #bingo-card {
@@ -63,6 +73,10 @@
       grid-template-columns: repeat(5, 1fr);
       gap: 5px;
       max-width: 300px;
+      border: 4px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 10px;
+      background-color: var(--bg-primary);
     }
 
     .cell {
@@ -70,19 +84,40 @@
       align-items: center;
       justify-content: center;
       height: 60px;
-      border: 1px solid #000;
+      border: 4px solid var(--border-color);
+      border-radius: var(--radius);
       font-size: 14px;
       cursor: pointer;
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      transition: all 0.2s ease;
+    }
+    
+    .cell:hover {
+      background-color: var(--bg-tertiary);
     }
 
     .marked {
-      background-color: #66ff66;
+      background-color: var(--sz-color-primary) !important;
+      color: white !important;
+    }
+    
+    /* Buttons with sharp borders */
+    .bingo-button {
+      border: 4px solid var(--border-color) !important;
+      border-radius: var(--radius) !important;
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+    
+    .bingo-button:hover {
+      background-color: var(--bg-tertiary);
     }
     
     /* Footer styling */
     .footer {
       background-color: var(--sz-color-surface);
-      border-top: 1px solid #e5e7eb;
+      border-top: 4px solid var(--border-color);
     }
     .footer-link {
       color: var(--sz-color-ink);
@@ -134,18 +169,18 @@
         <label for="itemsInput" class="block text-sm font-medium text-gray-600 hidden">Enter 24 items separated by a new
           line:</label>
         <textarea id="itemsInput" rows="4"
-          class="mt-1 p-2 block w-full border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300 hidden"></textarea>
+          class="bingo-button mt-1 p-2 block w-full shadow-sm focus:outline-none focus:ring focus:border-blue-300 hidden"></textarea>
         <button onclick="generateBingoCard()"
-          class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 hidden">Generate
+          class="bingo-button mt-4 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 hidden">Generate
           Bingo Card</button>
         <button onclick="reshuffleItems()"
-          class="mt-2 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring focus:border-gray-300">إعادة
+          class="bingo-button mt-2 px-4 py-2 text-white hover:bg-gray-600 focus:outline-none focus:ring focus:border-gray-300">إعادة
           ترتيب العناصر</button>
         <button onclick="saveList()"
-          class="mt-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:border-green-300 hidden">Save
+          class="bingo-button mt-2 px-4 py-2 text-white hover:bg-green-600 focus:outline-none focus:ring focus:border-green-300 hidden">Save
           List</button>
         <button id="muteButton"
-          class="mt-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300">إغلاق
+          class="bingo-button mt-2 px-4 py-2 text-white hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300">إغلاق
           صوت الفوز</button>
         <script>
           document.getElementById('muteButton').addEventListener('click', function () {

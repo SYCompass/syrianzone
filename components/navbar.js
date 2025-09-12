@@ -80,7 +80,7 @@ class NavBar extends HTMLElement {
         .navbar {
           background-color: var(--sz-color-surface);
           backdrop-filter: blur(10px);
-          border-bottom: 1px solid var(--border-color);
+          border-bottom: 4px solid var(--border-color);
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
           position: relative;
           z-index: 1000;
@@ -105,7 +105,8 @@ class NavBar extends HTMLElement {
           text-decoration: none;
           color: var(--sz-color-ink);
           padding: 0.5rem 0.75rem;
-          border-radius: 0.5rem;
+          border: 4px solid transparent;
+          border-radius: 0px;
           transition: all 0.2s;
           font-size: 0.95rem;
         }
@@ -114,7 +115,8 @@ class NavBar extends HTMLElement {
         }
         .nav-item.active {
           background-color: color-mix(in oklab, var(--sz-color-primary) 12%, var(--sz-color-surface));
-          color: var(--sz-color-primary);
+          color: var(--sz-color-secondary);
+          border-color: var(--border-color);
           font-weight: 500;
         }
         .nav-item i {
@@ -124,13 +126,13 @@ class NavBar extends HTMLElement {
         .menu-button {
           display: none;
           background: none;
-          border: none;
+          border: 4px solid transparent;
           cursor: pointer;
           padding: 0.5rem;
           color: var(--sz-color-ink);
           width: 2.5rem;
           height: 2.5rem;
-          border-radius: 0.5rem;
+          border-radius: 0px;
         }
         .menu-button:hover {
           background-color: var(--bg-tertiary);
@@ -145,8 +147,8 @@ class NavBar extends HTMLElement {
           justify-content: center;
           width: 2.5rem;
           height: 2.5rem;
-          border-radius: 0.5rem;
-          border: none;
+          border-radius: 0px;
+          border: 4px solid var(--border-color);
           background: var(--sz-color-surface);
           color: var(--sz-color-ink);
           cursor: pointer;
@@ -246,7 +248,7 @@ class NavBar extends HTMLElement {
             padding: 0.75rem;
             width: 100%;
             justify-content: flex-start;
-            border-radius: 0.375rem;
+            border-radius: 0rem;
           }
           .nav-item.active {
             background-color: color-mix(in oklab, var(--sz-color-primary) 12%, var(--sz-color-surface));

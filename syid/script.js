@@ -60,36 +60,11 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
-// Back to Top functionality
-function initializeNavigation() {
-    const backToTop = document.getElementById('backToTop');
-
-    // Back to top functionality
-    function toggleBackToTop() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        backToTop.style.display = scrollTop > 300 ? 'block' : 'none';
-    }
-
-    // Event listeners
-    window.addEventListener('scroll', () => {
-        toggleBackToTop();
-    });
-
-    backToTop.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-
-    // Initial call
-    toggleBackToTop();
-}
+// Back to Top functionality is now handled by the back-to-top component
 
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize navigation
-    initializeNavigation();
+    // Navigation is now handled by components
 
     // Add click event listeners to all color items
     document.querySelectorAll('[data-hex]').forEach(item => {

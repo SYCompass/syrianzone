@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   loadQuestions().then(() => {
     loadingSpinner.style.display = 'none';
     introSection.classList.remove('hidden');
-    initializeBackToTop();
+    // Back to top initialization is now handled by the component
     loadPreviousResults();
   }).catch(error => {
     console.error("Failed to load questions:", error);
@@ -1096,33 +1096,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     );
   }
 
-  // --- Back to Top Functionality ---
-  function initializeBackToTop() {
-    const backToTop = document.getElementById('backToTop');
-    
-    if (!backToTop) return;
-
-    // Back to top functionality
-    function toggleBackToTop() {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      backToTop.style.display = scrollTop > 300 ? 'block' : 'none';
-    }
-
-    // Event listeners
-    window.addEventListener('scroll', () => {
-      toggleBackToTop();
-    });
-
-    backToTop.addEventListener('click', () => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    });
-
-    // Initial call
-    toggleBackToTop();
-  }
+  // --- Back to Top Functionality is now handled by the back-to-top component ---
 
   /**
    * اضافة عناصر الواجهة للإختبارات المسبقة

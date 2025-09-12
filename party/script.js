@@ -25,14 +25,31 @@ class SyrianPoliticalOrganizations {
             sortSelect: document.getElementById('sortSelect'),
             resultsCount: document.getElementById('resultsCount'),
             organizationsGrid: document.getElementById('initiativesGrid'),
+            organizationsTable: document.getElementById('organizationsTable'),
+            organizationsTableBody: document.getElementById('organizationsTableBody'),
             loadingSpinner: document.getElementById('loadingSpinner'),
             errorMessage: document.getElementById('errorMessage'),
             noResults: document.getElementById('noResults'),
             loadMoreContainer: document.getElementById('loadMoreContainer'),
             loadMoreBtn: document.getElementById('loadMoreBtn'),
             retryButton: document.getElementById('retryButton'),
-            backToTop: document.getElementById('backToTop')
+            // backToTop: removed - handled by component
         };
+        
+        // Initialize ViewToggle component
+        this.viewToggle = new window.SZ.ViewToggle({
+            tableViewBtn: '#tableViewBtn',
+            gridViewBtn: '#gridViewBtn',
+            tableContainer: '#organizationsTable',
+            gridContainer: '#initiativesGrid',
+            storageKey: 'party-view-preference',
+            onViewChange: (view) => {
+                this.currentView = view;
+                this.displayOrganizations();
+            }
+        });
+        
+        this.currentView = this.viewToggle.getCurrentView();
     }
     
     // Bind event listeners
@@ -82,15 +99,7 @@ class SyrianPoliticalOrganizations {
             this.loadOrganizations();
         });
         
-        // Back to top functionality
-        this.elements.backToTop.addEventListener('click', () => {
-            this.scrollToTop();
-        });
-        
-        // Scroll event for back to top button
-        window.addEventListener('scroll', () => {
-            this.toggleBackToTop();
-        });
+        // Back to top functionality is now handled by the back-to-top component
         
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
@@ -351,6 +360,20 @@ class SyrianPoliticalOrganizations {
             this.hideNoResults();
         }
         
+        // Display based on current view
+        if (this.currentView === 'table') {
+            this.displayOrganizationsTable(organizationsToShow);
+        } else {
+            this.displayOrganizationsGrid(organizationsToShow);
+        }
+        
+        // Show/hide load more button
+        this.elements.loadMoreContainer.style.display = 
+            endIndex < this.filteredOrganizations.length ? 'block' : 'none';
+    }
+    
+    // Display organizations in grid format
+    displayOrganizationsGrid(organizationsToShow) {
         // Clear grid if it's the first page
         if (this.currentPage === 1) {
             this.elements.organizationsGrid.innerHTML = '';
@@ -361,24 +384,34 @@ class SyrianPoliticalOrganizations {
             const card = this.createOrganizationCard(organization);
             this.elements.organizationsGrid.appendChild(card);
         });
+    }
+    
+    // Display organizations in table format
+    displayOrganizationsTable(organizationsToShow) {
+        // Clear table if it's the first page
+        if (this.currentPage === 1) {
+            this.elements.organizationsTableBody.innerHTML = '';
+        }
         
-        // Show/hide load more button
-        this.elements.loadMoreContainer.style.display = 
-            endIndex < this.filteredOrganizations.length ? 'block' : 'none';
+        // Add organization rows
+        organizationsToShow.forEach(organization => {
+            const row = this.createOrganizationTableRow(organization);
+            this.elements.organizationsTableBody.appendChild(row);
+        });
     }
     
     // Create organization card
     createOrganizationCard(organization) {
         const card = document.createElement('div');
-        card.className = 'rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-md transition-shadow';
+        card.className = 'bg-white shadow-sm hover:shadow-md transition-shadow';
         
         const location = this.formatLocation(organization);
         const socialLinks = this.createSocialLinks(organization);
         
         card.innerHTML = `
-            <div class="org-card p-6 bg-white rounded-lg shadow-sm">
+            <div class="org-card p-6 shadow-sm">
                 <div class="mb-4">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">${this.escapeHtml(organization[CONFIG.COLUMNS.INITIATIVE_NAME])}</h3>
+                    <h3 class="text-xl font-bold mb-2" style="color: var(--text-primary);">${this.escapeHtml(organization[CONFIG.COLUMNS.INITIATIVE_NAME])}</h3>
                     <div class="flex flex-wrap gap-2 mb-3">
                         ${organization[CONFIG.COLUMNS.CATEGORY] ? 
                             `<span class="type-badge">${this.escapeHtml(organization[CONFIG.COLUMNS.CATEGORY])}</span>` : ''}
@@ -387,17 +420,17 @@ class SyrianPoliticalOrganizations {
                 </div>
                 
                 ${organization[CONFIG.COLUMNS.DESCRIPTION] ? 
-                    `<p class="text-gray-600 leading-relaxed mb-4">${this.escapeHtml(organization[CONFIG.COLUMNS.DESCRIPTION])}</p>` : ''}
+                    `<p class="leading-relaxed mb-4" style="color: var(--text-secondary);">${this.escapeHtml(organization[CONFIG.COLUMNS.DESCRIPTION])}</p>` : ''}
                 
                 <div class="space-y-3">
-                    ${location ? `<div class="flex items-center text-sm text-gray-600">
+                    ${location ? `<div class="flex items-center text-sm" style="color: var(--text-secondary);">
                         <div class="w-5 flex justify-center ml-2">
                             <i class="fas fa-map-marker-alt text-[var(--sz-color-primary)]"></i>
                         </div>
                         <span>${location}</span>
                     </div>` : ''}
                     
-                    ${organization[CONFIG.COLUMNS.MVP_MEMBERS] ? `<div class="flex items-center text-sm text-gray-600">
+                    ${organization[CONFIG.COLUMNS.MVP_MEMBERS] ? `<div class="flex items-center text-sm" style="color: var(--text-secondary);">
                         <div class="w-5 flex justify-center ml-2">
                             <i class="fas fa-users text-[var(--sz-color-primary)]"></i>
                         </div>
@@ -448,7 +481,7 @@ class SyrianPoliticalOrganizations {
                         </div>
                     ` : ''}
                     
-                    ${organization[CONFIG.COLUMNS.LANG] ? `<div class="flex items-center text-sm text-gray-600">
+                    ${organization[CONFIG.COLUMNS.LANG] ? `<div class="flex items-center text-sm" style="color: var(--text-secondary);">
                         <div class="w-5 flex justify-center ml-2">
                             <i class="fas fa-language text-[var(--sz-color-primary)]"></i>
                         </div>
@@ -461,6 +494,101 @@ class SyrianPoliticalOrganizations {
         `;
         
         return card;
+    }
+    
+    // Create organization table row
+    createOrganizationTableRow(organization) {
+        const row = document.createElement('tr');
+        row.className = 'table-row-hover';
+        
+        // Organization name cell
+        const nameCell = document.createElement('td');
+        nameCell.className = 'px-6 py-4';
+        nameCell.innerHTML = `
+            <div class="font-semibold" style="color: var(--text-primary);">${this.escapeHtml(organization[CONFIG.COLUMNS.INITIATIVE_NAME])}</div>
+            ${organization[CONFIG.COLUMNS.DESCRIPTION] ? 
+                `<div class="text-sm mt-1" style="color: var(--text-secondary);">${this.escapeHtml(organization[CONFIG.COLUMNS.DESCRIPTION])}</div>` : ''}
+        `;
+        
+        // Type cell
+        const typeCell = document.createElement('td');
+        typeCell.className = 'px-6 py-4';
+        typeCell.innerHTML = organization[CONFIG.COLUMNS.CATEGORY] ? 
+            `<span class="type-badge">${this.escapeHtml(organization[CONFIG.COLUMNS.CATEGORY])}</span>` : '';
+        
+        // Country cell
+        const countryCell = document.createElement('td');
+        countryCell.className = 'px-6 py-4';
+        countryCell.innerHTML = organization[CONFIG.COLUMNS.COUNTRY] ? 
+            `<span class="text-sm" style="color: var(--text-primary);">${this.escapeHtml(organization[CONFIG.COLUMNS.COUNTRY])}</span>` : '';
+        
+        // City cell
+        const cityCell = document.createElement('td');
+        cityCell.className = 'px-6 py-4';
+        cityCell.innerHTML = organization[CONFIG.COLUMNS.CITY] ? 
+            `<span class="text-sm" style="color: var(--text-primary);">${this.escapeHtml(organization[CONFIG.COLUMNS.CITY])}</span>` : '';
+        
+        // Links cell
+        const linksCell = document.createElement('td');
+        linksCell.className = 'px-6 py-4';
+        const links = [];
+        
+        if (organization[CONFIG.COLUMNS.WEBSITE]) {
+            links.push(`<a href="${this.escapeHtml(organization[CONFIG.COLUMNS.WEBSITE])}" target="_blank" rel="noopener" class="text-sm hover:underline" style="color: var(--sz-color-primary);"><i class="fas fa-globe mr-1"></i>الموقع</a>`);
+        }
+        
+        if (organization[CONFIG.COLUMNS.MANIFESTO_LINK]) {
+            links.push(`<a href="${this.escapeHtml(organization[CONFIG.COLUMNS.MANIFESTO_LINK])}" target="_blank" rel="noopener" class="text-sm hover:underline" style="color: var(--sz-color-primary);"><i class="fas fa-file-alt mr-1"></i>البيان</a>`);
+        }
+        
+        // Add social media links
+        const socialLinks = this.createTableSocialLinks(organization);
+        if (socialLinks) {
+            links.push(socialLinks);
+        }
+        
+        linksCell.innerHTML = `<div class="flex flex-col space-y-1">${links.join('')}</div>`;
+        
+        // Append all cells to row
+        row.appendChild(nameCell);
+        row.appendChild(typeCell);
+        row.appendChild(countryCell);
+        row.appendChild(cityCell);
+        row.appendChild(linksCell);
+        
+        return row;
+    }
+    
+    // Create social links for table view
+    createTableSocialLinks(organization) {
+        const links = [];
+        
+        if (organization[CONFIG.COLUMNS.FACEBOOK]) {
+            const url = window.SZ.social.format('facebook', organization[CONFIG.COLUMNS.FACEBOOK]);
+            links.push(`<a href="${url}" target="_blank" rel="noopener" class="text-sm hover:underline" style="color: var(--sz-color-primary);"><i class="fab fa-facebook mr-1"></i>فيسبوك</a>`);
+        }
+        
+        if (organization[CONFIG.COLUMNS.TWITTER]) {
+            const url = window.SZ.social.format('x', organization[CONFIG.COLUMNS.TWITTER]);
+            links.push(`<a href="${url}" target="_blank" rel="noopener" class="text-sm hover:underline" style="color: var(--sz-color-primary);"><i class="fab fa-x-twitter mr-1"></i>X</a>`);
+        }
+        
+        if (organization[CONFIG.COLUMNS.INSTAGRAM]) {
+            const url = window.SZ.social.format('instagram', organization[CONFIG.COLUMNS.INSTAGRAM]);
+            links.push(`<a href="${url}" target="_blank" rel="noopener" class="text-sm hover:underline" style="color: var(--sz-color-primary);"><i class="fab fa-instagram mr-1"></i>إنستغرام</a>`);
+        }
+        
+        if (organization[CONFIG.COLUMNS.TELEGRAM]) {
+            const url = window.SZ.social.format('telegram', organization[CONFIG.COLUMNS.TELEGRAM]);
+            links.push(`<a href="${url}" target="_blank" rel="noopener" class="text-sm hover:underline" style="color: var(--sz-color-primary);"><i class="fab fa-telegram mr-1"></i>تلغرام</a>`);
+        }
+        
+        if (organization[CONFIG.COLUMNS.YOUTUBE]) {
+            const url = window.SZ.social.format('youtube', organization[CONFIG.COLUMNS.YOUTUBE]);
+            links.push(`<a href="${url}" target="_blank" rel="noopener" class="text-sm hover:underline" style="color: var(--sz-color-primary);"><i class="fab fa-youtube mr-1"></i>يوتيوب</a>`);
+        }
+        
+        return links.join(' ');
     }
     
     // Format location string
@@ -678,19 +806,7 @@ class SyrianPoliticalOrganizations {
         return null;
     }
     
-    // Toggle back to top button
-    toggleBackToTop() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        this.elements.backToTop.style.display = scrollTop > 300 ? 'block' : 'none';
-    }
-    
-    // Scroll to top
-    scrollToTop() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    }
+    // Back to top functionality moved to component
     
     // Handle keyboard navigation
     handleKeyboardNavigation(event) {

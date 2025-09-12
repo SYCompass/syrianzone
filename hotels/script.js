@@ -6,7 +6,7 @@ class SyrianHotels {
         this.currentPage = 1;
         this.isLoading = false;
         this.searchTimeout = null;
-        this.currentView = this.getPersistedView() || this.getDefaultView(); // Persisted or responsive default
+        this.currentView = 'table'; // Will be set by ViewToggle component
         
         this.initializeElements();
         this.bindEvents();
@@ -51,8 +51,21 @@ class SyrianHotels {
             loadMoreContainer: document.getElementById('loadMoreContainer'),
             loadMoreBtn: document.getElementById('loadMoreBtn'),
             retryButton: document.getElementById('retryButton'),
-            backToTop: document.getElementById('backToTop')
+            // backToTop: removed - handled by component
         };
+        
+        // Initialize ViewToggle component
+        this.viewToggle = new window.SZ.ViewToggle({
+            tableViewBtn: this.elements.tableViewBtn,
+            gridViewBtn: this.elements.gridViewBtn,
+            tableContainer: this.elements.hotelsTable,
+            gridContainer: this.elements.hotelsGrid,
+            storageKey: 'hotels-view',
+            onViewChange: (view) => {
+                this.currentView = view;
+                this.displayHotels();
+            }
+        });
     }
     
     // Bind event listeners
@@ -94,29 +107,14 @@ class SyrianHotels {
             this.loadHotels();
         });
         
-        // Back to top functionality
-        this.elements.backToTop.addEventListener('click', () => {
-            this.scrollToTop();
-        });
-        
-        // Scroll event for back to top button
-        window.addEventListener('scroll', () => {
-            this.toggleBackToTop();
-        });
+        // Back to top functionality is now handled by the back-to-top component
         
         // Window resize event for responsive view switching
         window.addEventListener('resize', () => {
             this.handleResize();
         });
         
-        // View toggle functionality
-        this.elements.tableViewBtn.addEventListener('click', () => {
-            this.switchView('table');
-        });
-        
-        this.elements.gridViewBtn.addEventListener('click', () => {
-            this.switchView('grid');
-        });
+        // View toggle functionality is now handled by ViewToggle component
         
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
@@ -136,7 +134,6 @@ class SyrianHotels {
                 this.hotels = cachedData;
                 this.setupFilters();
                 this.clearAllFilters();
-                this.initializeView();
                 this.displayHotels();
                 return;
             }
@@ -159,7 +156,6 @@ class SyrianHotels {
 
             this.setupFilters();
             this.clearAllFilters();
-            this.initializeView();
             this.displayHotels();
         } catch (error) {
             console.error('Error loading hotels:', error);
@@ -169,11 +165,7 @@ class SyrianHotels {
         }
     }
     
-    // Initialize view based on screen size
-    initializeView() {
-        const defaultView = this.getDefaultView();
-        this.switchView(defaultView);
-    }
+    // Initialize view based on screen size (now handled by ViewToggle component)
     
     // Get sample data for testing
     getSampleData() {
@@ -408,32 +400,9 @@ class SyrianHotels {
         this.displayHotels();
     }
     
-    // Handle window resize
+    // Handle window resize (ViewToggle component handles responsive behavior)
     handleResize() {
-        const newDefaultView = this.getDefaultView();
-        
-        // Only switch if the current view doesn't match the new default
-        // and we're not in the middle of loading
-        if (newDefaultView !== this.currentView && !this.isLoading) {
-            this.switchView(newDefaultView);
-        }
-    }
-    
-    // Switch between table and grid view
-    switchView(view) {
-        this.currentView = view;
-        this.setPersistedView(view);
-        
-        // Update button states
-        this.elements.tableViewBtn.classList.toggle('active', view === 'table');
-        this.elements.gridViewBtn.classList.toggle('active', view === 'grid');
-        
-        // Show/hide appropriate containers
-        this.elements.hotelsTable.style.display = view === 'table' ? 'block' : 'none';
-        this.elements.hotelsGrid.style.display = view === 'grid' ? 'grid' : 'none';
-        
-        // Refresh the display
-        this.displayHotels();
+        // ViewToggle component now handles responsive view switching
     }
     
     // Display hotels
@@ -544,7 +513,7 @@ class SyrianHotels {
     // Create hotel table row
     createHotelTableRow(hotel) {
         const row = document.createElement('tr');
-        row.className = 'hover:bg-gray-50';
+        row.className = 'table-row-hover';
         
         // Hotel name cell
         const nameCell = document.createElement('td');
@@ -559,13 +528,13 @@ class SyrianHotels {
         const cityCell = document.createElement('td');
         cityCell.className = 'px-6 py-4';
         cityCell.innerHTML = hotel[CONFIG.COLUMNS.CITY] ? 
-            `<span class="hotel-badge">${this.escapeHtml(hotel[CONFIG.COLUMNS.CITY])}</span>` : '';
+            `<span class="type-badge">${this.escapeHtml(hotel[CONFIG.COLUMNS.CITY])}</span>` : '';
         
         // Style cell
         const styleCell = document.createElement('td');
         styleCell.className = 'px-6 py-4';
         styleCell.innerHTML = hotel[CONFIG.COLUMNS.STYLE] ? 
-            `<span class="hotel-badge primary">${this.escapeHtml(hotel[CONFIG.COLUMNS.STYLE])}</span>` : '';
+            `<span class="type-badge">${this.escapeHtml(hotel[CONFIG.COLUMNS.STYLE])}</span>` : '';
         
         // Contact cell
         const contactCell = document.createElement('td');
@@ -638,7 +607,7 @@ class SyrianHotels {
         if (hotel[CONFIG.COLUMNS.INSTAGRAM]) {
             const url = window.SZ.social.format('instagram', hotel[CONFIG.COLUMNS.INSTAGRAM]);
             links.push(`
-                <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
+                <a href="${url}" target="_blank" rel="noopener" class="text-sm hover:underline" style="color: var(--sz-color-primary);">
                     <i class="fab fa-instagram ml-1"></i> زيارة صفحة الانستغرام
                 </a>
             `);
@@ -648,7 +617,7 @@ class SyrianHotels {
         if (hotel[CONFIG.COLUMNS.FACEBOOK]) {
             const url = window.SZ.social.format('facebook', hotel[CONFIG.COLUMNS.FACEBOOK]);
             links.push(`
-                <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
+                <a href="${url}" target="_blank" rel="noopener" class="text-sm hover:underline" style="color: var(--sz-color-primary);">
                     <i class="fab fa-facebook ml-1"></i> زيارة صفحة الفيسبوك
                 </a>
             `);
@@ -658,7 +627,7 @@ class SyrianHotels {
         if (hotel[CONFIG.COLUMNS.X_TWITTER]) {
             const url = window.SZ.social.format('x', hotel[CONFIG.COLUMNS.X_TWITTER]);
             links.push(`
-                <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
+                <a href="${url}" target="_blank" rel="noopener" class="text-sm hover:underline" style="color: var(--sz-color-primary);">
                     <i class="fab fa-x-twitter ml-1"></i> زيارة صفحة X
                 </a>
             `);
@@ -741,7 +710,7 @@ class SyrianHotels {
         if (hotel[CONFIG.COLUMNS.INSTAGRAM]) {
             const url = window.SZ.social.format('instagram', hotel[CONFIG.COLUMNS.INSTAGRAM]);
             links.push(`
-                <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
+                <a href="${url}" target="_blank" rel="noopener" class="text-sm hover:underline" style="color: var(--sz-color-primary);">
                     <i class="fab fa-instagram ml-1"></i> زيارة صفحة الانستغرام
                 </a>
             `);
@@ -751,7 +720,7 @@ class SyrianHotels {
         if (hotel[CONFIG.COLUMNS.FACEBOOK]) {
             const url = window.SZ.social.format('facebook', hotel[CONFIG.COLUMNS.FACEBOOK]);
             links.push(`
-                <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
+                <a href="${url}" target="_blank" rel="noopener" class="text-sm hover:underline" style="color: var(--sz-color-primary);">
                     <i class="fab fa-facebook ml-1"></i> زيارة صفحة الفيسبوك
                 </a>
             `);
@@ -761,7 +730,7 @@ class SyrianHotels {
         if (hotel[CONFIG.COLUMNS.X_TWITTER]) {
             const url = window.SZ.social.format('x', hotel[CONFIG.COLUMNS.X_TWITTER]);
             links.push(`
-                <a href="${url}" target="_blank" rel="noopener" class="social-text-link">
+                <a href="${url}" target="_blank" rel="noopener" class="text-sm hover:underline" style="color: var(--sz-color-primary);">
                     <i class="fab fa-x-twitter ml-1"></i> زيارة صفحة X
                 </a>
             `);
@@ -956,19 +925,7 @@ class SyrianHotels {
         }
     }
     
-    // Toggle back to top button
-    toggleBackToTop() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        this.elements.backToTop.style.display = scrollTop > 300 ? 'block' : 'none';
-    }
-    
-    // Scroll to top
-    scrollToTop() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    }
+    // Back to top functionality moved to component
     
     // Handle keyboard navigation
     handleKeyboardNavigation(event) {

@@ -137,6 +137,46 @@ html[data-theme="high-contrast"] {
 [data-theme] .border-gray-200, 
 [data-theme] .divide-gray-200 { border-color: var(--border-color) !important; }
 
+/* Border utilities that need theme-aware colors */
+[data-theme] .border-b,
+[data-theme] .border-t,
+[data-theme] .border-l,
+[data-theme] .border-r,
+[data-theme] .border { border-color: var(--border-color) !important; }
+
+/* Divide utilities for table rows and other dividers */
+[data-theme] .divide-y > * + *,
+[data-theme] .divide-x > * + * { border-color: var(--border-color) !important; }
+
+/* Table-specific border overrides */
+[data-theme] table,
+[data-theme] thead,
+[data-theme] tbody,
+[data-theme] tfoot,
+[data-theme] tr,
+[data-theme] th,
+[data-theme] td { border-color: var(--border-color) !important; }
+
+/* Remove default browser table borders that might show as white */
+[data-theme] thead tr { 
+    border-bottom: 1px solid var(--border-color) !important; 
+}
+[data-theme] thead th { 
+    border-bottom: 1px solid var(--border-color) !important; 
+}
+[data-theme] thead th:not(:last-child) { 
+    border-right: 1px solid var(--border-color) !important; 
+}
+
+/* Ensure table borders use theme colors */
+[data-theme] table { 
+    border-collapse: collapse !important; 
+}
+[data-theme] .bg-gray-50 { 
+    background-color: var(--bg-secondary) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
 /* Inputs and form controls */
 [data-theme] input,
 [data-theme] select,
@@ -162,13 +202,6 @@ html[data-theme="high-contrast"] {
 [data-theme="dark-purple"] .footer,
 [data-theme="dark-green"] .footer,
 [data-theme="high-contrast"] .footer {
-    color: var(--text-primary) !important;
-}
-[data-theme="dark"] .footer .text-[var(--sz-color-ink)],
-[data-theme="dark-blue"] .footer .text-[var(--sz-color-ink)],
-[data-theme="dark-purple"] .footer .text-[var(--sz-color-ink)],
-[data-theme="dark-green"] .footer .text-[var(--sz-color-ink)],
-[data-theme="high-contrast"] .footer .text-[var(--sz-color-ink)] {
     color: var(--text-primary) !important;
 }
 

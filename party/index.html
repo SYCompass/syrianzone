@@ -51,49 +51,80 @@
       font-family: "IBM Plex Sans Arabic", sans-serif !important;
       direction: rtl;
     }
-    
-    /* Theme color variables */
+    /* Sharp borders and consistent styling like startpage */
     :root {
       --sz-color-primary: #556A4E;
       --sz-color-accent: #A73F46;
       --sz-color-surface: #FFFFFF;
       --sz-color-ink: #0D1315;
+      --radius: 0px;
+      --radius-sm: calc(var(--radius) * 0.75);
+      --radius-md: var(--radius);
+      --radius-lg: calc(var(--radius) * 2);
+    }
+    
+    /* Override Tailwind rounded classes to use sharp borders */
+    .rounded, .rounded-md, .rounded-lg, .rounded-xl {
+      border-radius: var(--radius) !important;
+    }
+    
+    /* Search and filter elements with consistent border styling */
+    .search-filter-input {
+      border: 4px solid var(--border-color) !important;
+      border-radius: var(--radius) !important;
+    }
+    
+    .search-filter-button {
+      border: 4px solid var(--border-color) !important;
+      border-radius: var(--radius) !important;
+    }
+    
+    .search-filter-select {
+      padding-right: 30px!important;
+      border: 4px solid var(--border-color) !important;
+      border-radius: var(--radius) !important;
     }
     
     /* Custom styles for political organizations */
     .org-card {
-      transition: all 0.3s ease;
-      border: 1px solid #e5e7eb;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 4px solid var(--border-color) !important;
+      border-radius: var(--radius) !important;
       height: 100%;
+      background-color: var(--bg-primary);
     }
     
     .org-card:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      border: 4px solid var(--border-color) !important;
     }
     
     .political-badge {
-      background: linear-gradient(135deg, var(--sz-color-primary), var(--sz-color-ink));
+      background: linear-gradient(135deg, #556A4E, #0D1315);
       color: white;
       font-size: 0.75rem;
       padding: 0.25rem 0.75rem;
-      border-radius: 1rem;
+      border-radius: var(--radius);
+      border: 2px solid var(--border-color);
       display: inline-block;
     }
     
     .type-badge {
-      background: #f3f4f6;
-      color: #374151;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
       font-size: 0.75rem;
       padding: 0.25rem 0.75rem;
-      border-radius: 1rem;
+      border-radius: var(--radius);
+      border: 2px solid var(--border-color);
       display: inline-block;
     }
     
     .social-link {
       width: 2rem;
       height: 2rem;
-      border-radius: 50%;
+      border-radius: var(--radius);
+      border: 4px solid var(--border-color);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -102,6 +133,54 @@
     
     .social-link:hover {
       transform: scale(1.1);
+    }
+    
+    /* View Toggle Styles */
+    .view-toggle-btn {
+      color: #6b7280;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+      white-space: nowrap;
+    }
+    
+    .view-toggle-btn:hover {
+      color: var(--sz-color-primary);
+      background: rgba(85, 106, 78, 0.1);
+    }
+    
+    .view-toggle-btn.active {
+      color: white;
+      background: var(--sz-color-primary);
+    }
+    
+    /* Mobile-specific toggle button styles */
+    @media (max-width: 640px) {
+      .view-toggle-btn {
+        min-width: 36px;
+        padding: 6px 8px;
+      }
+      
+      .view-toggle-btn i {
+        font-size: 0.875rem;
+      }
+    }
+    
+    /* Extra small mobile devices */
+    @media (max-width: 480px) {
+      .view-toggle-btn {
+        min-width: 32px;
+        padding: 4px 6px;
+        font-size: 0.7rem;
+      }
+      
+      .view-toggle-btn i {
+        font-size: 0.75rem;
+      }
     }
     
     .loading-spinner {
@@ -118,10 +197,20 @@
       100% { transform: rotate(360deg); }
     }
     
+    /* Table hover styling for theme compatibility */
+    .table-row-hover {
+      background-color: var(--bg-primary);
+      transition: background-color 0.2s ease;
+    }
+    
+    .table-row-hover:hover {
+      background-color: var(--bg-tertiary) !important;
+    }
+    
     /* Footer styling */
     .footer {
       background-color: var(--sz-color-surface);
-      border-top: 1px solid #e5e7eb;
+      border-top: 4px solid var(--border-color);
     }
     .footer-link {
       color: var(--sz-color-ink);
@@ -134,6 +223,7 @@
   
   <!-- Components -->
   <script src="/components/navbar.js"></script>
+  <script src="/components/back-to-top.js" defer></script>
 </head>
 <body class="bg-gray-100 min-h-screen">
   <!-- Navbar Web Component -->
@@ -166,7 +256,7 @@
                 type="text" 
                 id="searchInput" 
                 placeholder="ابحث في المنظمات السياسية بالاسم أو النوع أو المكان..." 
-                class="w-full pr-10 pl-10 py-3 border border-gray-300 bg-white text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]"
+                class="search-filter-input w-full pr-10 pl-10 py-3 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]"
               >
               <button id="clearSearch" class="absolute left-3 top-1/2 transform -translate-y-1/2 hidden">
                 <i class="fas fa-times h-4 w-4 text-gray-400 hover:text-gray-600"></i>
@@ -175,53 +265,69 @@
           </div>
           
           <!-- Filters -->
-          <div class="flex flex-wrap gap-4 justify-center items-end">
+          <div class="filter-container flex flex-wrap gap-4 justify-center items-end p-4">
             <div class="flex flex-col space-y-2">
               <label for="categoryFilter" class="text-sm font-medium">نوع المنظمة</label>
-              <select id="categoryFilter" class="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
+              <select id="categoryFilter" class="search-filter-select flex h-10 w-full bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
                 <option value="">جميع الأنواع</option>
               </select>
             </div>
             
             <div class="flex flex-col space-y-2">
               <label for="countryFilter" class="text-sm font-medium">البلد</label>
-              <select id="countryFilter" class="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
+              <select id="countryFilter" class="search-filter-select flex h-10 w-full bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
                 <option value="">جميع البلدان</option>
               </select>
             </div>
             
             <div class="flex flex-col space-y-2">
               <label for="cityFilter" class="text-sm font-medium">المدينة</label>
-              <select id="cityFilter" class="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
+              <select id="cityFilter" class="search-filter-select flex h-10 w-full bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
                 <option value="">جميع المدن</option>
               </select>
             </div>
             
             <div class="flex flex-col space-y-2">
               <label for="langFilter" class="text-sm font-medium">اللغة</label>
-              <select id="langFilter" class="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
+              <select id="langFilter" class="search-filter-select flex h-10 w-full bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
                 <option value="">جميع اللغات</option>
               </select>
             </div>
             
-            <button id="clearFilters" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 h-10 px-4 py-2 transition-colors">
+            <button id="clearFilters" class="search-filter-button inline-flex items-center justify-center whitespace-nowrap text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 h-10 px-4 py-2 transition-colors">
               <i class="fas fa-times ml-2 h-4 w-4"></i> مسح الفلاتر
             </button>
           </div>
         </div>
         
         <!-- Results Info -->
-        <div class="flex justify-between items-center pt-6 border-t mt-6">
+        <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center pt-6 border-t mt-6 space-y-4 lg:space-y-0">
           <span id="resultsCount" class="text-sm font-medium">جاري تحميل المنظمات السياسية...</span>
-          <div class="flex items-center space-x-2">
-            <label for="sortSelect" class="text-sm text-gray-600">ترتيب حسب:</label>
-            <select id="sortSelect" class="flex h-8 rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
-              <option value="name">الاسم (أ-ي)</option>
-              <option value="name-desc">الاسم (ي-أ)</option>
-              <option value="category">النوع</option>
-              <option value="country">البلد</option>
-              <option value="city">المدينة</option>
-            </select>
+          <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+            <!-- View Toggle -->
+            <div class="flex items-center space-x-2">
+              <label class="text-sm text-gray-600">عرض:</label>
+              <div class="flex bg-gray-100 rounded-lg p-1">
+                <button id="tableViewBtn" class="view-toggle-btn px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md transition-colors" data-view="table">
+                  <i class="fas fa-table ml-1"></i> <span class="hidden sm:inline">جدول</span>
+                </button>
+                <button id="gridViewBtn" class="view-toggle-btn px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md transition-colors" data-view="grid">
+                  <i class="fas fa-th ml-1"></i> <span class="hidden sm:inline">شبكة</span>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Sort -->
+            <div class="flex items-center space-x-2">
+              <label for="sortSelect" class="text-sm text-gray-600">ترتيب حسب:</label>
+              <select id="sortSelect" class="search-filter-select flex h-8 bg-white px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
+                <option value="name">الاسم (أ-ي)</option>
+                <option value="name-desc">الاسم (ي-أ)</option>
+                <option value="category">النوع</option>
+                <option value="country">البلد</option>
+                <option value="city">المدينة</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -240,7 +346,7 @@
         <div id="errorMessage" class="flex flex-col items-center justify-center py-12" style="display: none;">
           <i class="fas fa-exclamation-triangle h-12 w-12 text-red-500 mb-4"></i>
           <p class="text-center text-gray-600 mb-4">فشل في تحميل المنظمات السياسية. يرجى المحاولة لاحقاً.</p>
-          <button id="retryButton" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-[var(--sz-color-primary)] text-white hover:bg-[var(--sz-color-accent)] h-10 px-4 py-2 transition-colors">
+          <button id="retryButton" class="search-filter-button inline-flex items-center justify-center whitespace-nowrap text-sm font-medium bg-[var(--sz-color-primary)] text-white hover:bg-[var(--sz-color-accent)] h-10 px-4 py-2 transition-colors">
             إعادة المحاولة
           </button>
         </div>
@@ -250,6 +356,24 @@
           <i class="fas fa-search h-12 w-12 text-gray-400 mb-4"></i>
           <h3 class="text-lg font-semibold mb-2">لم يتم العثور على منظمات سياسية</h3>
           <p class="text-gray-600">جرب تعديل كلمات البحث أو الفلاتر.</p>
+        </div>
+        
+        <!-- Organizations Table View -->
+        <div id="organizationsTable" class="overflow-x-auto" style="display: none;">
+          <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المنظمة</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">النوع</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">البلد</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المدينة</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الروابط</th>
+              </tr>
+            </thead>
+            <tbody id="organizationsTableBody" class="bg-white divide-y divide-gray-200">
+              <!-- Organization rows will be dynamically inserted here -->
+            </tbody>
+          </table>
         </div>
         
         <!-- Organizations Grid -->
@@ -302,10 +426,7 @@
     </div>
   </footer>
 
-  <!-- Back to Top Button -->
-  <button id="backToTop" class="fixed bottom-6 left-6 z-50 h-10 w-10 rounded-full bg-[var(--sz-color-primary)] text-white shadow-lg hover:bg-[var(--sz-color-accent)] transition-colors" style="display: none;">
-    <i class="fas fa-arrow-up h-5 w-5 mx-auto"></i>
-  </button>
+  <!-- Back to Top Button - Component will auto-initialize -->
 
   <!-- Configuration -->
   <script src="/components/utils-csv.js"></script>
@@ -313,6 +434,7 @@
   <script src="/components/utils-cache.js"></script>
   <script src="/components/utils-offline.js"></script>
   <script src="/components/utils-social.js"></script>
+  <script src="/components/view-toggle.js"></script>
   <script src="/party/config.js"></script>
   
   <!-- Main JavaScript -->

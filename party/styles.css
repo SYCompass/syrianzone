@@ -161,7 +161,9 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
 }
-
+.filter-container select {
+    padding-right: 30px!important;
+}
 .filter-container {
     display: flex;
     flex-wrap: wrap;
@@ -183,7 +185,7 @@ body {
 }
 
 .filter-group select {
-    padding: 0.75rem;
+    padding-right: 30px;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     background: var(--white);
@@ -544,6 +546,8 @@ body {
     
     .filter-group select {
         min-width: auto;
+        padding-right: 30px!important;
+
     }
     
     .results-info {
