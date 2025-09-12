@@ -16,7 +16,16 @@ html {
 	--sz-color-primary: #3b82f6;
 	--sz-color-accent: #2563eb;
 	--sz-color-ink: #e5e7eb;
-	--sz-color-surface: #0b0b0b;
+	--sz-color-surface: #0D1315;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--sz-color-primary: #3b82f6;
+		--sz-color-accent: #2563eb;
+		--sz-color-ink: #e5e7eb;
+		--sz-color-surface: #0D1315;
+	}
 }
 
 /* Capture-safe override for html2canvas: avoid lab()/oklch() colors by forcing hex */

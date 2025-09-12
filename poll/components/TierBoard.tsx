@@ -269,7 +269,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   return (
     <Card ref={containerRef} className="max-w-screen-lg mx-auto p-4" data-capture-root>
       <div
-        className="mb-4 p-2 bg-gray-100 border rounded"
+        className="mb-4 p-2 bg-gray-100 dark:bg-[#0D1315] border border-gray-200 dark:border-neutral-800 rounded"
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => handleDrop(e, "bank")}
         data-bank-area
@@ -315,7 +315,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
                 <Avatar src={c.imageUrl || ""} alt={c.name} size={48} className="mb-1" />
                 <span className="text-xs text-center leading-tight">{c.name}</span>
                 {c.title ? (
-                  <span className={`text-[11px] text-gray-600 text-center leading-tight ${selected ? "!text-white" : ""}`}>{c.title}</span>
+                  <span className={`text-[11px] text-gray-600 dark:text-gray-300 text-center leading-tight ${selected ? "!text-white" : ""}`}>{c.title}</span>
                 ) : null}
               </Button>
             );
@@ -323,7 +323,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
         </div>
       </div>
 
-      <div className="mb-3 text-sm text-gray-700 text-center flex flex-wrap gap-2 items-center justify-center">
+      <div className="mb-3 text-sm text-gray-700 dark:text-gray-300 text-center flex flex-wrap gap-2 items-center justify-center">
         <span className="font-semibold">شرح المستويات:</span>
         <span className="inline-flex items-center gap-1">
           <span className="px-2 py-0.5 rounded-md text-white bg-rose-600 font-semibold">S</span>
@@ -359,7 +359,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
             </div>
             <div
               data-tier-area={k}
-              className={`flex flex-wrap justify-center min-h-[165px] flex-grow p-2 border-2 border-dashed ${tierStyles[k].border} ${tierStyles[k].area} rounded-l`}
+              className={`flex flex-wrap justify-center min-h-[165px] flex-grow p-2 border-2 border-dashed ${tierStyles[k].border} ${tierStyles[k].area} dark:bg-[#0D1315] rounded-l`}
               onDragOver={(e) => e.preventDefault()}
               onDrop={(e) => handleDrop(e, k)}
               onClick={() => {
@@ -383,7 +383,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
                     <Avatar src={c.imageUrl || ""} alt={c.name} size={48} className="mb-1" />
                     <span className="text-xs text-center leading-tight">{c.name}</span>
                     {c.title ? (
-                      <span className="text-[11px] text-gray-600 text-center leading-tight">{c.title}</span>
+                      <span className="text-[11px] text-gray-600 dark:text-gray-300 text-center leading-tight">{c.title}</span>
                     ) : null}
                   </Button>
                 );
@@ -394,7 +394,9 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       </div>
 
       <div className="flex gap-3 justify-center mt-6 p-4">
-        <Button type="button" variant="secondary" onClick={submit} disabled={isSubmitting}>إرسال</Button>
+        <Button type="button" variant="secondary" onClick={submit} disabled={isSubmitting} className="dark:bg-green-600 dark:hover:bg-green-500 dark:text-white">
+          إرسال
+        </Button>
         <Button type="button" onClick={saveImage} disabled={isSubmitting}>حفظ كصورة</Button>
         <Button
           type="button"

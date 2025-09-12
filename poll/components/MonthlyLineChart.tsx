@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
 import { Card } from "@/components/ui/card";
+import { useTheme } from "next-themes";
 
 type Series = {
   name: string;
@@ -34,6 +35,8 @@ export default function MonthlyLineChart({ months, series, height = 260 }: Props
   const padding = { top: 16, right: 16, bottom: 36, left: 40 };
   const [containerRef, setContainerRef] = React.useState<HTMLDivElement | null>(null);
   const [selected, setSelected] = React.useState<Set<string>>(new Set());
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   const width = containerRef?.clientWidth || 800;
   const innerWidth = Math.max(10, width - padding.left - padding.right);
   const innerHeight = Math.max(10, height - padding.top - padding.bottom);
@@ -90,16 +93,16 @@ export default function MonthlyLineChart({ months, series, height = 260 }: Props
         <div className="text-sm font-medium mb-2">تطوّر النقاط الشهري</div>
         <svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none">
           {/* Axes */}
-          <line x1={padding.left} y1={padding.top} x2={padding.left} y2={height - padding.bottom} stroke="#e5e7eb" />
-          <line x1={padding.left} y1={height - padding.bottom} x2={width - padding.right} y2={height - padding.bottom} stroke="#e5e7eb" />
+          <line x1={padding.left} y1={padding.top} x2={padding.left} y2={height - padding.bottom} stroke={isDark ? "#27272a" : "#e5e7eb"} />
+          <line x1={padding.left} y1={height - padding.bottom} x2={width - padding.right} y2={height - padding.bottom} stroke={isDark ? "#27272a" : "#e5e7eb"} />
 
           {/* Y grid and ticks */}
           {yTicks.map((t) => {
             const y = yFor(t);
             return (
               <g key={`y-${t}`}>
-                <line x1={padding.left} y1={y} x2={width - padding.right} y2={y} stroke="#f3f4f6" />
-                <text x={padding.left - 8} y={y} textAnchor="end" dominantBaseline="middle" fontSize={10} fill="#6b7280">
+                <line x1={padding.left} y1={y} x2={width - padding.right} y2={y} stroke={isDark ? "#1f2937" : "#f3f4f6"} />
+                <text x={padding.left - 8} y={y} textAnchor="end" dominantBaseline="middle" fontSize={10} fill={isDark ? "#9ca3af" : "#6b7280"}>
                   {t}
                 </text>
               </g>
@@ -108,7 +111,7 @@ export default function MonthlyLineChart({ months, series, height = 260 }: Props
 
           {/* X labels */}
           {months.map((m, i) => (
-            <text key={`x-${m}`} x={xFor(i)} y={height - padding.bottom + 16} textAnchor="middle" fontSize={10} fill="#6b7280">
+            <text key={`x-${m}`} x={xFor(i)} y={height - padding.bottom + 16} textAnchor="middle" fontSize={10} fill={isDark ? "#9ca3af" : "#6b7280"}>
               {m}
             </text>
           ))}

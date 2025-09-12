@@ -10,6 +10,20 @@ class NavBar extends HTMLElement {
     this.render();
     this.addEventListeners();
     this.highlightActivePage();
+    // Sync theme from document to shadow host so CSS variables update
+    const apply = () => {
+      const isDark = document.documentElement.classList.contains('dark') || window.matchMedia('(prefers-color-scheme: dark)').matches;
+      this.shadowRoot?.host.classList.toggle('dark', isDark);
+    };
+    apply();
+    const mo = new MutationObserver(apply);
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    // @ts-ignore
+    this._mo = mo;
+    const mql = window.matchMedia('(prefers-color-scheme: dark)');
+    mql.addEventListener?.('change', apply);
+    // @ts-ignore
+    this._mql = mql;
   }
 
   highlightActivePage() {
@@ -48,6 +62,14 @@ class NavBar extends HTMLElement {
           display: block;
           font-family: "IBM Plex Sans Arabic", sans-serif;
           direction: rtl;
+          --sz-color-ink: #0f172a;
+          --sz-color-surface: #ffffff;
+        }
+        @media (prefers-color-scheme: dark) {
+          :host {
+            --sz-color-ink: #e5e7eb;
+            --sz-color-surface: #0D1315;
+          }
         }
         .navbar {
           background-color: var(--sz-color-surface);
@@ -85,13 +107,14 @@ class NavBar extends HTMLElement {
           background-color: color-mix(in oklab, var(--sz-color-ink) 5%, transparent);
         }
         .nav-item.active {
-          background-color: color-mix(in oklab, #556A4E 12%, white);
+          background-color: color-mix(in oklab, #556A4E 12%, var(--sz-color-surface));
           color: #556A4E;
           font-weight: 500;
         }
         .nav-item i {
           margin-left: 0.5rem;
           font-size: 1.1rem;
+          color: currentColor;
         }
         .nav-item.forum-link i {
           color: #A73F46 !important;
@@ -203,7 +226,7 @@ class NavBar extends HTMLElement {
             border-radius: 0.375rem;
           }
           .nav-item.active {
-            background-color: color-mix(in oklab, #556A4E 12%, white);
+            background-color: color-mix(in oklab, #556A4E 12%, var(--sz-color-surface));
           }
           .container {
             padding: 0 0.5rem;
@@ -215,7 +238,10 @@ class NavBar extends HTMLElement {
         <div class="container">
           <div class="mobile-header">
             <a href="https://syrian.zone" class="logo">
-              <img src="${BASE}/assets/logo-lightmode.svg" alt="Syrian Zone">
+              <picture>
+                <source media="(prefers-color-scheme: dark)" srcset="${BASE}/assets/logo-darkmode.svg">
+                <img src="${BASE}/assets/logo-lightmode.svg" alt="Syrian Zone">
+              </picture>
             </a>
             <div class="mobile-actions">
               <button class="menu-button">
@@ -226,32 +252,35 @@ class NavBar extends HTMLElement {
           <div class="nav-items">
             <div class="desktop-logo">
               <a href="https://syrian.zone" class="logo">
-                <img src="${BASE}/assets/logo-lightmode.svg" alt="Syrian Zone" style="height: 50px;">
+                <picture>
+                  <source media="(prefers-color-scheme: dark)" srcset="${BASE}/assets/logo-darkmode.svg">
+                  <img src="${BASE}/assets/logo-lightmode.svg" alt="Syrian Zone" style="height: 50px;">
+                </picture>
               </a>
             </div>
 
             <a href="/syofficial" class="nav-item">
-              <i class="fas fa-check-circle" style="color: var(--sz-color-ink);"></i>
+              <i class="fas fa-check-circle"></i>
               الحسابات الرسمية 
             </a>
             <a href="/syid" class="nav-item">
-              <i class="fas fa-palette" style="color: var(--sz-color-ink);"></i>
+              <i class="fas fa-palette"></i>
               الهوية البصرية 
             </a>
             <a href="/party" class="nav-item">
-              <i class="fas fa-users" style="color: var(--sz-color-ink);"></i>
+              <i class="fas fa-users"></i>
               دليل الأحزاب
             </a>
             <a href="/tierlist" class="nav-item">
-              <i class="fas fa-list-ol" style="color: var(--sz-color-ink);"></i>
+              <i class="fas fa-list-ol"></i>
               تير ليست الحكومة
             </a>
             <a href="/compass" class="nav-item">
-              <i class="fas fa-compass" style="color: var(--sz-color-ink);"></i>
+              <i class="fas fa-compass"></i>
               البوصلة السياسية
             </a>
             <a href="/sites" class="nav-item">
-              <i class="fas fa-globe" style="color: var(--sz-color-ink);"></i>
+              <i class="fas fa-globe"></i>
               المواقع السورية
             </a>
             <a target="_blank" href="https://github.com/SYCompass/Twitter-SVG-Syrian-Flag-Replacer/releases/tag/1.0.1" class="nav-item">

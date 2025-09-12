@@ -21,10 +21,24 @@ const ibmPlex = IBM_Plex_Sans_Arabic({
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning className={ibmPlex.variable}>
+    <html lang="ar" dir="rtl" suppressHydrationWarning className={`${ibmPlex.variable}`}>
       <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
         <link rel="icon" href="/assets/favicon.png" type="image/png" />
+        <Script id="theme-init" strategy="beforeInteractive">{`
+          (function() {
+            try {
+              var ls = window.localStorage;
+              var stored = ls.getItem('theme');
+              var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+              var theme = (stored === 'light' || stored === 'dark') ? stored : (systemDark ? 'dark' : 'light');
+              var root = document.documentElement;
+              root.classList.remove('light','dark');
+              root.classList.add(theme);
+              root.style.colorScheme = theme;
+            } catch (e) {}
+          })();
+        `}</Script>
         <Script src="https://www.googletagmanager.com/gtag/js?id=G-K4H98TC203" strategy="afterInteractive" />
         <Script id="ga-gtag" strategy="afterInteractive">{`
           window.dataLayer = window.dataLayer || [];
@@ -33,7 +47,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           gtag('config', 'G-K4H98TC203');
         `}</Script>
       </head>
-      <body className={`bg-gray-100 text-neutral-900`}>
+      <body className={`bg-gray-100 text-neutral-900 dark:bg-[#0D1315] dark:text-neutral-100`}>
         <ThemeProvider>
           <CustomNavBar />
           <div className="container mx-auto px-4 py-4 flex justify-end gap-2 items-center">

@@ -10,15 +10,15 @@ export default function AlgorithmInfo() {
             {open ? (
   <div className="fixed inset-0 z-50 flex items-center justify-center">
     <div className="absolute inset-0 bg-black/50" onClick={() => setOpen(false)} />
-    <div className="relative z-10 w-[min(680px,92vw)] rounded bg-white p-5 shadow-xl">
+    <div className="relative z-10 w-[min(680px,92vw)] rounded bg-white dark:bg-[#0D1315] p-5 shadow-xl">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-lg font-semibold">خوارزمية الترتيب</h3>
-        <button onClick={() => setOpen(false)} aria-label="Close" className="text-gray-600 hover:text-black">✕</button>
+        <button onClick={() => setOpen(false)} aria-label="Close" className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white">✕</button>
       </div>
 
       <div className="overflow-x-auto" dir="rtl">
-        <table className="w-full text-sm border border-gray-200 rounded">
-          <thead className="bg-gray-100">
+        <table className="w-full text-sm border border-gray-200 dark:border-neutral-800 rounded">
+          <thead className="bg-gray-100 dark:bg-[#0D1315]">
             <tr>
               <th className="p-2 border">التيير</th>
               <th className="p-2 border">النقاط الأساسية</th>
@@ -59,18 +59,18 @@ export default function AlgorithmInfo() {
           </tbody>
         </table>
 
-        <div className="mt-6 text-sm text-gray-700 space-y-2" dir="rtl">
+        <div className="mt-6 text-sm text-gray-700 dark:text-gray-300 space-y-2" dir="rtl">
           <p>
             يعتمد الترتيب في الجداول على «المعدّل»، وهو متوسط النقاط لكل صوت،
             أي <span className="font-semibold">المعدّل = مجموع النقاط ÷ مجموع الأصوات</span>.
             نعرض كذلك إجمالي النقاط والأصوات للشفافية، لكن الفرز يتم بحسب المعدّل أولاً.
           </p>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             إذا كان عدد الأصوات صفراً، يظهر المعدّل بقيمة 0 لتجنّب القسمة على صفر.
           </p>
         </div>
 
-        <div className="mt-6 flex items-center gap-2 text-sm text-gray-600" dir="rtl">
+        <div className="mt-6 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400" dir="rtl">
         <a
           href="https://github.com/SYCompass/syrianzone/tree/main/poll"
           target="_blank"

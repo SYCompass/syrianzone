@@ -16,10 +16,10 @@ const sizes = {
 };
 
 const variants = {
-  default: "border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-100",
-  secondary: "bg-gray-700 text-white hover:bg-gray-800",
-  outline: "border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-100",
-  destructive: "bg-red-600 text-white hover:bg-red-700",
+  default: "border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:hover:bg-neutral-800",
+  secondary: "bg-gray-700 text-white hover:bg-gray-800 dark:bg-green-900 dark:text-white dark:hover:bg-green-500",
+  outline: "border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-100 dark:border-neutral-700 dark:bg-transparent dark:text-neutral-100 dark:hover:bg-neutral-900",
+  destructive: "bg-red-600 text-white hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600",
 };
 
 export const Button = forwardRef<HTMLButtonElement, Props>(function Button(
