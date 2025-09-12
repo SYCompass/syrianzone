@@ -8,6 +8,8 @@
 
 body {
     font-family: 'IBM Plex Sans Arabic', sans-serif;
+    color: var(--text-primary);
+    background: var(--bg-primary);
 }
 
 .answer-btn {

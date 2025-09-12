@@ -8,16 +8,14 @@
 }
 
 :root {
-    --primary-color: #556A4E;
-    --secondary-color: #A73F46;
-    --accent-color: #006d66;
-    --text-color: #333;
-    --text-light: #666;
-    --background-color: #f8f9fa;
-    --white: #ffffff;
-    --border-color: #e1e5e9;
-    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.15);
+    --primary-color: var(--sz-color-primary);
+    --secondary-color: var(--sz-color-accent);
+    /* Accent color comes from shared theme token --accent-color */
+    --text-color: var(--text-primary);
+    --text-light: var(--text-secondary);
+    --background-color: var(--bg-secondary);
+    --white: var(--bg-primary);
+    /* Use shared border/shadow tokens from /styles/theme.css */
     --border-radius: 8px;
     --transition: all 0.3s ease;
 }
@@ -25,8 +23,8 @@
 body {
     font-family: "IBM Plex Sans Arabic", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
-    color: var(--text-color);
-    background-color: var(--background-color);
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
     direction: rtl;
 }
 
@@ -38,7 +36,7 @@ body {
 
 /* Header Styles */
 .header {
-    background: var(--white);
+    background: var(--bg-secondary);
     box-shadow: var(--shadow);
     position: sticky;
     top: 0;
@@ -53,14 +51,14 @@ body {
 }
 
 .logo h1 {
-    color: var(--primary-color);
+    color: var(--accent-color);
     font-size: 1.8rem;
     font-weight: 700;
     margin-bottom: 0.25rem;
 }
 
 .logo p {
-    color: var(--text-light);
+    color: var(--text-secondary);
     font-size: 0.9rem;
     font-weight: 400;
 }
@@ -73,7 +71,7 @@ body {
 
 .nav a {
     text-decoration: none;
-    color: var(--text-color);
+    color: var(--text-primary);
     font-weight: 500;
     transition: var(--transition);
     padding: 0.5rem 1rem;
@@ -81,14 +79,14 @@ body {
 }
 
 .nav a:hover {
-    color: var(--primary-color);
-    background-color: var(--background-color);
+    color: var(--accent-color);
+    background-color: var(--bg-secondary);
 }
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: var(--white);
+    background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+    color: var(--text-primary);
     padding: 4rem 0;
     text-align: center;
 }
@@ -108,7 +106,7 @@ body {
 
 /* Search Section */
 .search-section {
-    background: var(--white);
+    background: var(--bg-secondary);
     padding: 2rem 0;
     border-bottom: 1px solid var(--border-color);
 }
@@ -128,7 +126,7 @@ body {
     right: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--text-light);
+    color: var(--text-secondary);
 }
 
 .search-box input {
@@ -143,8 +141,8 @@ body {
 
 .search-box input:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(85, 106, 78, 0.1);
+    border-color: var(--accent-color);
+    box-shadow: var(--shadow);
 }
 
 .clear-btn {
@@ -154,7 +152,7 @@ body {
     transform: translateY(-50%);
     background: none;
     border: none;
-    color: var(--text-light);
+    color: var(--text-secondary);
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 50%;
@@ -162,8 +160,8 @@ body {
 }
 
 .clear-btn:hover {
-    background-color: var(--background-color);
-    color: var(--text-color);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
 }
 
 .filter-container {
@@ -182,7 +180,7 @@ body {
 
 .filter-group label {
     font-weight: 500;
-    color: var(--text-color);
+    color: var(--text-primary);
     font-size: 0.9rem;
 }
 
@@ -190,7 +188,7 @@ body {
     padding: 0.75rem;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-    background: var(--white);
+    background: var(--bg-primary);
     font-size: 0.9rem;
     min-width: 150px;
     transition: var(--transition);
@@ -199,13 +197,13 @@ body {
 
 .filter-group select:focus {
     outline: none;
-    border-color: var(--primary-color);
+    border-color: var(--accent-color);
 }
 
 .clear-filters-btn {
     padding: 0.75rem 1.5rem;
-    background: var(--text-light);
-    color: var(--white);
+    background: var(--text-secondary);
+    color: var(--text-primary);
     border: none;
     border-radius: var(--border-radius);
     cursor: pointer;
@@ -217,7 +215,7 @@ body {
 }
 
 .clear-filters-btn:hover {
-    background: var(--text-color);
+    background: var(--text-primary);
 }
 
 .results-info {
@@ -230,7 +228,7 @@ body {
 
 .results-info span {
     font-weight: 500;
-    color: var(--text-color);
+    color: var(--text-primary);
 }
 
 .sort-container {
@@ -241,14 +239,14 @@ body {
 
 .sort-container label {
     font-size: 0.9rem;
-    color: var(--text-light);
+    color: var(--text-secondary);
 }
 
 .sort-container select {
     padding: 0.5rem;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-    background: var(--white);
+    background: var(--bg-primary);
     font-size: 0.9rem;
     direction: rtl;
 }
@@ -267,7 +265,7 @@ body {
     width: 40px;
     height: 40px;
     border: 4px solid var(--border-color);
-    border-top: 4px solid var(--primary-color);
+    border-top: 4px solid var(--accent-color);
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin: 0 auto 1rem;
@@ -281,7 +279,7 @@ body {
 .error-message, .no-results {
     text-align: center;
     padding: 3rem 0;
-    color: var(--text-light);
+    color: var(--text-secondary);
 }
 
 .error-message i, .no-results i {
@@ -293,8 +291,8 @@ body {
 .retry-btn {
     margin-top: 1rem;
     padding: 0.75rem 1.5rem;
-    background: var(--primary-color);
-    color: var(--white);
+    background: var(--accent-color);
+    color: var(--bg-primary);
     border: none;
     border-radius: var(--border-radius);
     cursor: pointer;
@@ -313,7 +311,7 @@ body {
 }
 
 .hotel-card {
-    background: var(--white);
+    background: var(--bg-primary);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     overflow: hidden;
@@ -335,14 +333,14 @@ body {
 .card-title {
     font-size: 1.3rem;
     font-weight: 600;
-    color: var(--primary-color);
+    color: var(--accent-color);
     margin-bottom: 0.5rem;
 }
 
 .card-style {
     display: inline-block;
     background: var(--accent-color);
-    color: var(--white);
+    color: var(--bg-primary);
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
     font-size: 0.8rem;
@@ -353,8 +351,8 @@ body {
 
 .card-city {
     display: inline-block;
-    background: #f3f4f6;
-    color: #374151;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
     font-size: 0.8rem;
@@ -365,8 +363,8 @@ body {
 
 .card-rating {
     display: inline-block;
-    background: #fef3c7;
-    color: #92400e;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
     font-size: 0.8rem;
@@ -377,8 +375,8 @@ body {
 
 .card-price {
     display: inline-block;
-    background: #d1fae5;
-    color: #065f46;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
     font-size: 0.8rem;
@@ -392,7 +390,7 @@ body {
 }
 
 .card-description {
-    color: var(--text-color);
+    color: var(--text-primary);
     margin-bottom: 1rem;
     line-height: 1.6;
 }
@@ -401,13 +399,13 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: var(--text-light);
+    color: var(--text-secondary);
     font-size: 0.9rem;
     margin-bottom: 1rem;
 }
 
 .card-location i {
-    color: var(--primary-color);
+    color: var(--accent-color);
 }
 
 .card-contact {
@@ -425,11 +423,11 @@ body {
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
     font-weight: 500;
-    color: var(--text-color);
+    color: var(--text-primary);
 }
 
 .contact-group .contact-group-title i {
-    color: var(--primary-color);
+    color: var(--accent-color);
 }
 
 .contact-item {
@@ -443,11 +441,11 @@ body {
 
 .contact-item i {
     width: 16px;
-    color: var(--primary-color);
+    color: var(--accent-color);
 }
 
 .contact-item a {
-    color: var(--primary-color);
+    color: var(--accent-color);
     text-decoration: none;
     transition: var(--transition);
 }
@@ -470,16 +468,16 @@ body {
     justify-content: center;
     width: 36px;
     height: 36px;
-    background: var(--background-color);
-    color: var(--text-light);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
     border-radius: 50%;
     text-decoration: none;
     transition: var(--transition);
 }
 
 .social-link:hover, .contact-link:hover {
-    background: var(--primary-color);
-    color: var(--white);
+    background: var(--accent-color);
+    color: var(--bg-primary);
     transform: scale(1.1);
 }
 
@@ -499,7 +497,7 @@ body {
 .map-container h4 {
     font-size: 0.9rem;
     font-weight: 500;
-    color: var(--text-color);
+    color: var(--text-primary);
     margin-bottom: 0.5rem;
 }
 
@@ -511,8 +509,8 @@ body {
 
 .load-more-btn {
     padding: 1rem 2rem;
-    background: var(--primary-color);
-    color: var(--white);
+    background: var(--accent-color);
+    color: var(--bg-primary);
     border: none;
     border-radius: var(--border-radius);
     cursor: pointer;
@@ -531,13 +529,13 @@ body {
 
 /* About Section */
 .about-section {
-    background: var(--white);
+    background: var(--bg-primary);
     padding: 4rem 0;
     text-align: center;
 }
 
 .about-section h2 {
-    color: var(--primary-color);
+    color: var(--accent-color);
     font-size: 2rem;
     margin-bottom: 1.5rem;
 }
@@ -545,14 +543,14 @@ body {
 .about-section p {
     max-width: 800px;
     margin: 0 auto 1rem;
-    color: var(--text-color);
+    color: var(--text-primary);
     line-height: 1.8;
 }
 
 /* Footer */
 .footer {
-    background: var(--text-color);
-    color: var(--white);
+    background: var(--text-primary);
+    color: var(--bg-primary);
     padding: 3rem 0 1rem;
 }
 
@@ -587,8 +585,8 @@ body {
     left: 2rem;
     width: 50px;
     height: 50px;
-    background: var(--primary-color);
-    color: var(--white);
+    background: var(--accent-color);
+    color: var(--bg-primary);
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -700,7 +698,7 @@ button:focus,
 input:focus,
 select:focus,
 a:focus {
-    outline: 2px solid var(--primary-color);
+    outline: 2px solid var(--accent-color);
     outline-offset: 2px;
 }
 

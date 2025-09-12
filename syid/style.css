@@ -1,7 +1,7 @@
 .content-wrapper {
     max-width: 1270px;
     margin: 2rem auto;
-    background: white;
+    background: var(--bg-primary);
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -18,7 +18,7 @@
  }
 
  .download-item {
-     background: white;
+     background: var(--bg-primary);
      padding: 20px;
      border-radius: 8px;
      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -42,19 +42,19 @@
  .font-weight-info h4 {
      font-size: 1.3em;
      margin-bottom: 8px;
-     color: #333;
+     color: var(--text-primary);
      font-weight: 600;
  }
 
  .font-weight-sample {
      font-size: 1.5em;
-     color: #666;
+     color: var(--text-secondary);
      margin-bottom: 5px;
  }
 
  .weight-technical {
      font-size: 0.9em;
-     color: #888;
+     color: var(--text-secondary);
  }
 
          .format-links {
@@ -65,8 +65,8 @@
  }
 
 .format-link {
-    background: #428177;
-    color: white;
+    background: var(--accent-color);
+    color: var(--bg-primary);
     padding: 6px 12px;
     border-radius: 20px;
     text-decoration: none;
@@ -76,7 +76,7 @@
 }
 
 .format-link:hover {
-    background: #054239;
+    background: var(--accent-hover);
 }
 
 #notification {
@@ -84,8 +84,8 @@
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--accent-color);
+    color: #fff;
     padding: 15px 25px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -142,7 +142,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-color);
 }
 
 .flag-visual .stripe {
@@ -180,19 +180,19 @@
 /* Measurement annotations */
 .measurement {
   position: absolute;
-  color: #718096;
+  color: var(--text-secondary);
   font-size: 1rem;
   font-family: monospace;
 }
 
 .dim-line {
   position: absolute;
-  background-color: #cbd5e0;
+  background-color: var(--border-color);
 }
 .dim-line::before, .dim-line::after {
   content: '';
   position: absolute;
-  background-color: #cbd5e0;
+  background-color: var(--border-color);
 }
 
 /* Horizontal Line Styling */

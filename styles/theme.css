@@ -1,0 +1,174 @@
+/* Shared Theme Variables for SyrianZone */
+/* Light (default) */
+:root {
+    /* Brand palette (stable across themes) */
+    --sz-color-primary: #556A4E; /* Reseda green */
+    --sz-color-accent:  #A73F46; /* Redwood */
+
+    /* Base tokens used by pages */
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #e9ecef;
+    --text-primary: #0D1315;
+    --text-secondary: #6c757d;
+    --accent-color: var(--sz-color-primary);
+    --accent-hover: #4a5d42;
+    --secondary-color: var(--sz-color-accent);
+    --secondary-hover: #8a2f38;
+    --border-color: #dee2e6;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.15);
+
+    /* Shadow DOM friendly tokens (navbar, etc.) */
+    --sz-color-surface: var(--bg-primary);
+    --sz-color-ink: var(--text-primary);
+}
+
+/* Dark */
+html[data-theme="dark"] {
+    --bg-primary: #0D1315;
+    --bg-secondary: #1a1f22;
+    --bg-tertiary: #2a2f32;
+    --text-primary: #FFFFFF;
+    --text-secondary: #adb5bd;
+    --accent-color: var(--sz-color-primary);
+    --accent-hover: #4a5d42;
+    --secondary-color: var(--sz-color-accent);
+    --secondary-hover: #8a2f38;
+    --border-color: #2a2f32;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.4);
+
+    --sz-color-surface: var(--bg-primary);
+    --sz-color-ink: var(--text-primary);
+}
+
+/* Dark Blue */
+html[data-theme="dark-blue"] {
+    --bg-primary: #0a0e1a;
+    --bg-secondary: #141824;
+    --bg-tertiary: #1e2230;
+    --text-primary: #e8eaed;
+    --text-secondary: #9aa0a6;
+    --accent-color: #4285f4;
+    --accent-hover: #1a73e8;
+    --secondary-color: #ea4335;
+    --secondary-hover: #d33b27;
+    --border-color: #2a2e3c;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 4px 20px rgba(66, 133, 244, 0.3);
+
+    --sz-color-surface: var(--bg-primary);
+    --sz-color-ink: var(--text-primary);
+}
+
+/* Dark Purple */
+html[data-theme="dark-purple"] {
+    --bg-primary: #0d0a14;
+    --bg-secondary: #1a1523;
+    --bg-tertiary: #261f33;
+    --text-primary: #e9e4f0;
+    --text-secondary: #b5a7c6;
+    --accent-color: #9c27b0;
+    --accent-hover: #7b1fa2;
+    --secondary-color: #ff6f00;
+    --secondary-hover: #e65100;
+    --border-color: #332b42;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 4px 20px rgba(156, 39, 176, 0.3);
+
+    --sz-color-surface: var(--bg-primary);
+    --sz-color-ink: var(--text-primary);
+}
+
+/* Dark Green */
+html[data-theme="dark-green"] {
+    --bg-primary: #0a0f0a;
+    --bg-secondary: #141a14;
+    --bg-tertiary: #1e261e;
+    --text-primary: #e4f0e4;
+    --text-secondary: #a7c6a7;
+    --accent-color: #4caf50;
+    --accent-hover: #388e3c;
+    --secondary-color: #ff9800;
+    --secondary-hover: #f57c00;
+    --border-color: #2b3c2b;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 4px 20px rgba(76, 175, 80, 0.3);
+
+    --sz-color-surface: var(--bg-primary);
+    --sz-color-ink: var(--text-primary);
+}
+
+/* High Contrast */
+html[data-theme="high-contrast"] {
+    --bg-primary: #000000;
+    --bg-secondary: #0a0a0a;
+    --bg-tertiary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --accent-color: #00ff00;
+    --accent-hover: #00cc00;
+    --secondary-color: #ff00ff;
+    --secondary-hover: #cc00cc;
+    --border-color: #333333;
+    --shadow: 0 2px 10px rgba(0, 255, 0, 0.2);
+    --shadow-hover: 0 4px 20px rgba(0, 255, 0, 0.4);
+
+    --sz-color-surface: var(--bg-primary);
+    --sz-color-ink: var(--text-primary);
+}
+
+/* Tailwind utility overrides to respect theme variables */
+[data-theme] body {
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+[data-theme] .bg-white { background-color: var(--bg-primary) !important; }
+[data-theme] .bg-gray-50 { background-color: var(--bg-secondary) !important; }
+[data-theme] .bg-gray-100 { background-color: var(--bg-secondary) !important; }
+[data-theme] .bg-gray-200 { background-color: var(--bg-tertiary) !important; }
+[data-theme] .text-gray-900, 
+[data-theme] .text-gray-800 { color: var(--text-primary) !important; }
+[data-theme] .text-gray-700, 
+[data-theme] .text-gray-600, 
+[data-theme] .text-gray-500 { color: var(--text-secondary) !important; }
+[data-theme] .border-gray-300, 
+[data-theme] .border-gray-200, 
+[data-theme] .divide-gray-200 { border-color: var(--border-color) !important; }
+
+/* Inputs and form controls */
+[data-theme] input,
+[data-theme] select,
+[data-theme] textarea {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+[data-theme] input::placeholder,
+[data-theme] textarea::placeholder { color: var(--text-secondary) !important; }
+[data-theme] .focus\:ring-2 { --tw-ring-color: var(--accent-color) !important; }
+[data-theme] .focus\:ring-1 { --tw-ring-color: var(--accent-color) !important; }
+[data-theme] .focus\:ring { --tw-ring-color: var(--accent-color) !important; }
+
+/* Footer helper */
+[data-theme] .footer { background: var(--bg-secondary) !important; color: var(--text-primary) !important; }
+[data-theme] .footer a { color: var(--text-primary) !important; }
+[data-theme] .footer a:hover { color: var(--accent-color) !important; }
+
+/* Stronger contrast for footer text in darker themes */
+[data-theme="dark"] .footer,
+[data-theme="dark-blue"] .footer,
+[data-theme="dark-purple"] .footer,
+[data-theme="dark-green"] .footer,
+[data-theme="high-contrast"] .footer {
+    color: var(--text-primary) !important;
+}
+[data-theme="dark"] .footer .text-[var(--sz-color-ink)],
+[data-theme="dark-blue"] .footer .text-[var(--sz-color-ink)],
+[data-theme="dark-purple"] .footer .text-[var(--sz-color-ink)],
+[data-theme="dark-green"] .footer .text-[var(--sz-color-ink)],
+[data-theme="high-contrast"] .footer .text-[var(--sz-color-ink)] {
+    color: var(--text-primary) !important;
+}
+

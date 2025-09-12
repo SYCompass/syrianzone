@@ -2,12 +2,35 @@ class NavBar extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
+    this._themeObserver = null;
   }
 
   connectedCallback() {
     this.render();
+    this.reflectThemeToHost();
+    this.observeTheme();
     this.addEventListeners();
     this.highlightActivePage();
+  }
+
+  disconnectedCallback() {
+    this._themeObserver?.disconnect();
+  }
+
+  reflectThemeToHost() {
+    const t = document.documentElement.getAttribute('data-theme') || 'dark';
+    this.setAttribute('data-theme', t);
+  }
+
+  observeTheme() {
+    this._themeObserver = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        if (m.type === 'attributes' && m.attributeName === 'data-theme') {
+          this.reflectThemeToHost();
+        }
+      }
+    });
+    this._themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   }
 
   highlightActivePage() {
@@ -30,6 +53,7 @@ class NavBar extends HTMLElement {
     const menuButton = this.shadowRoot.querySelector('.menu-button');
     const navItems = this.shadowRoot.querySelector('.nav-items');
     const navbar = this.shadowRoot.querySelector('.navbar');
+    const themeButtons = this.shadowRoot.querySelectorAll('.theme-button');
     
     // Safely handle menu button click
     menuButton?.addEventListener('click', () => {
@@ -37,6 +61,12 @@ class NavBar extends HTMLElement {
       menuButton.classList.toggle('active');
       navbar?.classList.toggle('menu-open');
     });
+
+    themeButtons?.forEach(btn => btn.addEventListener('click', () => {
+      if (window.SZ?.theme) {
+        window.SZ.theme.cycle();
+      }
+    }));
   }
 
   render() {
@@ -50,7 +80,7 @@ class NavBar extends HTMLElement {
         .navbar {
           background-color: var(--sz-color-surface);
           backdrop-filter: blur(10px);
-          border-bottom: 1px solid color-mix(in oklab, var(--sz-color-ink) 10%, transparent);
+          border-bottom: 1px solid var(--border-color);
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
           position: relative;
           z-index: 1000;
@@ -80,10 +110,10 @@ class NavBar extends HTMLElement {
           font-size: 0.95rem;
         }
         .nav-item:hover {
-          background-color: color-mix(in oklab, var(--sz-color-ink) 5%, transparent);
+          background-color: var(--bg-tertiary);
         }
         .nav-item.active {
-          background-color: color-mix(in oklab, var(--sz-color-primary) 12%, white);
+          background-color: color-mix(in oklab, var(--sz-color-primary) 12%, var(--sz-color-surface));
           color: var(--sz-color-primary);
           font-weight: 500;
         }
@@ -103,14 +133,35 @@ class NavBar extends HTMLElement {
           border-radius: 0.5rem;
         }
         .menu-button:hover {
-          background-color: color-mix(in oklab, var(--sz-color-ink) 5%, transparent);
+          background-color: var(--bg-tertiary);
         }
         .menu-button i {
           font-size: 1.25rem;
         }
+        /* Theme button visible on all viewports */
+        .theme-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 2.5rem;
+          height: 2.5rem;
+          border-radius: 0.5rem;
+          border: none;
+          background: var(--sz-color-surface);
+          color: var(--sz-color-ink);
+          cursor: pointer;
+        }
+        .theme-button:hover {
+          background-color: var(--bg-tertiary);
+        }
         .mobile-header {
           display: none;
         }
+        /* Theme-aware logo swap using reflected attribute on host */
+        .logo img.logo-light { display: none; }
+        .logo img.logo-dark { display: inline-block; }
+        :host([data-theme="light"]) .logo img.logo-light { display: inline-block; }
+        :host([data-theme="light"]) .logo img.logo-dark { display: none; }
         @media (max-width: 768px) {
           .navbar {
             position: fixed;
@@ -198,7 +249,7 @@ class NavBar extends HTMLElement {
             border-radius: 0.375rem;
           }
           .nav-item.active {
-            background-color: color-mix(in oklab, var(--sz-color-primary) 12%, white);
+            background-color: color-mix(in oklab, var(--sz-color-primary) 12%, var(--sz-color-surface));
           }
           .container {
             padding: 0 0.5rem;
@@ -210,9 +261,13 @@ class NavBar extends HTMLElement {
         <div class="container">
           <div class="mobile-header">
             <a href="/" class="logo">
-              <img src="/assets/logo-lightmode.svg" alt="Syrian Zone">
+              <img src="/assets/logo-lightmode.svg" class="logo-light" alt="Syrian Zone">
+              <img src="/assets/logo-darkmode.svg" class="logo-dark" alt="Syrian Zone">
             </a>
             <div class="mobile-actions">
+              <button class="theme-button" title="Toggle theme">
+                <i class="fas fa-adjust"></i>
+              </button>
               <button class="menu-button">
                 <i class="fas fa-bars"></i>
               </button>
@@ -221,7 +276,8 @@ class NavBar extends HTMLElement {
           <div class="nav-items">
             <div class="desktop-logo">
               <a href="/" class="logo">
-                <img src="/assets/logo-lightmode.svg" alt="Syrian Zone" style="height: 50px;">
+                <img src="/assets/logo-lightmode.svg" class="logo-light" alt="Syrian Zone" style="height: 50px;">
+                <img src="/assets/logo-darkmode.svg" class="logo-dark" alt="Syrian Zone" style="height: 50px;">
               </a>
             </div>
 
@@ -257,6 +313,10 @@ class NavBar extends HTMLElement {
               <i class="fas fa-comments" style="color: var(--sz-color-accent);"></i>
               المنتدى
             </a>
+            <!-- Desktop theme toggle -->
+            <button class="theme-button" title="Toggle theme">
+              <i class="fas fa-adjust"></i>
+            </button>
           </div>
         </div>
       </nav>

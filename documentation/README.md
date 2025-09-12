@@ -7,8 +7,6 @@ This documentation describes the overall project structure and provides an overv
 - `/index.html` — Start page (dashboard-style landing) with weather, clock, search, and quick links
 - `/components/` — Reusable web components and helpers
   - `navbar.js` — Custom element for the site navigation bar
-  - `markdown-renderer.js` — Simple markdown-to-HTML utility
-  - `wallpaper-item.js` — Custom element for wallpaper cards
   - `utils-csv.js`, `utils-http.js`, `utils-cache.js`, `utils-offline.js` — Shared utilities (see below)
 - `/startpage/` — Scripts and assets supporting the start page (`script.js`, `languages.js`)
 - `/syofficial/` — Official Syrian accounts directory (multi-category, i18n, CSV-fed)

@@ -4,16 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiplayer Debug Test</title>
+    <script>(function(){try{var s=localStorage.getItem('sz-theme');if(!s){var sp=localStorage.getItem('startpage-settings');if(sp){s=(JSON.parse(sp)||{}).theme}};document.documentElement.setAttribute('data-theme', s||'dark');}catch(e){}})();</script>
+    <link rel="stylesheet" href="/styles/theme.css">
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            background: #f0f0f0;
+            background: var(--bg-primary);
+            color: var(--text-primary);
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background: white;
+            background: var(--bg-secondary);
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -21,13 +24,13 @@
         .debug-section {
             margin: 20px 0;
             padding: 15px;
-            background: #f8f9fa;
+            background: var(--bg-tertiary);
             border-radius: 5px;
-            border-left: 4px solid #007bff;
+            border-left: 4px solid var(--accent-color);
         }
         button {
-            background: #007bff;
-            color: white;
+            background: var(--accent-color);
+            color: var(--bg-primary);
             border: none;
             padding: 10px 20px;
             border-radius: 5px;
@@ -35,15 +38,16 @@
             margin: 5px;
         }
         button:hover {
-            background: #0056b3;
+            background: var(--secondary-color);
         }
         pre {
-            background: #f1f1f1;
+            background: var(--bg-secondary);
             padding: 10px;
             border-radius: 3px;
             overflow-x: auto;
         }
     </style>
+    <script src="/components/utils-theme.js" defer></script>
 </head>
 <body>
     <div class="container">

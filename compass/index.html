@@ -28,6 +28,8 @@
   <link rel="apple-touch-icon" href="/assets/favicon.png">
   
   <!-- Stylesheets -->
+  <script>(function(){try{var s=localStorage.getItem('sz-theme');if(!s){var sp=localStorage.getItem('startpage-settings');if(sp){s=(JSON.parse(sp)||{}).theme}};document.documentElement.setAttribute('data-theme', s||'dark');}catch(e){}})();</script>
+  <link rel="stylesheet" href="/styles/theme.css" />
   <link rel="stylesheet" href="/styles/output.css" />
   <link rel="stylesheet" href="/compass/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -68,6 +70,7 @@
   
   <!-- Components -->
   <script src="/components/navbar.js"></script>
+  <script src="/components/utils-theme.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/TextPlugin.min.js"></script>
   <script src="/components/utils-csv.js"></script>
@@ -86,8 +89,11 @@
     <i class="fas fa-arrow-up h-5 w-5 mx-auto"></i>
   </button>
 
-  <!-- Hero Section -->
-  <section class="bg-gradient-to-br from-[var(--sz-color-primary)] to-[var(--sz-color-ink)] text-white py-16 md:py-24">
+  <!-- Hero Section (static background) -->
+  <style>
+    .hero-static { background: linear-gradient(135deg, #556A4E, #0D1315) !important; }
+  </style>
+  <section class="hero-static text-white py-16 md:py-24">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <div class="max-w-3xl mx-auto">
         <h1 class="text-4xl md:text-5xl font-bold mb-6">بوصلة سوريا</h1>

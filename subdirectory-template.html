@@ -20,6 +20,8 @@
   <meta name="twitter:title" content="Syrian Zone">
   <meta name="twitter:description" content="بوابة المشاريع السورية">
   <meta name="twitter:image" content="https://syrian.zone/assets/thumbnail.jpg">
+  <script>(function(){try{var s=localStorage.getItem('sz-theme');if(!s){var sp=localStorage.getItem('startpage-settings');if(sp){s=(JSON.parse(sp)||{}).theme}};document.documentElement.setAttribute('data-theme', s||'dark');}catch(e){}})();</script>
+  <link rel="stylesheet" href="/styles/theme.css">
   
   <title>Syrian Zone - بوابة المشاريع السورية</title>
   
@@ -30,6 +32,8 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/styles/output.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- Google Analytics -->
@@ -69,6 +73,7 @@
   
   <!-- Components -->
   <script type="module" src="/components/navbar.js"></script>
+  <script src="/components/utils-theme.js" defer></script>
 </head>
 
 <body class="bg-gray-100 min-h-screen">

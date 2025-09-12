@@ -26,8 +26,8 @@
 .icon-container {
     width: 3.5rem;
     height: 3.5rem;
-    background: var(--sz-color-surface);
-    border-radius: 1rem;
+    background: white;
+    border-radius: 0rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -69,7 +69,7 @@
 
 /* Website Sections */
 .website-section {
-    background: white;
+    background: var(--sz-color-surface);
     border-radius: 1rem;
     padding: 1.5rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);

@@ -55,21 +55,31 @@ class Startpage {
 
     // Theme Management
     applyTheme() {
-        document.documentElement.setAttribute('data-theme', this.settings.theme);
+        if (window.SZ?.theme) {
+            window.SZ.theme.apply(this.settings.theme);
+        } else {
+            document.documentElement.setAttribute('data-theme', this.settings.theme);
+        }
         this.updateThemeIcon();
     }
 
     cycleTheme() {
-    const themes = ['light', 'dark', 'dark-blue', 'dark-purple', 'dark-green', 'high-contrast'];
+    const themes = window.SZ?.theme?.themes || ['light', 'dark', 'dark-blue', 'dark-purple', 'dark-green', 'high-contrast'];
     const currentIndex = themes.indexOf(this.settings.theme);
     const nextIndex = (currentIndex + 1) % themes.length;
     this.settings.theme = themes[nextIndex];
+    if (window.SZ?.theme) {
+        window.SZ.theme.set(this.settings.theme);
+    }
     this.applyTheme();
     this.saveSettings();
     }
 
     setTheme(theme) {
     this.settings.theme = theme;
+    if (window.SZ?.theme) {
+        window.SZ.theme.set(theme);
+    }
     this.applyTheme();
     this.saveSettings();
     }
