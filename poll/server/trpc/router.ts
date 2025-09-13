@@ -8,6 +8,7 @@ import { verifyTurnstile } from "@/lib/turnstile";
 import { sha256 } from "@/lib/hash";
 import { v4 as uuidv4 } from "uuid";
 import { publish } from "@/server/realtime/broker";
+import { TwitterApi } from "twitter-api-v2";
 
 export type Context = {
   ip: string | undefined;
@@ -55,9 +56,7 @@ export const appRouter = t.router({
 
         const ok = await verifyTurnstile(input.cfToken, ctx.ip);
         if (!ok) throw new Error("Turnstile failed");
-        // TODO: Add server-side rate limiting and per-device/IP daily caps
 
-        // Enforce minimum selections
         const totalAssigned = (Object.keys(input.tiers) as Array<keyof typeof input.tiers>).reduce(
           (acc, key) => acc + input.tiers[key].length,
           0
@@ -73,9 +72,18 @@ export const appRouter = t.router({
 
         const ballotId = uuidv4();
 
+        let prevRanks: Array<{ candidateId: string; votes: number; score: number }> | null = null;
+        const isGovPoll = poll.slug === "best-ministers";
+        if (isGovPoll) {
+          prevRanks = await db
+            .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
+            .from(dailyScores)
+            .where(and(eq(dailyScores.pollId, poll.id), eq(dailyScores.day, voteDay)))
+            .orderBy(desc(dailyScores.score), desc(dailyScores.votes));
+        }
+
         await db.insert(ballots).values({ id: ballotId, pollId: poll.id, voteDay, voterKey, ipHash, userAgent });
 
-        // New hybrid scoring algorithm: tier minimums + tier-weighted position bonuses
         const tierMinimums: Record<string, number> = { S: 50, A: 40, B: 30, C: 20, D: 10, F: 0 };
         const tierPositionBonuses: Record<string, number[]> = {
           S: [5, 3, 1, 0, 0, 0, 0, 0, 0, 0], // 1st=+5, 2nd=+3, 3rd=+1, 4th+=+0
@@ -118,6 +126,73 @@ export const appRouter = t.router({
 
         const channel = `poll:${poll.id}:${voteDay.toISOString()}`;
         publish(channel, { type: "ballot", deltas: Array.from(scoreDelta.entries()) });
+
+        // After updating scores, compute current ranks and tweet changes in real time (for gov poll only)
+        if (isGovPoll && prevRanks) {
+          const curr = await db
+            .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
+            .from(dailyScores)
+            .where(and(eq(dailyScores.pollId, poll.id), eq(dailyScores.day, voteDay)))
+            .orderBy(desc(dailyScores.score), desc(dailyScores.votes));
+          const prevRankById = new Map<string, number>();
+          prevRanks.forEach((r, i) => prevRankById.set(r.candidateId, i + 1));
+          const currRankById = new Map<string, number>();
+          curr.forEach((r, i) => currRankById.set(r.candidateId, i + 1));
+
+          const changed: Array<{ id: string; from: number; to: number; overName?: string; belowName?: string }> = [];
+          for (const [id, to] of currRankById.entries()) {
+            const from = prevRankById.get(id);
+            if (typeof from === "number" && from !== to) {
+              let overName: string | undefined;
+              let belowName: string | undefined;
+              if (to < from) {
+                const below = curr[to];
+                if (below && below.candidateId !== id) {
+                  const [cBelow] = await db.select().from(candidates).where(eq(candidates.id, below.candidateId));
+                  overName = cBelow?.name as string | undefined;
+                }
+              } else if (to > from) {
+                const above = curr[to - 2]; // array is 0-based
+                if (above && above.candidateId !== id) {
+                  const [cAbove] = await db.select().from(candidates).where(eq(candidates.id, above.candidateId));
+                  belowName = cAbove?.name as string | undefined;
+                }
+              }
+              changed.push({ id, from, to, overName, belowName });
+            }
+          }
+
+          if (changed.length) {
+            try {
+              const oauth2Refresh = process.env.TWITTER_OAUTH2_REFRESH_TOKEN;
+              const clientId = process.env.TWITTER_CLIENT_ID;
+              const clientSecret = process.env.TWITTER_CLIENT_SECRET;
+              let tw: any | null = null;
+              if (oauth2Refresh && clientId && clientSecret) {
+                const oauth2Client = new TwitterApi({ clientId, clientSecret });
+                const { client } = await oauth2Client.refreshOAuth2Token(oauth2Refresh);
+                tw = client;
+              }
+              if (tw) {
+                for (const ch of changed) {
+                  const [c] = await db.select().from(candidates).where(eq(candidates.id, ch.id));
+                  const name = (c?.name as string) || "مرشح";
+                  const arrow = ch.to < ch.from ? "⬆️" : "⬇️";
+                  const change = Math.abs(ch.from - ch.to);
+                  const dir = ch.to < ch.from ? "تقدّم" : "تراجع";
+                  const suffix = change > 1 ? `(${change} مراتب)` : "مرتبة واحدة";
+                  const over = ch.overName && ch.to < ch.from ? `؛ تجاوز ${ch.overName}` : "";
+                  const fell = ch.belowName && ch.to > ch.from ? `؛ تراجع لصالح ${ch.belowName}` : "";
+                  const dayStr = voteDay.toISOString().slice(0, 10);
+                  const text = `تحديث التصنيف (${dayStr})\n${arrow} ${name} ${dir} من #${ch.from} إلى #${ch.to} ${suffix}${over || fell}\n\nتابع الترتيب الكامل: syrian.zone/tierlist/leaderboard`;
+                  try {
+                    await tw.v2.tweet(text);
+                  } catch { }
+                }
+              }
+            } catch { }
+          }
+        }
 
         return { ok: true };
       }),

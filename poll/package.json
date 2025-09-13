@@ -14,7 +14,11 @@
     "copy-assets": "tsx ./scripts/copy-assets.ts",
     "seed:jolani": "tsx ./scripts/seed-jolani.ts",
     "copy-assets:jolani": "tsx ./scripts/copy-jolani-assets.ts",
-    "submit:jolani": "tsx ./scripts/submit-jolani.ts"
+    "submit:jolani": "tsx ./scripts/submit-jolani.ts",
+    "announce:ranks": "tsx ./scripts/announce-rank-changes.ts",
+    "mock:ranks": "tsx ./scripts/mock-ranks.ts",
+    "x:auth:init": "tsx ./scripts/x-auth.ts init",
+    "x:auth:exchange": "tsx ./scripts/x-auth.ts exchange"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.2",
@@ -44,6 +48,7 @@
     "postgres": "^3.4.7",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "twitter-api-v2": "^1.27.0",
     "uuid": "^11.1.0",
     "zod": "^4.1.5"
   },
