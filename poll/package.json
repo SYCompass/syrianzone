@@ -11,7 +11,10 @@
     "drizzle:generate": "drizzle-kit generate",
     "drizzle:migrate": "drizzle-kit migrate",
     "seed": "tsx ./scripts/seed.ts",
-    "copy-assets": "tsx ./scripts/copy-assets.ts"
+    "copy-assets": "tsx ./scripts/copy-assets.ts",
+    "seed:jolani": "tsx ./scripts/seed-jolani.ts",
+    "copy-assets:jolani": "tsx ./scripts/copy-jolani-assets.ts",
+    "submit:jolani": "tsx ./scripts/submit-jolani.ts"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.2",
