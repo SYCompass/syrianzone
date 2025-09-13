@@ -2,7 +2,7 @@ import { initTRPC } from "@trpc/server";
 import { z } from "zod";
 import { db } from "@/db";
 import { ballots, ballotItems, candidates, dailyScores, polls } from "@/db/schema";
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, sql, desc } from "drizzle-orm";
 import { getLocalMidnightUTC } from "@/lib/time";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { sha256 } from "@/lib/hash";
