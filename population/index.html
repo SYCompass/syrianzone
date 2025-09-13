@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>أطلس سكان سوريا</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/population/style.css" />
     <link rel="stylesheet" href="/styles/theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script>
@@ -13,6 +13,15 @@
     </script>
     <script src="/components/utils-theme.js" defer></script>
     <script src="/components/navbar.js" defer></script>
+      <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K4H98TC203"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-K4H98TC203');
+  </script>
+
 </head>
 <body>
     <nav-bar></nav-bar>
@@ -43,6 +52,6 @@
 
     <div id="hover-tooltip" class="hidden"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
-    <script src="script.js"></script>
+    <script src="/population/script.js"></script>
 </body>
 </html>

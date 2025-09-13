@@ -123,7 +123,7 @@ function loadGeoJsonToMap(data){
 }
 
 async function loadPopulationData(){
-    const res=await fetch('population_data.json');
+    const res=await fetch('/population/population_data.json');
     const data=await res.json();
     appState.allPopulationData=data;
 
