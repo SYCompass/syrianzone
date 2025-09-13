@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>أطلس سكان سوريا</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/styles/theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script>
+      (function(){try{var s=localStorage.getItem('sz-theme');if(!s){var sp=localStorage.getItem('startpage-settings');if(sp){s=(JSON.parse(sp)||{}).theme}};document.documentElement.setAttribute('data-theme', s||'dark');}catch(e){}})();
+    </script>
+    <script src="/components/utils-theme.js" defer></script>
+    <script src="/components/navbar.js" defer></script>
+</head>
+<body>
+    <nav-bar></nav-bar>
+    <div class="navbar-spacer"></div>
+    <div class="container">
+        <header class="header">
+            <h1 class="main-title">أطلس سكان سوريا</h1>
+            <p class="subtitle">خريطة تفاعلية لعدد السكان حسب المحافظات</p>
+        </header>
+
+        <section class="map-section">
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+        </section>
+
+        <div class="controls">
+            <button id="dataSourcesBtn" class="btn">مصادر البيانات</button>
+        </div>
+
+        <aside id="dataSourcesPanel" class="data-sources-panel hidden">
+            <div class="panel-card">
+                <h3 class="panel-title">اختر مصدر البيانات</h3>
+                <div id="sourcesGrid" class="sources-grid"></div>
+            </div>
+        </aside>
+    </div>
+
+    <div id="hover-tooltip" class="hidden"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

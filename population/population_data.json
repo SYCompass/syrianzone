@@ -1,0 +1,114 @@
+{
+  "sources": [
+    {
+      "source_id": 1,
+      "source_url": "https://data.humdata.org/dataset/worldpop-population-counts-for-syrian-arab-republic",
+      "date": "2020",
+      "note": "Population within 15km radius",
+      "cities": {
+        "Damascus": 4066006,
+        "Aleppo": 3086786,
+        "Hims": 1143619,
+        "Lattakia": 644135,
+        "Hamah": 601523,
+        "Idlib": 375865,
+        "Dayr Az Zawr": 360749,
+        "Dar`a": 313204,
+        "Tartus": 285049,
+        "Al Ḥasakah": 260319
+      }
+    },
+    {
+      "source_id": 2,
+      "source_url": "https://simplemaps.com/data/sy-cities",
+      "date": "unknown",
+      "note": "City proper population",
+      "cities": {
+        "Damascus": 2584771,
+        "Aleppo": 2003671,
+        "Hims": 775404,
+        "Lattakia": 700000,
+        "Hamah": 696863,
+        "Ar Raqqah": 299824,
+        "Dayr Az Zawr": 271800,
+        "Al Ḥasakah": 188160,
+        "Idlib": 165000,
+        "Dar`a": 146481,
+        "Tartus": 89457,
+        "As Suwayda": 64730,
+        "Quneitra": 153
+      }
+    },
+    {
+      "source_id": 3,
+      "source_url": "https://data.who.int/countries/760",
+      "date": "2023",
+      "note": "WHO data for 2024 projections",
+      "cities": {
+        "Damascus": 2400000
+      }
+    },
+    {
+      "source_id": 4,
+      "source_url": "https://www.geo-ref.net/en/syr.htm",
+      "date": "2021",
+      "note": "Governorate populations",
+      "cities": {
+        "Aleppo": 4118000,
+        "Al Ḥasakah": 1865000,
+        "Ar Raqqah": 940000,
+        "As Suwayda": 540000,
+        "Damascus": 2103000,
+        "Dar`a": 966000,
+        "Dayr Az Zawr": 1267000,
+        "Hamah": 2147000,
+        "Hims": 1790000,
+        "Idlib": 1172000,
+        "Lattakia": 1346000,
+        "Quneitra": 124000,
+        "Rif Dimashq": 3372000,
+        "Tartus": 1172000
+      }
+    },
+    {
+      "source_id": 5,
+      "source_url": "https://www.worldometers.info/world-population/syria-population/",
+      "date": "2025",
+      "note": "City population estimates",
+      "cities": {
+        "Aleppo": 2098210,
+        "Damascus": 1569394,
+        "Hims": 775404,
+        "Lattakia": 709000,
+        "Ar Raqqah": 531952,
+        "Hamah": 460602,
+        "Tartus": 458327,
+        "Al Ḥasakah": 422445,
+        "Dayr Az Zawr": 271800,
+        "Idlib": 128840,
+        "Dar`a": 97969,
+        "As Suwayda": 59052,
+        "Quneitra": 36143
+      }
+    }
+  ],
+  "metadata": {
+    "total_sources": 5,
+    "city_names_standardized": [
+      "Al Ḥasakah",
+      "Aleppo", 
+      "Ar Raqqah",
+      "As Suwayda",
+      "Damascus",
+      "Dar`a",
+      "Dayr Az Zawr",
+      "Hamah",
+      "Hims",
+      "Idlib",
+      "Lattakia",
+      "Quneitra",
+      "Rif Dimashq",
+      "Tartus"
+    ]
+  }
+}
