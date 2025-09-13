@@ -1,0 +1,83 @@
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:#13181B;
+    color:#B7BBBD;
+    min-height:100vh;
+    overflow-x:hidden;
+    direction:rtl
+}
+
+.header{text-align:center;padding:24px 0}
+.main-title{font-size:2rem;font-weight:700;margin-bottom:4px;color:#B7BBBD}
+.subtitle{font-size:1rem;color:#82848C}
+
+.map-section{padding:0 8px;margin-bottom:16px}
+.map-container{width:100%;height:85vh;border-radius:8px;overflow:hidden;position:relative}
+#map{width:100%;height:100%}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+    .map-container{height:40vh}
+}
+
+.leaflet-container{background:transparent!important}
+.leaflet-tile-pane{display:none}
+
+#hover-tooltip{
+    position:fixed;
+    background:rgba(31,36,39,.95);
+    border:1px solid #5D695F;
+    border-radius:6px;
+    padding:6px 10px;
+    color:#B7BBBD;
+    font-size:13px;
+    pointer-events:none;
+    z-index:1001;
+    opacity:0;
+    transition:opacity .2s
+}
+#hover-tooltip .city-name{font-weight:700;margin-bottom:2px;font-size:14px}
+#hover-tooltip.hidden{opacity:0}
+#hover-tooltip:not(.hidden){opacity:1}
+
+.controls{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.btn{
+    padding:10px 20px;font-size:1rem;font-weight:500;
+    background:#2C6046;color:#B7BBBD;border:none;border-radius:6px;
+    cursor:pointer;transition:all .2s
+}
+.btn:hover{opacity:.9;transform:translateY(-1px)}
+.btn.active{background:#3a7d5a;box-shadow:0 0 0 2px #B7BBBD}
+
+.data-sources-panel{
+    position:fixed;top:80px;right:12px;width:280px;
+    z-index:1002
+}
+.panel-card{
+    background:#1f2427;padding:16px;border-radius:8px;border:1px solid #5D695F
+}
+.panel-title{font-size:1rem;font-weight:600;margin-bottom:12px;color:#B7BBBD}
+.sources-grid{display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow-y:auto}
+
+.source-item{
+    padding:10px;border-radius:6px;border:1px solid #5D695F;
+    background:#2a3033;cursor:pointer;transition:all .2s;position:relative
+}
+.source-item:hover{transform:scale(1.02);border-color:#2C6046}
+.source-item.selected{background:#2C6046;border:2px solid #B7BBBD}
+.source-name{font-weight:600;margin-bottom:4px}
+.source-description{font-size:.75rem;color:#82848C}
+.checkmark{margin-right:4px;color:#B7BBBD}
+
+.leaflet-control.legend{
+    background:#1f2427;padding:8px 10px;border:1px solid #5D695F;
+    border-radius:6px;font-size:12px;color:#B7BBBD
+}
+.legend i{
+    width:14px;height:14px;display:inline-block;margin-left:6px;
+    border-radius:2px;border:1px solid rgba(0,0,0,.3)
+}
+
+.hidden{display:none}
