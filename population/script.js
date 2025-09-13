@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
     initializeMap();
     await loadPopulationData();
 
-    fetch('syria_provinces.geojson')
+    fetch('/population/syria_provinces.geojson')
         .then(r=>r.json())
         .then(loadGeoJsonToMap)
         .catch(err=>console.error(err));
