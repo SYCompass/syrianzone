@@ -91,7 +91,6 @@ async function main() {
   if (oauth2Refresh && clientId && clientSecret) {
     const oauth2Client = new TwitterApi({ clientId, clientSecret });
     const { client: logged, refreshToken: newRefreshToken } = await oauth2Client.refreshOAuth2Token(oauth2Refresh);
-    // Persist rotated refresh token for next run (if available)
     if (newRefreshToken && newRefreshToken !== oauth2Refresh) {
       try {
         const envPath = join(process.cwd(), ".env.local");
