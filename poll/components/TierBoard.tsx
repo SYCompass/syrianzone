@@ -28,6 +28,15 @@ const tierStyles: Record<TierKey, { label: string; area: string; border: string 
   F: { label: "bg-gray-800", area: "bg-gray-100", border: "border-gray-300" },
 };
 
+const tierDescriptions: Record<TierKey, string> = {
+  S: "ممتاز",
+  A: "جيد جدًا",
+  B: "جيد",
+  C: "مقبول",
+  D: "ضعيف",
+  F: "سيئ",
+};
+
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export default function TierBoard({ initialCandidates, pollId, voteDay }: Props) {
@@ -354,8 +363,9 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
       <div ref={tiersRef} data-capture-target>
         {tierKeys.map((k) => (
           <div key={k} className="flex mb-1">
-            <div data-tier-label={k} className={`w-20 min-h-[165px] ${tierStyles[k].label} text-white text-xl font-bold flex items-center justify-center rounded-r`}>
-              {k}
+            <div data-tier-label={k} className={`w-20 min-h-[165px] ${tierStyles[k].label} text-white rounded-r flex flex-col items-center justify-center`}>
+              <span className="text-xl font-bold leading-none">{k}</span>
+              <span className="text-[16px] font-bold leading-none mt-4 opacity-90">{tierDescriptions[k]}</span>
             </div>
             <div
               data-tier-area={k}
