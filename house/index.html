@@ -16,13 +16,49 @@
     .rounded, .rounded-md, .rounded-lg, .rounded-xl { border-radius: var(--radius) !important; }
     .card { background-color: var(--sz-color-surface); border: 4px solid var(--border-color); }
     .table th, .table td { border: 1px solid var(--border-color); }
+    .sortable-header { cursor: pointer; user-select: none; position: relative; }
+    .sortable-header:hover { background-color: var(--sz-color-surface-hover, rgba(0,0,0,0.05)); }
+    .sort-indicator { 
+      margin-left: 8px; 
+      font-size: 0.8em; 
+      opacity: 0.4; 
+      color: #9ca3af; 
+      display: inline-block;
+      vertical-align: top;
+      width: 12px;
+      text-align: center;
+      position: relative;
+      top: 1px;
+    }
+    .sort-indicator.active { opacity: 1; color: #374151; }
+    .sort-arrows {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 16px;
+    }
+    .sort-arrow { 
+      display: block; 
+      height: 6px;
+      line-height: 6px;
+      font-size: 8px;
+      margin: 0;
+    }
+    .sort-arrow.down { 
+      transform: rotate(180deg);
+      margin-top: 2px;
+    }
+    #resetFilters:hover {
+      background-color: var(--bg-tertiary) !important;
+    }
   </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
   <nav-bar></nav-bar>
 
   <main class="container mx-auto px-4 py-8">
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-6xl mx-auto">
       <h1 class="text-3xl font-bold text-center mb-4">مجلس الشعب</h1>
       <p class="text-center text-gray-600 mb-6">أعضاء الهيئات الناخبة لمجلس الشعب — يمكن التصفية والبحث وعرض إحصاءات</p>
 
@@ -39,7 +75,7 @@
             <label class="block text-sm text-gray-600 mb-1">بحث بالاسم أو المكان</label>
             <input id="searchInput" type="text" class="w-full border px-3 py-2" placeholder="ابحث…" />
           </div>
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-3 gap-3">
             <div>
               <label class="block text-sm text-gray-600 mb-1">الجنس</label>
               <select id="sexFilter" class="w-full border px-3 py-2 bg-white">
@@ -58,6 +94,12 @@
                 <option value="50s">50–59</option>
                 <option value="60p">60+</option>
               </select>
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">&nbsp;</label>
+              <button id="resetFilters" class="w-full px-3 py-2 transition-all duration-200" style="border: 4px solid var(--border-color); background: var(--sz-color-surface); color: var(--sz-color-ink); border-radius: 0px;">
+                إعادة تعيين
+              </button>
             </div>
           </div>
         </div>

@@ -13,6 +13,7 @@
   let sexChart, ageChart;
 
   const PROVINCES = [
+    { key: 'all', label: 'الكل', sheetId: null, gid: null },
     { key: 'qunaitra', label: 'القنيطرة', sheetId: '1lFrQs1onIXLo_kLpvn5oRCoAS_Oro6to8yHHItiYxEE', gid: '1068037771' },
     { key: 'idlib', label: 'إدلب', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '0' },
     { key: 'hama', label: 'حماة', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '694979899' },
@@ -148,6 +149,48 @@
     });
   }
 
+  function sortData(data, column, direction) {
+    if (!column) return data;
+    
+    return [...data].sort((a, b) => {
+      let aVal = a[column];
+      let bVal = b[column];
+      
+      // Handle null/undefined values - put them at the end
+      if (aVal == null && bVal == null) return 0;
+      if (aVal == null) return 1;
+      if (bVal == null) return -1;
+      
+      let result = 0;
+      
+      if (column === 'BirthYear' || column === 'Age 2025') {
+        // Numeric sorting
+        const aNum = parseNumeric(aVal);
+        const bNum = parseNumeric(bVal);
+        result = aNum - bNum;
+      } else {
+        // Text sorting 
+        const aStr = String(aVal).trim();
+        const bStr = String(bVal).trim();
+        
+        try {
+          result = aStr.localeCompare(bStr, ['ar', 'ar-SA', 'ar-SY'], {
+            numeric: false,
+            sensitivity: 'base',
+            ignorePunctuation: true
+          });
+        } catch (e) {
+          // Fallback to normalized comparison if localeCompare fails
+          const aNorm = normalizeString(aStr);
+          const bNorm = normalizeString(bStr);
+          result = aNorm < bNorm ? -1 : (aNorm > bNorm ? 1 : 0);
+        }
+      }
+      
+      return direction === 'desc' ? -result : result;
+    });
+  }
+
   function renderTable(headers, rows){
     const HEADER_LABELS_AR = {
       'Name': 'الاسم',
@@ -156,16 +199,59 @@
       'Sex': 'الجنس',
       'Place': 'مكان الولادة',
     };
+    
+    const sortedRows = sortData(rows, sortColumn, sortDirection);
+    
     theadRow.innerHTML = '';
     const headerDefs = headers.map((key)=>({ key, label: HEADER_LABELS_AR[key] || key }));
-    headerDefs.forEach(({ label })=>{
+    headerDefs.forEach(({ key, label })=>{
       const th = document.createElement('th');
-      th.className = 'px-4 py-2 text-right text-xs font-medium text-gray-600 uppercase tracking-wider bg-gray-50';
-      th.textContent = label;
+      th.className = 'px-4 py-2 text-right text-xs font-medium text-gray-600 uppercase tracking-wider bg-gray-50 sortable-header';
+      th.setAttribute('data-column', key);
+      
+      // Add sort indicator - unified component
+      const indicator = document.createElement('span');
+      indicator.className = 'sort-indicator';
+      
+      function createSortArrows(isActive, direction) {
+        if (isActive) {
+          const arrowClass = direction === 'asc' ? 'up' : 'down';
+          return `<div class="sort-arrows">
+            <div class="sort-arrow ${arrowClass}">▲</div>
+          </div>`;
+        } else {
+          return `<div class="sort-arrows">
+            <div class="sort-arrow up">▲</div>
+            <div class="sort-arrow down">▲</div>
+          </div>`;
+        }
+      }
+      
+      if (sortColumn === key) {
+        indicator.innerHTML = createSortArrows(true, sortDirection);
+        indicator.classList.add('active');
+      } else {
+        indicator.innerHTML = createSortArrows(false);
+      }
+      
+      th.appendChild(document.createTextNode(label));
+      th.appendChild(indicator);
+      
+      // Add click handler for sorting
+      th.addEventListener('click', () => {
+        if (sortColumn === key) {
+          sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+          sortColumn = key;
+          sortDirection = 'asc';
+        }
+        onControlsChange();
+      });
+      
       theadRow.appendChild(th);
     });
     tbody.innerHTML = '';
-    rows.forEach(r=>{
+    sortedRows.forEach(r=>{
       const tr = document.createElement('tr');
       headerDefs.forEach(({ key })=>{
         const td = document.createElement('td');
@@ -179,20 +265,44 @@
 
   let originalData = [];
   let headers = [];
+  let sortColumn = 'Name'; // Default sort by Name
+  let sortDirection = 'asc'; // 'asc' or 'desc'
 
   async function load(){
     try {
       statusEl.textContent = 'جاري التحميل…';
-      const selectedKey = provinceSelect.value || 'qunaitra';
-      const province = PROVINCES.find(p=>p.key===selectedKey) || PROVINCES[0];
-      const res = await fetch(csvUrlFor(province), { cache: 'no-store' });
-      if(!res.ok){ throw new Error('HTTP '+res.status); }
-      const text = await res.text();
-      if (window.SZ?.csv?.detectRedirectHTML && window.SZ.csv.detectRedirectHTML(text)) {
-        throw new Error('لم يتم نشر الجدول كـ CSV للعامة');
+      const selectedKey = provinceSelect.value || 'all';
+      
+      let objects = [];
+      
+      if (selectedKey === 'all') {
+        // Load data from all provinces
+        for (const province of PROVINCES.slice(1)) { // Skip 'all' option
+          try {
+            const res = await fetch(csvUrlFor(province), { cache: 'no-store' });
+            if(res.ok) {
+              const text = await res.text();
+              if (!window.SZ?.csv?.detectRedirectHTML || !window.SZ.csv.detectRedirectHTML(text)) {
+                const provinceObjects = window.SZ?.csv?.parseCSVToObjects ? window.SZ.csv.parseCSVToObjects(text) : [];
+                objects.push(...provinceObjects);
+              }
+            }
+          } catch (e) {
+            console.warn(`Failed to load ${province.label}:`, e);
+          }
+        }
+      } else {
+        const province = PROVINCES.find(p=>p.key===selectedKey) || PROVINCES[1];
+        const res = await fetch(csvUrlFor(province), { cache: 'no-store' });
+        if(!res.ok){ throw new Error('HTTP '+res.status); }
+        const text = await res.text();
+        if (window.SZ?.csv?.detectRedirectHTML && window.SZ.csv.detectRedirectHTML(text)) {
+          throw new Error('لم يتم نشر الجدول كـ CSV للعامة');
+        }
+        objects = window.SZ?.csv?.parseCSVToObjects ? window.SZ.csv.parseCSVToObjects(text) : [];
       }
-      const objects = window.SZ?.csv?.parseCSVToObjects ? window.SZ.csv.parseCSVToObjects(text) : [];
-      headers = objects.length ? Object.keys(objects[0]) : [];
+      
+      headers = objects.length ? Object.keys(objects[0]).filter(key => !key.startsWith('__')) : [];
       originalData = objects.map(o=>{
         const sexNorm = normalizeSex(o['Sex']||o['الجنس']);
         const ageNum = computeAge(o);
@@ -234,6 +344,16 @@
     renderCharts(filtered);
   }
 
+  function resetFilters() {
+    provinceSelect.value = 'all';
+    searchInput.value = '';
+    sexFilter.value = '';
+    ageGroupFilter.value = '';
+    sortColumn = 'Name'; // Reset to default sort
+    sortDirection = 'asc';
+    load();
+  }
+
   document.addEventListener('DOMContentLoaded', function(){
     // Ensure Chart.js uses Arabic font
     try {
@@ -243,6 +363,13 @@
     } catch(e) {}
     provinceSelect.innerHTML = PROVINCES.map(p=>`<option value="${p.key}">${p.label}</option>`).join('');
     provinceSelect.value = PROVINCES[0].key;
+    
+    // Add reset button event listener
+    const resetButton = document.getElementById('resetFilters');
+    if (resetButton) {
+      resetButton.addEventListener('click', resetFilters);
+    }
+    
     load();
   });
   provinceSelect.addEventListener('change', load);
