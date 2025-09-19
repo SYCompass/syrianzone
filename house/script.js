@@ -22,6 +22,7 @@
     { key: 'daraa', label: 'درعا', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '1028853845' },
     { key: 'latakia', label: 'اللاذقية', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '638432279' },
     { key: 'tartus', label: 'طرطوس', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '1926010966' },
+    { key: 'homs', label: 'حمص', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '252895295' },
   ];
 
   function csvUrlFor(p){
