@@ -13,7 +13,7 @@
   let sexChart, ageChart;
 
   const PROVINCES = [
-    { key: 'all', label: 'الكل', sheetId: null, gid: null },
+    { key: 'all', label: 'الكل', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '125118455' },
     { key: 'qunaitra', label: 'القنيطرة', sheetId: '1lFrQs1onIXLo_kLpvn5oRCoAS_Oro6to8yHHItiYxEE', gid: '1068037771' },
     { key: 'idlib', label: 'إدلب', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '0' },
     { key: 'hama', label: 'حماة', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '694979899' },
@@ -281,24 +281,8 @@
       
       let objects = [];
       
-      if (selectedKey === 'all') {
-        // Load data from all provinces
-        for (const province of PROVINCES.slice(1)) { // Skip 'all' option
-          try {
-            const res = await fetch(csvUrlFor(province), { cache: 'no-store' });
-            if(res.ok) {
-              const text = await res.text();
-              if (!window.SZ?.csv?.detectRedirectHTML || !window.SZ.csv.detectRedirectHTML(text)) {
-                const provinceObjects = window.SZ?.csv?.parseCSVToObjects ? window.SZ.csv.parseCSVToObjects(text) : [];
-                objects.push(...provinceObjects);
-              }
-            }
-          } catch (e) {
-            console.warn(`Failed to load ${province.label}:`, e);
-          }
-        }
-      } else {
-        const province = PROVINCES.find(p=>p.key===selectedKey) || PROVINCES[1];
+      {
+        const province = PROVINCES.find(p=>p.key===selectedKey) || PROVINCES[0];
         const res = await fetch(csvUrlFor(province), { cache: 'no-store' });
         if(!res.ok){ throw new Error('HTTP '+res.status); }
         const text = await res.text();
