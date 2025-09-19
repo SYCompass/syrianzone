@@ -277,7 +277,7 @@
   async function load(){
     try {
       statusEl.textContent = 'جاري التحميل…';
-      const selectedKey = provinceSelect.value || 'all';
+      const selectedKey = provinceSelect.value || 'damascus';
       
       let objects = [];
       
@@ -358,7 +358,7 @@
       Chart.defaults.font.size = 13;
     } catch(e) {}
     provinceSelect.innerHTML = PROVINCES.map(p=>`<option value="${p.key}">${p.label}</option>`).join('');
-    provinceSelect.value = PROVINCES[0].key;
+    provinceSelect.value = 'damascus';
     
     // Add reset button event listener
     const resetButton = document.getElementById('resetFilters');
