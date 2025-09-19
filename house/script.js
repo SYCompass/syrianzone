@@ -16,6 +16,7 @@
     { key: 'qunaitra', label: 'القنيطرة', sheetId: '1lFrQs1onIXLo_kLpvn5oRCoAS_Oro6to8yHHItiYxEE', gid: '1068037771' },
     { key: 'idlib', label: 'إدلب', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '0' },
     { key: 'hama', label: 'حماة', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '694979899' },
+    { key: 'damascus', label: 'دمشق', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '1923715976' },
   ];
 
   function csvUrlFor(p){
