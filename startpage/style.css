@@ -583,23 +583,23 @@ body[dir="rtl"] .search-form {
 
 .links-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
 }
 
 .link-item {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: auto auto;
+    justify-items: center;
     align-items: center;
-    padding: 15px 10px;
+    padding: 16px 10px;
     background: transparent;
     border: none;
     text-decoration: none;
     color: var(--text-primary);
     transition: all 0.3s ease;
     text-align: center;
-    min-height: 80px;
-    justify-content: center;
+    min-height: 90px;
 }
 
 .link-item:hover {
@@ -611,6 +611,7 @@ body[dir="rtl"] .search-form {
     font-size: 1.8rem;
     margin-bottom: 8px;
     color: var(--accent-color);
+    justify-self: center;
 }
 
 .sydf-icon {
@@ -1067,9 +1068,9 @@ body[dir="rtl"] .search-form {
         max-width: 100%;
     }
     
-    .links-grid {
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-        gap: 12px;
+.links-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
     }
     
     .settings-panel {
@@ -1102,7 +1103,7 @@ body[dir="rtl"] .search-form {
     
     .links-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+        gap: 12px;
     }
     
     .modal-content {

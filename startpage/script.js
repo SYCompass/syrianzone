@@ -395,6 +395,12 @@ updateClock() {
                     case 8: // Forum
                         linkText.textContent = lang.forum;
                         break;
+                    case 9: // Revolution Archive
+                        linkText.textContent = lang.revolutionArchive;
+                        break;
+                    case 10: // Syrian Development Fund
+                        linkText.textContent = lang.syrianDevelopmentFund;
+                        break;
                 }
             }
         });

@@ -78,6 +78,8 @@ const languages = {
         syrianWebsites: "المواقع السورية",
         flagReplacer: "مبدل العلم",
         forum: "المنتدى",
+        revolutionArchive: "أرشيف الثورة",
+        syrianDevelopmentFund: "صندوق التنمية السوري",
         
         // About and UI
         about: "حول",
@@ -206,6 +208,8 @@ const languages = {
         syrianWebsites: "Syrian Websites",
         flagReplacer: "Flag Replacer",
         forum: "Forum",
+        revolutionArchive: "Revolution Archive",
+        syrianDevelopmentFund: "Syrian Development Fund",
         
         // About and UI
         about: "About",
