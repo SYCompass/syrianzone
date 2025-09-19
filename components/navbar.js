@@ -299,6 +299,10 @@ class NavBar extends HTMLElement {
               <i class="fas fa-list-ol" style="color: var(--sz-color-ink);"></i>
               تير ليست الحكومة
             </a>
+            <a href="/house" class="nav-item">
+              <i class="fas fa-landmark" style="color: var(--sz-color-ink);"></i>
+              مجلس الشعب
+            </a>
             <a href="/compass" class="nav-item">
               <i class="fas fa-compass" style="color: var(--sz-color-ink);"></i>
               البوصلة السياسية

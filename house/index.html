@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مجلس الشعب</title>
+  <script>(function(){try{var s=localStorage.getItem('sz-theme');if(!s){var sp=localStorage.getItem('startpage-settings');if(sp){s=(JSON.parse(sp)||{}).theme}};document.documentElement.setAttribute('data-theme', s||'dark');}catch(e){}})();</script>
+  <link rel="stylesheet" href="/styles/theme.css">
+  <link rel="stylesheet" href="/styles/output.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+  <style>
+    body { font-family: 'IBM Plex Sans Arabic', sans-serif!important; direction: rtl; }
+    :root { --radius: 0px; }
+    .rounded, .rounded-md, .rounded-lg, .rounded-xl { border-radius: var(--radius) !important; }
+    .card { background-color: var(--sz-color-surface); border: 4px solid var(--border-color); }
+    .table th, .table td { border: 1px solid var(--border-color); }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <nav-bar></nav-bar>
+
+  <main class="container mx-auto px-4 py-8">
+    <div class="max-w-5xl mx-auto">
+      <h1 class="text-3xl font-bold text-center mb-4">مجلس الشعب</h1>
+      <p class="text-center text-gray-600 mb-6">أعضاء الهيئات الناخبة لمجلس الشعب — يمكن التصفية والبحث وعرض إحصاءات</p>
+
+      <!-- Controls -->
+      <div class="card p-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">المحافظة</label>
+            <select id="provinceSelect" class="w-full border px-3 py-2 bg-white">
+              <!-- options populated by script -->
+            </select>
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm text-gray-600 mb-1">بحث بالاسم أو المكان</label>
+            <input id="searchInput" type="text" class="w-full border px-3 py-2" placeholder="ابحث…" />
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">الجنس</label>
+              <select id="sexFilter" class="w-full border px-3 py-2 bg-white">
+                <option value="">الكل</option>
+                <option value="ذكر">ذكر</option>
+                <option value="أنثى">أنثى</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">الفئة العمرية</label>
+              <select id="ageGroupFilter" class="w-full border px-3 py-2 bg-white">
+                <option value="">الكل</option>
+                <option value="lt30">أقل من 30</option>
+                <option value="30s">30–39</option>
+                <option value="40s">40–49</option>
+                <option value="50s">50–59</option>
+                <option value="60p">60+</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div class="card p-4 text-center">
+          <div class="text-sm text-gray-600">الإجمالي</div>
+          <div id="statTotal" class="text-2xl font-bold">–</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="text-sm text-gray-600">ذكور</div>
+          <div id="statMale" class="text-2xl font-bold">–</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="text-sm text-gray-600">إناث</div>
+          <div id="statFemale" class="text-2xl font-bold">–</div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="card p-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="text-lg font-semibold mb-2">توزيع الجنس</h3>
+            <canvas id="sexChart" height="220"></canvas>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-2">توزيع الأعمار</h3>
+            <canvas id="ageChart" height="220"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="card p-4">
+        <div id="status" class="text-center py-6 text-gray-600">جاري التحميل…</div>
+        <div class="overflow-x-auto" id="tableWrap" style="display:none;">
+          <table class="min-w-full bg-white table">
+            <thead>
+              <tr id="theadRow"></tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/components/navbar.js"></script>
+  <script src="/components/utils-theme.js" defer></script>
+  <script src="/components/utils-csv.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="/house/script.js" defer></script>
+</body>
+</html>
+
+
