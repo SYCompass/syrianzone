@@ -380,16 +380,19 @@ updateClock() {
                     case 3: // Minister Tierlist
                         linkText.textContent = lang.ministerTierlist;
                         break;
-                    case 4: // Political Compass
+                    case 4: // House of Representatives
+                        linkText.textContent = lang.house;
+                        break;
+                    case 5: // Political Compass
                         linkText.textContent = lang.politicalCompass;
                         break;
-                    case 5: // Syrian Websites
+                    case 6: // Syrian Websites
                         linkText.textContent = lang.syrianWebsites;
                         break;
-                    case 6: // Flag Replacer
+                    case 7: // Flag Replacer
                         linkText.textContent = lang.flagReplacer;
                         break;
-                    case 7: // Forum
+                    case 8: // Forum
                         linkText.textContent = lang.forum;
                         break;
                 }
