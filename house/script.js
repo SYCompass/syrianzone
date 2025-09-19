@@ -19,6 +19,7 @@
     { key: 'hama', label: 'حماة', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '694979899' },
     { key: 'damascus', label: 'دمشق', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '1923715976' },
     { key: 'rif-damascus', label: 'ريف دمشق', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '1677791143' },
+    { key: 'daraa', label: 'درعا', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '1028853845' },
   ];
 
   function csvUrlFor(p){
