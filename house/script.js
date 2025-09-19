@@ -23,6 +23,7 @@
     { key: 'latakia', label: 'اللاذقية', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '638432279' },
     { key: 'tartus', label: 'طرطوس', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '1926010966' },
     { key: 'homs', label: 'حمص', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '252895295' },
+    { key: 'aleppo', label: 'حلب', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '1121899715' },
   ];
 
   function csvUrlFor(p){
@@ -356,6 +357,12 @@
     ageGroupFilter.value = '';
     sortColumn = 'Name'; // Reset to default sort
     sortDirection = 'asc';
+    // Immediately clear charts UI before reload
+    try { sexChart?.destroy(); sexChart = undefined; } catch(e) {}
+    try { ageChart?.destroy(); ageChart = undefined; } catch(e) {}
+    statusEl.style.display = '';
+    statusEl.textContent = 'جاري التحميل…';
+    tableWrap.style.display = 'none';
     load();
   }
 
