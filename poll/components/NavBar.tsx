@@ -16,6 +16,7 @@ type NavItem = {
 export default function NavBar(): React.ReactElement {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const basePath = (process.env.NEXT_PUBLIC_BASE_PATH || "") as string;
 
   const items: NavItem[] = useMemo(
     () => [
@@ -74,9 +75,17 @@ export default function NavBar(): React.ReactElement {
 
             <div className="nav-row primary">
             {primaryItems.map((item) => {
+              // Determine active state for absolute or relative links
+              let itemPath = item.href;
+              try {
+                if (/^https?:\/\//.test(item.href)) {
+                  itemPath = new URL(item.href).pathname;
+                }
+              } catch {}
+              const currentFullPath = `${basePath}${pathname || ""}`;
               const isActive = !item.external && (
-                (item.href === "/" && pathname === "/") ||
-                (item.href !== "/" && pathname?.startsWith(item.href))
+                (itemPath === "/" && currentFullPath === `${basePath}/`) ||
+                (itemPath !== "/" && (currentFullPath === itemPath || currentFullPath.startsWith(itemPath)))
               );
 
               const className = `nav-item ${isActive ? "active" : ""}`;
