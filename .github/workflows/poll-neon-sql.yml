@@ -29,6 +29,7 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
+          cache-dependency-path: poll/pnpm-lock.yaml
 
       - name: Install deps
         run: pnpm install --frozen-lockfile
