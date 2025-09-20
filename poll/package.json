@@ -18,7 +18,8 @@
     "announce:ranks": "tsx ./scripts/announce-rank-changes.ts",
     "mock:ranks": "tsx ./scripts/mock-ranks.ts",
     "x:auth:init": "tsx ./scripts/x-auth.ts init",
-    "x:auth:exchange": "tsx ./scripts/x-auth.ts exchange"
+    "x:auth:exchange": "tsx ./scripts/x-auth.ts exchange",
+    "deploy:prod": "tsx ./scripts/deploy-prod.ts"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.2",

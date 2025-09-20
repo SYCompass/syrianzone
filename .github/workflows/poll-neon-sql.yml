@@ -1,0 +1,64 @@
+name: Poll Neon SQL Apply
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'poll/drizzle/*.sql'
+  workflow_dispatch:
+
+jobs:
+  apply-sql:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: poll
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Determine changed SQL files
+        id: changes
+        run: |
+          FROM_SHA=${{ github.event.before }}
+          TO_SHA=${{ github.sha }}
+          if [ -z "$FROM_SHA" ] || [ "$FROM_SHA" = "0000000000000000000000000000000000000000" ]; then
+            FROM_SHA=$(git rev-list --max-parents=0 HEAD | tail -n 1)
+          fi
+          git diff --name-only "$FROM_SHA" "$TO_SHA" | grep '^poll/drizzle/.*\.sql$' || true > ../changed_sql.txt
+          echo "Changed SQL files:" && cat ../changed_sql.txt || true
+
+      - name: Apply each changed SQL
+        if: hashFiles('../changed_sql.txt') != ''
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+          NEON_BRANCH_ID: ${{ secrets.NEON_BRANCH_ID }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          set -euo pipefail
+          while IFS= read -r FILE; do
+            [ -z "$FILE" ] && continue
+            # convert repo path poll/drizzle/... -> relative path drizzle/...
+            REL=${FILE#poll/}
+            echo "Creating snapshot and applying: $REL"
+            pnpm deploy:prod "$REL"
+          done < ../changed_sql.txt
+
+
