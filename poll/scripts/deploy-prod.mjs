@@ -8,24 +8,26 @@ async function createNeonSnapshot() {
     throw new Error('Missing NEON_API_KEY, NEON_PROJECT_ID or NEON_BRANCH_ID env vars');
   }
 
-  const endpoint = `https://console.neon.tech/api/v2/projects/${projectId}/branches/${branchId}/snapshots`;
-  const body = JSON.stringify({ snapshot: { name: `pre-deploy-${new Date().toISOString()}` } });
+  // Use the official Snapshot endpoint (Beta): POST /projects/{project_id}/branches/{branch_id}/snapshot
+  const name = `pre-deploy-${new Date().toISOString()}`;
+  const url = new URL(`https://console.neon.tech/api/v2/projects/${projectId}/branches/${branchId}/snapshot`);
+  url.searchParams.set('name', name);
 
-  const res = await fetch(endpoint, {
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
-    body,
+    // body optional; we pass name via query param per docs
   });
   if (!res.ok) {
     const text = await res.text().catch(() => '');
     throw new Error(`Neon snapshot failed: ${res.status} ${res.statusText} ${text}`);
   }
   const json = await res.json().catch(() => ({}));
-  const snapId = (json && (json.snapshot?.id || json.id)) || 'unknown';
-  console.log('Created Neon snapshot:', snapId);
+  const snapshotId = (json && (json.snapshot?.id || json.id)) || 'unknown';
+  console.log('Created Neon snapshot:', snapshotId);
 }
 
 async function runDrizzleMigrate() {

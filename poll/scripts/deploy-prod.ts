@@ -11,24 +11,25 @@ async function createNeonSnapshot() {
     throw new Error("Missing NEON_API_KEY, NEON_PROJECT_ID or NEON_BRANCH_ID env vars");
   }
 
-  const endpoint = `https://console.neon.tech/api/v2/projects/${projectId}/branches/${branchId}/snapshots`;
-  const body = JSON.stringify({ snapshot: { name: `pre-deploy-${new Date().toISOString()}` } });
+  // Use official Snapshot endpoint (Beta): POST /projects/{project_id}/branches/{branch_id}/snapshot
+  const name = `pre-deploy-${new Date().toISOString()}`;
+  const url = new URL(`https://console.neon.tech/api/v2/projects/${projectId}/branches/${branchId}/snapshot`);
+  url.searchParams.set("name", name);
 
-  const res = await fetch(endpoint, {
+  const res = await fetch(url, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
-    body,
   });
   if (!res.ok) {
     const text = await res.text().catch(() => "");
     throw new Error(`Neon snapshot failed: ${res.status} ${res.statusText} ${text}`);
   }
   const json = (await res.json()) as any;
-  const snapId = json?.snapshot?.id || json?.id;
-  console.log("Created Neon snapshot:", snapId || json);
+  const snapshotId = json?.snapshot?.id || json?.id;
+  console.log("Created Neon snapshot:", snapshotId || json);
 }
 
 async function runApplySql(sqlPath: string) {
