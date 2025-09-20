@@ -41,17 +41,30 @@ async function runApplySql(sqlPath: string) {
   });
 }
 
+async function runDrizzleMigrate() {
+  return new Promise<void>((resolve, reject) => {
+    const child = spawn("pnpm", ["-s", "drizzle:migrate"], { stdio: "inherit", env: process.env });
+    child.on("exit", (code) => {
+      if (code === 0) resolve();
+      else reject(new Error(`drizzle:migrate exited with code ${code}`));
+    });
+  });
+}
+
 async function main() {
-  const sqlPath = process.argv[2];
-  if (!sqlPath) {
-    throw new Error("Usage: pnpm tsx scripts/deploy-prod.ts <path-to-sql-file>");
-  }
+  const arg = process.argv[2];
+  const mode = !arg || arg === "--pending" ? "pending" : "single";
 
   console.log("Creating Neon snapshot before applying migrations...");
   await createNeonSnapshot();
 
-  console.log("Running SQL apply script:", sqlPath);
-  await runApplySql(sqlPath);
+  if (mode === "pending") {
+    console.log("Running drizzle migrations (pending only)...");
+    await runDrizzleMigrate();
+  } else {
+    console.log("Running SQL apply script:", arg);
+    await runApplySql(arg);
+  }
 
   console.log("Done.");
 }

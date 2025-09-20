@@ -19,7 +19,8 @@
     "mock:ranks": "tsx ./scripts/mock-ranks.ts",
     "x:auth:init": "tsx ./scripts/x-auth.ts init",
     "x:auth:exchange": "tsx ./scripts/x-auth.ts exchange",
-    "deploy:prod": "tsx ./scripts/deploy-prod.ts"
+    "deploy:prod": "tsx ./scripts/deploy-prod.ts",
+    "start:prod": "pnpm -s deploy:prod --pending && next start"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.2",
