@@ -7,6 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "start:migrate": "pnpm -s drizzle:migrate && next start",
+    "prestart": "node ./scripts/deploy-prod.mjs",
     "lint": "eslint",
     "drizzle:generate": "drizzle-kit generate",
     "drizzle:migrate": "drizzle-kit migrate",
@@ -19,8 +20,7 @@
     "mock:ranks": "tsx ./scripts/mock-ranks.ts",
     "x:auth:init": "tsx ./scripts/x-auth.ts init",
     "x:auth:exchange": "tsx ./scripts/x-auth.ts exchange",
-    "deploy:prod": "tsx ./scripts/deploy-prod.ts",
-    "start:prod": "pnpm -s deploy:prod --pending && next start"
+    "deploy:prod": "tsx ./scripts/deploy-prod.ts"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.2",
