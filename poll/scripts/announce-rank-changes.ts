@@ -53,7 +53,7 @@ function buildTweet(name: string, from: number, to: number, day: string, context
   const suffix = change > 1 ? `(${change} مراتب)` : "مرتبة واحدة";
   const over = context?.overName && to < from ? `؛ تجاوز ${context.overName}` : "";
   const fell = context?.belowName && to > from ? `؛ تراجع لصالح ${context.belowName}` : "";
-  return `تحديث التصنيف (${day})\n${arrow} ${name} ${dir} من #${from} إلى #${to} ${suffix}${over || fell}\n\nتابع الترتيب الكامل: syrian.zone/tierlist/leaderboard`;
+  return `تحديث التصنيف (${day})\n${name} ${arrow} ${dir} من #${from} إلى #${to} ${suffix}\n\nتابع الترتيب الكامل: syrian.zone/tierlist/leaderboard`;
 }
 
 async function main() {

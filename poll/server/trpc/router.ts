@@ -194,7 +194,7 @@ export const appRouter = t.router({
                 const over = ch.overName && ch.to < ch.from ? `؛ تجاوز ${ch.overName}` : "";
                 const fell = ch.belowName && ch.to > ch.from ? `؛ تراجع لصالح ${ch.belowName}` : "";
                 const dayStr = voteDay.toISOString().slice(0, 10);
-                const text = `تحديث التصنيف (${dayStr})\n${arrow} ${name} ${dir} من #${ch.from} إلى #${ch.to} ${suffix}${over || fell}\n\nتابع الترتيب الكامل: syrian.zone/tierlist/leaderboard`;
+                const text = `تحديث التصنيف (${dayStr})\n${name} ${arrow} ${dir} من #${ch.from} إلى #${ch.to} ${suffix}\n\nتابع الترتيب الكامل: syrian.zone/tierlist/leaderboard`;
                 if (tweetDry || !tw) {
                   console.log("[tweet:dry]", text);
                 } else {
