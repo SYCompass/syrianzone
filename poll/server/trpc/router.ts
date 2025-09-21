@@ -74,20 +74,6 @@ export const appRouter = t.router({
         const ballotId = uuidv4();
 
         const isGovPoll = poll.slug === "best-ministers";
-        async function fetchRanksMap(day: Date): Promise<Map<string, number>> {
-          const rows = await db
-            .select({
-              candidateId: dailyScores.candidateId,
-              r: sql<number>`rank() over (order by ${dailyScores.score} desc, ${dailyScores.votes} desc, ${dailyScores.candidateId} asc)`,
-            })
-            .from(dailyScores)
-            .innerJoin(candidates, eq(candidates.id, dailyScores.candidateId))
-            .where(and(eq(dailyScores.pollId, poll.id), eq(dailyScores.day, day), sql`${candidates.category} <> 'governor'`));
-          const map = new Map<string, number>();
-          for (const row of rows as any[]) map.set(row.candidateId, Number(row.r));
-          return map;
-        }
-        const prevRanksMap = isGovPoll ? await fetchRanksMap(voteDay) : new Map<string, number>();
 
         await db.insert(ballots).values({ id: ballotId, pollId: poll.id, voteDay, voterKey, ipHash, userAgent });
 
@@ -136,13 +122,43 @@ export const appRouter = t.router({
 
         // After updating scores, compute current ranks and tweet changes in real time (for gov poll only)
         if (isGovPoll) {
-          const currRanksMap = await fetchRanksMap(voteDay);
+          // Build current rows then derive the "prev" by subtracting this ballot's deltas
+          const currAll = await db
+            .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
+            .from(dailyScores)
+            .innerJoin(candidates, eq(candidates.id, dailyScores.candidateId))
+            .where(and(eq(dailyScores.pollId, poll.id), eq(dailyScores.day, voteDay), sql`${candidates.category} <> 'governor'`));
+
+          type Row = { candidateId: string; votes: number; score: number };
+          const currRows: Row[] = currAll as any;
+          const deltaById = new Map<string, { votes: number; score: number }>();
+          for (const [id, d] of scoreDelta.entries()) deltaById.set(id, d);
+
+          function rankMap(rows: Row[]): Map<string, number> {
+            const sorted = [...rows].sort((a, b) =>
+              (b.score - a.score) || (b.votes - a.votes) || a.candidateId.localeCompare(b.candidateId)
+            );
+            const map = new Map<string, number>();
+            sorted.forEach((r, i) => map.set(r.candidateId, i + 1));
+            return map;
+          }
+
+          const prevRows: Row[] = currRows.map((r) => {
+            const d = deltaById.get(r.candidateId) || { votes: 0, score: 0 };
+            return {
+              candidateId: r.candidateId,
+              votes: Math.max(0, r.votes - d.votes),
+              score: Math.max(0, r.score - d.score),
+            };
+          });
+
+          const prevRanksMap = rankMap(prevRows);
+          const currRanksMap = rankMap(currRows);
+
           const changed: Array<{ id: string; from: number; to: number }> = [];
           for (const [id, to] of currRanksMap.entries()) {
             const from = prevRanksMap.get(id);
-            if (typeof from === "number" && from !== to) {
-              changed.push({ id, from, to });
-            }
+            if (typeof from === "number" && from !== to) changed.push({ id, from, to });
           }
 
           if (changed.length) {
