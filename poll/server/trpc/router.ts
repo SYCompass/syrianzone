@@ -9,6 +9,7 @@ import { sha256 } from "@/lib/hash";
 import { v4 as uuidv4 } from "uuid";
 import { publish } from "@/server/realtime/broker";
 import { TwitterApi } from "twitter-api-v2";
+import { getReadWriteClient } from "@/lib/xAuth";
 
 export type Context = {
   ip: string | undefined;
@@ -169,19 +170,8 @@ export const appRouter = t.router({
               const clientSecret = process.env.TWITTER_CLIENT_SECRET;
               const tweetDry = (process.env.TWITTER_DRY || "").toLowerCase() === "true" || process.env.TWITTER_DRY === "1";
               let tw: any | null = null;
-              if (oauth2Refresh && clientId && clientSecret) {
-                try {
-                  const oauth2Client = new TwitterApi({ clientId, clientSecret });
-                  const { client } = await oauth2Client.refreshOAuth2Token(oauth2Refresh);
-                  tw = client;
-                  // Best-effort identity check
-                  try { const me = await tw.v2.me(); console.log("[tweet] auth as:", me?.data?.username || me?.data?.id); } catch (e) { console.warn("[tweet] v2.me failed:", (e as any)?.message); }
-                } catch (e: any) {
-                  console.error("[tweet] OAuth2 refresh failed:", e?.data || e?.message || e);
-                }
-              } else {
-                console.warn("[tweet] OAuth2 env vars missing; skipping tweet.");
-              }
+              try { tw = await getReadWriteClient(); } catch (e: any) { console.error("[tweet] client init failed:", e?.message || e); }
+              if (!tw) console.warn("[tweet] missing client (no refresh token stored); visit /api/x/init to authorize.");
               for (const ch of changed) {
                 const [c] = await db.select().from(candidates).where(eq(candidates.id, ch.id));
                 const name = (c?.name as string) || "مرشح";
