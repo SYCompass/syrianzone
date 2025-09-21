@@ -175,7 +175,12 @@ export const appRouter = t.router({
               try { tw = await getReadWriteClient(); } catch (e: any) { console.error("[tweet] client init failed:", e?.message || e); }
               if (!tw) console.warn("[tweet] missing client (no refresh token stored); visit /api/x/init to authorize.");
               // Re-read current ranks to avoid races; use freshest "to"
-              const latestMap = await fetchRanksMap(voteDay);
+              const latestAll = await db
+                .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
+                .from(dailyScores)
+                .innerJoin(candidates, eq(candidates.id, dailyScores.candidateId))
+                .where(and(eq(dailyScores.pollId, poll.id), eq(dailyScores.day, voteDay), sql`${candidates.category} <> 'governor'`));
+              const latestMap = rankMap(latestAll as any);
               const ch = { ...pick, to: latestMap.get(pick.id) || pick.to };
               const [c] = await db.select().from(candidates).where(eq(candidates.id, ch.id));
                 const name = (c?.name as string) || "مرشح";
