@@ -1,4 +1,6 @@
 import { spawn } from 'node:child_process';
+import postgres from 'postgres';
+import { randomUUID } from 'node:crypto';
 
 async function createNeonSnapshot() {
   const apiKey = process.env.NEON_API_KEY;
@@ -45,6 +47,30 @@ async function main() {
   await createNeonSnapshot();
   console.log('Running drizzle migrations (pending only)...');
   await runDrizzleMigrate();
+
+  // Backfill safety: ensure poll and candidate exist even on fresh DBs
+  try {
+    const url = process.env.DATABASE_URL;
+    if (!url) throw new Error('DATABASE_URL is not set');
+    const sql = postgres(url, { ssl: 'require' });
+    const slug = 'best-ministers';
+    const [{ id: pollId } = {}] = await sql`select id from polls where slug = ${slug} limit 1`;
+    let ensuredPollId = pollId;
+    if (!ensuredPollId) {
+      ensuredPollId = randomUUID();
+      await sql`insert into polls (id, slug, title, timezone) values (${ensuredPollId}, ${slug}, ${'تقييم الوزراء'}, ${'Europe/Amsterdam'}) on conflict (slug) do nothing`;
+      console.log('Ensured poll row for', slug);
+    }
+    const [{ exists } = { exists: false }] = await sql`select exists(select 1 from candidates where id = ${'item31'} and poll_id = ${ensuredPollId}) as exists`;
+    if (!exists) {
+      const [{ s } = { s: 0 }] = await sql`select coalesce(max(sort), 0) as s from candidates where poll_id = ${ensuredPollId}`;
+      await sql`insert into candidates (id, poll_id, name, title, image_url, sort, category) values (${ 'item31' }, ${ ensuredPollId }, ${ 'محمد طه الأحمد' }, ${ 'رئيس اللجنة العليا لانتخابات مجلس الشعب' }, ${ '/tierlist/images/item31.png' }, ${ s + 1 }, ${ 'minister' }) on conflict (id) do nothing`;
+      console.log('Inserted candidate item31');
+    }
+    await sql.end({ timeout: 1 });
+  } catch (e) {
+    console.warn('Ensure poll/candidate step failed (non-fatal):', e?.message || e);
+  }
 }
 
 main().catch((e) => {
