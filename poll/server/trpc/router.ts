@@ -164,6 +164,10 @@ export const appRouter = t.router({
           }
 
           if (changed.length) {
+            // Coalesce to a single message: pick the largest absolute delta within top N
+            const TOP_N = 10;
+            const filtered = changed.filter((c) => (currRankById.get(c.id) || 999) <= TOP_N);
+            const pick = (filtered.length ? filtered : changed).sort((a, b) => Math.abs((b.from - b.to)) - Math.abs((a.from - a.to)))[0];
             try {
               const oauth2Refresh = process.env.TWITTER_OAUTH2_REFRESH_TOKEN;
               const clientId = process.env.TWITTER_CLIENT_ID;
@@ -172,8 +176,8 @@ export const appRouter = t.router({
               let tw: any | null = null;
               try { tw = await getReadWriteClient(); } catch (e: any) { console.error("[tweet] client init failed:", e?.message || e); }
               if (!tw) console.warn("[tweet] missing client (no refresh token stored); visit /api/x/init to authorize.");
-              for (const ch of changed) {
-                const [c] = await db.select().from(candidates).where(eq(candidates.id, ch.id));
+              const ch = pick;
+              const [c] = await db.select().from(candidates).where(eq(candidates.id, ch.id));
                 const name = (c?.name as string) || "مرشح";
                 const arrow = ch.to < ch.from ? "⬆️" : "⬇️";
                 const change = Math.abs(ch.from - ch.to);
@@ -189,7 +193,6 @@ export const appRouter = t.router({
                   try { await tw.v2.tweet(text); console.log("[tweet:sent]", name, ch.from, "->", ch.to); }
                   catch (e: any) { console.error("[tweet:error]", e?.data || e?.message || e); }
                 }
-              }
             } catch (e: any) {
               console.error("[tweet] unexpected error:", e?.message || e);
             }
