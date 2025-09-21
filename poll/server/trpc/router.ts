@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import { publish } from "@/server/realtime/broker";
 import { TwitterApi } from "twitter-api-v2";
 import { getReadWriteClient } from "@/lib/xAuth";
+import { Redis } from "@upstash/redis";
 
 export type Context = {
   ip: string | undefined;
@@ -194,6 +195,15 @@ export const appRouter = t.router({
               let tw: any | null = null;
               try { tw = await getReadWriteClient(); } catch (e: any) { console.error("[tweet] client init failed:", e?.message || e); }
               if (!tw) console.warn("[tweet] missing client (no refresh token stored); visit /api/x/init to authorize.");
+
+              // Simple global rate-limit: max 1 tweet per 90s
+              const redis = Redis.fromEnv();
+              const lockKey = `tweet:lock:${poll.id}`;
+              const locked = await redis.set(lockKey, "1", { nx: true, ex: 90 });
+              if (!locked) {
+                console.log("[tweet:skip] rate-limited (lock held)");
+                return;
+              }
               // Aggregated view is the source of truth; use 'pick' as-is
               const ch = pick;
               const [c] = await db.select().from(candidates).where(eq(candidates.id, ch.id));
@@ -208,7 +218,11 @@ export const appRouter = t.router({
                   console.log("[tweet:dry]", text);
                 } else {
                   try { await tw.v2.tweet(text); console.log("[tweet:sent]", name, ch.from, "->", ch.to); }
-                  catch (e: any) { console.error("[tweet:error]", e?.data || e?.message || e); }
+                  catch (e: any) {
+                    console.error("[tweet:error]", e?.data || e?.message || e);
+                    // If rate-limited, extend lock a bit to avoid hammering
+                    try { await Redis.fromEnv().expire(lockKey, 180); } catch {}
+                  }
                 }
               // Persist NEW snapshot for next comparisons (aggregated)
               for (let i = 0; i < currSorted.length; i++) {
