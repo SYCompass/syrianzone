@@ -1,7 +1,7 @@
 import { initTRPC } from "@trpc/server";
 import { z } from "zod";
 import { db } from "@/db";
-import { ballots, ballotItems, candidates, dailyScores, polls } from "@/db/schema";
+import { ballots, ballotItems, candidates, dailyScores, dailyRanks, polls } from "@/db/schema";
 import { and, eq, sql, desc, asc } from "drizzle-orm";
 import { getLocalMidnightUTC } from "@/lib/time";
 import { verifyTurnstile } from "@/lib/turnstile";
@@ -75,6 +75,26 @@ export const appRouter = t.router({
 
         const isGovPoll = poll.slug === "best-ministers";
 
+        // 1) Snapshot current leaderboard BEFORE applying this vote
+        if (isGovPoll) {
+          type Row = { candidateId: string; votes: number; score: number };
+          const beforeRows: Row[] = (await db
+            .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
+            .from(dailyScores)
+            .innerJoin(candidates, eq(candidates.id, dailyScores.candidateId))
+            .where(and(eq(dailyScores.pollId, poll.id), eq(dailyScores.day, voteDay), sql`${candidates.category} <> 'governor'`))) as any;
+          const beforeSorted = [...beforeRows].sort((a, b) =>
+            (b.score - a.score) || (b.votes - a.votes) || a.candidateId.localeCompare(b.candidateId)
+          );
+          for (let i = 0; i < beforeSorted.length; i++) {
+            const r = beforeSorted[i];
+            await db
+              .insert(dailyRanks)
+              .values({ pollId: poll.id, candidateId: r.candidateId, day: voteDay, rank: i + 1, votes: r.votes, score: r.score })
+              .onConflictDoUpdate({ target: [dailyRanks.pollId, dailyRanks.candidateId, dailyRanks.day], set: { rank: i + 1, votes: r.votes, score: r.score } });
+          }
+        }
+
         await db.insert(ballots).values({ id: ballotId, pollId: poll.id, voteDay, voterKey, ipHash, userAgent });
 
         const tierMinimums: Record<string, number> = { S: 50, A: 40, B: 30, C: 20, D: 10, F: 0 };
@@ -120,7 +140,7 @@ export const appRouter = t.router({
         const channel = `poll:${poll.id}:${voteDay.toISOString()}`;
         publish(channel, { type: "ballot", deltas: Array.from(scoreDelta.entries()) });
 
-        // After updating scores, compute current ranks and tweet changes in real time (for gov poll only)
+        // 3-4) After updates, compare current ranks vs the snapshot from step 1, tweet if changed, then persist new snapshot
         if (isGovPoll) {
           // Build current rows then derive the "prev" by subtracting this ballot's deltas
           const currAll = await db
@@ -143,16 +163,12 @@ export const appRouter = t.router({
             return map;
           }
 
-          const prevRows: Row[] = currRows.map((r) => {
-            const d = deltaById.get(r.candidateId) || { votes: 0, score: 0 };
-            return {
-              candidateId: r.candidateId,
-              votes: Math.max(0, r.votes - d.votes),
-              score: Math.max(0, r.score - d.score),
-            };
-          });
-
-          const prevRanksMap = rankMap(prevRows);
+          // Previous snapshot: last persisted leaderboard for today
+          const prevSnap = await db
+            .select({ candidateId: dailyRanks.candidateId, rank: dailyRanks.rank })
+            .from(dailyRanks)
+            .where(and(eq(dailyRanks.pollId, poll.id), eq(dailyRanks.day, voteDay)));
+          const prevRanksMap = new Map<string, number>(prevSnap.map((r) => [r.candidateId, r.rank] as const));
           const currRanksMap = rankMap(currRows);
 
           const changed: Array<{ id: string; from: number; to: number }> = [];
@@ -196,6 +212,17 @@ export const appRouter = t.router({
                   try { await tw.v2.tweet(text); console.log("[tweet:sent]", name, ch.from, "->", ch.to); }
                   catch (e: any) { console.error("[tweet:error]", e?.data || e?.message || e); }
                 }
+              // Persist NEW snapshot for next comparisons
+              const newSorted = [...currRows].sort((a, b) =>
+                (b.score - a.score) || (b.votes - a.votes) || a.candidateId.localeCompare(b.candidateId)
+              );
+              for (let i = 0; i < newSorted.length; i++) {
+                const r = newSorted[i];
+                await db
+                  .insert(dailyRanks)
+                  .values({ pollId: poll.id, candidateId: r.candidateId, day: voteDay, rank: i + 1, votes: r.votes, score: r.score })
+                  .onConflictDoUpdate({ target: [dailyRanks.pollId, dailyRanks.candidateId, dailyRanks.day], set: { rank: i + 1, votes: r.votes, score: r.score } });
+              }
             } catch (e: any) {
               console.error("[tweet] unexpected error:", e?.message || e);
             }
