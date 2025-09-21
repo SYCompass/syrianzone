@@ -17,21 +17,32 @@ async function createNeonSnapshot() {
   const url = new URL(`https://console.neon.tech/api/v2/projects/${projectId}/branches/${branchId}/snapshot`);
   url.searchParams.set('name', name);
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    // body optional; we pass name via query param per docs
-  });
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    throw new Error(`Neon snapshot failed: ${res.status} ${res.statusText} ${text}`);
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      // If quota exceeded or any snapshot-specific issue, warn and continue
+      if (res.status === 422 || text.includes('SNAPSHOTS_LIMIT_EXCEEDED')) {
+        console.warn('Snapshot skipped (limit/quota):', `${res.status} ${res.statusText} ${text}`);
+        return false;
+      }
+      console.warn('Snapshot skipped (API error):', `${res.status} ${res.statusText} ${text}`);
+      return false;
+    }
+    const json = await res.json().catch(() => ({}));
+    const snapshotId = (json && (json.snapshot?.id || json.id)) || 'unknown';
+    console.log('Created Neon snapshot:', snapshotId);
+    return true;
+  } catch (e) {
+    console.warn('Snapshot skipped (network/error):', e?.message || e);
+    return false;
   }
-  const json = await res.json().catch(() => ({}));
-  const snapshotId = (json && (json.snapshot?.id || json.id)) || 'unknown';
-  console.log('Created Neon snapshot:', snapshotId);
 }
 
 async function runDrizzleMigrate() {
@@ -45,8 +56,13 @@ async function runDrizzleMigrate() {
 }
 
 async function main() {
-  console.log('Creating Neon snapshot before applying migrations...');
-  await createNeonSnapshot();
+  const wantSnapshot = (process.env.NEON_SNAPSHOT || '').toLowerCase() !== 'skip' && (process.env.NEON_SNAPSHOT || '').toLowerCase() !== 'false';
+  if (wantSnapshot) {
+    console.log('Creating Neon snapshot before applying migrations...');
+    await createNeonSnapshot();
+  } else {
+    console.log('Skipping Neon snapshot (NEON_SNAPSHOT=skip)');
+  }
 
   // List migration files present in the container image
   try {
