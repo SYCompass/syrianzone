@@ -75,17 +75,24 @@ export const appRouter = t.router({
 
         const isGovPoll = poll.slug === "best-ministers";
 
-        // 1) Snapshot current leaderboard BEFORE applying this vote
+        // 1) Snapshot current GENERAL leaderboard (all-time aggregated, ministers-only) BEFORE this vote
         if (isGovPoll) {
-          type Row = { candidateId: string; votes: number; score: number };
-          const beforeRows: Row[] = (await db
-            .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
+          type Agg = { candidateId: string; votes: number; score: number };
+          const beforeAgg: Agg[] = (await db
+            .select({
+              candidateId: dailyScores.candidateId,
+              votes: sql<number>`sum(${dailyScores.votes})`,
+              score: sql<number>`sum(${dailyScores.score})`,
+            })
             .from(dailyScores)
             .innerJoin(candidates, eq(candidates.id, dailyScores.candidateId))
-            .where(and(eq(dailyScores.pollId, poll.id), eq(dailyScores.day, voteDay), sql`${candidates.category} <> 'governor'`))) as any;
-          const beforeSorted = [...beforeRows].sort((a, b) =>
-            (b.score - a.score) || (b.votes - a.votes) || a.candidateId.localeCompare(b.candidateId)
-          );
+            .where(and(eq(dailyScores.pollId, poll.id), sql`${candidates.category} <> 'governor'`))
+            .groupBy(dailyScores.candidateId)) as any;
+          const beforeSorted = [...beforeAgg].sort((a, b) => {
+            const aAvg = a.votes > 0 ? a.score / a.votes : 0;
+            const bAvg = b.votes > 0 ? b.score / b.votes : 0;
+            return (bAvg - aAvg) || (b.score - a.score) || (b.votes - a.votes) || a.candidateId.localeCompare(b.candidateId);
+          });
           for (let i = 0; i < beforeSorted.length; i++) {
             const r = beforeSorted[i];
             await db
@@ -140,36 +147,33 @@ export const appRouter = t.router({
         const channel = `poll:${poll.id}:${voteDay.toISOString()}`;
         publish(channel, { type: "ballot", deltas: Array.from(scoreDelta.entries()) });
 
-        // 3-4) After updates, compare current ranks vs the snapshot from step 1, tweet if changed, then persist new snapshot
+        // 3-4) After updates, compare current GENERAL leaderboard vs the snapshot, tweet if changed, then persist new snapshot
         if (isGovPoll) {
-          // Build current rows then derive the "prev" by subtracting this ballot's deltas
-          const currAll = await db
-            .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
+          type Agg = { candidateId: string; votes: number; score: number };
+          const currAgg: Agg[] = (await db
+            .select({
+              candidateId: dailyScores.candidateId,
+              votes: sql<number>`sum(${dailyScores.votes})`,
+              score: sql<number>`sum(${dailyScores.score})`,
+            })
             .from(dailyScores)
             .innerJoin(candidates, eq(candidates.id, dailyScores.candidateId))
-            .where(and(eq(dailyScores.pollId, poll.id), eq(dailyScores.day, voteDay), sql`${candidates.category} <> 'governor'`));
+            .where(and(eq(dailyScores.pollId, poll.id), sql`${candidates.category} <> 'governor'`))
+            .groupBy(dailyScores.candidateId)) as any;
+          const currSorted = [...currAgg].sort((a, b) => {
+            const aAvg = a.votes > 0 ? a.score / a.votes : 0;
+            const bAvg = b.votes > 0 ? b.score / b.votes : 0;
+            return (bAvg - aAvg) || (b.score - a.score) || (b.votes - a.votes) || a.candidateId.localeCompare(b.candidateId);
+          });
+          const currRanksMap = new Map<string, number>();
+          currSorted.forEach((r, i) => currRanksMap.set(r.candidateId, i + 1));
 
-          type Row = { candidateId: string; votes: number; score: number };
-          const currRows: Row[] = currAll as any;
-          const deltaById = new Map<string, { votes: number; score: number }>();
-          for (const [id, d] of scoreDelta.entries()) deltaById.set(id, d);
-
-          function rankMap(rows: Row[]): Map<string, number> {
-            const sorted = [...rows].sort((a, b) =>
-              (b.score - a.score) || (b.votes - a.votes) || a.candidateId.localeCompare(b.candidateId)
-            );
-            const map = new Map<string, number>();
-            sorted.forEach((r, i) => map.set(r.candidateId, i + 1));
-            return map;
-          }
-
-          // Previous snapshot: last persisted leaderboard for today
+          // Previous snapshot: last persisted aggregated leaderboard for today
           const prevSnap = await db
             .select({ candidateId: dailyRanks.candidateId, rank: dailyRanks.rank })
             .from(dailyRanks)
             .where(and(eq(dailyRanks.pollId, poll.id), eq(dailyRanks.day, voteDay)));
           const prevRanksMap = new Map<string, number>(prevSnap.map((r) => [r.candidateId, r.rank] as const));
-          const currRanksMap = rankMap(currRows);
 
           const changed: Array<{ id: string; from: number; to: number }> = [];
           for (const [id, to] of currRanksMap.entries()) {
@@ -190,14 +194,8 @@ export const appRouter = t.router({
               let tw: any | null = null;
               try { tw = await getReadWriteClient(); } catch (e: any) { console.error("[tweet] client init failed:", e?.message || e); }
               if (!tw) console.warn("[tweet] missing client (no refresh token stored); visit /api/x/init to authorize.");
-              // Re-read current ranks to avoid races; use freshest "to"
-              const latestAll = await db
-                .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
-                .from(dailyScores)
-                .innerJoin(candidates, eq(candidates.id, dailyScores.candidateId))
-                .where(and(eq(dailyScores.pollId, poll.id), eq(dailyScores.day, voteDay), sql`${candidates.category} <> 'governor'`));
-              const latestMap = rankMap(latestAll as any);
-              const ch = { ...pick, to: latestMap.get(pick.id) || pick.to };
+              // Aggregated view is the source of truth; use 'pick' as-is
+              const ch = pick;
               const [c] = await db.select().from(candidates).where(eq(candidates.id, ch.id));
                 const name = (c?.name as string) || "مرشح";
                 const arrow = ch.to < ch.from ? "⬆️" : "⬇️";
@@ -212,12 +210,9 @@ export const appRouter = t.router({
                   try { await tw.v2.tweet(text); console.log("[tweet:sent]", name, ch.from, "->", ch.to); }
                   catch (e: any) { console.error("[tweet:error]", e?.data || e?.message || e); }
                 }
-              // Persist NEW snapshot for next comparisons
-              const newSorted = [...currRows].sort((a, b) =>
-                (b.score - a.score) || (b.votes - a.votes) || a.candidateId.localeCompare(b.candidateId)
-              );
-              for (let i = 0; i < newSorted.length; i++) {
-                const r = newSorted[i];
+              // Persist NEW snapshot for next comparisons (aggregated)
+              for (let i = 0; i < currSorted.length; i++) {
+                const r = currSorted[i];
                 await db
                   .insert(dailyRanks)
                   .values({ pollId: poll.id, candidateId: r.candidateId, day: voteDay, rank: i + 1, votes: r.votes, score: r.score })
