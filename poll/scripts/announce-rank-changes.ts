@@ -59,6 +59,7 @@ function buildTweet(name: string, from: number, to: number, day: string, context
 async function main() {
   const slug = process.argv[2] || "best-ministers";
   const dry = process.argv.includes("--dry");
+  console.log(`[mode] slug=${slug} dry=${dry}`);
   const p = await getPoll(slug);
   if (slug === "jolani") {
     console.log("Skipping non-government poll (jolani).");
@@ -84,28 +85,43 @@ async function main() {
   const candList = await db.select().from(candidates).where(and(eq(candidates.pollId, p.id), inArray(candidates.id, ids)));
   const byId = new Map(candList.map((c) => [c.id, c] as const));
 
-  let rw: any;
+  let rw: any = null;
   const oauth2Refresh = process.env.TWITTER_OAUTH2_REFRESH_TOKEN;
   const clientId = process.env.TWITTER_CLIENT_ID;
   const clientSecret = process.env.TWITTER_CLIENT_SECRET;
-  if (oauth2Refresh && clientId && clientSecret) {
-    const oauth2Client = new TwitterApi({ clientId, clientSecret });
-    const { client: logged, refreshToken: newRefreshToken } = await oauth2Client.refreshOAuth2Token(oauth2Refresh);
-    if (newRefreshToken && newRefreshToken !== oauth2Refresh) {
-      try {
-        const envPath = join(process.cwd(), ".env.local");
-        const cur = readFileSync(envPath, "utf8");
-        const updated = cur.match(/^TWITTER_OAUTH2_REFRESH_TOKEN=/m)
-          ? cur.replace(/^TWITTER_OAUTH2_REFRESH_TOKEN=.*/m, `TWITTER_OAUTH2_REFRESH_TOKEN=${newRefreshToken}`)
-          : cur + `\nTWITTER_OAUTH2_REFRESH_TOKEN=${newRefreshToken}\n`;
-        writeFileSync(envPath, updated, "utf8");
-        console.log("Updated TWITTER_OAUTH2_REFRESH_TOKEN in .env.local");
-      } catch (e) {
-        console.warn("Could not persist rotated refresh token:", e);
+  if (dry) {
+    console.log("[auth] dry mode: skipping auth");
+  } else if (oauth2Refresh && clientId && clientSecret) {
+    try {
+      console.log("[auth] using OAuth2 refresh token flow");
+      const oauth2Client = new TwitterApi({ clientId, clientSecret });
+      const { client: logged, refreshToken: newRefreshToken } = await oauth2Client.refreshOAuth2Token(oauth2Refresh);
+      if (newRefreshToken && newRefreshToken !== oauth2Refresh) {
+        try {
+          const envPath = join(process.cwd(), ".env.local");
+          const cur = readFileSync(envPath, "utf8");
+          const updated = cur.match(/^TWITTER_OAUTH2_REFRESH_TOKEN=/m)
+            ? cur.replace(/^TWITTER_OAUTH2_REFRESH_TOKEN=.*/m, `TWITTER_OAUTH2_REFRESH_TOKEN=${newRefreshToken}`)
+            : cur + `\nTWITTER_OAUTH2_REFRESH_TOKEN=${newRefreshToken}\n`;
+          writeFileSync(envPath, updated, "utf8");
+          console.log("[auth] updated TWITTER_OAUTH2_REFRESH_TOKEN in .env.local");
+        } catch (e) {
+          console.warn("[auth] could not persist rotated refresh token:", (e as Error).message);
+        }
       }
+      rw = logged;
+      try {
+        const me = await rw.v2.me();
+        console.log("[auth] authenticated as:", me.data?.username || me.data?.id);
+      } catch (e) {
+        console.warn("[auth] v2.me() failed:", (e as Error).message);
+      }
+    } catch (e: any) {
+      console.error("[auth] OAuth2 refresh failed:", e?.data || e?.message || e);
+      throw e;
     }
-    rw = logged;
   } else {
+    console.log("[auth] using legacy keys flow");
     const client = new TwitterApi({
       appKey: process.env.TWITTER_API_KEY || "",
       appSecret: process.env.TWITTER_API_SECRET || "",
@@ -113,6 +129,12 @@ async function main() {
       accessSecret: process.env.TWITTER_ACCESS_SECRET || "",
     });
     rw = client.readWrite;
+    try {
+      const me = await rw.v2.me();
+      console.log("[auth] authenticated as:", me.data?.username || me.data?.id);
+    } catch (e) {
+      console.warn("[auth] v2.me() failed:", (e as Error).message);
+    }
   }
 
   for (const c of changes) {
