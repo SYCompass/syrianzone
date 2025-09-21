@@ -73,20 +73,21 @@ export const appRouter = t.router({
 
         const ballotId = uuidv4();
 
-        let prevRanks: Array<{ candidateId: string; votes: number; score: number }> | null = null;
         const isGovPoll = poll.slug === "best-ministers";
-        // Preload all candidates for tie-breaks and category filtering
-        const allCandidates = await db.select().from(candidates).where(eq(candidates.pollId, poll.id));
-        const ministerIds = new Set(allCandidates.filter((c: any) => c.category !== "governor").map((c) => c.id));
-        if (isGovPoll) {
+        async function fetchRanksMap(day: Date): Promise<Map<string, number>> {
           const rows = await db
-            .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
+            .select({
+              candidateId: dailyScores.candidateId,
+              r: sql<number>`rank() over (order by ${dailyScores.score} desc, ${dailyScores.votes} desc, ${dailyScores.candidateId} asc)`,
+            })
             .from(dailyScores)
-            .where(and(eq(dailyScores.pollId, poll.id), eq(dailyScores.day, voteDay)))
-            .orderBy(desc(dailyScores.score), desc(dailyScores.votes), asc(dailyScores.candidateId));
-          // Ministers only, stable ordering
-          prevRanks = rows.filter((r) => ministerIds.has(r.candidateId));
+            .innerJoin(candidates, eq(candidates.id, dailyScores.candidateId))
+            .where(and(eq(dailyScores.pollId, poll.id), eq(dailyScores.day, day), sql`${candidates.category} <> 'governor'`));
+          const map = new Map<string, number>();
+          for (const row of rows as any[]) map.set(row.candidateId, Number(row.r));
+          return map;
         }
+        const prevRanksMap = isGovPoll ? await fetchRanksMap(voteDay) : new Map<string, number>();
 
         await db.insert(ballots).values({ id: ballotId, pollId: poll.id, voteDay, voterKey, ipHash, userAgent });
 
@@ -134,47 +135,20 @@ export const appRouter = t.router({
         publish(channel, { type: "ballot", deltas: Array.from(scoreDelta.entries()) });
 
         // After updating scores, compute current ranks and tweet changes in real time (for gov poll only)
-        if (isGovPoll && prevRanks) {
-          const currAll = await db
-            .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
-            .from(dailyScores)
-            .where(and(eq(dailyScores.pollId, poll.id), eq(dailyScores.day, voteDay)))
-            .orderBy(desc(dailyScores.score), desc(dailyScores.votes), asc(dailyScores.candidateId));
-          const curr = currAll.filter((r) => ministerIds.has(r.candidateId));
-          const prevRankById = new Map<string, number>();
-          prevRanks.forEach((r, i) => prevRankById.set(r.candidateId, i + 1));
-          const currRankById = new Map<string, number>();
-          curr.forEach((r, i) => currRankById.set(r.candidateId, i + 1));
-
-          const changed: Array<{ id: string; from: number; to: number; overName?: string; belowName?: string }> = [];
-          for (const [id, to] of currRankById.entries()) {
-            const from = prevRankById.get(id);
+        if (isGovPoll) {
+          const currRanksMap = await fetchRanksMap(voteDay);
+          const changed: Array<{ id: string; from: number; to: number }> = [];
+          for (const [id, to] of currRanksMap.entries()) {
+            const from = prevRanksMap.get(id);
             if (typeof from === "number" && from !== to) {
-              let overName: string | undefined;
-              let belowName: string | undefined;
-              if (to < from) {
-                const belowIdx = to; // zero-based index of rank just below current
-                const below = curr[belowIdx];
-                if (below && below.candidateId !== id) {
-                  const [cBelow] = await db.select().from(candidates).where(eq(candidates.id, below.candidateId));
-                  overName = cBelow?.name as string | undefined;
-                }
-              } else if (to > from) {
-                const aboveIdx = to - 2; // zero-based index of rank just above current
-                const above = curr[aboveIdx];
-                if (above && above.candidateId !== id) {
-                  const [cAbove] = await db.select().from(candidates).where(eq(candidates.id, above.candidateId));
-                  belowName = cAbove?.name as string | undefined;
-                }
-              }
-              changed.push({ id, from, to, overName, belowName });
+              changed.push({ id, from, to });
             }
           }
 
           if (changed.length) {
             // Coalesce to a single message: pick the largest absolute delta within top N
             const TOP_N = 10;
-            const filtered = changed.filter((c) => (currRankById.get(c.id) || 999) <= TOP_N);
+            const filtered = changed.filter((c) => (currRanksMap.get(c.id) || 999) <= TOP_N);
             const pick = (filtered.length ? filtered : changed).sort((a, b) => Math.abs((b.from - b.to)) - Math.abs((a.from - a.to)))[0];
             try {
               const oauth2Refresh = process.env.TWITTER_OAUTH2_REFRESH_TOKEN;
@@ -191,8 +165,6 @@ export const appRouter = t.router({
                 const change = Math.abs(ch.from - ch.to);
                 const dir = ch.to < ch.from ? "تقدّم" : "تراجع";
                 const suffix = change > 1 ? `(${change} مراتب)` : "مرتبة واحدة";
-                const over = ch.overName && ch.to < ch.from ? `؛ تجاوز ${ch.overName}` : "";
-                const fell = ch.belowName && ch.to > ch.from ? `؛ تراجع لصالح ${ch.belowName}` : "";
                 const dayStr = voteDay.toISOString().slice(0, 10);
                 const text = `تحديث التصنيف (${dayStr})\n${name} ${arrow} ${dir} من #${ch.from} إلى #${ch.to} ${suffix}\n\nتابع الترتيب الكامل: syrian.zone/tierlist/leaderboard`;
                 if (tweetDry || !tw) {
