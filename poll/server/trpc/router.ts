@@ -75,12 +75,17 @@ export const appRouter = t.router({
 
         let prevRanks: Array<{ candidateId: string; votes: number; score: number }> | null = null;
         const isGovPoll = poll.slug === "best-ministers";
+        // Preload all candidates for tie-breaks and category filtering
+        const allCandidates = await db.select().from(candidates).where(eq(candidates.pollId, poll.id));
+        const ministerIds = new Set(allCandidates.filter((c: any) => c.category !== "governor").map((c) => c.id));
         if (isGovPoll) {
-          prevRanks = await db
+          const rows = await db
             .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
             .from(dailyScores)
             .where(and(eq(dailyScores.pollId, poll.id), eq(dailyScores.day, voteDay)))
-            .orderBy(desc(dailyScores.score), desc(dailyScores.votes));
+            .orderBy(desc(dailyScores.score), desc(dailyScores.votes), asc(dailyScores.candidateId));
+          // Ministers only, stable ordering
+          prevRanks = rows.filter((r) => ministerIds.has(r.candidateId));
         }
 
         await db.insert(ballots).values({ id: ballotId, pollId: poll.id, voteDay, voterKey, ipHash, userAgent });
@@ -130,11 +135,12 @@ export const appRouter = t.router({
 
         // After updating scores, compute current ranks and tweet changes in real time (for gov poll only)
         if (isGovPoll && prevRanks) {
-          const curr = await db
+          const currAll = await db
             .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
             .from(dailyScores)
             .where(and(eq(dailyScores.pollId, poll.id), eq(dailyScores.day, voteDay)))
-            .orderBy(desc(dailyScores.score), desc(dailyScores.votes));
+            .orderBy(desc(dailyScores.score), desc(dailyScores.votes), asc(dailyScores.candidateId));
+          const curr = currAll.filter((r) => ministerIds.has(r.candidateId));
           const prevRankById = new Map<string, number>();
           prevRanks.forEach((r, i) => prevRankById.set(r.candidateId, i + 1));
           const currRankById = new Map<string, number>();
@@ -147,13 +153,15 @@ export const appRouter = t.router({
               let overName: string | undefined;
               let belowName: string | undefined;
               if (to < from) {
-                const below = curr[to];
+                const belowIdx = to; // zero-based index of rank just below current
+                const below = curr[belowIdx];
                 if (below && below.candidateId !== id) {
                   const [cBelow] = await db.select().from(candidates).where(eq(candidates.id, below.candidateId));
                   overName = cBelow?.name as string | undefined;
                 }
               } else if (to > from) {
-                const above = curr[to - 2]; // array is 0-based
+                const aboveIdx = to - 2; // zero-based index of rank just above current
+                const above = curr[aboveIdx];
                 if (above && above.candidateId !== id) {
                   const [cAbove] = await db.select().from(candidates).where(eq(candidates.id, above.candidateId));
                   belowName = cAbove?.name as string | undefined;
