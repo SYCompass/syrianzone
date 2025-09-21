@@ -167,30 +167,42 @@ export const appRouter = t.router({
               const oauth2Refresh = process.env.TWITTER_OAUTH2_REFRESH_TOKEN;
               const clientId = process.env.TWITTER_CLIENT_ID;
               const clientSecret = process.env.TWITTER_CLIENT_SECRET;
+              const tweetDry = (process.env.TWITTER_DRY || "").toLowerCase() === "true" || process.env.TWITTER_DRY === "1";
               let tw: any | null = null;
               if (oauth2Refresh && clientId && clientSecret) {
-                const oauth2Client = new TwitterApi({ clientId, clientSecret });
-                const { client } = await oauth2Client.refreshOAuth2Token(oauth2Refresh);
-                tw = client;
+                try {
+                  const oauth2Client = new TwitterApi({ clientId, clientSecret });
+                  const { client } = await oauth2Client.refreshOAuth2Token(oauth2Refresh);
+                  tw = client;
+                  // Best-effort identity check
+                  try { const me = await tw.v2.me(); console.log("[tweet] auth as:", me?.data?.username || me?.data?.id); } catch (e) { console.warn("[tweet] v2.me failed:", (e as any)?.message); }
+                } catch (e: any) {
+                  console.error("[tweet] OAuth2 refresh failed:", e?.data || e?.message || e);
+                }
+              } else {
+                console.warn("[tweet] OAuth2 env vars missing; skipping tweet.");
               }
-              if (tw) {
-                for (const ch of changed) {
-                  const [c] = await db.select().from(candidates).where(eq(candidates.id, ch.id));
-                  const name = (c?.name as string) || "مرشح";
-                  const arrow = ch.to < ch.from ? "⬆️" : "⬇️";
-                  const change = Math.abs(ch.from - ch.to);
-                  const dir = ch.to < ch.from ? "تقدّم" : "تراجع";
-                  const suffix = change > 1 ? `(${change} مراتب)` : "مرتبة واحدة";
-                  const over = ch.overName && ch.to < ch.from ? `؛ تجاوز ${ch.overName}` : "";
-                  const fell = ch.belowName && ch.to > ch.from ? `؛ تراجع لصالح ${ch.belowName}` : "";
-                  const dayStr = voteDay.toISOString().slice(0, 10);
-                  const text = `تحديث التصنيف (${dayStr})\n${arrow} ${name} ${dir} من #${ch.from} إلى #${ch.to} ${suffix}${over || fell}\n\nتابع الترتيب الكامل: syrian.zone/tierlist/leaderboard`;
-                  try {
-                    await tw.v2.tweet(text);
-                  } catch { }
+              for (const ch of changed) {
+                const [c] = await db.select().from(candidates).where(eq(candidates.id, ch.id));
+                const name = (c?.name as string) || "مرشح";
+                const arrow = ch.to < ch.from ? "⬆️" : "⬇️";
+                const change = Math.abs(ch.from - ch.to);
+                const dir = ch.to < ch.from ? "تقدّم" : "تراجع";
+                const suffix = change > 1 ? `(${change} مراتب)` : "مرتبة واحدة";
+                const over = ch.overName && ch.to < ch.from ? `؛ تجاوز ${ch.overName}` : "";
+                const fell = ch.belowName && ch.to > ch.from ? `؛ تراجع لصالح ${ch.belowName}` : "";
+                const dayStr = voteDay.toISOString().slice(0, 10);
+                const text = `تحديث التصنيف (${dayStr})\n${arrow} ${name} ${dir} من #${ch.from} إلى #${ch.to} ${suffix}${over || fell}\n\nتابع الترتيب الكامل: syrian.zone/tierlist/leaderboard`;
+                if (tweetDry || !tw) {
+                  console.log("[tweet:dry]", text);
+                } else {
+                  try { await tw.v2.tweet(text); console.log("[tweet:sent]", name, ch.from, "->", ch.to); }
+                  catch (e: any) { console.error("[tweet:error]", e?.data || e?.message || e); }
                 }
               }
-            } catch { }
+            } catch (e: any) {
+              console.error("[tweet] unexpected error:", e?.message || e);
+            }
           }
         }
 
@@ -200,5 +212,6 @@ export const appRouter = t.router({
 });
 
 export type AppRouter = typeof appRouter;
+
 
 
