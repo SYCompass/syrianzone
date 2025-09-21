@@ -138,8 +138,8 @@ async function main() {
     }
   }
 
-  // Pick exactly one change to announce: largest absolute delta within current top 10
-  const TOP_N = 10;
+  // Pick exactly one change to announce: largest absolute delta within current top 20
+  const TOP_N = 31;
   const inTop = changes.filter((ch) => (currRankById.get(ch.candidateId) ?? Number.MAX_SAFE_INTEGER) <= TOP_N);
   const pool = inTop.length ? inTop : changes;
   const pick = pool.sort((a, b) => (Math.abs((b.delta ?? (b.from! - b.to))) - Math.abs((a.delta ?? (a.from! - a.to)))) || (a.to - b.to))[0];
