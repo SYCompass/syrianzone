@@ -75,6 +75,7 @@ async function main() {
   const prevByRank = new Map<number, RankRow>(prev.map((r) => [r.rank, r]));
   const currByRank = new Map<number, RankRow>(curr.map((r) => [r.rank, r]));
   const prevRankById = new Map<string, number>(prev.map((r) => [r.candidateId, r.rank] as const));
+  const currRankById = new Map<string, number>(curr.map((r) => [r.candidateId, r.rank] as const));
   const changes = diffRanks(prev, curr);
   if (!changes.length) {
     console.log("No rank changes detected.");
@@ -137,33 +138,25 @@ async function main() {
     }
   }
 
-  for (const c of changes) {
-    const name = (byId.get(c.candidateId)?.name as string) || "مرشح";
-    let overName: string | undefined;
-    let belowName: string | undefined;
-    if (c.delta && c.delta > 0) {
-      const below = currByRank.get(c.to + 1);
-      if (below) {
-        const belowCand = byId.get(below.candidateId);
-        overName = (belowCand?.name as string) || undefined;
-      }
-    } else if (c.delta && c.delta < 0) {
-      const above = currByRank.get(c.to - 1);
-      if (above) {
-        const aboveCand = byId.get(above.candidateId);
-        belowName = (aboveCand?.name as string) || undefined;
-      }
-    }
-    const tweet = buildTweet(name, c.from!, c.to, days[1], { overName, belowName });
-    if (dry) {
-      console.log("[DRY]", tweet);
-    } else {
-      try {
-        await rw.v2.tweet(tweet);
-        console.log("Tweeted:", tweet);
-      } catch (e) {
-        console.error("Tweet failed:", e);
-      }
+  // Pick exactly one change to announce: largest absolute delta within current top 10
+  const TOP_N = 10;
+  const inTop = changes.filter((ch) => (currRankById.get(ch.candidateId) ?? Number.MAX_SAFE_INTEGER) <= TOP_N);
+  const pool = inTop.length ? inTop : changes;
+  const pick = pool.sort((a, b) => (Math.abs((b.delta ?? (b.from! - b.to))) - Math.abs((a.delta ?? (a.from! - a.to)))) || (a.to - b.to))[0];
+  if (!pick) {
+    console.log("No change to announce after filtering.");
+    return;
+  }
+  const name = (byId.get(pick.candidateId)?.name as string) || "مرشح";
+  const tweet = buildTweet(name, pick.from!, pick.to, days[1]);
+  if (dry) {
+    console.log("[DRY]", tweet);
+  } else {
+    try {
+      await rw.v2.tweet(tweet);
+      console.log("Tweeted:", tweet);
+    } catch (e) {
+      console.error("Tweet failed:", e);
     }
   }
 }
