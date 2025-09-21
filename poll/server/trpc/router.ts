@@ -158,7 +158,9 @@ export const appRouter = t.router({
               let tw: any | null = null;
               try { tw = await getReadWriteClient(); } catch (e: any) { console.error("[tweet] client init failed:", e?.message || e); }
               if (!tw) console.warn("[tweet] missing client (no refresh token stored); visit /api/x/init to authorize.");
-              const ch = pick;
+              // Re-read current ranks to avoid races; use freshest "to"
+              const latestMap = await fetchRanksMap(voteDay);
+              const ch = { ...pick, to: latestMap.get(pick.id) || pick.to };
               const [c] = await db.select().from(candidates).where(eq(candidates.id, ch.id));
                 const name = (c?.name as string) || "مرشح";
                 const arrow = ch.to < ch.from ? "⬆️" : "⬇️";
