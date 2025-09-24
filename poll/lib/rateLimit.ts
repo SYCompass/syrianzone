@@ -9,4 +9,8 @@ export const rateLimit10PerMin = redis
   ? new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(10, "1 m"), analytics: false, prefix: "rate:ballot" })
   : ({ limit: async () => ({ success: true }) } as unknown as Ratelimit);
 
+export const rateLimit1PerMin = redis
+  ? new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(1, "1 m"), analytics: false, prefix: "rate:ballot:1m" })
+  : ({ limit: async () => ({ success: true }) } as unknown as Ratelimit);
+
 

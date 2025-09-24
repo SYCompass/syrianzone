@@ -1,4 +1,4 @@
-import { initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { db } from "@/db";
 import { ballots, ballotItems, candidates, dailyScores, dailyRanks, polls } from "@/db/schema";
@@ -11,6 +11,7 @@ import { publish } from "@/server/realtime/broker";
 import { TwitterApi } from "twitter-api-v2";
 import { getReadWriteClient } from "@/lib/xAuth";
 import { Redis } from "@upstash/redis";
+import { rateLimit1PerMin } from "@/lib/rateLimit";
 
 export type Context = {
   ip: string | undefined;
@@ -58,6 +59,15 @@ export const appRouter = t.router({
 
         const ok = await verifyTurnstile(input.cfToken, ctx.ip);
         if (!ok) throw new Error("Turnstile failed");
+
+        // Rate limit: 1 submission per minute per device or IP
+        {
+          const rlKey = input.deviceId ? `device:${input.deviceId}` : (ctx.ip ? `ip:${ctx.ip}` : `ua:${ctx.userAgent || "unknown"}`);
+          const rl = await rateLimit1PerMin.limit(rlKey);
+          if (!rl.success) {
+            throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many submissions. Please wait a minute." });
+          }
+        }
 
         const totalAssigned = (Object.keys(input.tiers) as Array<keyof typeof input.tiers>).reduce(
           (acc, key) => acc + input.tiers[key].length,
