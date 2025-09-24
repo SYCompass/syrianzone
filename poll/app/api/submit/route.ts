@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const decision = await aj.protect(req);
+    const decision = await aj.protect(req, { requested: 1 });
     if (decision.isDenied()) {
       return new Response(JSON.stringify({ error: "Too many submissions. Please wait a minute." }), { status: 429 });
     }

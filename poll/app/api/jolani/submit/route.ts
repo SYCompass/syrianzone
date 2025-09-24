@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     const userAgent = req.headers.get("user-agent") || undefined;
 
     // Rate limit: 1 submission per minute per device or IP
-    const decision = await aj.protect(req);
+    const decision = await aj.protect(req, { requested: 1 });
     if (decision.isDenied()) {
       return NextResponse.json({ ok: false, error: "Too many submissions. Please wait a minute." }, { status: 429 });
     }
