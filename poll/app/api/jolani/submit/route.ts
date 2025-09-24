@@ -5,7 +5,7 @@ import { and, eq, sql } from "drizzle-orm";
 import { getLocalMidnightUTC } from "@/lib/time";
 import { v4 as uuidv4 } from "uuid";
 import { sha256 } from "@/lib/hash";
-import { rateLimit1PerMin } from "@/lib/rateLimit";
+import { aj } from "@/lib/arcjet";
 
 export const runtime = "nodejs";
 
@@ -41,11 +41,9 @@ export async function POST(req: NextRequest) {
     const userAgent = req.headers.get("user-agent") || undefined;
 
     // Rate limit: 1 submission per minute per device or IP
-    const rlKey = deviceId ? `device:${deviceId}` : (ip ? `ip:${ip}` : `ua:${userAgent || "unknown"}`);
-    const rl = await rateLimit1PerMin.limit(rlKey);
-    if (!rl.success) {
-      const retryAfter = Math.max(1, Math.ceil(((rl.reset || 0) - Date.now()) / 1000));
-      return NextResponse.json({ ok: false, error: "Too many submissions. Please wait a minute." }, { status: 429, headers: { "Retry-After": String(retryAfter) } });
+    const decision = await aj.protect(req);
+    if (decision.isDenied()) {
+      return NextResponse.json({ ok: false, error: "Too many submissions. Please wait a minute." }, { status: 429 });
     }
 
     const ballotId = uuidv4();
