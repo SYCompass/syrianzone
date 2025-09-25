@@ -18,6 +18,8 @@
     "submit:jolani": "tsx ./scripts/submit-jolani.ts",
     "announce:ranks": "tsx ./scripts/announce-rank-changes.ts",
     "mock:ranks": "tsx ./scripts/mock-ranks.ts",
+    "test:rate-limit": "tsx ./scripts/test-rate-limit.ts",
+    "test:rate-limit:trpc": "tsx ./scripts/test-rate-limit-trpc.ts",
     "x:auth:init": "tsx ./scripts/x-auth.ts init",
     "x:auth:exchange": "tsx ./scripts/x-auth.ts exchange",
     "deploy:prod": "tsx ./scripts/deploy-prod.ts"
