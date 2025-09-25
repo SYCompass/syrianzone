@@ -5,13 +5,18 @@ import uvloop
 import os
 import pytz
 import sys
+import re
 
 from datetime import datetime
 
 # Fetching 500 users now, can be 1000
 PAGES = 5
 PER_PAGE = 100
-GITHUB_TOKEN = sys.argv[1]
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
+
+if GITHUB_TOKEN is None:
+    print("GITHUB_TOKEN env required.")
+    sys.exit(1)
 
 HEADERS = {
     "Accept": "application/vnd.github+json",
@@ -43,7 +48,7 @@ def analyze_contributions(data):
 
 
 async def get_with_retries(session, url, headers=None, max_retries=3, delay=1):
-    for attempt in range(max_retries):
+    for _ in range(max_retries):
         try:
             async with session.get(url, headers=headers) as res:
                 if res.status == 200:
@@ -77,6 +82,15 @@ async def get_contributions(session, username, semaphore):
         return analyze_contributions(data)
 
 
+def filtering_automated_commits(user_id: str, total_commits: int):
+    automated_commits_users = {"30838534": 23933}
+    return (
+        total_commits - automated_commits_users[user_id]
+        if user_id in automated_commits_users
+        else total_commits
+    )
+
+
 async def fetch_user_data(session, username, avatar_url, semaphore):
     print(f"🔍 Processing {username}...")
     daily, monthly, yearly, lifetime = await get_contributions(
@@ -87,10 +101,9 @@ async def fetch_user_data(session, username, avatar_url, semaphore):
         "daily_contributions": daily,
         "monthly_contributions": monthly,
         "yearly_contributions": yearly,
-        "total_contributions": lifetime
-        - (
-            23933 if "30838534" in avatar_url else 0
-        ),  # Execluding fake commits from user with id:30838534
+        "total_contributions": filtering_automated_commits(
+            re.search(r"/u/(\d+)(?=[/?]|$)", avatar_url).group(1), lifetime
+        ),
         "avatar_url": avatar_url,
     }
 
