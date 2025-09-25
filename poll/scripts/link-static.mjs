@@ -1,4 +1,4 @@
-import { symlink, rm, stat } from 'node:fs/promises'
+import { symlink, rm, stat, mkdir } from 'node:fs/promises'
 import { join } from 'node:path'
 const root = join(process.cwd(), '..')
 const pub = join(process.cwd(), 'public')
@@ -9,4 +9,11 @@ const link = async (name) => {
   try { await symlink(src, dst, 'junction') } catch {}
 }
 await Promise.all(items.map(link))
+
+// Ensure /tierlist/images points to /images (for app assets under /tierlist)
+try { await mkdir(join(pub, 'tierlist'), { recursive: true }) } catch {}
+const nestedSrc = join(pub, 'images')
+const nestedDst = join(pub, 'tierlist', 'images')
+try { const s = await stat(nestedDst); if (s) await rm(nestedDst, { recursive: true, force: true }) } catch {}
+try { await symlink(nestedSrc, nestedDst, 'junction') } catch {}
 

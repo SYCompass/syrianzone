@@ -5,12 +5,19 @@ const staticDirs = ["assets","styles","components","flag-replacer", ...subapps]
 
 const nextConfig: NextConfig = {
   env: { NEXT_PUBLIC_BASE_PATH: "" },
+  assetPrefix: "/tierlist",
   eslint: { ignoreDuringBuilds: true },
   async rewrites() {
     const toIndex = subapps.map((d) => ({ source: `/${d}`, destination: `/${d}/index.html` }))
     const slashes = subapps.map((d) => ({ source: `/${d}/`, destination: `/${d}/index.html` }))
     const passthru = staticDirs.map((d) => ({ source: `/${d}/:path*`, destination: `/${d}/:path*` }))
-    return { beforeFiles: [ ...toIndex, ...slashes, ...passthru ] }
+    const tierlistRoutes = [
+      { source: "/tierlist/leaderboard", destination: "/leaderboard" },
+      { source: "/tierlist/leaderboard/", destination: "/leaderboard" },
+      { source: "/tierlist/jolani", destination: "/jolani" },
+      { source: "/tierlist/jolani/", destination: "/jolani" },
+    ]
+    return { beforeFiles: [ ...tierlistRoutes, ...toIndex, ...slashes, ...passthru ] }
   },
   typescript: { ignoreBuildErrors: true }
 };
