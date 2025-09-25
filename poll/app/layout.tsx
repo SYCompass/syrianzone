@@ -52,7 +52,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <CustomNavBar />
           <div className="container mx-auto px-4 py-4 flex justify-end gap-2 items-center">
             <Button asChild variant="outline">
-              <Link href="/">التصنيف</Link>
+              <a href="/">التصنيف</a>
             </Button>
             <Button asChild variant="outline">
               <Link href="/leaderboard">الإحصائيات</Link>
