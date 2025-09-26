@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="دليل الفنادق السورية - اكتشف وتصفح الفنادق في سوريا">
+  <meta name="keywords" content="سوريا، الفنادق، الإقامة، دمشق، حلب، اللاذقية">
+  <meta name="author" content="Syrian Zone">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="دليل الفنادق السورية">
+  <meta property="og:description" content="اكتشف وتصفح الفنادق في سوريا">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://syrian.zone/hotels">
+  <meta property="og:image" content="https://syrian.zone/assets/thumbnail.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Syrian Zone">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="دليل الفنادق السورية">
+  <meta name="twitter:description" content="اكتشف وتصفح الفنادق في سوريا">
+  <meta name="twitter:image" content="https://syrian.zone/assets/thumbnail.jpg">
+  
+  <title>دليل الفنادق السورية - Syrian Zone</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/favicon.png">
+  
+  <!-- Stylesheets -->
+  <script>(function(){try{var s=localStorage.getItem('sz-theme');if(!s){var sp=localStorage.getItem('startpage-settings');if(sp){s=(JSON.parse(sp)||{}).theme}};document.documentElement.setAttribute('data-theme', s||'dark');}catch(e){}})();</script>
+  <link rel="stylesheet" href="/styles/theme.css">
+  <link rel="stylesheet" href="/styles/output.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K4H98TC203"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K4H98TC203');
+  </script>
+  
+  <!-- Custom Styles -->
+  <style>
+    body {
+      font-family: "IBM Plex Sans Arabic", sans-serif !important;
+      direction: rtl;
+    }
+    
+    /* Theme consistency: sharp borders and consistent radius */
+    :root {
+      --radius: 0px; /* Sharp corners for this page */
+    }
+    
+    /* Override Tailwind rounded classes to use sharp corners */
+    .rounded, .rounded-md, .rounded-lg, .rounded-full {
+      border-radius: var(--radius) !important;
+    }
+    
+    /* Search and filter elements with consistent border styling */
+    .search-filter-input {
+      border: 4px solid var(--border-color) !important;
+      border-radius: var(--radius) !important;
+    }
+    
+    .search-filter-button {
+      border: 4px solid var(--border-color) !important;
+      border-radius: var(--radius) !important;
+    }
+    
+    .search-filter-select {
+      padding-right: 30px!important;
+      border: 4px solid var(--border-color) !important;
+      border-radius: var(--radius) !important;
+    }
+    
+    /* Hero section with theme-consistent background */
+    .hero-static { 
+      background: linear-gradient(135deg, var(--sz-color-primary), var(--text-primary)) !important; 
+    }
+    
+    /* Footer styling */
+    .footer {
+      background-color: var(--sz-color-surface);
+      border-top: 4px solid var(--border-color);
+    }
+    .footer-link {
+      color: var(--sz-color-ink);
+    }
+    
+    /* Back to top button styling is handled by the component */
+    
+    /* Table row hover effects */
+    .table-row-hover {
+      background-color: var(--bg-primary);
+      transition: background-color 0.2s ease;
+    }
+    .table-row-hover:hover {
+      background-color: var(--bg-tertiary) !important;
+    }
+    
+    /* Sharp-cornered badges */
+    .type-badge {
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius) !important; /* Ensure sharp corners */
+      border: 2px solid var(--border-color);
+      display: inline-block;
+    }
+    
+    /* Custom styles for hotels */
+    .hotel-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 4px solid var(--border-color) !important;
+      border-radius: var(--radius) !important;
+      height: 100%;
+      background-color: var(--bg-primary);
+    }
+    
+    .hotel-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      border: 4px solid var(--border-color) !important;
+    }
+    
+    .style-badge {
+      background: linear-gradient(135deg, var(--sz-color-primary), var(--sz-color-surface));
+      color: var(--sz-color-ink);
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius);
+      border: 2px solid var(--border-color);
+      display: inline-block;
+    }
+    
+    .city-badge {
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius);
+      border: 2px solid var(--border-color);
+      display: inline-block;
+    }
+    
+    .contact-link {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .contact-link:hover {
+      transform: scale(1.1);
+    }
+    
+    .loading-spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--sz-color-primary);
+      border-radius: 50%;
+      width: 2rem;
+      height: 2rem;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Map embed styling */
+    .map-embed {
+      width: 100%;
+      height: 200px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+    
+    /* Multiple contact info styling */
+    .contact-group {
+      margin-bottom: 0.5rem;
+    }
+    
+    .contact-group .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.25rem;
+      font-size: 0.9rem;
+    }
+    
+    .contact-group .contact-item i {
+      width: 16px;
+      color: var(--sz-color-primary);
+    }
+    
+    .contact-group .contact-item a {
+      color: var(--sz-color-primary);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    
+    .contact-group .contact-item a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Footer styling */
+    .footer {
+      background-color: var(--sz-color-surface);
+    }
+    .footer-link {
+      color: var(--sz-color-ink);
+      transition: color 0.2s ease;
+    }
+    .footer-link:hover {
+      color: var(--sz-color-primary);
+    }
+    
+    /* View Toggle Styles */
+    .view-toggle-btn {
+      color: #6b7280;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+      white-space: nowrap;
+      border-radius: 0.375rem !important; /* Override sharp border setting for toggle buttons */
+    }
+    
+    .view-toggle-btn:hover {
+      color: var(--sz-color-primary);
+      background: rgba(85, 106, 78, 0.1);
+      border-radius: 0.375rem !important;
+    }
+    
+    .view-toggle-btn.active {
+      color: white;
+      background: var(--sz-color-primary);
+      border-radius: 0.375rem !important;
+    }
+    
+    /* View toggle container should also have rounded corners */
+    .view-toggle-btn:first-child {
+      border-top-left-radius: 0.5rem !important;
+      border-bottom-left-radius: 0.5rem !important;
+    }
+    .view-toggle-btn:last-child {
+      border-top-right-radius: 0.5rem !important;
+      border-bottom-right-radius: 0.5rem !important;
+    }
+    
+    /* Mobile-specific toggle button styles */
+    @media (max-width: 640px) {
+      .view-toggle-btn {
+        min-width: 36px;
+        padding: 6px 8px;
+      }
+      
+      .view-toggle-btn i {
+        font-size: 0.875rem;
+      }
+    }
+    
+    /* Table Styles */
+    .hotels-table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    .hotels-table th,
+    .hotels-table td {
+      text-align: right;
+      padding: 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .hotels-table th {
+      background-color: #f9fafb;
+      font-weight: 600;
+      color: #374151;
+    }
+    
+    .hotels-table tbody tr:hover {
+      background-color: var(--bg-tertiary) !important;
+    }
+    
+    .hotel-name-cell {
+      font-weight: 600;
+      color: var(--sz-color-primary);
+    }
+    
+    .hotel-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    
+    .hotel-badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius);
+      border: 2px solid var(--border-color);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+    }
+    
+    .hotel-badge.primary {
+      background: linear-gradient(135deg, var(--sz-color-primary), var(--sz-color-surface));
+      color: var(--sz-color-ink);
+      border: 2px solid var(--border-color);
+    }
+    
+    .hotel-contact-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .hotel-contact-item {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+    
+    .hotel-contact-item a {
+      color: var(--sz-color-primary);
+      text-decoration: none;
+    }
+    
+    .hotel-contact-item a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Phone number styling for LTR display */
+    .hotel-contact-item a[dir="ltr"] {
+      direction: ltr;
+      text-align: left;
+      unicode-bidi: bidi-override;
+    }
+    
+    .contact-item a[dir="ltr"] {
+      direction: ltr;
+      text-align: left;
+      unicode-bidi: bidi-override;
+    }
+    
+    /* Social text links styling */
+    .social-text-link {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      margin: 4px 0;
+      background: #f3f4f6;
+      color: var(--sz-color-primary);
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+    }
+    
+    .social-text-link:hover {
+      background: var(--sz-color-primary);
+      color: white;
+      transform: translateY(-1px);
+    }
+    
+    .social-text-link i {
+      margin-left: 6px;
+    }
+    
+    .website-link {
+      display: inline-flex;
+      align-items: center;
+      color: var(--sz-color-primary);
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+    
+    .website-link:hover {
+      text-decoration: underline;
+    }
+    
+    .website-link i {
+      margin-left: 6px;
+    }
+    
+    .hotel-social-text-links {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    /* Responsive social links */
+    @media (max-width: 768px) {
+      .social-text-link {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+      }
+      
+      .hotel-social-text-links {
+        gap: 2px;
+      }
+    }
+    
+    .hotel-social-links {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .hotel-social-link {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #f3f4f6;
+      color: #6b7280;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    
+    .hotel-social-link:hover {
+      background: var(--sz-color-primary);
+      color: white;
+      transform: scale(1.1);
+    }
+    
+    /* Responsive table */
+    @media (max-width: 768px) {
+      .hotels-table {
+        font-size: 0.875rem;
+      }
+      
+      .hotels-table th,
+      .hotels-table td {
+        padding: 8px 4px;
+      }
+      
+      .hotel-social-links {
+        flex-direction: column;
+        gap: 4px;
+      }
+      
+      .hotel-social-link {
+        width: 28px;
+        height: 28px;
+        font-size: 0.75rem;
+      }
+      
+      /* Mobile view toggle improvements */
+      .view-toggle-btn {
+        font-size: 0.75rem;
+        padding: 4px 6px;
+      }
+      
+      /* Mobile results section */
+      .flex.flex-col.lg\\:flex-row {
+        gap: 1rem;
+      }
+      
+      .flex.flex-col.sm\\:flex-row {
+        gap: 0.75rem;
+      }
+    }
+    
+    /* Extra small mobile devices */
+    @media (max-width: 480px) {
+      .view-toggle-btn {
+        min-width: 32px;
+        padding: 4px 6px;
+        font-size: 0.7rem;
+      }
+      
+      .view-toggle-btn i {
+        font-size: 0.75rem;
+      }
+      
+      .hotels-table th,
+      .hotels-table td {
+        padding: 6px 2px;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+  
+  <!-- Components -->
+  <script src="/components/navbar.js"></script>
+  <script src="/components/view-toggle.js"></script>
+  <script src="/components/utils-theme.js" defer></script>
+  <script src="/components/back-to-top.js" defer></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <!-- Navbar Web Component -->
+  <nav-bar></nav-bar>
+
+  <!-- Main Content -->
+  <main class="flex-1">
+    <!-- Search and Filter Section -->
+    <section class="bg-white border-b py-8" id="hotels">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="space-y-6">
+          <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="max-w-3xl mx-auto">
+              <h1 class="text-4xl md:text-5xl font-bold mb-6">دليل الفنادق السورية</h1>
+              <p class="text-xl text-white opacity-90">تصفح واكتشف الفنادق في مختلف المدن السورية مع معلومات الاتصال والموقع</p>
+            </div>
+          </div>
+    
+          <!-- Search Box -->
+          <div class="relative max-w-2xl mx-auto">
+            <div class="relative">
+              <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"></i>
+              <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="ابحث في الفنادق بالاسم أو المدينة أو النمط المعماري..." 
+                class="search-filter-input w-full pr-10 pl-10 py-3 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]"
+              >
+              <button id="clearSearch" class="absolute left-3 top-1/2 transform -translate-y-1/2 hidden">
+                <i class="fas fa-times h-4 w-4 text-gray-400 hover:text-gray-600"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Filters -->
+          <div class="filter-container flex flex-wrap gap-4 justify-center items-end p-4">
+            <div class="flex flex-col space-y-2">
+              <label for="cityFilter" class="text-sm font-medium">المدينة</label>
+              <select id="cityFilter" class="search-filter-select flex h-10 w-full bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
+                <option value="">جميع المدن</option>
+              </select>
+            </div>
+            
+            <div class="flex flex-col space-y-2">
+              <label for="styleFilter" class="text-sm font-medium">النمط المعماري</label>
+              <select id="styleFilter" class="search-filter-select flex h-10 w-full bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
+                <option value="">جميع الأنماط</option>
+              </select>
+            </div>
+            
+            <button id="clearFilters" class="search-filter-button inline-flex items-center justify-center whitespace-nowrap text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 h-10 px-4 py-2 transition-colors">
+              <i class="fas fa-times ml-2 h-4 w-4"></i> مسح الفلاتر
+            </button>
+          </div>
+        </div>
+        
+        <!-- Results Info -->
+        <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center pt-6 border-t mt-6 space-y-4 lg:space-y-0">
+          <span id="resultsCount" class="text-sm font-medium">جاري تحميل الفنادق...</span>
+          <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+            <!-- View Toggle -->
+            <div class="flex items-center space-x-2">
+              <label class="text-sm text-gray-600">عرض:</label>
+              <div class="flex bg-gray-100 rounded-lg p-1">
+                <button id="tableViewBtn" class="view-toggle-btn px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md transition-colors" data-view="table">
+                  <i class="fas fa-table ml-1"></i> <span class="hidden sm:inline">جدول</span>
+                </button>
+                <button id="gridViewBtn" class="view-toggle-btn px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md transition-colors" data-view="grid">
+                  <i class="fas fa-th ml-1"></i> <span class="hidden sm:inline">شبكة</span>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Sort -->
+            <div class="flex items-center space-x-2">
+              <label for="sortSelect" class="text-sm text-gray-600">ترتيب حسب:</label>
+              <select id="sortSelect" class="search-filter-select flex h-8 bg-white px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
+                <option value="name">الاسم (أ-ي)</option>
+                <option value="name-desc">الاسم (ي-أ)</option>
+                <option value="city">المدينة</option>
+                <option value="style">النمط المعماري</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hotels Grid -->
+    <section class="py-12">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="flex flex-col items-center justify-center py-12">
+          <div class="loading-spinner"></div>
+          <p class="mt-4 text-gray-600">جاري تحميل الفنادق...</p>
+        </div>
+        
+        <!-- Error Message -->
+        <div id="errorMessage" class="flex flex-col items-center justify-center py-12" style="display: none;">
+          <i class="fas fa-exclamation-triangle h-12 w-12 text-red-500 mb-4"></i>
+          <p class="text-center text-gray-600 mb-4">فشل في تحميل الفنادق. يرجى المحاولة لاحقاً.</p>
+          <button id="retryButton" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-[var(--sz-color-primary)] text-white hover:bg-[var(--sz-color-accent)] h-10 px-4 py-2 transition-colors">
+            إعادة المحاولة
+          </button>
+        </div>
+        
+        <!-- No Results -->
+        <div id="noResults" class="flex flex-col items-center justify-center py-12" style="display: none;">
+          <i class="fas fa-search h-12 w-12 text-gray-400 mb-4"></i>
+          <h3 class="text-lg font-semibold mb-2">لم يتم العثور على فنادق</h3>
+          <p class="text-gray-600">جرب تعديل كلمات البحث أو الفلاتر.</p>
+        </div>
+        
+        <!-- Hotels Table View -->
+        <div id="hotelsTable" class="overflow-x-auto">
+          <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الفندق</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المدينة</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">النمط</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الهاتف</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الموقع</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الروابط</th>
+              </tr>
+            </thead>
+            <tbody id="hotelsTableBody" class="bg-white divide-y divide-gray-200">
+              <!-- Hotel rows will be dynamically inserted here -->
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Hotels Grid View -->
+        <div id="hotelsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style="display: none;">
+          <!-- Hotel cards will be dynamically inserted here -->
+        </div>
+        
+        <!-- Load More -->
+        <div id="loadMoreContainer" class="flex justify-center mt-8" style="display: none;">
+          <button id="loadMoreBtn" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-[var(--sz-color-primary)] text-white hover:bg-[var(--sz-color-accent)] h-10 px-4 py-2 transition-colors">
+            <i class="fas fa-plus ml-2 h-4 w-4"></i> تحميل المزيد
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="bg-gray-50 py-16" id="about">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="max-w-3xl mx-auto">
+          <h2 class="text-3xl font-bold mb-6 text-gray-900">حول دليل الفنادق السورية</h2>
+          <p class="text-gray-600 mb-4">يعتبر دليل الفنادق السورية مرجعاً شاملاً للتعرف على الفنادق في مختلف المدن السورية. تهدف هذه المنصة إلى توفير معلومات دقيقة ومحدثة حول أماكن الإقامة في سوريا.</p>
+          <p class="text-gray-600">سواء كنت تبحث عن فندق في دمشق القديمة أو في حلب أو في أي مدينة سورية أخرى، تقدم هذه المنصة وصولاً سهلاً لمعلومات الاتصال والموقع والتفاصيل.</p>
+          <div class="mt-8">
+            <a href="https://forms.gle/vLAxoz5RNt6z6qyj9" target="_blank" rel="noopener" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-[var(--sz-color-primary)] text-white hover:bg-[var(--sz-color-accent)] h-12 px-6 py-3 transition-colors">
+              <i class="fas fa-plus ml-2 h-4 w-4"></i>
+              ارسال طلب إضافة للقائمة
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer py-6 w-full">
+    <div class="container mx-auto px-4 text-center">
+      <p class="text-[var(--sz-color-ink)]">&copy; 2025 syrian.zone</p>
+      <p class="mt-2 text-sm text-[var(--sz-color-ink)]">
+        تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span>
+      </p>
+      <div class="mt-2 flex justify-center gap-4">
+        <a href="http://hadealahmad.com/" target="_blank" rel="noopener" class="footer-link flex items-center">
+          <i class="fas fa-globe ml-1"></i> الموقع الشخصي
+        </a>
+        <a href="https://x.com/hadealahmad" target="_blank" rel="noopener" class="footer-link flex items-center">
+          <i class="fab fa-x-twitter ml-1"></i> حساب X
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button - Component will auto-initialize -->
+
+  <!-- Configuration -->
+  <script src="/components/utils-csv.js"></script>
+  <script src="/components/utils-http.js"></script>
+  <script src="/components/utils-cache.js"></script>
+  <script src="/components/utils-offline.js"></script>
+  <script src="/components/utils-social.js"></script>
+  <script src="/hotels/config.js"></script>
+  
+  <!-- Main JavaScript -->
+  <script src="/hotels/script.js"></script>
+</body>
+</html>

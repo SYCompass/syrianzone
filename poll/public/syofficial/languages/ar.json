@@ -1,0 +1,53 @@
+{
+    "app": {
+        "title": "روابط الجهات الرسمية السورية",
+        "description": "اضغط على اسم الجهة للوصول إلى صفحاتها الرسمية على وسائل التواصل الاجتماعي",
+        "noResults": "لا توجد نتائج مطابقة",
+        "searchPlaceholder": "ابحث بالاسم...",
+        "error": {
+            "connection": "خطأ في الاتصال! الحالة: {status}",
+            "loading": "خطأ في تحميل بيانات {category}"
+        }
+    },
+    "categories": {
+        "all": "الكل",
+        "governorates": "المحافظات",
+        "ministries": "الوزارات",
+        "ministers": "الوزراء",
+        "public_figures": "الشخصيات العامة",
+        "syndicates": "النقابات",
+        "universities": "الجامعات",
+        "embassies": "السفارات",
+        "other": "أخرى"
+    },
+    "sections": {
+        "governorates": "المحافظات",
+        "ministries": "الوزارات",
+        "ministers": "الوزراء",
+        "public_figures": "الشخصيات العامة",
+        "syndicates": "النقابات",
+        "universities": "الجامعات",
+        "embassies": "السفارات",
+        "other": "أخرى"
+    },
+    "table": {
+        "name": "الاسم",
+        "description": "الوصف",
+        "socialLinks": "روابط التواصل",
+        "noLinks": "لا توجد روابط"
+    },
+    "view": {
+        "grid": "عرض الشبكة",
+        "table": "عرض الجدول"
+    },
+    "social": {
+        "twitterList": "قائمة تويتر",
+        "telegramList": "قائمة تلغرام"
+    },
+    "footer": {
+        "copyright": "© 2025 روابط الجهات الرسمية السورية",
+        "developedBy": "تم التطوير بواسطة",
+        "personalWebsite": "الموقع الشخصي",
+        "xAccount": "حساب X"
+    }
+} 

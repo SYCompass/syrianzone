@@ -3,7 +3,7 @@ import { join } from 'node:path'
 const root = join(process.cwd(), '..')
 const pub = join(process.cwd(), 'public')
 const items = ['assets','styles','components','bingo','board','compass','game','hotels','house','legacytierlist','party','population','sites','startpage','stats','syid','syofficial','flag-replacer']
-const useCopy = (process.env.COPY_STATIC === '1') || (process.env.NODE_ENV === 'production')
+const useCopy = true
 const link = async (name) => {
   const src = join(root, name); const dst = join(pub, name)
   try { const s = await stat(dst); if (s) await rm(dst, { recursive: true, force: true }) } catch {}

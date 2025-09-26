@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+      <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/favicon.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Syrian Zone - أطلس سكان سوريا">
+    <meta name="keywords" content="سوريا, أطلس, سكان, Syrian Zone, Syria">
+    <meta name="author" content="Syrian Zone">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Syrian Zone">
+    <meta property="og:description" content="أطلس سكان سوريا">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://syrian.zone">
+    <meta property="og:image" content="https://syrian.zone/assets/thumbnail.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Syrian Zone">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Syrian Zone">
+    <meta name="twitter:description" content="أطلس سكان سوريا"> 
+      <title>أطلس سكان سوريا</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <link rel="stylesheet" href="/population/style.css" />
+    <link rel="stylesheet" href="/styles/theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script>
+      (function(){try{var s=localStorage.getItem('sz-theme');if(!s){var sp=localStorage.getItem('startpage-settings');if(sp){s=(JSON.parse(sp)||{}).theme}};document.documentElement.setAttribute('data-theme', s||'dark');}catch(e){}})();
+    </script>
+    <script src="/components/utils-theme.js" defer></script>
+    <script src="/components/navbar.js" defer></script>
+      <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K4H98TC203"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-K4H98TC203');
+  </script>
+
+</head>
+<body>
+    <nav-bar></nav-bar>
+    <div class="navbar-spacer"></div>
+    <div class="container">
+        <header class="header">
+            <h1 class="main-title">أطلس سكان سوريا</h1>
+            <p class="subtitle">خريطة تفاعلية لعدد السكان حسب المحافظات</p>
+        </header>
+
+        <section class="map-section">
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+        </section>
+
+        <div class="controls">
+            <button id="dataSourcesBtn" class="btn">مصادر البيانات</button>
+        </div>
+
+        <aside id="dataSourcesPanel" class="data-sources-panel hidden">
+            <div class="panel-card">
+                <h3 class="panel-title">اختر مصدر البيانات</h3>
+                <div id="sourcesGrid" class="sources-grid"></div>
+            </div>
+        </aside>
+    </div>
+
+    <div id="hover-tooltip" class="hidden"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script src="/population/script.js?v=1.0.0"></script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplayer Debug Test</title>
+    <script>(function(){try{var s=localStorage.getItem('sz-theme');if(!s){var sp=localStorage.getItem('startpage-settings');if(sp){s=(JSON.parse(sp)||{}).theme}};document.documentElement.setAttribute('data-theme', s||'dark');}catch(e){}})();</script>
+    <link rel="stylesheet" href="/styles/theme.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .debug-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: var(--bg-tertiary);
+            border-radius: 5px;
+            border-left: 4px solid var(--accent-color);
+        }
+        button {
+            background: var(--accent-color);
+            color: var(--bg-primary);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: var(--secondary-color);
+        }
+        pre {
+            background: var(--bg-secondary);
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+    </style>
+    <script src="/components/utils-theme.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Multiplayer Connection Debug</h1>
+        
+        <div class="debug-section">
+            <h3>Test Instructions</h3>
+            <ol>
+                <li>Open the main game in one tab: <a href="index.html" target="_blank">index.html</a></li>
+                <li>Create a room and note the room ID</li>
+                <li>Open the main game in another tab</li>
+                <li>Join the room using the room ID</li>
+                <li>Use the buttons below to debug the connection</li>
+            </ol>
+        </div>
+        
+        <div class="debug-section">
+            <h3>Debug Tools</h3>
+            <button onclick="showLocalStorage()">Show LocalStorage</button>
+            <button onclick="clearLocalStorage()">Clear LocalStorage</button>
+            <button onclick="showConnections()">Show Connections</button>
+            <button onclick="testWebRTC()">Test WebRTC Support</button>
+        </div>
+        
+        <div class="debug-section">
+            <h3>Debug Output</h3>
+            <pre id="debugOutput">Click a debug button to see output...</pre>
+        </div>
+        
+        <div class="debug-section">
+            <h3>Real-time LocalStorage Monitor</h3>
+            <pre id="storageMonitor">Monitoring localStorage...</pre>
+        </div>
+    </div>
+
+    <script>
+        function log(message) {
+            const output = document.getElementById('debugOutput');
+            output.textContent = message;
+        }
+        
+        function showLocalStorage() {
+            const storage = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('signaling_')) {
+                    storage[key] = JSON.parse(localStorage.getItem(key));
+                }
+            }
+            log('LocalStorage signaling data:\n' + JSON.stringify(storage, null, 2));
+        }
+        
+        function clearLocalStorage() {
+            const keys = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('signaling_')) {
+                    keys.push(key);
+                }
+            }
+            keys.forEach(key => localStorage.removeItem(key));
+            log('Cleared ' + keys.length + ' signaling entries from localStorage');
+            updateStorageMonitor();
+        }
+        
+        function showConnections() {
+            if (window.game && window.game.networkManager) {
+                const nm = window.game.networkManager;
+                const info = {
+                    isHost: nm.isHost,
+                    roomId: nm.roomId,
+                    localPlayer: nm.localPlayer ? {
+                        id: nm.localPlayer.id,
+                        name: nm.localPlayer.name,
+                        position: { x: nm.localPlayer.x, y: nm.localPlayer.y }
+                    } : null,
+                    connections: Array.from(nm.connections.keys()),
+                    remotePlayers: Array.from(nm.remotePlayers.keys())
+                };
+                log('Game connection info:\n' + JSON.stringify(info, null, 2));
+            } else {
+                log('Game not found. Make sure the main game is loaded.');
+            }
+        }
+        
+        function testWebRTC() {
+            try {
+                const pc = new RTCPeerConnection({
+                    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+                });
+                log('WebRTC is supported!\nRTCPeerConnection created successfully.');
+                pc.close();
+            } catch (error) {
+                log('WebRTC test failed:\n' + error.message);
+            }
+        }
+        
+        function updateStorageMonitor() {
+            const monitor = document.getElementById('storageMonitor');
+            const signalingData = {};
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('signaling_')) {
+                    try {
+                        signalingData[key] = JSON.parse(localStorage.getItem(key));
+                    } catch (e) {
+                        signalingData[key] = localStorage.getItem(key);
+                    }
+                }
+            }
+            
+            if (Object.keys(signalingData).length === 0) {
+                monitor.textContent = 'No signaling data in localStorage';
+            } else {
+                monitor.textContent = JSON.stringify(signalingData, null, 2);
+            }
+        }
+        
+        // Update storage monitor every 2 seconds
+        setInterval(updateStorageMonitor, 2000);
+        updateStorageMonitor();
+        
+        // Show initial WebRTC test
+        testWebRTC();
+    </script>
+</body>
+</html> 

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="تير ليست وزراء الحكومة السورية الجديدة - تقييم وترتيب الحكومة">
+  <meta name="keywords" content="سوريا, وزراء, حكومة, تقييم, تير ليست">
+  <meta name="author" content="Syrian Zone">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="تير ليست وزراء الحكومة السورية الجديدة">
+  <meta property="og:description" content="تقييم وترتيب وزراء الحكومة السورية الجديدة">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://syrian.zone/tierlist">
+  <meta property="og:image" content="https://syrian.zone/assets/thumbnail.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Syrian Zone">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="تير ليست وزراء الحكومة السورية الجديدة">
+  <meta name="twitter:description" content="تقييم وترتيب وزراء الحكومة السورية الجديدة">
+  <meta name="twitter:image" content="https://syrian.zone/assets/thumbnail.jpg">
+  
+  <title>تقييم الوزراء</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/favicon.png">
+  
+  <!-- Stylesheets -->
+  <script>(function(){try{var s=localStorage.getItem('sz-theme');if(!s){var sp=localStorage.getItem('startpage-settings');if(sp){s=(JSON.parse(sp)||{}).theme}};document.documentElement.setAttribute('data-theme', s||'dark');}catch(e){}})();</script>
+  <link rel="stylesheet" href="/styles/theme.css">
+  <link rel="stylesheet" href="/styles/output.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K4H98TC203"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K4H98TC203');
+  </script>
+  
+  
+  <!-- Custom Styles -->
+  <style>
+    body {
+      font-family: "IBM Plex Sans Arabic", sans-serif !important;
+      direction: rtl;
+    }
+    /* Theme color variables */
+    :root {
+      --sz-color-primary: #556A4E;
+      --sz-color-accent: #A73F46;
+      --sz-color-surface: #FFFFFF;
+      --sz-color-ink: #0D1315;
+    }
+    /* Footer styling */
+    .footer {
+      background-color: var(--sz-color-surface);
+      border-top: 1px solid #e5e7eb;
+    }
+    .footer-link {
+      color: var(--sz-color-ink);
+      transition: color 0.2s ease;
+    }
+    .footer-link:hover {
+      color: var(--sz-color-primary);
+    }
+  </style>
+  
+  <!-- Components -->
+  <script src="/components/navbar.js"></script>
+  <script src="/components/utils-theme.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+
+<body class="bg-gray-100">
+  <!-- Navbar Web Component -->
+  <nav-bar></nav-bar>
+
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 pt-24 pb-8">
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">تير ليست وزراء الحكومة السورية الجديدة</h1>
+    <p class="text-lg leading-relaxed text-gray-600 mb-8 text-center">يمكن حفظ صورة جاهزة لمشاركتها على السوشال ميديا
+      بسهولة من خلال الزر الموجود في آخر الصفحة</p>
+
+    <div class="max-w-screen-lg mx-auto bg-white p-5 rounded-lg shadow tier-list-app">
+    <p class="text-lg leading-relaxed text-gray-600 mb-4 text-center">في نسخة الكمبيوتر: يمكنك سحب وافلات اسم الوزير في
+      القائمة</p>
+    <p class="text-lg leading-relaxed text-gray-600 mb-4 text-center">في نسخة الموبايل: يمكنك النقر على اسم الوزير ثم
+      النقر على المكان في القائمة لنقله</p>
+
+    <div class="mb-6 border border-gray-300 rounded bg-gray-200 p-2">
+      <h2 class="text-xl font-bold text-gray-800 text-center">قائمة الوزراء</h2>
+      <div id="item-bank" class="flex flex-wrap gap-2 p-2 bg-gray-300 rounded dropzone">
+        <div class="item" draggable="true" data-id="item1">
+          <img src="images/item1.webp" alt="أسعد حسن الشيباني وزير الخارجية والمغتربين">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">أسعد حسن
+            الشيباني وزير الخارجية والمغتربين</p>
+        </div>
+        <div class="item" draggable="true" data-id="item2">
+          <img src="images/item2.webp" alt="مرهف أبو قصرة وزير الدفاع">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">مرهف أبو
+            قصرة وزير الدفاع</p>
+        </div>
+        <div class="item" draggable="true" data-id="item3">
+          <img src="images/item3.webp" alt="أنس خطاب وزير الداخلية">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">أنس خطاب
+            وزير الداخلية</p>
+        </div>
+        <div class="item" draggable="true" data-id="item4">
+          <img src="images/item4.webp" alt="محمد عنجراني وزير الإدارة المحلية">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">محمد
+            عنجراني وزير الإدارة المحلية</p>
+        </div>
+        <div class="item" draggable="true" data-id="item5">
+          <img src="images/item5.webp" alt="مظهر الويس وزير العدل">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">مظهر الويس
+            وزير العدل</p>
+        </div>
+        <div class="item" draggable="true" data-id="item6">
+          <img src="images/item6.webp" alt="محمد البشير وزير الطاقة">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">محمد
+            البشير وزير الطاقة</p>
+        </div>
+        <div class="item" draggable="true" data-id="item7">
+          <img src="images/item7.webp" alt="مروان الحلبي وزير التعليم العالي">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">مروان
+            الحلبي وزير التعليم العالي</p>
+        </div>
+        <div class="item" draggable="true" data-id="item8">
+          <img src="images/item8.webp" alt="هند قبوات وزيرة العمل والشؤون الاجتماعية">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">هند قبوات
+            وزيرة العمل والشؤون الاجتماعية</p>
+        </div>
+        <div class="item" draggable="true" data-id="item9">
+          <img src="images/item9.webp" alt="محمد صالح وزير الثقافة">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">محمد صالح
+            وزير الثقافة</p>
+        </div>
+        <div class="item" draggable="true" data-id="item10">
+          <img src="images/item10.webp" alt="نضال الشعار وزير الاقتصاد">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">نضال
+            الشعار وزير الاقتصاد</p>
+        </div>
+        <div class="item" draggable="true" data-id="item11">
+          <img src="images/item11.webp" alt="حمزة المصطفى وزير الإعلام">
+          <p>حمزة المصطفى وزير الإعلام</p>
+        </div>
+        <div class="item" draggable="true" data-id="item12">
+          <img src="images/item12.webp" alt="يعرب بدر وزير النقل">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">يعرب بدر
+            وزير النقل</p>
+        </div>
+        <div class="item" draggable="true" data-id="item13">
+          <img src="images/item13.webp" alt="محمد يسر برنية وزير المالية">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">محمد يسر
+            برنية وزير المالية</p>
+        </div>
+        <div class="item" draggable="true" data-id="item14">
+          <img src="images/item14.webp" alt="مصعب نزال العلي وزير الصحة">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">مصعب نزال
+            العلي وزير الصحة</p>
+        </div>
+        <div class="item" draggable="true" data-id="item15">
+          <img src="images/item15.webp" alt="رائد الصالح وزير الطوارئ والكوارث">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">رائد
+            الصالح وزير الطوارئ والكوارث</p>
+        </div>
+        <div class="item" draggable="true" data-id="item16">
+          <img src="images/item16.webp" alt="عبد السلام هيكل وزير الاتصالات وتقانة المعلومات">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">عبد السلام
+            هيكل وزير الاتصالات وتقانة المعلومات</p>
+        </div>
+        <div class="item" draggable="true" data-id="item17">
+          <img src="images/item17.webp" alt="أمجد بدر وزير الزراعة">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">أمجد بدر
+            وزير الزراعة</p>
+        </div>
+        <div class="item" draggable="true" data-id="item18">
+          <img src="images/item18.webp" alt="محمد تركو وزير التربية">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">محمد تركو
+            وزير التربية</p>
+        </div>
+        <div class="item" draggable="true" data-id="item19">
+          <img src="images/item19.webp" alt="مصطفى عبد الرزاق وزير الأشغال العامة والإسكان">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">مصطفى عبد
+            الرزاق وزير الأشغال العامة والإسكان</p>
+        </div>
+        <div class="item" draggable="true" data-id="item20">
+          <img src="images/item20.webp" alt="محمد سامح حامض وزير الرياضة والشباب">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">محمد سامح
+            حامض وزير الرياضة والشباب</p>
+        </div>
+        <div class="item" draggable="true" data-id="item21">
+          <img src="images/item21.webp" alt="مازن الصالحاني وزير السياحة">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">مازن
+            الصالحاني وزير السياحة</p>
+        </div>
+        <div class="item" draggable="true" data-id="item22">
+          <img src="images/item22.webp" alt="محمد حسان سكاف وزير التنمية الإدارية">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">محمد حسان
+            سكاف وزير التنمية الإدارية</p>
+        </div>
+        <div class="item" draggable="true" data-id="item23">
+          <img src="images/item23.webp" alt="محمد أبو الخير شكري وزير الأوقاف">
+          <p class="text-xs leading-tight overflow-hidden text-ellipsis text-center break-words line-clamp-3">محمد أبو
+            الخير شكري وزير الأوقاف</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tiers-container" style="max-width: 1024px; margin:auto;">
+    <!-- Repeatable tier-row blocks -->
+    <!-- Example row: -->
+    <div class="flex mb-1">
+      <div
+        class="w-20 min-h-[165px] bg-[#2d4d3c] text-white text-xl font-bold flex items-center justify-center rounded-r">
+        S</div>
+      <div id="tier-s"
+        class="flex flex-wrap min-h-[165px] flex-grow p-2 border-2 border-dashed border-gray-300 bg-gray-50 rounded-l dropzone">
+      </div>
+    </div>
+    <div class="flex mb-1">
+      <div
+        class="w-20 min-h-[165px] bg-[#807fff] text-white text-xl font-bold flex items-center justify-center rounded-r">
+        A</div>
+      <div id="tier-a"
+        class="flex flex-wrap min-h-[165px] flex-grow p-2 border-2 border-dashed border-gray-300 bg-gray-50 rounded-l dropzone">
+      </div>
+    </div>
+    <div class="flex mb-1">
+      <div
+        class="w-20 min-h-[165px] bg-[#7fbfff] text-white text-xl font-bold flex items-center justify-center rounded-r">
+        B</div>
+      <div id="tier-b"
+        class="flex flex-wrap min-h-[165px] flex-grow p-2 border-2 border-dashed border-gray-300 bg-gray-50 rounded-l dropzone">
+      </div>
+    </div>
+    <div class="flex mb-1">
+      <div
+        class="w-20 min-h-[165px] bg-[#ffbf7f] text-white text-xl font-bold flex items-center justify-center rounded-r">
+        C</div>
+      <div id="tier-d"
+        class="flex flex-wrap min-h-[165px] flex-grow p-2 border-2 border-dashed border-gray-300 bg-gray-50 rounded-l dropzone">
+      </div>
+    </div>
+    <div class="flex mb-1">
+      <div
+        class="w-20 min-h-[165px] bg-[#ff7f7e] text-white text-xl font-bold flex items-center justify-center rounded-r">
+        D</div>
+      <div id="tier-d"
+        class="flex flex-wrap min-h-[165px] flex-grow p-2 border-2 border-dashed border-gray-300 bg-gray-50 rounded-l dropzone">
+      </div>
+    </div>
+    <div class="flex mb-1">
+      <div
+        class="w-20 min-h-[165px] bg-[#3b3b3b] text-white text-xl font-bold flex items-center justify-center rounded-r">
+        F</div>
+      <div id="tier-f"
+        class="flex flex-wrap min-h-[165px] flex-grow p-2 border-2 border-dashed border-gray-300 bg-gray-50 rounded-l dropzone">
+      </div>
+    </div>
+    <!-- Continue with A, B, C, D, F rows (change label and color accordingly) -->
+  </div>
+
+      <button id="save-button"
+        class="block mx-auto my-8 px-5 py-2 bg-[var(--sz-color-primary)] text-white rounded hover:bg-[var(--sz-color-accent)] transition">
+        حفظ قائمتك كصورة
+      </button>
+    </div>
+  </div>
+
+  <script src="/script.js"></script>
+
+  <footer class="footer py-6 mt-8 w-full">
+    <div class="container mx-auto px-4 text-center">
+      <p class="text-[var(--sz-color-ink)]">&copy; 2025 تير ليست الحكومة | Ministers Tier List</p>
+      <p class="mt-2 text-sm text-[var(--sz-color-ink)]">
+        تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span>
+      </p>
+      <div class="mt-2 flex justify-center gap-4">
+        <a href="http://hadealahmad.com/" target="_blank" rel="noopener"
+          class="footer-link flex items-center">
+          <i class="fas fa-globe ml-1"></i> الموقع الشخصي
+        </a>
+        <a href="https://x.com/hadealahmad" target="_blank" rel="noopener"
+          class="footer-link flex items-center">
+          <i class="fab fa-x-twitter ml-1"></i> حساب X
+        </a>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
