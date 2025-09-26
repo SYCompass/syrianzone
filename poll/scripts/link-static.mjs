@@ -1,12 +1,16 @@
-import { symlink, rm, stat, mkdir } from 'node:fs/promises'
+import { symlink, rm, stat, mkdir, cp, copyFile } from 'node:fs/promises'
 import { join } from 'node:path'
 const root = join(process.cwd(), '..')
 const pub = join(process.cwd(), 'public')
 const items = ['assets','styles','components','bingo','board','compass','game','hotels','house','legacytierlist','party','population','sites','startpage','stats','syid','syofficial','flag-replacer']
+const useCopy = (process.env.COPY_STATIC === '1') || (process.env.NODE_ENV === 'production')
 const link = async (name) => {
   const src = join(root, name); const dst = join(pub, name)
   try { const s = await stat(dst); if (s) await rm(dst, { recursive: true, force: true }) } catch {}
-  try { await symlink(src, dst, 'junction') } catch {}
+  try {
+    if (useCopy) await cp(src, dst, { recursive: true })
+    else await symlink(src, dst, 'junction')
+  } catch {}
 }
 await Promise.all(items.map(link))
 
@@ -15,7 +19,10 @@ try {
   const src = join(root, 'index.html');
   const dst = join(pub, 'index.html');
   try { const s = await stat(dst); if (s) await rm(dst, { force: true }) } catch {}
-  try { await symlink(src, dst) } catch {}
+  try {
+    if (useCopy) await copyFile(src, dst)
+    else await symlink(src, dst)
+  } catch {}
 } catch {}
 
 // Ensure /tierlist/images points to /images (for app assets under /tierlist)
