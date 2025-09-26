@@ -451,7 +451,8 @@ export default async function Page() {
             <p className="text-sm text-gray-500 mb-2">الترتيب حسب المعدّل لكل صوت؛ عرض النقاط والأصوات الإجمالية</p>
             <Card>
               <CardContent>
-                <Table>
+                <div className="overflow-x-auto">
+                  <Table className="min-w-[36rem]">
                   <Thead>
                     <Tr>
                       <Th className="w-10 text-right">#</Th>
@@ -480,7 +481,8 @@ export default async function Page() {
                       </Tr>
                     ))}
                   </Tbody>
-                </Table>
+                  </Table>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -542,7 +544,8 @@ export default async function Page() {
         <p className="text-sm text-gray-500 mb-2">الترتيب حسب المعدّل لكل صوت؛ عرض النقاط والأصوات الإجمالية</p>
         <Card>
           <CardContent>
-            <Table>
+            <div className="overflow-x-auto">
+              <Table className="min-w-[36rem]">
               <Thead>
                 <Tr>
                   <Th className="w-10 text-right">#</Th>
@@ -571,7 +574,8 @@ export default async function Page() {
                   </Tr>
                 ))}
               </Tbody>
-            </Table>
+              </Table>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -633,7 +637,8 @@ export default async function Page() {
         <p className="text-sm text-gray-500 mb-2">الترتيب حسب المعدّل لكل صوت؛ عرض النقاط والأصوات الإجمالية</p>
         <Card>
           <CardContent>
-            <Table>
+            <div className="overflow-x-auto">
+              <Table className="min-w-[36rem]">
               <Thead>
                 <Tr>
                   <Th className="w-10 text-right">#</Th>
@@ -662,7 +667,8 @@ export default async function Page() {
                   </Tr>
                 ))}
               </Tbody>
-            </Table>
+              </Table>
+            </div>
           </CardContent>
         </Card>
       </div>
