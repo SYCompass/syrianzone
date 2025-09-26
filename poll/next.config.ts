@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
       { source: "/", destination: "/index.html" },
       { source: "/tierlist/_next/:path*", destination: "/_next/:path*" },
       { source: "/tierlist/api/:path*", destination: "/api/:path*" },
+      { source: "/tierlist/assets/:path*", destination: "/assets/:path*" },
       { source: "/tierlist/images/:path*", destination: "/images/:path*" },
       { source: "/tierlist/leaderboard", destination: "/leaderboard" },
       { source: "/tierlist/leaderboard/", destination: "/leaderboard" },
