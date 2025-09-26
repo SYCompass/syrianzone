@@ -1,6 +1,6 @@
 # Poll (Next.js Tierlist App) (`/poll`)
 
-A Next.js app that powers the dynamic tierlist experience, proxied under `/tierlist` by the root `server.js`.
+A Next.js app that powers the dynamic tierlist experience served under `/tierlist` in production
 
 ## Key Areas
 - `/poll/app` — App Router pages (`page.tsx`, leaderboard, API routes under `/app/api/*`).
@@ -12,8 +12,16 @@ A Next.js app that powers the dynamic tierlist experience, proxied under `/tierl
 - `/poll/scripts` — Maintenance scripts (apply-sql, copy assets, seeding helpers).
 
 ## Runtime Integration
-- The root Express server proxies `/tierlist` and `/api` to the Next.js app on `NEXT_PORT` with WebSocket upgrades supported.
-- Ensure `basePath` is configured (see `/poll/next.config.ts`) to match `/tierlist` for correctness behind the proxy.
+- Apache forwards all traffic to the container (single catch‑all). No dedicated `/tierlist` rule is required.
+- `next.config.ts` sets `assetPrefix` and rewrites so the app works under `/tierlist`:
+  - `/tierlist/_next/*` → `/_next/*`
+  - `/tierlist/assets/*` → `/assets/*`
+  - `/tierlist/images/*` → `/images/*`
+  - `/tierlist/api/*` → `/api/*`
+- The root `/` is served from `public/index.html` via a rewrite.
+
+## Static subapps
+- During build/start, `poll/scripts/link-static.mjs` copies sibling folders (`/bingo`, `/house`, `/syofficial`, etc.) into `poll/public`. This ensures they are available inside the container under `/`.
 
 ## Notes
 - Use `pnpm` (lockfile present) for dependency management.

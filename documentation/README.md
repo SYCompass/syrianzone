@@ -2,6 +2,29 @@
 
 This documentation describes the overall project structure and provides an overview of each subpage/app. Each subpage has a dedicated markdown file under this directory with details about features, data flow, and key functions.
 
+## Deployment topology (prod)
+
+```
+                Internet (Cloudflare)
+                        |
+                   VPS (Apache)
+                 reverse proxy :443
+                        |
+                 127.0.0.1:3030
+                        |
+                 Coolify → Container
+                        |
+                 Next.js (poll/) on :3000
+                 ├─ SSR app under /tierlist
+                 └─ Static subapps copied into poll/public
+                    (/bingo, /house, /syofficial, ...)
+```
+
+Key points:
+- Apache has a single catch‑all proxy to the Coolify-published port (3030). No extra /tierlist rules.
+- The Next.js app serves the landing page at `/` from `public/index.html` and the dynamic app under `/tierlist`.
+- Static subapps are copied into `poll/public` at build/start (see `poll/scripts/link-static.mjs`).
+
 ## Repository Structure (High-level)
 
 - `/index.html` — Start page (dashboard-style landing) with weather, clock, search, and quick links
@@ -20,10 +43,10 @@ This documentation describes the overall project structure and provides an overv
 - `/sites/` — Syrian websites link directory
 - `/stats/` — Stats landing (static)
 - `/legacytierlist/` — Legacy static tierlist page and assets (replaced by Next.js app)
-- `/poll/` — Next.js app (tierlist) proxied under `/tierlist` by `server.js`
+- `/poll/` — Next.js app (tierlist) served under `/tierlist` behind Apache→Coolify
 - `/flag-replacer/` — Twitter SVG Syrian Flag Replacer (extension assets)
 - Root utilities
-  - `server.js` — Express static server + proxy to Next.js for `/tierlist` and `/api`
+  - `server.js` — Express static server + historical notes (not used in prod routing)
   - `list-projects-for-repo.mjs` — Script to fetch issues and synthesize a board
   - `styles/` and `output.css` — Shared CSS output
 
@@ -50,9 +73,9 @@ The following utilities are available globally via `window.SZ` and are used by `
 - `sites.md` — Syrian websites page
 - `stats.md` — Stats landing
 - `legacytierlist.md` — Legacy static tierlist page (renamed from `/tierlist`)
-- `poll.md` — Next.js tierlist app (proxied)
+- `poll.md` — Next.js tierlist app (basePath, rewrites, static copy)
 - `flag-replacer.md` — Flag Replacer extension
-- `server.md` — Express server and proxy behaviour
+- `server.md` — Production routing (Cloudflare → Apache → Coolify → Next.js)
 - `scripts.md` — Utility scripts (Octokit board generator)
 
 ## Conventions
