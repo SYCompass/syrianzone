@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
     const slashes = subapps.map((d) => ({ source: `/${d}/`, destination: `/${d}/index.html` }))
     const passthru = staticDirs.map((d) => ({ source: `/${d}/:path*`, destination: `/${d}/:path*` }))
     const tierlistRoutes = [
+      { source: "/", destination: "/index.html" },
       { source: "/tierlist/_next/:path*", destination: "/_next/:path*" },
       { source: "/tierlist/api/:path*", destination: "/api/:path*" },
       { source: "/tierlist/images/:path*", destination: "/images/:path*" },

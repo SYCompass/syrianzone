@@ -10,6 +10,14 @@ const link = async (name) => {
 }
 await Promise.all(items.map(link))
 
+// Link root index.html to serve landing page at "/"
+try {
+  const src = join(root, 'index.html');
+  const dst = join(pub, 'index.html');
+  try { const s = await stat(dst); if (s) await rm(dst, { force: true }) } catch {}
+  try { await symlink(src, dst) } catch {}
+} catch {}
+
 // Ensure /tierlist/images points to /images (for app assets under /tierlist)
 try { await mkdir(join(pub, 'tierlist'), { recursive: true }) } catch {}
 const nestedSrc = join(pub, 'images')
