@@ -163,8 +163,10 @@ export default async function Page() {
   let series: { name: string; values: number[]; color?: string; imageUrl?: string }[] = [];
   let seriesMinisters: { name: string; values: number[]; color?: string; imageUrl?: string }[] = [];
   let seriesGovernors: { name: string; values: number[]; color?: string; imageUrl?: string }[] = [];
+  let seriesSecurity: { name: string; values: number[]; color?: string; imageUrl?: string }[] = [];
   let rowsGov: Array<{ candidateId: string; name: string; title?: string; imageUrl?: string; votes: number; score: number; avg: number; rank: number }> = [];
-  let monthMinBest: any[] = [], monthMinWorst: any[] = [], monthGovBest: any[] = [], monthGovWorst: any[] = [];
+  let rowsSec: Array<{ candidateId: string; name: string; title?: string; imageUrl?: string; votes: number; score: number; avg: number; rank: number }> = [];
+  let monthMinBest: any[] = [], monthMinWorst: any[] = [], monthGovBest: any[] = [], monthGovWorst: any[] = [], monthSecBest: any[] = [], monthSecWorst: any[] = [];
   let rowsMinOnly: Array<{ candidateId: string; name: string; title?: string; imageUrl?: string; votes: number; score: number; avg: number; rank: number }> = [];
   let triadMinBestAvg: Array<{ candidateId: string; name: string; title?: string; imageUrl?: string; avg: number }> = [];
   if (p) {
@@ -243,11 +245,13 @@ export default async function Page() {
       }));
     }
 
-    const ministers = candsAll.filter((c: any) => c.category !== "governor");
+    const ministers = candsAll.filter((c: any) => c.category !== "governor" && c.category !== "security");
     const governors = candsAll.filter((c: any) => c.category === "governor");
+    const security = candsAll.filter((c: any) => c.category === "security");
 
     seriesMinisters = buildSeries(ministers);
     seriesGovernors = buildSeries(governors);
+    seriesSecurity = buildSeries(security);
 
     // Also keep combined series (optional)
     const colorById = new Map<string, string>();
@@ -258,6 +262,11 @@ export default async function Page() {
       .map((c) => ({ candidateId: c.id, name: c.name, title: c.title || undefined, imageUrl: c.imageUrl || undefined, votes: totalsVotes.get(c.id) || 0, score: totalsScore.get(c.id) || 0, avg: avgScore.get(c.id) || 0 }))
       .sort((a, b) => (b.avg - a.avg) || (b.score - a.score) || (b.votes - a.votes));
     rowsGov = govTotals.map((t, i) => ({ ...t, rank: i + 1 }));
+
+    const secTotals = security
+      .map((c) => ({ candidateId: c.id, name: c.name, title: c.title || undefined, imageUrl: c.imageUrl || undefined, votes: totalsVotes.get(c.id) || 0, score: totalsScore.get(c.id) || 0, avg: avgScore.get(c.id) || 0 }))
+      .sort((a, b) => (b.avg - a.avg) || (b.score - a.score) || (b.votes - a.votes));
+    rowsSec = secTotals.map((t, i) => ({ ...t, rank: i + 1 }));
 
     // Build ministers-only rows including zero-score entries
     const minTotals = ministers
@@ -310,10 +319,13 @@ export default async function Page() {
     }
     const mins = pickExtremes(ministers);
     const govs = pickExtremes(governors);
+    const secs = pickExtremes(security);
     monthMinBest = mins.best;
     monthMinWorst = mins.worst;
     monthGovBest = govs.best;
     monthGovWorst = govs.worst;
+    monthSecBest = secs.best;
+    monthSecWorst = secs.worst;
 
     // Top 3 best of all time (ministers) by average score per vote
     triadMinBestAvg = ministers
@@ -443,17 +455,17 @@ export default async function Page() {
                   <Thead>
                     <Tr>
                       <Th className="w-10 text-right">#</Th>
-                      <Th className="w-full text-right">المسؤول</Th>
-                      <Th className="w-20 text-right">النقاط</Th>
-                      <Th className="w-16 text-right">الأصوات</Th>
-                      <Th className="w-24 text-right">المعدّل</Th>
+                      <Th className="text-right">المسؤول</Th>
+                      <Th className="w-16 sm:w-20 text-right">النقاط</Th>
+                      <Th className="w-14 sm:w-16 text-right">الأصوات</Th>
+                      <Th className="w-20 sm:w-24 text-right">المعدّل</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
                     {rowsMinOnly.map((r) => (
                       <Tr key={r.candidateId}>
                         <Td>#{r.rank}</Td>
-                        <Td>
+                        <Td className="min-w-[12rem] sm:min-w-0">
                           <div className="flex items-center gap-2">
                             <Avatar src={r.imageUrl || ""} alt={r.name} size={28} />
                             <div className="leading-tight">
@@ -481,6 +493,7 @@ export default async function Page() {
           <MonthlyLineChart months={months} series={seriesGovernors} />
         </ClientOnly>
       </div>
+
 
       {/* Best of month - Governors */}
       <div className="max-w-screen-md mx-auto mt-6">
@@ -533,17 +546,108 @@ export default async function Page() {
               <Thead>
                 <Tr>
                   <Th className="w-10 text-right">#</Th>
-                  <Th className="w-full text-right">المسؤول</Th>
-                  <Th className="w-20 text-right">النقاط</Th>
-                  <Th className="w-16 text-right">الأصوات</Th>
-                  <Th className="w-24 text-right">المعدّل</Th>
+                  <Th className="text-right">المسؤول</Th>
+                  <Th className="w-16 sm:w-20 text-right">النقاط</Th>
+                  <Th className="w-14 sm:w-16 text-right">الأصوات</Th>
+                  <Th className="w-20 sm:w-24 text-right">المعدّل</Th>
                 </Tr>
               </Thead>
               <Tbody>
                 {rowsGov.map((r) => (
                   <Tr key={r.candidateId}>
                     <Td>#{r.rank}</Td>
-                    <Td>
+                        <Td className="min-w-[12rem] sm:min-w-0">
+                      <div className="flex items-center gap-2">
+                        <Avatar src={r.imageUrl || ""} alt={r.name} size={28} />
+                        <div className="leading-tight">
+                          <div className="text-sm">{r.name}</div>
+                          {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
+                        </div>
+                      </div>
+                    </Td>
+                    <Td>{formatNumberKM(r.score)}</Td>
+                    <Td>{formatNumberKM(r.votes)}</Td>
+                    <Td>{r.avg.toFixed(2)}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
+
+
+      <div className="mt-8">
+        <h3 className="font-semibold mb-2 text-center">إحصائيات مسؤولي الأمن</h3>
+        <ClientOnly>
+          <MonthlyLineChart months={months} series={seriesSecurity} />
+        </ClientOnly>
+      </div>
+
+  {/* Best of month - Security */}
+  <div className="max-w-screen-md mx-auto mt-6">
+    <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر - مسؤولي الأمن</h2>
+    <ClientOnly>
+      <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+    </ClientOnly>
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      {monthSecBest.slice(0, 3).map((r) => (
+        <Card key={r.candidateId}>
+          <CardContent className="py-3 flex items-center gap-3">
+            <Avatar src={r.imageUrl || ""} alt={r.name} size={36} />
+            <div>
+              <div className="font-medium text-sm">{r.name}</div>
+              {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  </div>
+
+  {/* Worst of month - Security */}
+  <div className="max-w-screen-md mx-auto mt-4">
+    <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر - مسؤولي الأمن</h2>
+    <ClientOnly>
+      <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
+    </ClientOnly>
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      {monthSecWorst.slice(0, 3).map((r) => (
+        <Card key={r.candidateId}>
+          <CardContent className="py-3 flex items-center gap-3">
+            <Avatar src={r.imageUrl || ""} alt={r.name} size={36} />
+            <div>
+              <div className="font-medium text-sm">{r.name}</div>
+              {r.title ? (<div className="text-xs text-gray-500">{r.title}</div>) : null}
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  </div>
+
+
+      <div className="max-w-screen-md mx-auto mt-6">
+        {/* Security-only leaderboard */}
+        <h2 className="font-semibold mb-2">قائمة مسؤولي الأمن</h2>
+        <p className="text-sm text-gray-500 mb-2">الترتيب حسب المعدّل لكل صوت؛ عرض النقاط والأصوات الإجمالية</p>
+        <Card>
+          <CardContent>
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th className="w-10 text-right">#</Th>
+                  <Th className="text-right">المسؤول</Th>
+                  <Th className="w-16 sm:w-20 text-right">النقاط</Th>
+                  <Th className="w-14 sm:w-16 text-right">الأصوات</Th>
+                  <Th className="w-20 sm:w-24 text-right">المعدّل</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {rowsSec.map((r) => (
+                  <Tr key={r.candidateId}>
+                    <Td>#{r.rank}</Td>
+                    <Td className="min-w-[12rem] sm:min-w-0">
                       <div className="flex items-center gap-2">
                         <Avatar src={r.imageUrl || ""} alt={r.name} size={28} />
                         <div className="leading-tight">

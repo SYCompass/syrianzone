@@ -97,10 +97,10 @@ export default function MonthlyLineChart({ months, series, height = 260 }: Props
           <line x1={padding.left} y1={height - padding.bottom} x2={width - padding.right} y2={height - padding.bottom} stroke={isDark ? "#27272a" : "#e5e7eb"} />
 
           {/* Y grid and ticks */}
-          {yTicks.map((t) => {
+          {yTicks.map((t, i) => {
             const y = yFor(t);
             return (
-              <g key={`y-${t}`}>
+              <g key={`y-${t}-${i}`}>
                 <line x1={padding.left} y1={y} x2={width - padding.right} y2={y} stroke={isDark ? "#1f2937" : "#f3f4f6"} />
                 <text x={padding.left - 8} y={y} textAnchor="end" dominantBaseline="middle" fontSize={10} fill={isDark ? "#9ca3af" : "#6b7280"}>
                   {t}

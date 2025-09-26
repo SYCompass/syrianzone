@@ -71,8 +71,8 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     }
     return copy;
   }, [initialCandidates, pollId, voteDay]);
-  const [bank, setBank] = useState<Candidate[]>(() => shuffledInitial.filter((c) => c.category !== "governor"));
-  const [selectedCategory, setSelectedCategory] = useState<"minister" | "governor">("minister");
+  const [bank, setBank] = useState<Candidate[]>(() => shuffledInitial.filter((c) => c.category !== "governor" && c.category !== "security"));
+  const [selectedCategory, setSelectedCategory] = useState<"minister" | "governor" | "security">("minister");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const containerRef = useRef<HTMLDivElement>(null);
   const tiersRef = useRef<HTMLDivElement>(null);
@@ -133,9 +133,14 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
   // Switch between categories for the bank (does not remove already placed items from tiers)
   useEffect(() => {
     const inTiers = new Set<string>(tierKeys.flatMap((k) => tiers[k].map((c) => c.id)));
-    const filtered = shuffledInitial.filter(
-      (c) => (c.category === (selectedCategory === "governor" ? "governor" : c.category)) && (selectedCategory === "governor" ? c.category === "governor" : c.category !== "governor")
-    ).filter((c) => !inTiers.has(c.id));
+    const filtered = shuffledInitial
+      .filter((c) => {
+        if (selectedCategory === "governor") return c.category === "governor";
+        if (selectedCategory === "security") return c.category === "security";
+        // ministers bucket = anything that's not governor or security
+        return c.category !== "governor" && c.category !== "security";
+      })
+      .filter((c) => !inTiers.has(c.id));
     setBank(filtered);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory, tiers, shuffledInitial]);
@@ -305,6 +310,16 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
                 onChange={() => setSelectedCategory("governor")}
               />
               المحافظون
+            </label>
+            <label className="flex items-center gap-1">
+              <input
+                type="radio"
+                name="category"
+                value="security"
+                checked={selectedCategory === "security"}
+                onChange={() => setSelectedCategory("security")}
+              />
+              مسؤولي الأمن
             </label>
           </div>
         </div>
