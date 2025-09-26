@@ -7,7 +7,7 @@
     "dev": "pnpm -s link:static && next dev --turbopack",
     "build": "pnpm -s link:static && next build --turbopack",
     "start": "pnpm -s link:static && next start",
-    "start:migrate": "pnpm -s drizzle:migrate && next start",
+    "start:migrate": "pnpm -s link:static && pnpm -s drizzle:migrate && next start",
     "prestart": "node ./scripts/deploy-prod.mjs",
     "lint": "eslint",
     "drizzle:generate": "drizzle-kit generate",
