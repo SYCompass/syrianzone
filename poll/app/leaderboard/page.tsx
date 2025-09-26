@@ -151,6 +151,69 @@ async function fetchAllTimeExtremes() {
 export default async function Page() {
   const rows = await fetchAllTimeTotals();
   const month = await fetchMonthExtremes();
+  // Jolani data
+  async function fetchJolaniAllTime() {
+    const [p] = await db.select().from(polls).where(eq(polls.slug, "jolani"));
+    if (!p) return [] as Array<{ candidateId: string; name: string; imageUrl?: string; votes: number; score: number; avg: number; rank: number }>;
+    const rows = await db
+      .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
+      .from(dailyScores)
+      .where(eq(dailyScores.pollId, p.id));
+    const agg = new Map<string, { votes: number; score: number }>();
+    for (const r of rows) {
+      const cur = agg.get(r.candidateId) || { votes: 0, score: 0 };
+      agg.set(r.candidateId, { votes: cur.votes + r.votes, score: cur.score + r.score });
+    }
+    const totals = Array.from(agg.entries()).map(([candidateId, v]) => ({ candidateId, votes: v.votes, score: v.score, avg: v.votes > 0 ? v.score / v.votes : 0 }));
+    totals.sort((a, b) => (b.avg - a.avg) || (b.score - a.score) || (b.votes - a.votes));
+    const cands = await db.select().from(candidates).where(eq(candidates.pollId, p.id));
+    return totals.map((t, i) => {
+      const c = cands.find((cc) => cc.id === t.candidateId);
+      return { candidateId: t.candidateId, name: c?.name || "", imageUrl: c?.imageUrl || undefined, votes: t.votes, score: t.score, avg: t.avg, rank: i + 1 };
+    });
+  }
+  async function fetchJolaniMonthlySeries(): Promise<{ months: string[]; series: { name: string; values: number[]; imageUrl?: string }[] }> {
+    const [p] = await db.select().from(polls).where(eq(polls.slug, "jolani"));
+    if (!p) return { months: [], series: [] };
+    const rows = await db
+      .select({ candidateId: dailyScores.candidateId, score: dailyScores.score, votes: dailyScores.votes, day: dailyScores.day })
+      .from(dailyScores)
+      .where(eq(dailyScores.pollId, p.id))
+      .orderBy(dailyScores.day);
+    const monthSet = new Set<string>();
+    const byCandidate = new Map<string, Map<string, { score: number; votes: number }>>();
+    for (const r of rows) {
+      const d = new Date(r.day as unknown as string);
+      const key = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
+      monthSet.add(key);
+      const m = byCandidate.get(r.candidateId) || new Map<string, { score: number; votes: number }>();
+      const prev = m.get(key) || { score: 0, votes: 0 };
+      m.set(key, { score: prev.score + (r.score || 0), votes: prev.votes + (r.votes || 0) });
+      byCandidate.set(r.candidateId, m);
+    }
+    const months = Array.from(monthSet.values()).sort();
+    const cands = await db.select().from(candidates).where(eq(candidates.pollId, p.id)).orderBy(candidates.sort);
+    const series = cands.map((c, i) => {
+      const n = Math.max(1, cands.length - 1);
+      const minL = 30, maxL = 78;
+      const light = Math.round(minL + ((maxL - minL) * i) / n);
+      const green = `hsl(145 65% ${light}%)`;
+      return {
+        name: c.name as string,
+        values: months.map((m) => {
+          const mv = byCandidate.get(c.id)?.get(m);
+          if (!mv) return 0;
+          return mv.votes > 0 ? mv.score / mv.votes : 0;
+        }),
+        imageUrl: (c.imageUrl as string | null) || undefined,
+        color: green,
+      };
+    });
+    return { months, series };
+  }
+  const jolaniRows = await fetchJolaniAllTime();
+  const jolaniChart = await fetchJolaniMonthlySeries();
+  const jolaniTop3 = jolaniRows.slice(0, 3);
   const allTime = await fetchAllTimeExtremes();
   const triad = allTime.best.slice(0, 3);
   const first = triad[0];
@@ -674,6 +737,93 @@ export default async function Page() {
       </div>
 
       <AlgorithmInfo />
+
+      {/* Jolani Top 3 Ever */}
+      {jolaniTop3.length ? (
+        <div className="max-w-screen-md mx-auto mt-20 mb-6">
+          <h2 className="font-semibold mb-3 text-center text-gray-500 text-2xl">أفضل ٣ شخصيات الجولاني على الإطلاق</h2>
+          <div className="grid grid-cols-3 items-end justify-items-center gap-4 mt-10">
+            <div className="flex flex-col items-center">
+              {jolaniTop3[1] && (
+                <div className="relative">
+                  <Avatar src={jolaniTop3[1].imageUrl || ""} alt={jolaniTop3[1].name} size={48} />
+                  <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-green-900 text-white text-[10px] border border-white flex items-center justify-center">2</span>
+                </div>
+              )}
+              {jolaniTop3[1] && <div className="text-sm mt-1 text-center leading-tight mb-2">{jolaniTop3[1].name}</div>}
+            </div>
+            <div className="flex flex-col items-center">
+              {jolaniTop3[0] && (
+                <div className="relative">
+                  <Avatar src={jolaniTop3[0].imageUrl || ""} alt={jolaniTop3[0].name} size={64} />
+                  <span className="absolute -top-1 -right-1 h-6 w-6 rounded-full bg-green-900 text-white text-[10px] border border-white flex items-center justify-center">1</span>
+                </div>
+              )}
+              {jolaniTop3[0] && <div className="font-medium mt-1 text-center leading-tight mb-2">{jolaniTop3[0].name}</div>}
+            </div>
+            <div className="flex flex-col items-center">
+              {jolaniTop3[2] && (
+                <div className="relative">
+                  <Avatar src={jolaniTop3[2].imageUrl || ""} alt={jolaniTop3[2].name} size={48} />
+                  <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-green-900 text-white text-[10px] border border-white flex items-center justify-center">3</span>
+                </div>
+              )}
+              {jolaniTop3[2] && <div className="text-sm mt-1 text-center leading-tight mb-2">{jolaniTop3[2].name}</div>}
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {/* Jolani stats */}
+      {jolaniChart.months.length && jolaniChart.series.length ? (
+        <div className="max-w-screen-md mx-auto mt-10">
+          <h3 className="font-semibold mb-2 text-center">إحصائيات شخصيات الجولاني</h3>
+          <ClientOnly>
+            <MonthlyLineChart months={jolaniChart.months} series={jolaniChart.series as any} />
+          </ClientOnly>
+        </div>
+      ) : null}
+      {jolaniRows.length ? (
+        <div className="max-w-screen-md mx-auto mt-4">
+          <h2 className="font-semibold mb-2">قائمة شخصيات الجولاني</h2>
+          <p className="text-sm text-gray-500 mb-2">الترتيب حسب المعدّل لكل صوت؛ عرض النقاط والأصوات الإجمالية</p>
+          <Card>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <Table className="min-w-[36rem]">
+                  <Thead>
+                    <Tr>
+                      <Th className="w-10 text-right">#</Th>
+                      <Th className="text-right">الشخصية</Th>
+                      <Th className="w-16 sm:w-20 text-right">النقاط</Th>
+                      <Th className="w-14 sm:w-16 text-right">الأصوات</Th>
+                      <Th className="w-20 sm:w-24 text-right">المعدّل</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {jolaniRows.map((r) => (
+                      <Tr key={r.candidateId}>
+                        <Td>#{r.rank}</Td>
+                        <Td className="min-w-[12rem] sm:min-w-0">
+                          <div className="flex items-center gap-2">
+                            <Avatar src={r.imageUrl || ""} alt={r.name} size={28} />
+                            <div className="leading-tight">
+                              <div className="text-sm">{r.name}</div>
+                            </div>
+                          </div>
+                        </Td>
+                        <Td>{formatNumberKM(r.score)}</Td>
+                        <Td>{formatNumberKM(r.votes)}</Td>
+                        <Td>{r.avg.toFixed(2)}</Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      ) : null}
     </main>
   );
 }

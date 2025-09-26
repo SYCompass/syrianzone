@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
@@ -13,6 +14,9 @@ type Props = {
   initialCandidates: Candidate[];
   pollId: string;
   voteDay: string;
+  submitApiPath?: string; // e.g., "/api/jolani/submit"
+  minSelections?: number; // default 3; use 1 for Jolani
+  pollSlug?: string; // optional; used only in payload for compatibility
 };
 
 type TierKey = "S" | "A" | "B" | "C" | "D" | "F";
@@ -39,7 +43,8 @@ const tierDescriptions: Record<TierKey, string> = {
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
-export default function TierBoard({ initialCandidates, pollId, voteDay }: Props) {
+export default function TierBoard({ initialCandidates, pollId, voteDay, submitApiPath, minSelections = 3, pollSlug }: Props) {
+  const router = useRouter();
   const [tiers, setTiers] = useState<Record<TierKey, Candidate[]>>({ S: [], A: [], B: [], C: [], D: [], F: [] });
   // Deterministic seeded shuffle to avoid SSR/CSR hydration mismatch
   const shuffledInitial = useMemo(() => {
@@ -72,7 +77,8 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     return copy;
   }, [initialCandidates, pollId, voteDay]);
   const [bank, setBank] = useState<Candidate[]>(() => shuffledInitial.filter((c) => c.category !== "governor" && c.category !== "security"));
-  const [selectedCategory, setSelectedCategory] = useState<"minister" | "governor" | "security">("minister");
+  const [selectedCategory, setSelectedCategory] = useState<"minister" | "governor" | "security" | "jolani">("minister");
+  const [isLoadingJolani, setIsLoadingJolani] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const containerRef = useRef<HTMLDivElement>(null);
   const tiersRef = useRef<HTMLDivElement>(null);
@@ -130,20 +136,37 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     return () => clearTimeout(id);
   }, [submitStatus]);
 
-  // Switch between categories for the bank (does not remove already placed items from tiers)
+  // Switch between categories for the bank. Reset tiers to avoid cross-poll submission.
   useEffect(() => {
-    const inTiers = new Set<string>(tierKeys.flatMap((k) => tiers[k].map((c) => c.id)));
-    const filtered = shuffledInitial
-      .filter((c) => {
-        if (selectedCategory === "governor") return c.category === "governor";
-        if (selectedCategory === "security") return c.category === "security";
-        // ministers bucket = anything that's not governor or security
-        return c.category !== "governor" && c.category !== "security";
-      })
-      .filter((c) => !inTiers.has(c.id));
-    setBank(filtered);
+    async function load() {
+      setSelectedIds(new Set());
+      setTiers(createEmptyTiers());
+      if (selectedCategory === "jolani") {
+        try {
+          setIsLoadingJolani(true);
+          const res = await fetch(`${BASE_PATH}/api/jolani/candidates`, { cache: "no-store" });
+          const data = await res.json();
+          const list: Candidate[] = (data?.candidates || []).map((c: any) => ({ id: c.id, name: c.name, title: c.title || null, imageUrl: c.imageUrl || null }));
+          setBank(list);
+        } finally {
+          setIsLoadingJolani(false);
+        }
+        return;
+      }
+      const inTiers = new Set<string>(tierKeys.flatMap((k) => tiers[k].map((c) => c.id)));
+      const filtered = shuffledInitial
+        .filter((c) => {
+          if (selectedCategory === "governor") return c.category === "governor";
+          if (selectedCategory === "security") return c.category === "security";
+          // ministers bucket = anything that's not governor or security
+          return c.category !== "governor" && c.category !== "security";
+        })
+        .filter((c) => !inTiers.has(c.id));
+      setBank(filtered);
+    }
+    load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategory, tiers, shuffledInitial]);
+  }, [selectedCategory, shuffledInitial]);
 
   function moveCandidateTo(candidateId: string, target: TierKey | "bank") {
     const fromTierKey = tierKeys.find((k) => tiers[k].some((c) => c.id === candidateId));
@@ -210,8 +233,10 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
 
   async function submit() {
     const totalAssigned = tierKeys.reduce((acc, k) => acc + tiers[k].length, 0);
-    if (totalAssigned < 3) {
-      setSubmitStatus({ ok: false, message: "الحد الأدنى للاختيار هو ٣. الرجاء اختيار ٣ على الأقل." });
+    if (totalAssigned < (minSelections || 3)) {
+      const min = minSelections || 3;
+      const minMsg = min === 1 ? "الحد الأدنى للاختيار هو ١. الرجاء اختيار عنصر واحد على الأقل." : `الحد الأدنى للاختيار هو ${min}. الرجاء اختيار ${min} على الأقل.`;
+      setSubmitStatus({ ok: false, message: minMsg });
       return;
     }
     if (nextSubmitAt && Date.now() < nextSubmitAt) {
@@ -226,12 +251,12 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
     const deviceId = localStorage.getItem("deviceId") || crypto.randomUUID();
     localStorage.setItem("deviceId", deviceId);
     const payload: {
-      pollSlug: string;
-      cfToken: string;
+      pollSlug?: string;
+      cfToken?: string;
       deviceId: string;
       tiers: Record<TierKey, Array<{ candidateId: string; pos: number }>>;
     } = {
-      pollSlug: "best-ministers",
+      pollSlug: pollSlug || "best-ministers",
       cfToken,
       deviceId,
       tiers: tierKeys.reduce((acc, k) => {
@@ -246,7 +271,8 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
         F: [] as Array<{ candidateId: string; pos: number }>,
       } as Record<TierKey, Array<{ candidateId: string; pos: number }>>),
     };
-    const submitPath = `${BASE_PATH}/api/submit`;
+    const providedPath = submitApiPath || `${BASE_PATH}/api/submit`;
+    const submitPath = providedPath.startsWith("/") ? `${BASE_PATH}${providedPath}` : providedPath;
     const res = await fetch(submitPath, {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -288,38 +314,23 @@ export default function TierBoard({ initialCandidates, pollId, voteDay }: Props)
         onDrop={(e) => handleDrop(e, "bank")}
         data-bank-area
       >
-        <div className="flex items-center justify-between">
-          <h2 className="font-bold text-center flex-1">قائمة المسؤولين</h2>
+        <div className="flex flex-col items-center gap-2">
           <div className="text-sm flex items-center gap-2">
-            <label className="flex items-center gap-1">
-              <input
-                type="radio"
-                name="category"
-                value="minister"
-                checked={selectedCategory === "minister"}
-                onChange={() => setSelectedCategory("minister")}
-              />
-              الحكومة
-            </label>
-            <label className="flex items-center gap-1">
-              <input
-                type="radio"
-                name="category"
-                value="governor"
-                checked={selectedCategory === "governor"}
-                onChange={() => setSelectedCategory("governor")}
-              />
-              المحافظون
-            </label>
-            <label className="flex items-center gap-1">
-              <input
-                type="radio"
-                name="category"
-                value="security"
-                checked={selectedCategory === "security"}
-                onChange={() => setSelectedCategory("security")}
-              />
-              مسؤولي الأمن
+            <label className="flex items-center gap-2">
+              <span className="whitespace-nowrap">التصنيف:</span>
+              <select
+                className="border rounded px-2 py-1 bg-white dark:bg-neutral-900 dark:border-neutral-800"
+                value={selectedCategory}
+                onChange={(e) => {
+                  const val = e.target.value as "minister" | "governor" | "security" | "jolani";
+                  setSelectedCategory(val);
+                }}
+              >
+                <option value="minister">الحكومة</option>
+                <option value="governor">المحافظون</option>
+                <option value="security">مسؤولو الأمن</option>
+                <option value="jolani">شخصيات الجولاني</option>
+              </select>
             </label>
           </div>
         </div>
