@@ -58,6 +58,60 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
 
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+  // Transcode a remote image URL into a JPEG data URL for reliable canvas rendering (iOS Safari)
+  async function transcodeToDataUrl(url: string, targetW: number, targetH: number, mode: "cover" | "contain" = "cover"): Promise<string | undefined> {
+    try {
+      const res = await fetch(url, { cache: "force-cache", mode: "cors" as RequestMode });
+      if (!res.ok) return undefined;
+      const blob = await res.blob();
+      const objUrl = URL.createObjectURL(blob);
+      const img = new Image();
+      await new Promise((resolve) => {
+        img.onload = () => resolve(null);
+        img.onerror = () => resolve(null);
+        img.src = objUrl;
+      });
+      URL.revokeObjectURL(objUrl);
+      const srcW = (img as any).naturalWidth || img.width;
+      const srcH = (img as any).naturalHeight || img.height;
+      let canvasW = targetW;
+      let canvasH = targetH;
+      if (mode === "contain") {
+        if (targetW <= 0 && targetH > 0 && srcH > 0) {
+          canvasH = targetH;
+          canvasW = Math.max(1, Math.round((srcW / srcH) * canvasH));
+        } else if (targetH <= 0 && targetW > 0 && srcW > 0) {
+          canvasW = targetW;
+          canvasH = Math.max(1, Math.round((srcH / srcW) * canvasW));
+        }
+      }
+      const off = document.createElement("canvas");
+      off.width = Math.max(1, canvasW);
+      off.height = Math.max(1, canvasH);
+      const octx = off.getContext("2d");
+      if (!octx) return undefined;
+      // white background to avoid transparent issues in JPEG
+      octx.fillStyle = "#ffffff";
+      octx.fillRect(0, 0, off.width, off.height);
+      if (mode === "cover") {
+        const minSide = Math.max(1, Math.min(srcW, srcH));
+        const sx = Math.floor((srcW - minSide) / 2);
+        const sy = Math.floor((srcH - minSide) / 2);
+        octx.drawImage(img, sx, sy, minSide, minSide, 0, 0, off.width, off.height);
+      } else {
+        // contain: center fit
+        const ratio = Math.min(off.width / srcW, off.height / srcH);
+        const dw = Math.round(srcW * ratio);
+        const dh = Math.round(srcH * ratio);
+        const dx = Math.floor((off.width - dw) / 2);
+        const dy = Math.floor((off.height - dh) / 2);
+        octx.drawImage(img, dx, dy, dw, dh);
+      }
+      return off.toDataURL("image/jpeg", 0.95);
+    } catch {
+      return undefined;
+    }
+  }
   // Local safe image loader: fetch as blob and use object URL to improve cross-browser reliability (iOS Safari)
   const objectUrls: string[] = [];
   async function loadImageSafe(url: string): Promise<HTMLImageElement | undefined> {
@@ -158,8 +212,11 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
   }
   await Promise.all(
     toLoad.map(async (src) => {
-      const img = await loadImageSafe(src);
-      if (img) loaded.set(src, img);
+      // Transcode avatars to a square JPEG to avoid CORS/taint issues
+      const dataUrl = await transcodeToDataUrl(src, 256, 256, "cover");
+      if (!dataUrl) return;
+      const img = await loadImage(dataUrl);
+      loaded.set(src, img);
     })
   );
 
@@ -264,7 +321,8 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
   let logoImg: HTMLImageElement | undefined;
   try {
     const src = logoSrc.startsWith("/") ? `${basePath}${logoSrc}` : logoSrc;
-    logoImg = await loadImageSafe(src);
+    const logoDataUrl = await transcodeToDataUrl(src, 0, 32, "contain");
+    if (logoDataUrl) logoImg = await loadImage(logoDataUrl);
   } catch {}
   const logoH = 32;
   let logoDrawW = 0;
