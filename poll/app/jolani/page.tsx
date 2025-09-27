@@ -3,10 +3,9 @@ import { Table, Thead, Tbody, Tr, Th, Td } from "@/components/ui/table";
 import { Avatar } from "@/components/ui/avatar";
 import { db } from "@/db";
 import { candidates, dailyScores, polls } from "@/db/schema";
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { getLocalMidnightUTC } from "@/lib/time";
 import { formatNumberKM } from "@/lib/utils";
-import JolaniConsoleHook from "./console-hook";
 import MonthlyLineChart from "@/components/MonthlyLineChart";
 import ClientOnly from "@/components/ClientOnly";
 
@@ -28,11 +27,13 @@ async function fetchAllTimeTotals(slug: string) {
   }
   const totals = Array.from(agg.entries()).map(([candidateId, v]) => ({ candidateId, votes: v.votes, score: v.score, avg: v.votes > 0 ? v.score / v.votes : 0 }));
   totals.sort((a, b) => (b.avg - a.avg) || (b.score - a.score) || (b.votes - a.votes));
-  const cands = await db.select().from(candidates).where(eq(candidates.pollId, p.id));
-  return totals.map((t, i) => {
-    const c = cands.find((cc) => cc.id === t.candidateId);
-    return { candidateId: t.candidateId, name: c?.name || "", imageUrl: c?.imageUrl || undefined, votes: t.votes, score: t.score, avg: t.avg, rank: i + 1 };
-  });
+  const cands = await db.select().from(candidates).where(and(eq(candidates.pollId, p.id), eq(candidates.category, 'jolani')));
+  return totals
+    .filter((t) => cands.some((c) => c.id === t.candidateId))
+    .map((t, i) => {
+      const c = cands.find((cc) => cc.id === t.candidateId);
+      return { candidateId: t.candidateId, name: c?.name || "", imageUrl: c?.imageUrl || undefined, votes: t.votes, score: t.score, avg: t.avg, rank: i + 1 };
+    });
 }
 
 async function fetchMonthlySeries(slug: string): Promise<{ months: string[]; series: { name: string; values: number[]; imageUrl?: string }[] }> {
@@ -55,12 +56,11 @@ async function fetchMonthlySeries(slug: string): Promise<{ months: string[]; ser
     byCandidate.set(r.candidateId, m);
   }
   const months = Array.from(monthSet.values()).sort();
-  const cands = await db.select().from(candidates).where(eq(candidates.pollId, p.id)).orderBy(candidates.sort);
-  // Build green palette for all series
+  const cands = await db.select().from(candidates).where(and(eq(candidates.pollId, p.id), eq(candidates.category, 'jolani'))).orderBy(candidates.sort);
   const series = cands.map((c, i) => {
     const n = Math.max(1, cands.length - 1);
-    const minL = 30; // darker for top-ranked
-    const maxL = 78; // lighter for last
+    const minL = 30;
+    const maxL = 78;
     const light = Math.round(minL + ((maxL - minL) * i) / n);
     const green = `hsl(145 65% ${light}%)`;
     return {
@@ -84,8 +84,6 @@ export default async function Page() {
   const { months, series } = await fetchMonthlySeries(slug);
   return (
     <main className="container mx-auto px-4 pt-8 pb-8">
-      {/* Inject browser console helpers */}
-      <JolaniConsoleHook />
       <h1 className="text-2xl font-bold mb-4 text-center">لوحة تصنيف شخصيات الجولاني</h1>
 
       {top3.length ? (
