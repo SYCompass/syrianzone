@@ -78,7 +78,6 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
   }, [initialCandidates, pollId, voteDay]);
   const [bank, setBank] = useState<Candidate[]>(() => shuffledInitial.filter((c) => c.category !== "governor" && c.category !== "security"));
   const [selectedCategory, setSelectedCategory] = useState<"minister" | "governor" | "security" | "jolani">("minister");
-  const [isLoadingJolani, setIsLoadingJolani] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const containerRef = useRef<HTMLDivElement>(null);
   const tiersRef = useRef<HTMLDivElement>(null);
@@ -138,35 +137,21 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
 
   // Switch between categories for the bank. Reset tiers to avoid cross-poll submission.
   useEffect(() => {
-    async function load() {
-      setSelectedIds(new Set());
-      setTiers(createEmptyTiers());
-      if (selectedCategory === "jolani") {
-        try {
-          setIsLoadingJolani(true);
-          const res = await fetch(`${BASE_PATH}/api/jolani/candidates`, { cache: "no-store" });
-          const data = await res.json();
-          const list: Candidate[] = (data?.candidates || []).map((c: any) => ({ id: c.id, name: c.name, title: c.title || null, imageUrl: c.imageUrl || null }));
-          setBank(list);
-        } finally {
-          setIsLoadingJolani(false);
-        }
-        return;
-      }
-      const inTiers = new Set<string>(tierKeys.flatMap((k) => tiers[k].map((c) => c.id)));
-      const filtered = shuffledInitial
-        .filter((c) => {
-          if (selectedCategory === "governor") return c.category === "governor";
-          if (selectedCategory === "security") return c.category === "security";
-          // ministers bucket = anything that's not governor or security
-          return c.category !== "governor" && c.category !== "security";
-        })
-        .filter((c) => !inTiers.has(c.id));
-      setBank(filtered);
-    }
-    load();
+    setSelectedIds(new Set());
+    setTiers(createEmptyTiers());
+    const inTiers = new Set<string>(tierKeys.flatMap((k) => tiers[k].map((c) => c.id)));
+    const filtered = shuffledInitial
+      .filter((c) => {
+        if (selectedCategory === "governor") return c.category === "governor";
+        if (selectedCategory === "security") return c.category === "security";
+        if (selectedCategory === "jolani") return c.category === "jolani";
+        // ministers bucket = anything that's not governor, security, or jolani
+        return c.category !== "governor" && c.category !== "security" && c.category !== "jolani";
+      })
+      .filter((c) => !inTiers.has(c.id));
+    setBank(filtered);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategory, shuffledInitial]);
+  }, [selectedCategory, tiers, shuffledInitial]);
 
   function moveCandidateTo(candidateId: string, target: TierKey | "bank") {
     const fromTierKey = tierKeys.find((k) => tiers[k].some((c) => c.id === candidateId));
@@ -429,7 +414,17 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
 
       <div className="flex gap-3 justify-center mt-6 p-4">
         <Button type="button" variant="secondary" onClick={submit} disabled={isSubmitting} className="dark:bg-green-600 dark:hover:bg-green-500 dark:text-white">
-          إرسال
+          {isSubmitting ? (
+            <span className="inline-flex items-center gap-2">
+              <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+              </svg>
+              جاري الإرسال...
+            </span>
+          ) : (
+            "إرسال"
+          )}
         </Button>
         <Button type="button" onClick={saveImage} disabled={isSubmitting}>حفظ كصورة</Button>
         <Button
