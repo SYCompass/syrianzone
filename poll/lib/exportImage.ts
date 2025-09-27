@@ -244,16 +244,18 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
   for (const k of tierOrder) {
     for (const it of tiers[k] || []) {
       const u = it.imageUrl || "";
-      if (u && !loaded.has(u)) toLoad.push(u.startsWith("/") ? `${basePath}${u}` : u);
+      if (!u) continue;
+      const abs = resolveUrl(u);
+      if (!loaded.has(abs)) toLoad.push(abs);
     }
   }
   await Promise.all(
-    toLoad.map(async (src) => {
+    toLoad.map(async (srcAbs) => {
       // Transcode avatars to a square JPEG to avoid CORS/taint issues and format incompatibilities
-      const dataUrl = await loadBestImageDataUrl(src, 256, 256, "cover");
+      const dataUrl = await loadBestImageDataUrl(srcAbs, 256, 256, "cover");
       if (!dataUrl) return;
       const img = await loadImage(dataUrl);
-      loaded.set(src, img);
+      loaded.set(srcAbs, img);
     })
   );
 
@@ -300,8 +302,9 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
       ctx.strokeRect(cx, cy, itemWidth, itemHeight);
 
       // Image
-      const imgSrc = it.imageUrl ? (it.imageUrl.startsWith("/") ? `${basePath}${it.imageUrl}` : it.imageUrl) : "";
-      const img = imgSrc ? loaded.get(imgSrc) : undefined;
+      const imgSrc = it.imageUrl || "";
+      const imgKey = resolveUrl(imgSrc);
+      const img = imgKey ? loaded.get(imgKey) : undefined;
       if (img && img.width && img.height) {
         const iw = 96;
         const ih = 96;

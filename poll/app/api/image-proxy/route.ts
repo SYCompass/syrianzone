@@ -24,6 +24,10 @@ export async function GET(req: NextRequest) {
     const upstream = await fetch(src, { cache: "no-store", headers: { "user-agent": req.headers.get("user-agent") || "Mozilla/5.0" } });
     if (!upstream.ok) return NextResponse.json({ error: "fetch failed" }, { status: 502 });
     const contentType = (upstream.headers.get("content-type") || "").toLowerCase();
+    // If upstream returned HTML or empty bytes, bail
+    if (contentType.includes("text/html")) {
+      return NextResponse.json({ error: "upstream non-image" }, { status: 502 });
+    }
     const input = Buffer.from(await upstream.arrayBuffer());
 
     // Convert to JPEG for maximum canvas compatibility (iOS Safari)
