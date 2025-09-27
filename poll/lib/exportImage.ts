@@ -58,10 +58,18 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
 
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+  const origin = (typeof window !== "undefined" && window.location && window.location.origin) ? window.location.origin : "";
+  function resolveUrl(u: string): string {
+    if (!u) return u;
+    if (u.startsWith("http://") || u.startsWith("https://")) return u;
+    if (u.startsWith("/")) return `${origin}${u}`;
+    return u;
+  }
   // Transcode a remote image URL into a JPEG data URL for reliable canvas rendering (iOS Safari)
   async function transcodeToDataUrl(url: string, targetW: number, targetH: number, mode: "cover" | "contain" = "cover"): Promise<string | undefined> {
     try {
-      const res = await fetch(url, { cache: "force-cache", mode: "cors" as RequestMode });
+      const abs = resolveUrl(url);
+      const res = await fetch(abs, { cache: "force-cache", mode: "same-origin" as RequestMode, credentials: "same-origin" as RequestCredentials });
       if (!res.ok) return undefined;
       const blob = await res.blob();
       const objUrl = URL.createObjectURL(blob);
