@@ -19,6 +19,7 @@ type ExportTierDataOptions = {
   width?: number;
   scale?: number;
   watermarkText?: string;
+  logoSrc?: string;
 };
 
 function loadImage(src: string): Promise<HTMLImageElement> {
@@ -40,6 +41,7 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
     width = 1000,
     scale = 2,
     watermarkText = "syrian.zone/tierlist",
+    logoSrc = (typeof window !== "undefined" ? `${basePath}/assets/logo-lightmode.svg` : "/assets/logo-lightmode.svg"),
   } = options;
 
   const tierOrder: TierKey[] = ["S", "A", "B", "C", "D", "F"];
@@ -57,6 +59,19 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
+  // Fonts
+  const fontFamily = 'IBM Plex Sans Arabic, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif';
+
+  // Measure footer (text + logo) to expand canvas width if needed to avoid cropping
+  const footerFont = "bold 16px " + fontFamily;
+  const measureCtx = document.createElement("canvas").getContext("2d") as CanvasRenderingContext2D;
+  measureCtx.font = footerFont;
+  const footerTextWidth = measureCtx.measureText(watermarkText).width;
+  const footerGap = 12;
+  const footerLogoW = 32;
+  const footerMinWidth = Math.ceil(footerTextWidth + footerGap + footerLogoW + 40);
+  const finalWidth = Math.max(width, footerMinWidth);
+
   const padding = { top: 16, right: 16, bottom: 16, left: 16 };
   const labelWidth = 90;
   const rowGap = 8; // gap between tiers
@@ -68,7 +83,7 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
   const tierBottomPad = 10;
 
   // Pre-compute dynamic height based on content
-  const areaW = width - padding.left - padding.right - labelWidth;
+  const areaW = finalWidth - padding.left - padding.right - labelWidth;
   const maxPerRow = Math.max(1, Math.floor((areaW + itemGap) / (itemWidth + itemGap)));
   const tierHeights: Record<TierKey, number> = { S: 0, A: 0, B: 0, C: 0, D: 0, F: 0 };
   let contentHeight = 0;
@@ -79,19 +94,17 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
     tierHeights[k] = blockHeight;
     contentHeight += blockHeight;
   }
-  const watermarkH = 40;
+  const watermarkH = 64;
   const height = padding.top + contentHeight + rowGap * (tierOrder.length - 1) + padding.bottom + watermarkH;
-  canvas.width = Math.floor(width * scale);
+  canvas.width = Math.floor(finalWidth * scale);
   canvas.height = Math.floor(height * scale);
   ctx.scale(scale, scale);
 
   ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, width, height);
+  ctx.fillRect(0, 0, finalWidth, height);
   // Enforce RTL rendering
   try { (ctx as any).direction = "rtl"; } catch {}
   const rtl = (s: string) => s;
-
-  const fontFamily = 'IBM Plex Sans Arabic, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif';
   ctx.font = "14px " + fontFamily;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
@@ -145,7 +158,7 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
     const areaX = padding.left + labelWidth;
     // Dotted (dashed) border around the tier area
     const areaY = y;
-    const areaWFull = width - padding.left - padding.right - labelWidth;
+    const areaWFull = finalWidth - padding.left - padding.right - labelWidth;
     ctx.save();
     ctx.setLineDash([4, 4]);
     ctx.strokeStyle = "#e5e7eb";
@@ -222,11 +235,41 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
     y += blockHeight + rowGap;
   }
 
-  // Watermark
+  // Watermark with logo to the right of URL
   ctx.fillStyle = "#111111";
   ctx.font = "bold 16px " + fontFamily;
-  ctx.textAlign = "center";
-  ctx.fillText(watermarkText, Math.floor(width / 2), height - 20);
+  const gap = 12;
+  const textWidth = ctx.measureText(watermarkText).width;
+  let logoImg: HTMLImageElement | undefined;
+  try {
+    const src = logoSrc.startsWith("/") ? `${basePath}${logoSrc}` : logoSrc;
+    logoImg = await loadImage(src);
+  } catch {}
+  const logoH = 32;
+  let logoDrawW = 0;
+  if (logoImg) {
+    const sW = (logoImg as any).naturalWidth || logoImg.width || logoH;
+    const sH = (logoImg as any).naturalHeight || logoImg.height || logoH;
+    const ratio = sH > 0 ? (logoH / sH) : 1;
+    logoDrawW = Math.max(1, Math.round(sW * ratio));
+  }
+  const totalW = textWidth + (logoImg ? gap + logoDrawW : 0);
+  const startX = Math.max(10, Math.floor((finalWidth - totalW) / 2));
+  const footerTop = height - (padding.bottom + watermarkH);
+  const by = footerTop + Math.floor(watermarkH / 2);
+  const prevAlign = ctx.textAlign;
+  const prevDir = (ctx as any).direction;
+  try { (ctx as any).direction = "ltr"; } catch {}
+  ctx.textAlign = "left";
+  ctx.fillText(watermarkText, startX, by);
+  if (logoImg && logoDrawW > 0) {
+    const lx = startX + textWidth + gap;
+    const ly = by - Math.floor(logoH / 2);
+    // Draw full logo preserving aspect ratio (no crop)
+    ctx.drawImage(logoImg, lx, ly, logoDrawW, logoH);
+  }
+  ctx.textAlign = prevAlign;
+  try { (ctx as any).direction = prevDir; } catch {}
 
   const link = document.createElement("a");
   link.download = fileName;
