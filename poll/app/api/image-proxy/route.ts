@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     if (!src || !isHttpUrl(src)) return NextResponse.json({ error: "invalid url" }, { status: 400 });
 
     // Fetch original
-    const upstream = await fetch(src, { cache: "no-store" });
+    const upstream = await fetch(src, { cache: "no-store", headers: { "user-agent": req.headers.get("user-agent") || "Mozilla/5.0" } });
     if (!upstream.ok) return NextResponse.json({ error: "fetch failed" }, { status: 502 });
     const contentType = (upstream.headers.get("content-type") || "").toLowerCase();
     const input = Buffer.from(await upstream.arrayBuffer());

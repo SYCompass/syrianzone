@@ -25,7 +25,10 @@ type ExportTierDataOptions = {
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve) => {
     const img = new Image();
-    img.crossOrigin = "anonymous";
+    // Only set crossOrigin for network URLs; data:/blob: don't need it and some browsers mishandle it
+    if (/^https?:\/\//i.test(src)) {
+      img.crossOrigin = "anonymous";
+    }
     (img as any).decoding = "sync";
     img.onload = () => resolve(img);
     img.onerror = () => resolve(img);
@@ -155,6 +158,8 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
       objectUrls.push(objUrl);
       const img = new Image();
       (img as any).decoding = "sync";
+      // iOS Safari sometimes needs a small defer before assigning src for blob URLs
+      await new Promise((r) => setTimeout(r, 0));
       await new Promise((resolve) => {
         img.onload = () => resolve(null);
         img.onerror = () => resolve(null);
