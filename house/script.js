@@ -12,7 +12,7 @@
   const statMale = document.getElementById('statMale');
   const statFemale = document.getElementById('statFemale');
   const statAppealed = document.getElementById('statAppealed');
-  let sexChart, ageChart;
+  let sexChart, ageChart, appealChart;
 
   const PROVINCES = [
     { key: 'all', label: 'الكل', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '125118455' },
@@ -116,22 +116,30 @@
     try {
       const appealed = data.filter((r)=> String((r['حالة الطعن']||'')).trim() === 'مطعون').length;
       if (statAppealed) statAppealed.textContent = String(appealed);
+      if (statAppealedPct) {
+        const pct = total > 0 ? Math.round((appealed / total) * 1000) / 10 : 0;
+        statAppealedPct.textContent = `${pct}%`;
+      }
     } catch(_) {}
   }
 
   function renderCharts(data){
     const sexCounts = { male: 0, female: 0 };
     const ageCounts = { lt30: 0, '30s': 0, '40s': 0, '50s': 0, '60p': 0 };
+    let appealedCount = 0;
     data.forEach(r=>{
       const s = r.__sexNorm;
       if (s === 'ذكر') sexCounts.male++; else if (s === 'أنثى') sexCounts.female++;
       const g = r.__ageGroup || ageToGroup(computeAge(r));
       if (g in ageCounts) ageCounts[g]++;
+      if (String(r.__appealStatus || r['حالة الطعن'] || '').trim() === 'مطعون') appealedCount++;
     });
     const sexCtx = document.getElementById('sexChart');
     const ageCtx = document.getElementById('ageChart');
+    const appealCtx = document.getElementById('appealChart');
     if (sexChart) sexChart.destroy();
     if (ageChart) ageChart.destroy();
+    if (appealChart) appealChart.destroy();
     const maleBase = '#556A4E';
     const femaleBase = '#A73F46';
     const maleDim = 'rgba(85,106,78,0.3)';
@@ -169,6 +177,17 @@
       type: 'bar',
       data: { labels: ['<30','30s','40s','50s','60+'], datasets: [{ data: [ageCounts.lt30, ageCounts['30s'], ageCounts['40s'], ageCounts['50s'], ageCounts['60p']], backgroundColor: ageBarColor }] },
       options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+    });
+
+    // Appeal chart
+    const notAppealed = Math.max(0, (data.length - appealedCount));
+    appealChart = new Chart(appealCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['مطعون', 'سليم'],
+        datasets: [{ data: [appealedCount, notAppealed], backgroundColor: [femaleBase, maleBase] }]
+      },
+      options: { plugins: { legend: { position: 'bottom' } } }
     });
   }
 

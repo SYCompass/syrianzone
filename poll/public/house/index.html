@@ -172,12 +172,13 @@
         <div class="card p-4 text-center">
           <div class="text-sm text-gray-600">مطعونين</div>
           <div id="statAppealed" class="text-2xl font-bold">–</div>
+          <div id="statAppealedPct" class="text-sm text-gray-600">–%</div>
         </div>
       </div>
 
       <!-- Charts -->
       <div class="card p-4 mb-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <h3 class="text-lg font-semibold mb-2">توزيع الجنس</h3>
             <canvas id="sexChart" height="220"></canvas>
@@ -185,6 +186,10 @@
           <div>
             <h3 class="text-lg font-semibold mb-2">توزيع الأعمار</h3>
             <canvas id="ageChart" height="220"></canvas>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-2">حالة الطعن</h3>
+            <canvas id="appealChart" height="220"></canvas>
           </div>
         </div>
       </div>
