@@ -7,6 +7,7 @@
   const searchInput = document.getElementById('searchInput');
   const sexFilter = document.getElementById('sexFilter');
   const ageGroupFilter = document.getElementById('ageGroupFilter');
+  const appealFilter = document.getElementById('appealFilter');
   const statTotal = document.getElementById('statTotal');
   const statMale = document.getElementById('statMale');
   const statFemale = document.getElementById('statFemale');
@@ -80,13 +81,17 @@
     const q = normalizeString(searchInput.value);
     const sex = sexFilter.value;
     const group = ageGroupFilter.value;
+    const appeal = (appealFilter && typeof appealFilter.value === 'string') ? appealFilter.value : '';
     return data.filter((row)=>{
       const name = row.__nameNorm;
       const place = row.__placeNorm;
       const rSex = row.__sexNorm;
       const rGroup = row.__ageGroup;
+      const rAppeal = String(row.__appealStatus || '').trim();
       if (sex && rSex !== sex) return false;
       if (group && rGroup !== group) return false;
+      if (appeal === 'appealed' && rAppeal !== 'مطعون') return false;
+      if (appeal === 'notAppealed' && rAppeal === 'مطعون') return false;
       if (q) {
         const hay = `${name} ${place}`;
         if (!hay.includes(q)) return false;
@@ -220,7 +225,6 @@
     };
     
     const sortedRows = sortData(rows, sortColumn, sortDirection);
-    const appealKey = (headers || []).find((k)=> String(k || '').trim() === 'حالة الطعن');
     
     theadRow.innerHTML = '';
     // Build visible headers: drop empty columns in current view and the 'المطعونين' notes column
@@ -283,12 +287,11 @@
     tbody.innerHTML = '';
     sortedRows.forEach(r=>{
       const tr = document.createElement('tr');
-      if (appealKey) {
-        const appealVal = String(r[appealKey] == null ? '' : r[appealKey]).trim();
-        if (appealVal === 'مطعون') {
+      try {
+        if (String(r.__appealStatus || '').trim() === 'مطعون') {
           tr.classList.add('appealed-row');
         }
-      }
+      } catch(_) {}
       headerDefs.forEach(({ key })=>{
         const td = document.createElement('td');
         td.className = 'px-4 py-2 text-sm border-t';
@@ -323,6 +326,7 @@
       }
       
       headers = objects.length ? Object.keys(objects[0]).filter(key => !key.startsWith('__')) : [];
+      const appealKey = headers.find((k)=> String(k || '').trim() === 'حالة الطعن');
       originalData = objects.map(o=>{
         const sexNorm = normalizeSex(o['Sex']||o['الجنس']);
         const ageNum = computeAge(o);
@@ -333,6 +337,7 @@
           __sexNorm: sexNorm,
           __ageGroup: ageGroup,
         });
+        try { base.__appealStatus = String((o[appealKey] || '')).trim(); } catch(_) { base.__appealStatus = ''; }
         if (!('Age' in base) && !('العمر' in base) && !('السن' in base)) {
           base['Age'] = String(ageNum || '');
         } else if ('Age' in base) {
@@ -369,6 +374,7 @@
     searchInput.value = '';
     sexFilter.value = '';
     ageGroupFilter.value = '';
+    try { if (appealFilter) appealFilter.value = ''; } catch(_) {}
     sortColumn = 'Name'; // Reset to default sort
     sortDirection = 'asc';
     // Immediately clear charts UI before reload
@@ -402,6 +408,7 @@
   searchInput.addEventListener('input', onControlsChange);
   sexFilter.addEventListener('change', onControlsChange);
   ageGroupFilter.addEventListener('change', onControlsChange);
+  try { appealFilter.addEventListener('change', onControlsChange); } catch(_) {}
 })();
 
 
