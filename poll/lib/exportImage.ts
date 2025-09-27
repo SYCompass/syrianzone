@@ -44,6 +44,7 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
 
   const tierOrder: TierKey[] = ["S", "A", "B", "C", "D", "F"];
   const tierLabel: Record<TierKey, string> = { S: "S", A: "A", B: "B", C: "C", D: "D", F: "F" };
+  const tierArabic: Record<TierKey, string> = { S: "ممتاز", A: "جيد جدًا", B: "جيد", C: "مقبول", D: "ضعيف", F: "سيئ" };
   const tierColor: Record<TierKey, string> = {
     S: "#e11d48",
     A: "#d97706",
@@ -137,8 +138,20 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
     ctx.fillStyle = "#ffffff";
     ctx.font = "bold 24px " + fontFamily;
     ctx.fillText(rtl(tierLabel[k]), padding.left + labelWidth / 2, y + 24);
+    // Arabic label under the letter
+    ctx.font = "600 16px " + fontFamily;
+    ctx.fillText(rtl(tierArabic[k]), padding.left + labelWidth / 2, y + 52);
     ctx.font = "600 14px " + fontFamily;
     const areaX = padding.left + labelWidth;
+    // Dotted (dashed) border around the tier area
+    const areaY = y;
+    const areaWFull = width - padding.left - padding.right - labelWidth;
+    ctx.save();
+    ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = "#e5e7eb";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(areaX, areaY, areaWFull, blockHeight);
+    ctx.restore();
     // Draw items centered per row; compute rows and place each item by (rowIndex, colIndex)
     const total = items.length;
     const rows = Math.max(1, Math.ceil(total / maxPerRow));
