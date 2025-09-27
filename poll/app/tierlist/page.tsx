@@ -11,13 +11,7 @@ export default async function Page() {
   const caller = appRouter.createCaller({ ip: undefined, userAgent: undefined });
   let data: { candidates: any[]; poll: { id: string }; voteDay: Date } | null = null;
   try {
-    const bm = await caller.poll.getToday({ slug: "best-ministers" });
-    const jl = await caller.poll.getToday({ slug: "jolani" });
-    const combined = [
-      ...bm.candidates.filter((c: any) => c.category !== "jolani"),
-      ...jl.candidates.map((c: any) => ({ ...c, category: "jolani" })),
-    ];
-    data = { candidates: combined, poll: bm.poll, voteDay: bm.voteDay };
+    data = await caller.poll.getToday({ slug: "best-ministers" });
   } catch (_) {
     data = null;
   }
@@ -42,7 +36,7 @@ export default async function Page() {
         </CardContent>
       </Card>
       {data ? (
-        <TierBoard initialCandidates={data.candidates} pollId={data.poll.id} voteDay={data.voteDay.toISOString()} submitApiPath="/api/submit" />
+        <TierBoard initialCandidates={data.candidates} pollId={data.poll.id} voteDay={data.voteDay.toISOString()} />
       ) : (
         <Card className="max-w-screen-lg mx-auto">
           <CardContent className="p-6 text-center text-gray-600 dark:text-gray-400">
