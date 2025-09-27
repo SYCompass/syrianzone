@@ -69,6 +69,13 @@
     #resetFilters:hover {
       background-color: var(--bg-tertiary) !important;
     }
+    /* Highlight appealed rows */
+    .appealed-row {
+      background-color: rgba(167, 63, 70, 0.12) !important;
+    }
+    .appealed-row td {
+      color: #7a2227;
+    }
   </style>
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-K4H98TC203"></script>
@@ -110,7 +117,7 @@
             <label class="block text-sm text-gray-600 mb-1">بحث بالاسم أو المكان</label>
             <input id="searchInput" type="text" class="w-full border px-3 py-2" placeholder="ابحث…" />
           </div>
-          <div class="grid grid-cols-3 gap-3">
+          <div class="grid grid-cols-4 gap-3">
             <div>
               <label class="block text-sm text-gray-600 mb-1">الجنس</label>
               <select id="sexFilter" class="w-full border px-3 py-2 bg-white">
@@ -131,6 +138,14 @@
               </select>
             </div>
             <div>
+              <label class="block text-sm text-gray-600 mb-1">حالة الطعن</label>
+              <select id="appealFilter" class="w-full border px-3 py-2 bg-white">
+                <option value="">الكل</option>
+                <option value="appealed">مطعون</option>
+                <option value="notAppealed">سليم</option>
+              </select>
+            </div>
+            <div>
               <label class="block text-sm text-gray-600 mb-1">&nbsp;</label>
               <button id="resetFilters" class="w-full px-3 py-2 transition-all duration-200" style="border: 4px solid var(--border-color); background: var(--sz-color-surface); color: var(--sz-color-ink); border-radius: 0px;">
                 إعادة تعيين
@@ -141,7 +156,7 @@
       </div>
 
       <!-- Stats -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
         <div class="card p-4 text-center">
           <div class="text-sm text-gray-600">الإجمالي</div>
           <div id="statTotal" class="text-2xl font-bold">–</div>
@@ -153,6 +168,10 @@
         <div class="card p-4 text-center">
           <div class="text-sm text-gray-600">إناث</div>
           <div id="statFemale" class="text-2xl font-bold">–</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="text-sm text-gray-600">مطعونين</div>
+          <div id="statAppealed" class="text-2xl font-bold">–</div>
         </div>
       </div>
 
@@ -189,7 +208,7 @@
   <script src="/components/utils-theme.js" defer></script>
   <script src="/components/utils-csv.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-  <script src="/house/script.js?ver=1.0.8" defer></script>
+  <script src="/house/script.js?ver=1.0.9" defer></script>
 </body>
 </html>
 

@@ -10,6 +10,7 @@
   const statTotal = document.getElementById('statTotal');
   const statMale = document.getElementById('statMale');
   const statFemale = document.getElementById('statFemale');
+  const statAppealed = document.getElementById('statAppealed');
   let sexChart, ageChart;
 
   const PROVINCES = [
@@ -90,6 +91,12 @@
         const hay = `${name} ${place}`;
         if (!hay.includes(q)) return false;
       }
+      // Drop empty rows (common in some sheets) – keep only rows with any real value, preferring Name
+      const nameCell = String(row['Name'] || row['الاسم'] || '').trim();
+      if (!nameCell) {
+        const hasAnyValue = (headers || []).some((k)=> String(row[k] == null ? '' : row[k]).trim() !== '');
+        if (!hasAnyValue) return false;
+      }
       return true;
     });
   }
@@ -101,6 +108,10 @@
     statTotal.textContent = String(total);
     statMale.textContent = String(male);
     statFemale.textContent = String(female);
+    try {
+      const appealed = data.filter((r)=> String((r['حالة الطعن']||'')).trim() === 'مطعون').length;
+      if (statAppealed) statAppealed.textContent = String(appealed);
+    } catch(_) {}
   }
 
   function renderCharts(data){
@@ -205,12 +216,24 @@
       'Age 2025': 'العمر 2025',
       'Sex': 'الجنس',
       'Place': 'مكان الولادة',
+      'Electoral District (الدائرة الانتخابية)': 'الدائرة الانتخابية',
     };
     
     const sortedRows = sortData(rows, sortColumn, sortDirection);
+    const appealKey = (headers || []).find((k)=> String(k || '').trim() === 'حالة الطعن');
     
     theadRow.innerHTML = '';
-    const headerDefs = headers.map((key)=>({ key, label: HEADER_LABELS_AR[key] || key }));
+    // Build visible headers: drop empty columns in current view and the 'المطعونين' notes column
+    const visibleHeaders = (headers || []).filter((key)=>{
+      const k = String(key || '').trim();
+      if (!k) return false;
+      if (k === 'المطعونين') return false;
+      // Hide columns that are entirely empty in the current dataset
+      try {
+        return sortedRows.some((r)=> String(r[key] == null ? '' : r[key]).trim() !== '');
+      } catch(_) { return true; }
+    });
+    const headerDefs = visibleHeaders.map((key)=>({ key, label: HEADER_LABELS_AR[key] || key }));
     headerDefs.forEach(({ key, label })=>{
       const th = document.createElement('th');
       th.className = 'px-4 py-2 text-right text-xs font-medium text-gray-600 uppercase tracking-wider bg-gray-50 sortable-header';
@@ -260,6 +283,12 @@
     tbody.innerHTML = '';
     sortedRows.forEach(r=>{
       const tr = document.createElement('tr');
+      if (appealKey) {
+        const appealVal = String(r[appealKey] == null ? '' : r[appealKey]).trim();
+        if (appealVal === 'مطعون') {
+          tr.classList.add('appealed-row');
+        }
+      }
       headerDefs.forEach(({ key })=>{
         const td = document.createElement('td');
         td.className = 'px-4 py-2 text-sm border-t';
