@@ -69,7 +69,9 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
   async function transcodeToDataUrl(url: string, targetW: number, targetH: number, mode: "cover" | "contain" = "cover"): Promise<string | undefined> {
     try {
       const abs = resolveUrl(url);
-      const res = await fetch(abs, { cache: "force-cache", mode: "same-origin" as RequestMode, credentials: "same-origin" as RequestCredentials });
+      // Always fetch via same-origin proxy to avoid CORS/taint and iOS Safari canvas issues
+      const proxied = `${origin}${basePath}/api/image-proxy?url=${encodeURIComponent(abs)}`;
+      const res = await fetch(proxied, { cache: "no-store" });
       if (!res.ok) return undefined;
       const blob = await res.blob();
       const objUrl = URL.createObjectURL(blob);
