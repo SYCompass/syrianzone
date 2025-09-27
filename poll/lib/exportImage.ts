@@ -10,6 +10,217 @@ type ExportOptions = {
   scale?: number;
 };
 
+type TierKey = "S" | "A" | "B" | "C" | "D" | "F";
+
+type ExportTierDataOptions = {
+  tiers: Record<TierKey, Array<{ name: string; title?: string | null; imageUrl?: string | null }>>;
+  basePath?: string;
+  fileName?: string;
+  width?: number;
+  scale?: number;
+  watermarkText?: string;
+};
+
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    (img as any).decoding = "sync";
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(img);
+    img.src = src;
+  });
+}
+
+export async function exportTierListFromData(options: ExportTierDataOptions): Promise<void> {
+  const {
+    tiers,
+    basePath = "",
+    fileName = "tier-list.png",
+    width = 1000,
+    scale = 2,
+    watermarkText = "syrian.zone/tierlist",
+  } = options;
+
+  const tierOrder: TierKey[] = ["S", "A", "B", "C", "D", "F"];
+  const tierLabel: Record<TierKey, string> = { S: "S", A: "A", B: "B", C: "C", D: "D", F: "F" };
+  const tierColor: Record<TierKey, string> = {
+    S: "#e11d48",
+    A: "#d97706",
+    B: "#059669",
+    C: "#0284c7",
+    D: "#7c3aed",
+    F: "#1f2937",
+  };
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+
+  const padding = { top: 16, right: 16, bottom: 16, left: 16 };
+  const labelWidth = 90;
+  const rowGap = 8; // gap between tiers
+  const itemWidth = 120;
+  const itemHeight = 160;
+  const itemGap = 8; // horizontal gap between items
+  const internalRowGap = 10; // vertical gap between rows inside the same tier
+  const tierTopPad = 10;
+  const tierBottomPad = 10;
+
+  // Pre-compute dynamic height based on content
+  const areaW = width - padding.left - padding.right - labelWidth;
+  const maxPerRow = Math.max(1, Math.floor((areaW + itemGap) / (itemWidth + itemGap)));
+  const tierHeights: Record<TierKey, number> = { S: 0, A: 0, B: 0, C: 0, D: 0, F: 0 };
+  let contentHeight = 0;
+  for (const k of tierOrder) {
+    const count = (tiers[k] || []).length;
+    const rows = Math.max(1, Math.ceil(count / maxPerRow));
+    const blockHeight = tierTopPad + rows * itemHeight + (rows - 1) * internalRowGap + tierBottomPad;
+    tierHeights[k] = blockHeight;
+    contentHeight += blockHeight;
+  }
+  const watermarkH = 40;
+  const height = padding.top + contentHeight + rowGap * (tierOrder.length - 1) + padding.bottom + watermarkH;
+  canvas.width = Math.floor(width * scale);
+  canvas.height = Math.floor(height * scale);
+  ctx.scale(scale, scale);
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, width, height);
+  // Enforce RTL rendering
+  try { (ctx as any).direction = "rtl"; } catch {}
+  const rtl = (s: string) => s;
+
+  const fontFamily = 'IBM Plex Sans Arabic, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif';
+  ctx.font = "14px " + fontFamily;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  function wrapText(text: string, maxWidthPx: number, lineHeight: number): string[] {
+    const words = text.split(/\s+/);
+    const lines: string[] = [];
+    let line = "";
+    for (const w of words) {
+      const test = line ? line + " " + w : w;
+      const m = ctx.measureText(test);
+      if (m.width > maxWidthPx && line) {
+        lines.push(line);
+        line = w;
+      } else {
+        line = test;
+      }
+    }
+    if (line) lines.push(line);
+    return lines.slice(0, 2);
+  }
+
+  const loaded: Map<string, HTMLImageElement> = new Map();
+  const toLoad: string[] = [];
+  for (const k of tierOrder) {
+    for (const it of tiers[k] || []) {
+      const u = it.imageUrl || "";
+      if (u && !loaded.has(u)) toLoad.push(u.startsWith("/") ? `${basePath}${u}` : u);
+    }
+  }
+  await Promise.all(
+    toLoad.map(async (src) => {
+      const img = await loadImage(src);
+      loaded.set(src, img);
+    })
+  );
+
+  let y = padding.top;
+  for (const k of tierOrder) {
+    const items = tiers[k] || [];
+    const blockHeight = tierHeights[k];
+    ctx.fillStyle = tierColor[k];
+    ctx.fillRect(padding.left, y, labelWidth, blockHeight);
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 24px " + fontFamily;
+    ctx.fillText(rtl(tierLabel[k]), padding.left + labelWidth / 2, y + 24);
+    ctx.font = "600 14px " + fontFamily;
+    const areaX = padding.left + labelWidth;
+    // Draw items centered per row; compute rows and place each item by (rowIndex, colIndex)
+    const total = items.length;
+    const rows = Math.max(1, Math.ceil(total / maxPerRow));
+    for (let idx = 0; idx < total; idx++) {
+      const rowIndex = Math.floor(idx / maxPerRow);
+      const colIndex = idx % maxPerRow;
+      const itemsInRow = Math.min(maxPerRow, total - rowIndex * maxPerRow);
+      const rowContentWidth = itemsInRow * itemWidth + (itemsInRow - 1) * itemGap;
+      const rowStartX = areaX + Math.max(0, Math.floor((areaW - rowContentWidth) / 2));
+      const cx = rowStartX + colIndex * (itemWidth + itemGap);
+      const cy = y + tierTopPad + rowIndex * (itemHeight + internalRowGap);
+      const it = items[idx];
+      // Card
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "#e5e7eb";
+      ctx.lineWidth = 1;
+      ctx.fillRect(cx, cy, itemWidth, itemHeight);
+      ctx.strokeRect(cx, cy, itemWidth, itemHeight);
+
+      // Image
+      const imgSrc = it.imageUrl ? (it.imageUrl.startsWith("/") ? `${basePath}${it.imageUrl}` : it.imageUrl) : "";
+      const img = imgSrc ? loaded.get(imgSrc) : undefined;
+      if (img && img.width && img.height) {
+        const iw = 96;
+        const ih = 96;
+        const ix = cx + Math.floor((itemWidth - iw) / 2);
+        const iy = cy + 8;
+        ctx.save();
+        ctx.beginPath();
+        const r = 6;
+        ctx.moveTo(ix + r, iy);
+        ctx.arcTo(ix + iw, iy, ix + iw, iy + ih, r);
+        ctx.arcTo(ix + iw, iy + ih, ix, iy + ih, r);
+        ctx.arcTo(ix, iy + ih, ix, iy, r);
+        ctx.arcTo(ix, iy, ix + iw, iy, r);
+        ctx.closePath();
+        ctx.clip();
+        // Crop like object-fit: cover (center square crop)
+        const srcW = (img as any).naturalWidth || img.width;
+        const srcH = (img as any).naturalHeight || img.height;
+        const minSide = Math.max(1, Math.min(srcW, srcH));
+        const sx = Math.floor((srcW - minSide) / 2);
+        const sy = Math.floor((srcH - minSide) / 2);
+        ctx.drawImage(img, sx, sy, minSide, minSide, ix, iy, iw, ih);
+        ctx.restore();
+      } else {
+        ctx.fillStyle = "#f3f4f6";
+        ctx.fillRect(cx + 12, cy + 12, 96, 96);
+      }
+
+      // Texts
+      ctx.fillStyle = "#111111";
+      ctx.font = "600 12px " + fontFamily;
+      const lines = wrapText(it.name ? rtl(it.name) : "", itemWidth - 12, 14);
+      lines.forEach((ln, i) => {
+        ctx.fillText(ln, cx + itemWidth / 2, cy + 112 + i * 14);
+      });
+      if (it.title) {
+        ctx.font = "12px " + fontFamily;
+        const tlines = wrapText(rtl(it.title), itemWidth - 12, 12);
+        tlines.forEach((ln, i) => {
+          ctx.fillText(ln, cx + itemWidth / 2, cy + 112 + lines.length * 14 + 4 + i * 12);
+        });
+      }
+
+    }
+
+    y += blockHeight + rowGap;
+  }
+
+  // Watermark
+  ctx.fillStyle = "#111111";
+  ctx.font = "bold 16px " + fontFamily;
+  ctx.textAlign = "center";
+  ctx.fillText(watermarkText, Math.floor(width / 2), height - 20);
+
+  const link = document.createElement("a");
+  link.download = fileName;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
 export async function exportTierListImage(options: ExportOptions): Promise<void> {
   const {
     container,

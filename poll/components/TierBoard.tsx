@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle2Icon, AlertCircleIcon } from "lucide-react";
-import { exportTierListImage } from "@/lib/exportImage";
+import { exportTierListFromData } from "@/lib/exportImage";
 
 type Candidate = { id: string; name: string; title?: string | null; imageUrl: string | null; category?: string | null };
 
@@ -272,18 +272,25 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
   }
 
   async function saveImage() {
-    if (!tiersRef.current) return;
     const appEl = containerRef.current;
     const maxWidthStyle = appEl ? window.getComputedStyle(appEl).maxWidth : "";
     const targetWidthCss = maxWidthStyle && maxWidthStyle !== "none" ? maxWidthStyle : "1000px";
     const targetWidth = parseInt(targetWidthCss, 10) || 1000;
-    await exportTierListImage({
-      container: tiersRef.current,
-      targetWidthPx: targetWidth,
+    const data = {
+      S: tiers.S.map((c) => ({ name: c.name, title: c.title || null, imageUrl: c.imageUrl || null })),
+      A: tiers.A.map((c) => ({ name: c.name, title: c.title || null, imageUrl: c.imageUrl || null })),
+      B: tiers.B.map((c) => ({ name: c.name, title: c.title || null, imageUrl: c.imageUrl || null })),
+      C: tiers.C.map((c) => ({ name: c.name, title: c.title || null, imageUrl: c.imageUrl || null })),
+      D: tiers.D.map((c) => ({ name: c.name, title: c.title || null, imageUrl: c.imageUrl || null })),
+      F: tiers.F.map((c) => ({ name: c.name, title: c.title || null, imageUrl: c.imageUrl || null })),
+    } as Record<"S"|"A"|"B"|"C"|"D"|"F", Array<{ name: string; title?: string | null; imageUrl?: string | null }>>;
+    await exportTierListFromData({
+      tiers: data,
       basePath: BASE_PATH,
-      watermarkText: "syrian.zone/tierlist",
       fileName: "tier-list.png",
+      width: targetWidth,
       scale: 2,
+      watermarkText: "syrian.zone/tierlist",
     });
   }
 
