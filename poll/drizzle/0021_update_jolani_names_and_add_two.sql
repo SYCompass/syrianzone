@@ -26,7 +26,7 @@ SELECT x.id, (SELECT id FROM p), x.name, NULL, x.image_url, (SELECT s + x.ofs FR
 FROM (
   VALUES
     ('jolani28', 'أرسلان القائد صفر', '/tierlist/images/jolani/jolani28.jpg', 1),
-    ('jolani29', 'قمر بني أمية', '/tierlist/images/jolani/jolani29.jpeg', 2)
+    ('jolani29', 'قمر بني أمية', '/tierlist/images/jolani/jolani29.jpg', 2)
 ) AS x(id, name, image_url, ofs)
 ON CONFLICT (id) DO NOTHING;
 
