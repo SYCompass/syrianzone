@@ -308,7 +308,7 @@ export default async function Page() {
       }));
     }
 
-    const ministers = candsAll.filter((c: any) => c.category !== "governor" && c.category !== "security");
+    const ministers = candsAll.filter((c: any) => c.category === "minister");
     const governors = candsAll.filter((c: any) => c.category === "governor");
     const security = candsAll.filter((c: any) => c.category === "security");
 
