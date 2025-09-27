@@ -112,6 +112,28 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
       return undefined;
     }
   }
+
+  function swapExtension(u: string, ext: string): string {
+    return u.replace(/\.(avif|webp|png|jpg|jpeg)$/i, `.${ext}`);
+  }
+
+  async function loadBestImageDataUrl(src: string, targetW: number, targetH: number, mode: "cover" | "contain" = "cover"): Promise<string | undefined> {
+    // Try original
+    let data = await transcodeToDataUrl(src, targetW, targetH, mode);
+    if (data) return data;
+    // Try common fallbacks for formats Safari may not decode
+    const candidates: string[] = [];
+    if (/\.(avif)$/i.test(src)) {
+      candidates.push(swapExtension(src, "jpg"), swapExtension(src, "jpeg"), swapExtension(src, "png"));
+    } else if (/\.(webp)$/i.test(src)) {
+      candidates.push(swapExtension(src, "jpg"), swapExtension(src, "png"));
+    }
+    for (const c of candidates) {
+      data = await transcodeToDataUrl(c, targetW, targetH, mode);
+      if (data) return data;
+    }
+    return undefined;
+  }
   // Local safe image loader: fetch as blob and use object URL to improve cross-browser reliability (iOS Safari)
   const objectUrls: string[] = [];
   async function loadImageSafe(url: string): Promise<HTMLImageElement | undefined> {
@@ -212,8 +234,8 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
   }
   await Promise.all(
     toLoad.map(async (src) => {
-      // Transcode avatars to a square JPEG to avoid CORS/taint issues
-      const dataUrl = await transcodeToDataUrl(src, 256, 256, "cover");
+      // Transcode avatars to a square JPEG to avoid CORS/taint issues and format incompatibilities
+      const dataUrl = await loadBestImageDataUrl(src, 256, 256, "cover");
       if (!dataUrl) return;
       const img = await loadImage(dataUrl);
       loaded.set(src, img);
