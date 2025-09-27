@@ -268,8 +268,9 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
         F: [] as Array<{ candidateId: string; pos: number }>,
       } as Record<TierKey, Array<{ candidateId: string; pos: number }>>),
     };
-    const providedPath = submitApiPath || `${BASE_PATH}/api/submit`;
-    const submitPath = providedPath.startsWith("/") ? `${BASE_PATH}${providedPath}` : providedPath;
+    // Build submit path without double-prefixing BASE_PATH
+    const providedPath = submitApiPath || "/api/submit";
+    const submitPath = `${BASE_PATH}${providedPath}`;
     const res = await fetch(submitPath, {
       method: "POST",
       headers: { "content-type": "application/json" },
