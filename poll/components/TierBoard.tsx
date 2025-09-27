@@ -83,6 +83,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
   const tiersRef = useRef<HTMLDivElement>(null);
   const [submitStatus, setSubmitStatus] = useState<{ ok: boolean; message: string; description?: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [nextSubmitAt, setNextSubmitAt] = useState<number | null>(null);
   const [now, setNow] = useState<number>(Date.now());
 
@@ -272,6 +273,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
   }
 
   async function saveImage() {
+    setIsSaving(true);
     const appEl = containerRef.current;
     const maxWidthStyle = appEl ? window.getComputedStyle(appEl).maxWidth : "";
     const targetWidthCss = maxWidthStyle && maxWidthStyle !== "none" ? maxWidthStyle : "1000px";
@@ -284,14 +286,18 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
       D: tiers.D.map((c) => ({ name: c.name, title: c.title || null, imageUrl: c.imageUrl || null })),
       F: tiers.F.map((c) => ({ name: c.name, title: c.title || null, imageUrl: c.imageUrl || null })),
     } as Record<"S"|"A"|"B"|"C"|"D"|"F", Array<{ name: string; title?: string | null; imageUrl?: string | null }>>;
-    await exportTierListFromData({
-      tiers: data,
-      basePath: BASE_PATH,
-      fileName: "tier-list.png",
-      width: targetWidth,
-      scale: 2,
-      watermarkText: "syrian.zone/tierlist",
-    });
+    try {
+      await exportTierListFromData({
+        tiers: data,
+        basePath: BASE_PATH,
+        fileName: "tier-list.png",
+        width: targetWidth,
+        scale: 2,
+        watermarkText: "syrian.zone/tierlist",
+      });
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   return (
@@ -431,7 +437,19 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
             "إرسال"
           )}
         </Button>
-        <Button type="button" onClick={saveImage} disabled={isSubmitting}>حفظ كصورة</Button>
+        <Button type="button" onClick={saveImage} disabled={isSubmitting || isSaving}>
+          {isSaving ? (
+            <span className="inline-flex items-center gap-2">
+              <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+              </svg>
+              جاري التحضير...
+            </span>
+          ) : (
+            "حفظ كصورة"
+          )}
+        </Button>
         <Button
           type="button"
           variant="destructive"
