@@ -153,7 +153,8 @@ export default async function Page() {
   const month = await fetchMonthExtremes();
   // Jolani data
   async function fetchJolaniAllTime() {
-    const [p] = await db.select().from(polls).where(eq(polls.slug, "jolani"));
+    // Count Jolani that live under the main poll by category
+    const [p] = await db.select().from(polls).where(eq(polls.slug, "best-ministers"));
     if (!p) return [] as Array<{ candidateId: string; name: string; imageUrl?: string; votes: number; score: number; avg: number; rank: number }>;
     const rows = await db
       .select({ candidateId: dailyScores.candidateId, votes: dailyScores.votes, score: dailyScores.score })
@@ -164,16 +165,19 @@ export default async function Page() {
       const cur = agg.get(r.candidateId) || { votes: 0, score: 0 };
       agg.set(r.candidateId, { votes: cur.votes + r.votes, score: cur.score + r.score });
     }
-    const totals = Array.from(agg.entries()).map(([candidateId, v]) => ({ candidateId, votes: v.votes, score: v.score, avg: v.votes > 0 ? v.score / v.votes : 0 }));
+    const candsAll = await db.select().from(candidates).where(eq(candidates.pollId, p.id));
+    const jolaniIds = new Set<string>(candsAll.filter((c: any) => c.category === "jolani").map((c: any) => c.id as string));
+    const totals = Array.from(agg.entries())
+      .filter(([candidateId]) => jolaniIds.has(candidateId))
+      .map(([candidateId, v]) => ({ candidateId, votes: v.votes, score: v.score, avg: v.votes > 0 ? v.score / v.votes : 0 }));
     totals.sort((a, b) => (b.avg - a.avg) || (b.score - a.score) || (b.votes - a.votes));
-    const cands = await db.select().from(candidates).where(eq(candidates.pollId, p.id));
     return totals.map((t, i) => {
-      const c = cands.find((cc) => cc.id === t.candidateId);
+      const c = candsAll.find((cc) => cc.id === t.candidateId);
       return { candidateId: t.candidateId, name: c?.name || "", imageUrl: c?.imageUrl || undefined, votes: t.votes, score: t.score, avg: t.avg, rank: i + 1 };
     });
   }
   async function fetchJolaniMonthlySeries(): Promise<{ months: string[]; series: { name: string; values: number[]; imageUrl?: string }[] }> {
-    const [p] = await db.select().from(polls).where(eq(polls.slug, "jolani"));
+    const [p] = await db.select().from(polls).where(eq(polls.slug, "best-ministers"));
     if (!p) return { months: [], series: [] };
     const rows = await db
       .select({ candidateId: dailyScores.candidateId, score: dailyScores.score, votes: dailyScores.votes, day: dailyScores.day })
@@ -192,7 +196,8 @@ export default async function Page() {
       byCandidate.set(r.candidateId, m);
     }
     const months = Array.from(monthSet.values()).sort();
-    const cands = await db.select().from(candidates).where(eq(candidates.pollId, p.id)).orderBy(candidates.sort);
+    const candsAll = await db.select().from(candidates).where(eq(candidates.pollId, p.id)).orderBy(candidates.sort);
+    const cands = candsAll.filter((c: any) => c.category === "jolani");
     const series = cands.map((c, i) => {
       const n = Math.max(1, cands.length - 1);
       const minL = 30, maxL = 78;
