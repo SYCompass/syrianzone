@@ -136,22 +136,20 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
   }, [submitStatus]);
 
   // Switch between categories for the bank. Reset tiers to avoid cross-poll submission.
+  // Important: do NOT depend on 'tiers' here to avoid infinite update loops.
   useEffect(() => {
     setSelectedIds(new Set());
     setTiers(createEmptyTiers());
-    const inTiers = new Set<string>(tierKeys.flatMap((k) => tiers[k].map((c) => c.id)));
-    const filtered = shuffledInitial
-      .filter((c) => {
-        if (selectedCategory === "governor") return c.category === "governor";
-        if (selectedCategory === "security") return c.category === "security";
-        if (selectedCategory === "jolani") return c.category === "jolani";
-        // ministers bucket = anything that's not governor, security, or jolani
-        return c.category !== "governor" && c.category !== "security" && c.category !== "jolani";
-      })
-      .filter((c) => !inTiers.has(c.id));
+    const filtered = shuffledInitial.filter((c) => {
+      if (selectedCategory === "governor") return c.category === "governor";
+      if (selectedCategory === "security") return c.category === "security";
+      if (selectedCategory === "jolani") return c.category === "jolani";
+      // ministers bucket = anything that's not governor, security, or jolani
+      return c.category !== "governor" && c.category !== "security" && c.category !== "jolani";
+    });
     setBank(filtered);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategory, tiers, shuffledInitial]);
+  }, [selectedCategory, shuffledInitial]);
 
   function moveCandidateTo(candidateId: string, target: TierKey | "bank") {
     const fromTierKey = tierKeys.find((k) => tiers[k].some((c) => c.id === candidateId));
