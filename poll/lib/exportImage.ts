@@ -58,6 +58,27 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
 
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+  // Local safe image loader: fetch as blob and use object URL to improve cross-browser reliability (iOS Safari)
+  const objectUrls: string[] = [];
+  async function loadImageSafe(url: string): Promise<HTMLImageElement | undefined> {
+    try {
+      const res = await fetch(url, { cache: "force-cache", mode: "cors" as RequestMode });
+      if (!res.ok) return undefined;
+      const blob = await res.blob();
+      const objUrl = URL.createObjectURL(blob);
+      objectUrls.push(objUrl);
+      const img = new Image();
+      (img as any).decoding = "sync";
+      await new Promise((resolve) => {
+        img.onload = () => resolve(null);
+        img.onerror = () => resolve(null);
+        img.src = objUrl;
+      });
+      return img;
+    } catch {
+      return undefined;
+    }
+  }
 
   // Fonts
   const fontFamily = 'IBM Plex Sans Arabic, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif';
@@ -137,8 +158,8 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
   }
   await Promise.all(
     toLoad.map(async (src) => {
-      const img = await loadImage(src);
-      loaded.set(src, img);
+      const img = await loadImageSafe(src);
+      if (img) loaded.set(src, img);
     })
   );
 
@@ -243,7 +264,7 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
   let logoImg: HTMLImageElement | undefined;
   try {
     const src = logoSrc.startsWith("/") ? `${basePath}${logoSrc}` : logoSrc;
-    logoImg = await loadImage(src);
+    logoImg = await loadImageSafe(src);
   } catch {}
   const logoH = 32;
   let logoDrawW = 0;
@@ -271,9 +292,16 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
   ctx.textAlign = prevAlign;
   try { (ctx as any).direction = prevDir; } catch {}
 
+  // Revoke any object URLs created during loading
+  try { objectUrls.forEach((u) => URL.revokeObjectURL(u)); } catch {}
+
+  // Prefer image/jpeg for better Safari compatibility; fallback to png if needed
+  const dataUrl = (() => {
+    try { return canvas.toDataURL("image/jpeg", 0.95); } catch { return canvas.toDataURL("image/png"); }
+  })();
   const link = document.createElement("a");
-  link.download = fileName;
-  link.href = canvas.toDataURL("image/png");
+  link.download = fileName.endsWith(".png") || fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") ? fileName : "tier-list.jpg";
+  link.href = dataUrl;
   link.click();
 }
 
