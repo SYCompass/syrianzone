@@ -73,7 +73,7 @@ export async function exportTierListFromData(options: ExportTierDataOptions): Pr
     try {
       const abs = resolveUrl(url);
       // Always fetch via same-origin proxy to avoid CORS/taint and iOS Safari canvas issues
-      const proxied = `${origin}${basePath}/api/image-proxy?url=${encodeURIComponent(abs)}`;
+      const proxied = `${origin}${basePath}/api/image-proxy?fit=${mode}&w=${targetW || 0}&h=${targetH || 0}&url=${encodeURIComponent(abs)}`;
       const res = await fetch(proxied, { cache: "no-store" });
       if (!res.ok) return undefined;
       const blob = await res.blob();

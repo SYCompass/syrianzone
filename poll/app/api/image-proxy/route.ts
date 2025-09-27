@@ -15,6 +15,9 @@ function isHttpUrl(u: string): boolean {
 export async function GET(req: NextRequest) {
   try {
     const src = req.nextUrl.searchParams.get("url") || "";
+    const wParam = req.nextUrl.searchParams.get("w");
+    const hParam = req.nextUrl.searchParams.get("h");
+    const fitParam = (req.nextUrl.searchParams.get("fit") || "cover").toLowerCase();
     if (!src || !isHttpUrl(src)) return NextResponse.json({ error: "invalid url" }, { status: 400 });
 
     // Fetch original
@@ -26,8 +29,14 @@ export async function GET(req: NextRequest) {
     // Convert to JPEG for maximum canvas compatibility (iOS Safari)
     try {
       // sharp can read most formats including avif/webp/png/jpeg/svg
-      const pipeline = sharp(input, { animated: false, limitInputPixels: 268435456 });
-      const jpeg = await pipeline.jpeg({ quality: 90, chromaSubsampling: "4:4:4" }).toBuffer();
+      let pipeline = sharp(input, { animated: false, limitInputPixels: 268435456 });
+      const w = wParam ? Math.max(1, Math.min(2000, parseInt(wParam, 10) || 0)) : null;
+      const h = hParam ? Math.max(1, Math.min(2000, parseInt(hParam, 10) || 0)) : null;
+      if ((w || h) && (w !== null || h !== null)) {
+        const fit = fitParam === "contain" ? "contain" : "cover";
+        pipeline = pipeline.resize({ width: w || undefined, height: h || undefined, fit: fit as any, position: "centre", background: { r: 255, g: 255, b: 255, alpha: 1 } });
+      }
+      const jpeg = await pipeline.jpeg({ quality: 90, chromaSubsampling: "4:4:4", force: true }).toBuffer();
       return new NextResponse(jpeg as unknown as BodyInit, {
         status: 200,
         headers: {
