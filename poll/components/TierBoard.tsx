@@ -247,17 +247,14 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
       return;
     }
     setIsSubmitting(true);
-    const cfToken = (document.getElementById("cf-turnstile-token") as HTMLInputElement | null)?.value || "";
     const deviceId = localStorage.getItem("deviceId") || crypto.randomUUID();
     localStorage.setItem("deviceId", deviceId);
     const payload: {
       pollSlug?: string;
-      cfToken?: string;
       deviceId: string;
       tiers: Record<TierKey, Array<{ candidateId: string; pos: number }>>;
     } = {
       pollSlug: pollSlug || "best-ministers",
-      cfToken,
       deviceId,
       tiers: tierKeys.reduce((acc, k) => {
         acc[k] = tiers[k].map((c, idx) => ({ candidateId: c.id, pos: idx }));

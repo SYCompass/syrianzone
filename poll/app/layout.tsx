@@ -60,17 +60,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           </div>
           {children}
           <Footer />
-          <input id="cf-turnstile-token" type="hidden" />
-          <script
-            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-            async
-            defer
-          />
-          <div
-            className="hidden"
-            data-sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-            data-callback="(t)=>{const el=document.getElementById('cf-turnstile-token'); if(el) el.value=t;}"
-          />
+          {/* Turnstile removed */}
         </ThemeProvider>
       </body>
     </html>

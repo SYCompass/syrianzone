@@ -4,7 +4,6 @@ import { db } from "@/db";
 import { ballots, ballotItems, candidates, dailyScores, dailyRanks, polls } from "@/db/schema";
 import { and, eq, sql, desc, asc } from "drizzle-orm";
 import { getLocalMidnightUTC } from "@/lib/time";
-import { verifyTurnstile } from "@/lib/turnstile";
 import { sha256 } from "@/lib/hash";
 import { v4 as uuidv4 } from "uuid";
 import { publish } from "@/server/realtime/broker";
@@ -48,16 +47,16 @@ export const appRouter = t.router({
         z.object({
           pollSlug: z.string(),
           tiers: Tiers,
-          cfToken: z.string(),
           deviceId: z.string().min(8),
+          // Turnstile disabled: keep optional for backward compatibility
+          cfToken: z.string().optional().catch("")
         })
       )
       .mutation(async ({ input, ctx }) => {
         const [poll] = await db.select().from(polls).where(eq(polls.slug, input.pollSlug));
         if (!poll) throw new Error("Poll not found");
 
-        const ok = await verifyTurnstile(input.cfToken, ctx.ip);
-        if (!ok) throw new Error("Turnstile failed");
+        // Turnstile verification disabled
 
         // Rate limiting enforced at route layer via Arcjet
 
