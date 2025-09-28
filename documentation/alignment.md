@@ -23,6 +23,8 @@ An interactive political compass generator that allows users to create custom po
 - **Export Options**: Download compass as PNG, JPG, or SVG formats
 - **Persistence**: LocalStorage saves compass state (dots, colors, axes)
 - **Full Touch Support**: Optimized touch event handling for mobile devices with proper coordinate mapping
+- **Responsive Design**: Mobile-first layout with adaptive canvas sizing and touch-friendly controls
+- **Visual Feedback**: Touch indicators and responsive UI elements for better mobile experience
 
 ## Key Functions
 - **Canvas Drawing**: `drawCompass()` renders quadrants, grid lines, axes labels, and dots
@@ -33,24 +35,27 @@ An interactive political compass generator that allows users to create custom po
 - **UI Updates**: Real-time updates when axes or colors change
 
 ## Technical Implementation
-- **Canvas-based Rendering**: HTML5 Canvas API for compass visualization
-- **Coordinate System**: Robust mouse/touch coordinate mapping handling both event types
+- **Canvas-based Rendering**: HTML5 Canvas API for compass visualization with dynamic sizing
+- **Coordinate System**: Robust mouse/touch coordinate mapping handling all event types
+- **Responsive Canvas**: Dynamic canvas sizing based on container width with aspect ratio preservation
+- **Touch Optimization**: Proper touch event handling with passive:false and visual feedback
 - **Drag and Drop**: Custom drag implementation for desktop (mouse) and mobile (touch)
-- **Touch Optimization**: Proper touch event handling with passive:false for better performance
 - **Color System**: Browser-native color pickers integrated with canvas rendering
 - **Export Formats**:
   - PNG: Canvas.toDataURL() for bitmap export
   - JPG: Canvas.toDataURL() with quality settings
   - SVG: Manual SVG generation with embedded elements
-- **Mobile-First**: Comprehensive touch support with visual feedback and instructions
+- **Mobile-First**: Comprehensive touch support with visual feedback, instructions, and adaptive layout
+- **Orientation Handling**: Automatic canvas resizing for device orientation changes
 
 ## User Interface Elements
-- **Compass Canvas**: 600x600px interactive canvas with crosshair cursor
-- **Axis Controls**: Four input fields for customizing compass directions
-- **Color Controls**: Four color pickers for quadrant customization
+- **Compass Canvas**: Responsive canvas (max 600px) with dynamic sizing and crosshair cursor
+- **Axis Controls**: Four input fields for customizing compass directions with mobile-optimized sizing
+- **Color Controls**: Four color pickers for quadrant customization in mobile-friendly grid layout
 - **Dots List**: Scrollable list showing all placed dots with edit/delete options
-- **Export Controls**: Format selection buttons and download trigger
-- **Visual Feedback**: Real-time canvas updates, hover states, active selections
+- **Export Controls**: Format selection buttons and download trigger with mobile-centered layout
+- **Visual Feedback**: Touch indicators, real-time updates, hover states, and active selections
+- **Mobile Instructions**: Clear guidance for touch interactions with visual examples
 
 ## Data Structure
 ```javascript

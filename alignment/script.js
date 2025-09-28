@@ -7,6 +7,12 @@ class PoliticalCompassGenerator {
     this.isDragging = false;
     this.dragOffset = { x: 0, y: 0 };
 
+    // Set canvas size based on container
+    this.resizeCanvas();
+
+    // Add visual touch indicator
+    this.touchIndicator = null;
+
     // Default colors for compass quadrants
     this.colors = {
       topLeft: '#4CAF50',
@@ -27,10 +33,37 @@ class PoliticalCompassGenerator {
     this.loadFromStorage();
   }
 
+  resizeCanvas() {
+    const container = this.canvas.parentElement;
+    const containerWidth = container.clientWidth - 8; // Account for border
+    const size = Math.min(containerWidth, 600); // Max 600px, but responsive
+
+    this.canvas.width = size;
+    this.canvas.height = size;
+
+    // Redraw after resize
+    if (this.dots.length > 0) {
+      this.drawCompass();
+    }
+  }
+
   init() {
     this.setupEventListeners();
+    this.resizeCanvas();
     this.drawCompass();
     this.updateDotsList();
+
+    // Handle window resize for mobile orientation changes
+    window.addEventListener('resize', () => {
+      this.resizeCanvas();
+    });
+
+    // Handle orientation changes
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        this.resizeCanvas();
+      }, 100);
+    });
   }
 
   setupEventListeners() {
@@ -156,22 +189,59 @@ class PoliticalCompassGenerator {
     }
   }
 
+  showTouchIndicator(x, y) {
+    // Remove existing indicator
+    if (this.touchIndicator) {
+      this.touchIndicator.remove();
+    }
+
+    // Create new indicator
+    this.touchIndicator = document.createElement('div');
+    this.touchIndicator.style.cssText = `
+      position: absolute;
+      left: ${x - 15}px;
+      top: ${y - 15}px;
+      width: 30px;
+      height: 30px;
+      border: 2px solid #ff0000;
+      border-radius: 50%;
+      background: rgba(255, 0, 0, 0.2);
+      pointer-events: none;
+      z-index: 1000;
+    `;
+
+    this.canvas.parentElement.appendChild(this.touchIndicator);
+
+    // Auto-remove after 1 second
+    setTimeout(() => {
+      if (this.touchIndicator) {
+        this.touchIndicator.remove();
+        this.touchIndicator = null;
+      }
+    }, 1000);
+  }
+
   handleTouchStart(e) {
     e.preventDefault();
     if (e.touches.length === 0) return;
 
     const coords = this.getCanvasCoordinates(e);
+    console.log('Touch start at:', coords.x, coords.y); // Debug log
+
+    // Show visual feedback
+    this.showTouchIndicator(coords.x, coords.y);
 
     // Find dot under touch
     this.selectedDot = this.dots.find(dot => {
       const distance = Math.sqrt((dot.x - coords.x) ** 2 + (dot.y - coords.y) ** 2);
-      return distance <= 10;
+      return distance <= 15; // Larger hit area for touch
     });
 
     if (this.selectedDot) {
       this.isDragging = true;
       this.dragOffset.x = coords.x - this.selectedDot.x;
       this.dragOffset.y = coords.y - this.selectedDot.y;
+      console.log('Starting drag of dot:', this.selectedDot.name); // Debug log
     }
   }
 
@@ -187,24 +257,35 @@ class PoliticalCompassGenerator {
 
   handleTouchEnd(e) {
     e.preventDefault();
-    if (this.isDragging) {
-      this.isDragging = false;
-      this.saveToStorage();
-    } else {
-      // Handle tap/click for adding dots
+
+    if (e.changedTouches && e.changedTouches.length > 0) {
       const coords = this.getCanvasCoordinates(e);
+      console.log('Touch end at:', coords.x, coords.y); // Debug log
 
-      // Check if tapping on existing dot
-      const tappedDot = this.dots.find(dot => {
-        const distance = Math.sqrt((dot.x - coords.x) ** 2 + (dot.y - coords.y) ** 2);
-        return distance <= 10;
-      });
+      // Show visual feedback for tap location
+      this.showTouchIndicator(coords.x, coords.y);
 
-      if (tappedDot) {
-        this.showDotEditor(tappedDot);
+      if (this.isDragging) {
+        console.log('Ending drag'); // Debug log
+        this.isDragging = false;
+        this.saveToStorage();
       } else {
-        // Add new dot
-        this.addDot(coords.x, coords.y);
+        console.log('Processing tap'); // Debug log
+        // Handle tap/click for adding dots or selecting existing dots
+        // Check if tapping on existing dot
+        const tappedDot = this.dots.find(dot => {
+          const distance = Math.sqrt((dot.x - coords.x) ** 2 + (dot.y - coords.y) ** 2);
+          return distance <= 15; // Slightly larger hit area for touch
+        });
+
+        if (tappedDot) {
+          console.log('Tapped existing dot:', tappedDot.name); // Debug log
+          this.showDotEditor(tappedDot);
+        } else {
+          console.log('Adding new dot at:', coords.x, coords.y); // Debug log
+          // Add new dot
+          this.addDot(coords.x, coords.y);
+        }
       }
     }
   }
