@@ -256,11 +256,12 @@
     const sortedRows = sortData(rows, sortColumn, sortDirection);
     
     theadRow.innerHTML = '';
-    // Build visible headers: drop empty columns in current view and the 'المطعونين' notes column
+    // Build visible headers: drop empty columns in current view and the notes columns
     const visibleHeaders = (headers || []).filter((key)=>{
       const k = String(key || '').trim();
       if (!k) return false;
       if (k === 'المطعونين') return false;
+      if (k === 'أسماء جديدة') return false;
       // Hide columns that are entirely empty in the current dataset
       try {
         return sortedRows.some((r)=> String(r[key] == null ? '' : r[key]).trim() !== '');
@@ -342,8 +343,14 @@
         body.innerHTML = '';
         return;
       }
+      function splitNames(val){
+        return String(val || '')
+          .split(/[,،;\n]+/)
+          .map(s=>s.trim())
+          .filter(Boolean);
+      }
       const items = sortedRows
-        .map((r)=> String(r[newNamesKey] == null ? '' : r[newNamesKey]).trim())
+        .flatMap((r)=> splitNames(r[newNamesKey]))
         .filter((v)=> v !== '');
       if (items.length === 0) {
         section.style.display = 'none';
