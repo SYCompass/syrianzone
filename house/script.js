@@ -319,6 +319,38 @@
       });
       tbody.appendChild(tr);
     });
+
+    // Render New Names table
+    try {
+      const section = document.getElementById('newNamesSection');
+      const body = document.getElementById('newNamesBody');
+      const selectedKey = provinceSelect.value || 'damascus';
+      const newNamesKey = (headers || []).find((k)=> String(k||'').trim() === 'أسماء جديدة');
+      if (!section || !body) return;
+      if (selectedKey === 'all' || !newNamesKey) {
+        section.style.display = 'none';
+        body.innerHTML = '';
+        return;
+      }
+      const items = sortedRows
+        .map((r)=> String(r[newNamesKey] == null ? '' : r[newNamesKey]).trim())
+        .filter((v)=> v !== '');
+      if (items.length === 0) {
+        section.style.display = 'none';
+        body.innerHTML = '';
+        return;
+      }
+      body.innerHTML = '';
+      items.forEach((val)=>{
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.className = 'px-4 py-2 text-sm border-t';
+        td.textContent = val;
+        tr.appendChild(td);
+        body.appendChild(tr);
+      });
+      section.style.display = '';
+    } catch(_) {}
   }
 
   let originalData = [];
