@@ -17,12 +17,12 @@ An interactive political compass generator that allows users to create custom po
 ## Core Features
 - **Custom Axes**: User-configurable labels for all four compass directions (left, right, top, bottom)
 - **Color Customization**: Individual color pickers for each compass quadrant
-- **Interactive Dot Placement**: Click or touch to place dots on compass with automatic color assignment
-- **Dot Management**: Drag dots to reposition, edit names, delete dots
+- **Interactive Dot Placement**: Click (desktop) or tap (mobile) to place dots on compass with automatic color assignment
+- **Dot Management**: Drag dots to reposition (desktop), long-press and drag (mobile), edit names, delete dots
 - **Dot Naming**: Assign custom names to placed dots
 - **Export Options**: Download compass as PNG, JPG, or SVG formats
 - **Persistence**: LocalStorage saves compass state (dots, colors, axes)
-- **Mobile Support**: Touch events for mobile interaction
+- **Full Touch Support**: Optimized touch event handling for mobile devices with proper coordinate mapping
 
 ## Key Functions
 - **Canvas Drawing**: `drawCompass()` renders quadrants, grid lines, axes labels, and dots
@@ -34,14 +34,15 @@ An interactive political compass generator that allows users to create custom po
 
 ## Technical Implementation
 - **Canvas-based Rendering**: HTML5 Canvas API for compass visualization
-- **Coordinate System**: Mouse/touch coordinate mapping to canvas coordinates
-- **Drag and Drop**: Custom drag implementation for dot repositioning
+- **Coordinate System**: Robust mouse/touch coordinate mapping handling both event types
+- **Drag and Drop**: Custom drag implementation for desktop (mouse) and mobile (touch)
+- **Touch Optimization**: Proper touch event handling with passive:false for better performance
 - **Color System**: Browser-native color pickers integrated with canvas rendering
 - **Export Formats**:
   - PNG: Canvas.toDataURL() for bitmap export
   - JPG: Canvas.toDataURL() with quality settings
   - SVG: Manual SVG generation with embedded elements
-- **Responsive Design**: Mobile-first approach with touch event handling
+- **Mobile-First**: Comprehensive touch support with visual feedback and instructions
 
 ## User Interface Elements
 - **Compass Canvas**: 600x600px interactive canvas with crosshair cursor

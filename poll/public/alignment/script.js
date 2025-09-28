@@ -42,9 +42,9 @@ class PoliticalCompassGenerator {
     this.canvas.addEventListener('mouseleave', () => this.handleMouseUp());
 
     // Touch events for mobile
-    this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e));
-    this.canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e));
-    this.canvas.addEventListener('touchend', () => this.handleTouchEnd());
+    this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false });
+    this.canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
+    this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: false });
 
     // Axis input events
     document.getElementById('leftAxis').addEventListener('input', () => this.updateAxis('left'));
@@ -81,9 +81,26 @@ class PoliticalCompassGenerator {
     const scaleX = this.canvas.width / rect.width;
     const scaleY = this.canvas.height / rect.height;
 
+    // Handle both mouse and touch events
+    let clientX, clientY;
+
+    if (e.touches && e.touches.length > 0) {
+      // Touch event
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else if (e.changedTouches && e.changedTouches.length > 0) {
+      // Touch end event
+      clientX = e.changedTouches[0].clientX;
+      clientY = e.changedTouches[0].clientY;
+    } else {
+      // Mouse event
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+
     return {
-      x: (e.clientX - rect.left) * scaleX,
-      y: (e.clientY - rect.top) * scaleY
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
     };
   }
 
@@ -141,27 +158,55 @@ class PoliticalCompassGenerator {
 
   handleTouchStart(e) {
     e.preventDefault();
-    const touch = e.touches[0];
-    const mouseEvent = new MouseEvent('mousedown', {
-      clientX: touch.clientX,
-      clientY: touch.clientY
+    if (e.touches.length === 0) return;
+
+    const coords = this.getCanvasCoordinates(e);
+
+    // Find dot under touch
+    this.selectedDot = this.dots.find(dot => {
+      const distance = Math.sqrt((dot.x - coords.x) ** 2 + (dot.y - coords.y) ** 2);
+      return distance <= 10;
     });
-    this.handleMouseDown(mouseEvent);
+
+    if (this.selectedDot) {
+      this.isDragging = true;
+      this.dragOffset.x = coords.x - this.selectedDot.x;
+      this.dragOffset.y = coords.y - this.selectedDot.y;
+    }
   }
 
   handleTouchMove(e) {
     e.preventDefault();
-    const touch = e.touches[0];
-    const mouseEvent = new MouseEvent('mousemove', {
-      clientX: touch.clientX,
-      clientY: touch.clientY
-    });
-    this.handleMouseMove(mouseEvent);
+    if (e.touches.length === 0 || !this.isDragging || !this.selectedDot) return;
+
+    const coords = this.getCanvasCoordinates(e);
+    this.selectedDot.x = coords.x - this.dragOffset.x;
+    this.selectedDot.y = coords.y - this.dragOffset.y;
+    this.drawCompass();
   }
 
   handleTouchEnd(e) {
     e.preventDefault();
-    this.handleMouseUp();
+    if (this.isDragging) {
+      this.isDragging = false;
+      this.saveToStorage();
+    } else {
+      // Handle tap/click for adding dots
+      const coords = this.getCanvasCoordinates(e);
+
+      // Check if tapping on existing dot
+      const tappedDot = this.dots.find(dot => {
+        const distance = Math.sqrt((dot.x - coords.x) ** 2 + (dot.y - coords.y) ** 2);
+        return distance <= 10;
+      });
+
+      if (tappedDot) {
+        this.showDotEditor(tappedDot);
+      } else {
+        // Add new dot
+        this.addDot(coords.x, coords.y);
+      }
+    }
   }
 
   drawCompass() {

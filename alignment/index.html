@@ -79,6 +79,10 @@
       border: 4px solid var(--border-color);
       cursor: crosshair;
       background: var(--bg-primary);
+      touch-action: none;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     .compass-controls {
@@ -330,6 +334,10 @@
           <!-- Compass Canvas -->
           <div class="compass-container">
             <canvas id="compassCanvas" class="compass-canvas" width="600" height="600"></canvas>
+            <div style="text-align: center; margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+              <i class="fas fa-info-circle"></i> اضغط على البوصلة لإضافة نقاط جديدة، أو اضغط على النقاط الموجودة لتعديلها
+              <br><small style="font-size: 0.8rem;">(على الأجهزة اللمسية: اضغط مطولاً واسحب لنقل النقاط)</small>
+            </div>
           </div>
 
           <!-- Dots Management -->
