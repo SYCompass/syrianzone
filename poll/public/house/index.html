@@ -164,10 +164,12 @@
         <div class="card p-4 text-center">
           <div class="text-sm text-gray-600">ذكور</div>
           <div id="statMale" class="text-2xl font-bold">–</div>
+          <div id="statMalePct" class="text-sm text-gray-600">–%</div>
         </div>
         <div class="card p-4 text-center">
           <div class="text-sm text-gray-600">إناث</div>
           <div id="statFemale" class="text-2xl font-bold">–</div>
+          <div id="statFemalePct" class="text-sm text-gray-600">–%</div>
         </div>
         <div class="card p-4 text-center">
           <div class="text-sm text-gray-600">مطعونين</div>
@@ -194,23 +196,11 @@
         </div>
       </div>
 
-      <!-- Table -->
-      <div class="card p-4">
-        <div id="status" class="text-center py-6 text-gray-600">جاري التحميل…</div>
-        <div class="overflow-x-auto" id="tableWrap" style="display:none;">
-          <table class="min-w-full bg-white table">
-            <thead>
-              <tr id="theadRow"></tr>
-            </thead>
-            <tbody id="tbody"></tbody>
-          </table>
-        </div>
-      </div>
-
       <!-- New Names Table -->
       <div class="card p-4 mt-6" id="newNamesSection" style="display:none;">
         <h3 class="text-lg font-semibold mb-2 flex items-center gap-2"><img src="/house/sus.png" alt="أيقونة" class="inline-block" style="width:18px;height:18px;"> <span>أسماء جديدة</span></h3>
-        <p class="text-sm text-gray-600 mb-2">فيما يلي الأسماء التي وردت في القوائم النهائية ولكنها لم تظهر في القوائم الأولية</p>
+        <p class="text-sm text-gray-600 mb-1">فيما يلي الأسماء التي وردت في القوائم النهائية ولكنها لم تظهر في القوائم الأولية</p>
+        <div class="text-sm text-gray-600 mb-2">العدد: <span id="newNamesCount">–</span></div>
         <div class="overflow-x-auto">
           <table class="min-w-full bg-white table">
             <thead>
@@ -219,6 +209,21 @@
               </tr>
             </thead>
             <tbody id="newNamesBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="card p-4">
+        <h3 class="text-lg font-semibold mb-2">القائمة الرئيسية</h3>
+        <p class="text-sm text-gray-600 mb-2">القائمة الكاملة للأسماء ضمن المحافظة المحددة. يمكنك الفرز والبحث والتصفية باستخدام الأدوات أعلاه.</p>
+        <div id="status" class="text-center py-6 text-gray-600">جاري التحميل…</div>
+        <div class="overflow-x-auto" id="tableWrap" style="display:none;">
+          <table class="min-w-full bg-white table">
+            <thead>
+              <tr id="theadRow"></tr>
+            </thead>
+            <tbody id="tbody"></tbody>
           </table>
         </div>
       </div>

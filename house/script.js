@@ -11,6 +11,8 @@
   const statTotal = document.getElementById('statTotal');
   const statMale = document.getElementById('statMale');
   const statFemale = document.getElementById('statFemale');
+  const statMalePct = document.getElementById('statMalePct');
+  const statFemalePct = document.getElementById('statFemalePct');
   const statAppealed = document.getElementById('statAppealed');
   let sexChart, ageChart, appealChart;
 
@@ -113,6 +115,14 @@
     statTotal.textContent = String(total);
     statMale.textContent = String(male);
     statFemale.textContent = String(female);
+    if (statMalePct) {
+      const pct = total > 0 ? Math.round((male / total) * 1000) / 10 : 0;
+      statMalePct.textContent = `${pct}%`;
+    }
+    if (statFemalePct) {
+      const pct = total > 0 ? Math.round((female / total) * 1000) / 10 : 0;
+      statFemalePct.textContent = `${pct}%`;
+    }
     try {
       const appealed = data.filter((r)=> String((r['حالة الطعن']||'')).trim() === 'مطعون').length;
       if (statAppealed) statAppealed.textContent = String(appealed);
@@ -341,6 +351,8 @@
         return;
       }
       body.innerHTML = '';
+      const countEl = document.getElementById('newNamesCount');
+      try { if (countEl) countEl.textContent = String(items.length); } catch(_) {}
       items.forEach((val)=>{
         const tr = document.createElement('tr');
         const td = document.createElement('td');
