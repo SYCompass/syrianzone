@@ -37,6 +37,7 @@ Key points:
 - `/party/` — Syrian political organizations directory (CSV-fed)
 - `/hotels/` — Syrian hotels directory (CSV-fed, grid/table views)
 - `/compass/` — Political compass test for Syria (CSV-fed questions, animated results)
+- `/alignment/` — Custom political compass generator (interactive canvas, export options)
 - `/board/` — Issues board viewer (reads GitHub issues via Octokit)
 - `/bingo/` — Moussa Alomar Bingo (client-side game)
 - `/game/` — Multiplayer platformer (static prototype)

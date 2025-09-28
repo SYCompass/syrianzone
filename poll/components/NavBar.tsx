@@ -26,6 +26,7 @@ export default function NavBar(): React.ReactElement {
       { label: "تير ليست الحكومة", href: "https://syrian.zone/tierlist", external: false, icon: <i className="fas fa-list-ol" style={{ color: "var(--sz-color-ink)" }} /> },
       { label: "مجلس الشعب", href: "https://syrian.zone/house", external: false, icon: <i className="fas fa-landmark" style={{ color: "var(--sz-color-ink)" }} /> },
       { label: "البوصلة السياسية", href: "https://syrian.zone/compass", external: false, icon: <i className="fas fa-compass" style={{ color: "var(--sz-color-ink)" }} /> },
+      { label: "بوصلة مخصصة", href: "https://syrian.zone/alignment", external: false, icon: <i className="fas fa-crosshairs" style={{ color: "var(--sz-color-ink)" }} /> },
       { label: "المواقع السورية", href: "https://syrian.zone/sites", external: false, icon: <i className="fas fa-globe" style={{ color: "var(--sz-color-ink)" }} /> },
       { label: "مبدل العلم", href: "https://github.com/SYCompass/Twitter-SVG-Syrian-Flag-Replacer/releases/tag/1.0.1", external: true, useImageIcon: true, imageSrc: "/assets/logo-lightmode.svg" },
       { label: "المنتدى", href: "https://wrraq.com", external: true, icon: <i className="fas fa-comments" style={{ color: "var(--sz-color-accent)" }} /> },

@@ -307,6 +307,10 @@ class NavBar extends HTMLElement {
               <i class="fas fa-compass" style="color: var(--sz-color-ink);"></i>
               البوصلة السياسية
             </a>
+            <a href="/alignment" class="nav-item">
+              <i class="fas fa-crosshairs" style="color: var(--sz-color-ink);"></i>
+              بوصلة مخصصة
+            </a>
             <a href="/sites" class="nav-item">
               <i class="fas fa-globe" style="color: var(--sz-color-ink);"></i>
               المواقع السورية
