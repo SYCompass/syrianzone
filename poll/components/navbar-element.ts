@@ -277,7 +277,7 @@ class NavBar extends HTMLElement {
             </a>
             <a href="/house" class="nav-item">
               <i class="fas fa-landmark"></i>
-              مجلس الشعب
+              المجلس التشريعي
             </a>
             <a href="/compass" class="nav-item">
               <i class="fas fa-compass"></i>

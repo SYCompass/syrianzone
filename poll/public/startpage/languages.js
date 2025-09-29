@@ -73,7 +73,7 @@ const languages = {
         visualIdentity: "الهوية البصرية",
         partyGuide: "دليل الأحزاب",
         ministerTierlist: "تير ليست الحكومة",
-        house: "مجلس الشعب",
+        house: "المجلس التشريعي",
         politicalCompass: "البوصلة السياسية",
         syrianWebsites: "المواقع السورية",
         flagReplacer: "مبدل العلم",

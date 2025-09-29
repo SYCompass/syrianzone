@@ -9,7 +9,7 @@ SELECT x.id, (SELECT id FROM p), x.name, x.title, x.image_url, (SELECT s + 1 FRO
 FROM (
   VALUES
     -- Adjust the name/title/image_url as desired; category defaults to 'minister'
-    ('item31', 'محمد طه الأحمد', 'رئيس اللجنة العليا لانتخابات مجلس الشعب', '/tierlist/images/item31.png')
+    ('item31', 'محمد طه الأحمد', 'رئيس اللجنة العليا لانتخابات المجلس التشريعي', '/tierlist/images/item31.png')
 ) AS x(id, name, title, image_url)
 ON CONFLICT (id) DO NOTHING;
 
