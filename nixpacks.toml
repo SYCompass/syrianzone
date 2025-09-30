@@ -1,0 +1,18 @@
+[phases.setup]
+nixPkgs = ["nodejs-20_x", "pnpm-9_x"]
+
+[phases.install]
+cmds = [
+  "pnpm install --no-frozen-lockfile",
+  "cd poll && pnpm install --frozen-lockfile",
+  "cd ../syrian-contributors && pnpm install --frozen-lockfile"
+]
+
+[phases.build]
+cmds = [
+  "cd poll && pnpm run link:static && pnpm build",
+  "cd ../syrian-contributors && pnpm build"
+]
+
+[start]
+cmd = "node reverse-proxy.js"

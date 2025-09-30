@@ -9,6 +9,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  basePath: '/syriangit',
+  assetPrefix: '/syriangit',
 }
 
 export default nextConfig

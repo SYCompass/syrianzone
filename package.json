@@ -6,23 +6,34 @@
   "author": "Hade Al-Ahmad <hade@hadealahmad.com>, Nour Sofanati <contact@nour-sofanati.com>",
   "license": "MIT",
   "packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af",
+  "workspaces": [
+    "poll",
+    "syrian-contributors"
+  ],
   "scripts": {
+    "install:all": "pnpm i --no-frozen-lockfile && cd poll && pnpm i --frozen-lockfile && cd ../syrian-contributors && pnpm i --frozen-lockfile",
+    "build:poll": "cd poll && pnpm -s link:static && pnpm build",
+    "build:syrian-contributors": "cd syrian-contributors && pnpm build",
+    "build": "pnpm -C poll -s link:static && pnpm build:poll && pnpm build:syrian-contributors",
+    "start:poll": "cd poll && pnpm -s link:static && pnpm -s start:migrate",
+    "start:syrian-contributors": "cd syrian-contributors && pnpm start",
+    "start:proxy": "node reverse-proxy.js",
+    "start": "pnpm start:poll & pnpm start:syrian-contributors & pnpm start:proxy & wait",
     "dev": "cd poll && pnpm -s link:static && pnpm dev",
-    "start": "cd poll && pnpm -s start:migrate",
-    "build": "cd poll && pnpm build",
     "lint": "eslint .",
     "dev:tailwind": "tailwindcss -i ./styles/tailwind.css -o ./styles/output.css --watch",
     "build:tailwind": "tailwindcss -i ./styles/tailwind.css -o ./styles/output.min.css --minify"
   },
   "dependencies": {
+    "http-proxy": "^1.18.1",
     "tailwindcss": "^4.1.4"
   },
   "devDependencies": {
+    "@eslint/js": "^9.13.0",
     "@tailwindcss/cli": "^4.1.4",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
-    "@eslint/js": "^9.13.0",
-    "globals": "^15.12.0",
-    "eslint": "^9.13.0"
+    "eslint": "^9.13.0",
+    "globals": "^15.12.0"
   }
 }
