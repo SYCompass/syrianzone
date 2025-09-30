@@ -40,7 +40,7 @@ Use these exact settings in your Coolify deployment:
 ### Build Settings (Nixpacks)
 - **Install Command**:
   ```bash
-  pnpm i --no-frozen-lockfile && cd poll && pnpm i --frozen-lockfile && cd ../syrian-contributors && pnpm i --frozen-lockfile
+  pnpm i --no-frozen-lockfile && cd poll && pnpm i --frozen-lockfile && cd ../syrian-contributors && pnpm i --no-frozen-lockfile
   ```
 
 - **Build Command**:

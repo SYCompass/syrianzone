@@ -2,7 +2,7 @@
 cmds = [
   "pnpm install --no-frozen-lockfile",
   "cd poll && pnpm install --frozen-lockfile",
-  "cd ../syrian-contributors && pnpm install --frozen-lockfile"
+  "cd ../syrian-contributors && pnpm install --no-frozen-lockfile"
 ]
 
 [phases.build]
