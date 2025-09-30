@@ -26,6 +26,7 @@ The monorepo has been configured to run both Next.js applications:
 
 ### 4. Nixpacks Configuration
 - Created `nixpacks.toml` for automated deployment with proper build phases
+- Nixpacks will auto-detect Node.js and pnpm requirements
 
 ## Coolify Deployment Settings
 
