@@ -7,21 +7,27 @@ const proxy = httpProxy.createProxyServer();
 // Handle proxy errors
 proxy.on('error', (err, req, res) => {
   console.error('Proxy error:', err);
-  res.writeHead(500, { 'Content-Type': 'text/plain' });
-  res.end('Proxy error occurred');
+  if (res && !res.headersSent) {
+    res.writeHead(500, { 'Content-Type': 'text/plain' });
+    res.end('Proxy error occurred');
+  }
 });
 
 // Create the main server
 const server = http.createServer((req, res) => {
   const url = req.url;
+  console.log(`Incoming request: ${req.method} ${url}`);
 
   // Route /syriangit/* requests to syrian-contributors app on port 3001
   if (url.startsWith('/syriangit/') || url === '/syriangit') {
+    const originalUrl = req.url;
     // Rewrite the path to remove /syriangit prefix for the target app
     req.url = url.replace('/syriangit', '') || '/';
+    console.log(`Routing to syrian-contributors: ${originalUrl} -> ${req.url}`);
     proxy.web(req, res, { target: 'http://localhost:3001' });
   } else {
     // Route all other requests to poll app on port 3002
+    console.log(`Routing to poll app: ${url}`);
     proxy.web(req, res, { target: 'http://localhost:3002' });
   }
 });

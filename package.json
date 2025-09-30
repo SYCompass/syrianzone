@@ -14,7 +14,7 @@
     "start:poll": "cd poll && PORT=3002 pnpm -s link:static && pnpm -s start:migrate",
     "start:syrian-contributors": "cd syrian-contributors && PORT=3001 pnpm start",
     "start:proxy": "node reverse-proxy.js",
-    "start": "pnpm start:poll & pnpm start:syrian-contributors & pnpm start:proxy & wait",
+    "start": "pnpm start:poll & sleep 3 && pnpm start:syrian-contributors & sleep 2 && pnpm start:proxy & wait",
     "dev": "cd poll && pnpm -s link:static && pnpm dev",
     "lint": "eslint .",
     "dev:tailwind": "tailwindcss -i ./styles/tailwind.css -o ./styles/output.css --watch",
