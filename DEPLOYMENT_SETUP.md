@@ -22,7 +22,8 @@ The monorepo has been configured to run both Next.js applications:
 ### 3. Reverse Proxy Setup
 - Created `reverse-proxy.js` to route traffic:
   - `/syriangit/*` → Syrian Contributors app (port 3001)
-  - `/*` → Poll app (port 3000)
+  - `/*` → Poll app (port 3002)
+- Reverse proxy listens on port 3000 (exposed to Coolify)
 
 ### 4. Nixpacks Configuration
 - Created `nixpacks.toml` for automated deployment with proper build phases

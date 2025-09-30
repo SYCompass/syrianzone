@@ -10,6 +10,7 @@
 - [x] Update syrian-contributors to run on port 3001
 - [x] Fix nixpacks configuration by removing incorrect package specifications
 - [x] Fix syrian-contributors lockfile issue by using --no-frozen-lockfile
+- [x] Fix port conflicts by assigning different ports to each app
 - [x] Create deployment documentation
 
 ## In Progress Tasks

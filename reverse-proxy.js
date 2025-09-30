@@ -21,8 +21,8 @@ const server = http.createServer((req, res) => {
     req.url = url.replace('/syriangit', '') || '/';
     proxy.web(req, res, { target: 'http://localhost:3001' });
   } else {
-    // Route all other requests to poll app on port 3000
-    proxy.web(req, res, { target: 'http://localhost:3000' });
+    // Route all other requests to poll app on port 3002
+    proxy.web(req, res, { target: 'http://localhost:3002' });
   }
 });
 
@@ -32,5 +32,5 @@ server.listen(PORT, () => {
   console.log(`Reverse proxy server listening on port ${PORT}`);
   console.log('Routing:');
   console.log('  /syriangit/* -> http://localhost:3001');
-  console.log('  /* -> http://localhost:3000');
+  console.log('  /* -> http://localhost:3002');
 });
