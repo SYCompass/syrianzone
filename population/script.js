@@ -8,6 +8,8 @@ const appState={
     allPopulationData:null
 };
 
+const GOOGLE_SHEET_ID = '2PACX-1vQFMcHyLLIQ0O64sW3zxAgR-kv7iCzaS8yV8-Pt3A-uFzj1koszZnMo5EkG9CEacSU9CwTHUxoFc8OF';
+
 const tooltip=document.getElementById('hover-tooltip');
 
 function initializeMap(){
@@ -33,6 +35,7 @@ function normalizeCityName(name){
         .replace(/Ḥ/g,'H')
         .toLowerCase();
 }
+
 function createNameMapping(cities){
     const mapping={};
     Object.keys(cities).forEach(city=>{
@@ -100,7 +103,7 @@ function loadGeoJsonToMap(data){
 
                     const name=feature.properties.province_name||'غير معروف';
                     const pop=findPopulation(name);
-                    const popStr=pop?pop.toLocaleString('ar-SY'):'لا توجد بيانات';
+                    const popStr=pop?pop.toLocaleString('en-US'):'لا توجد بيانات';
                     tooltip.innerHTML=
                         `<div class="city-name">${name}</div>
                          <div>عدد السكان: ${popStr}</div>
@@ -122,35 +125,115 @@ function loadGeoJsonToMap(data){
     appState.map.fitBounds(appState.geojsonLayer.getBounds());
 }
 
+// Parse CSV data from Google Sheets
+function parseCSV(csv){
+    const lines=csv.trim().split('\n');
+    const headers=lines[0].split(',').map(h=>h.trim());
+    
+    const sources=[];
+    const sourceMap={};
+    
+    for(let i=1;i<lines.length;i++){
+        const line=lines[i];
+        if(!line.trim())continue;
+
+        const values=[];
+        let current='';
+        let inQuotes=false;
+        
+        for(let j=0;j<line.length;j++){
+            const char=line[j];
+            if(char==='"'){
+                inQuotes=!inQuotes;
+            }else if(char===','&&!inQuotes){
+                values.push(current.trim());
+                current='';
+            }else{
+                current+=char;
+            }
+        }
+        values.push(current.trim());
+        
+        if(values.length<6)continue;
+        
+        const sourceId=values[0];
+        const sourceUrl=values[1];
+        const date=values[2];
+        const note=values[3];
+        const cityName=values[4];
+        const population=parseInt(values[5])||0;
+        
+        if(!sourceMap[sourceId]){
+            sourceMap[sourceId]={
+                source_id:parseInt(sourceId),
+                source_url:sourceUrl,
+                date:date,
+                note:note,
+                cities:{}
+            };
+            sources.push(sourceMap[sourceId]);
+        }
+        
+        if(cityName&&population){
+            sourceMap[sourceId].cities[cityName]=population;
+        }
+    }
+    
+    return{sources:sources};
+}
+
 async function loadPopulationData(){
-    const res=await fetch('/population/population_data.json');
-    const data=await res.json();
-    appState.allPopulationData=data;
+    try {
+        const corsProxy='https://corsproxy.io/?';
+        let csvUrl=`https://docs.google.com/spreadsheets/d/e/${GOOGLE_SHEET_ID}/pub?output=csv`;
+        
+        let res;
+        try {
+            res=await fetch(corsProxy+encodeURIComponent(csvUrl));
+        } catch(e) {
+            console.log('CORS proxy failed, trying direct fetch...');
+            res=await fetch(csvUrl);
+        }
+        
+        if(!res.ok)throw new Error('Failed to fetch data');
+        
+        const csvText=await res.text();
+        const data=parseCSV(csvText);
+        
+        if(!data.sources||data.sources.length===0){
+            throw new Error('No data found in sheet');
+        }
+        
+        appState.allPopulationData=data;
 
-    const sourcesGrid=document.getElementById('sourcesGrid');
-    sourcesGrid.innerHTML='';
+        const sourcesGrid=document.getElementById('sourcesGrid');
+        sourcesGrid.innerHTML='';
 
-    data.sources.forEach(src=>{
-        const id=`source_${src.source_id}`;
-        appState.dataSources[id]={
-            name:`المصدر ${src.source_id} (${src.date})`,
-            description:src.note||'بيانات سكان',
-            data:src.cities
-        };
+        data.sources.forEach(src=>{
+            const id=`source_${src.source_id}`;
+            appState.dataSources[id]={
+                name:`المصدر ${src.source_id} (${src.date})`,
+                description:src.note||'بيانات سكان',
+                data:src.cities
+            };
 
-        const item=document.createElement('div');
-        item.className='source-item';
-        item.dataset.source=id;
-        item.innerHTML=`
-            <h4 class="source-name">المصدر ${src.source_id} (${src.date})</h4>
-            <p class="source-description">${appState.dataSources[id].description}</p>
-            <p style="font-size:.7rem;color:#5D695F;margin-top:2px">
-                ${Object.keys(src.cities).length} مدينة
-            </p>`;
-        item.addEventListener('click',()=>selectDataSource(id));
-        sourcesGrid.appendChild(item);
-    });
-    if(data.sources.length)selectDataSource(`source_${data.sources[0].source_id}`);
+            const item=document.createElement('div');
+            item.className='source-item';
+            item.dataset.source=id;
+            item.innerHTML=`
+                <h4 class="source-name">المصدر ${src.source_id} (${src.date})</h4>
+                <p class="source-description">${appState.dataSources[id].description}</p>
+                <p style="font-size:.7rem;color:#5D695F;margin-top:2px">
+                    ${Object.keys(src.cities).length} مدينة
+                </p>`;
+            item.addEventListener('click',()=>selectDataSource(id));
+            sourcesGrid.appendChild(item);
+        });
+        
+        if(data.sources.length)selectDataSource(`source_${data.sources[0].source_id}`);
+    } catch(error) {
+        console.error('Error loading data from Google Sheets:',error);
+    }
 }
 
 function selectDataSource(id){
@@ -172,7 +255,6 @@ function selectDataSource(id){
     appState.currentDataSource=src.name;
     if(appState.geojsonLayer)appState.geojsonLayer.setStyle(getFeatureStyle);
     
-    // Close the data sources panel
     const panel=document.getElementById('dataSourcesPanel');
     const btn=document.getElementById('dataSourcesBtn');
     appState.showDataSources=false;
