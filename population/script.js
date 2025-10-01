@@ -1,3 +1,19 @@
+// Configuration constants
+const CONFIG = {
+    GOOGLE_SHEETS: {
+        SHEET_ID: '2PACX-1vS6vFJV6ldATqU0Gi-0tnn-2VPBWz8So0zbVpWoCIdv7f_m7tOyDXPlAsOncPzB_y-LD9ZxgPw9AOAl',
+        CACHE_DURATION: 24 * 60 * 60 * 1000, // 24 hours
+        MAX_RETRIES: 3
+    },
+    CSV: {
+        DELIMITER: ',',
+        TRIM_HEADERS: true
+    },
+    CACHE: {
+        NAMESPACE: 'population'
+    }
+};
+
 const appState={
     map:null,
     geojsonLayer:null,
@@ -5,13 +21,8 @@ const appState={
     dataSources:{},
     currentDataSource:null,
     showDataSources:false,
-    allPopulationData:null,
-    cache:null
+    allPopulationData:null
 };
-
-const GOOGLE_SHEET_ID = '2PACX-1vS6vFJV6ldATqU0Gi-0tnn-2VPBWz8So0zbVpWoCIdv7f_m7tOyDXPlAsOncPzB_y-LD9ZxgPw9AOAl';
-const POPULATION_CACHE_KEY = 'syrian_population_data';
-const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
 const tooltip=document.getElementById('hover-tooltip');
 
@@ -87,7 +98,7 @@ function findPopulation(provinceName){
     };
     if(special[provinceName]){
         for(const v of special[provinceName])
-            if(appState.populationData[v])return appState.populationData[v];
+            {if(appState.populationData[v])return appState.populationData[v];}
     }
     return pop;
 }
@@ -128,32 +139,28 @@ function loadGeoJsonToMap(data){
     appState.map.fitBounds(appState.geojsonLayer.getBounds());
 }
 
-// Parse CSV data from Google Sheets using SZ.csv utilities
-function parsePopulationCSV(csvText){
-    // Use SZ.csv to parse the CSV into objects
-    const rows = window.SZ.csv.parseCSVToObjects(csvText, {
-        delimiter: ',',
-        trimHeaders: true
-    });
-
-    if(!rows || rows.length === 0){
+// Process raw CSV data into sources format
+function processPopulationData(rawData) {
+    if (!rawData || rawData.length === 0) {
         throw new Error('No data found in CSV');
     }
 
     const sources = [];
     const sourceMap = {};
 
-    rows.forEach(row => {
-        const sourceId = row.source_id || row.Source_ID;
-        const sourceUrl = row.source_url || row.Source_URL;
+    rawData.forEach(row => {
+        const sourceId = row.source_id || row.Source_ID || row['Source ID'];
+        const sourceUrl = row.source_url || row.Source_URL || row['Source URL'];
         const date = row.date || row.Date;
         const note = row.note || row.Note;
-        const cityName = row.cityName || row.City_Name || row.city_name;
-        const population = parseInt(row.population || row.Population) || 0;
+        const cityName = row.city_name || row.City_Name || row['City Name'];
+        const populationStr = row.population || row.Population;
 
-        if(!sourceId || !cityName || !population) return;
+        if (!sourceId || !cityName) return;
 
-        if(!sourceMap[sourceId]){
+        const population = parseInt(populationStr) || 0;
+
+        if (!sourceMap[sourceId]) {
             sourceMap[sourceId] = {
                 source_id: parseInt(sourceId),
                 source_url: sourceUrl,
@@ -164,64 +171,59 @@ function parsePopulationCSV(csvText){
             sources.push(sourceMap[sourceId]);
         }
 
-        sourceMap[sourceId].cities[cityName] = population;
+        if (cityName && population >= 0) {
+            sourceMap[sourceId].cities[cityName] = population;
+        }
     });
 
     return { sources: sources };
 }
 
 async function loadPopulationData(){
-    // Initialize cache if not already done
-    if(!appState.cache){
-        appState.cache = window.SZ.cache.createCache('population');
-    }
+    try {
+        // Check cache first
+        const cache = window.SZ?.cache?.createCache(CONFIG.CACHE.NAMESPACE) || null;
+        const cachedData = cache?.get('populationData') || null;
+        if (cachedData) {
+            setupPopulationData(cachedData);
+            return;
+        }
 
-    // Try to load from cache first
-    const cachedData = appState.cache.get(POPULATION_CACHE_KEY);
-    if(cachedData){
-        console.log('Loading population data from cache');
-        processPopulationData(cachedData);
-        return;
-    }
-
-    // Load data with offline retry handling
-    await window.SZ.offline.runWithOfflineRetry(
-        async () => {
-            const csvUrl = `https://docs.google.com/spreadsheets/d/e/${GOOGLE_SHEET_ID}/pub?output=csv`;
-
-            const response = await window.SZ.http.fetchWithRetry(csvUrl, {
-                retries: 3,
-                backoffMs: 1000,
-                timeoutMs: 10000,
+        // Fetch data using shared utilities
+        const loader = async () => {
+            const csvUrl = `https://docs.google.com/spreadsheets/d/e/${CONFIG.GOOGLE_SHEETS.SHEET_ID}/pub?output=csv`;
+            const res = await window.SZ.http.fetchWithRetry(csvUrl, {
+                retries: CONFIG.GOOGLE_SHEETS.MAX_RETRIES,
                 acceptTypes: 'text/csv, text/plain, */*'
             });
+            const rows = window.SZ.csv.parseCSVToObjects(res.text, {
+                delimiter: CONFIG.CSV.DELIMITER,
+                trimHeaders: CONFIG.CSV.TRIM_HEADERS
+            });
+            return rows;
+        };
 
-            const data = parsePopulationCSV(response.text);
+        const rawData = await window.SZ.offline.runWithOfflineRetry(loader, {
+            onError: (error) => console.error('Error loading population data:', error)
+        });
 
-            if(!data.sources || data.sources.length === 0){
-                throw new Error('No data found in sheet');
-            }
+        const data = processPopulationData(rawData);
 
-            // Cache the data
-            appState.cache.set(POPULATION_CACHE_KEY, data, CACHE_TTL);
-
-            return data;
-        },
-        {
-            retries: 5,
-            backoffMs: 2000,
-            onSuccess: (data) => {
-                console.log('Successfully loaded population data');
-                processPopulationData(data);
-            },
-            onError: (error) => {
-                console.error('Failed to load population data after retries:', error);
-            }
+        if (!data.sources || data.sources.length === 0) {
+            throw new Error('No data found in sheet');
         }
-    );
+
+        // Cache the processed data
+        cache?.set('populationData', data, CONFIG.GOOGLE_SHEETS.CACHE_DURATION);
+
+        setupPopulationData(data);
+    } catch(error) {
+        console.error('Error loading population data:', error);
+        throw error;
+    }
 }
 
-function processPopulationData(data){
+function setupPopulationData(data) {
     appState.allPopulationData = data;
 
     const sourcesGrid = document.getElementById('sourcesGrid');
@@ -248,7 +250,7 @@ function processPopulationData(data){
         sourcesGrid.appendChild(item);
     });
 
-    if(data.sources.length) {
+    if (data.sources.length) {
         selectDataSource(`source_${data.sources[0].source_id}`);
     }
 }
@@ -316,38 +318,11 @@ document.addEventListener('DOMContentLoaded',async()=>{
         .catch(err=>console.error(err));
 });
 
-// Utility function to clear population cache
-function clearPopulationCache(){
-    if(appState.cache){
-        appState.cache.remove(POPULATION_CACHE_KEY);
-        console.log('Population cache cleared');
-    }
-}
-
-// Utility function to refresh population data
-async function refreshPopulationData(){
-    if(appState.cache){
-        appState.cache.remove(POPULATION_CACHE_KEY);
-    }
-    await loadPopulationData();
-}
-
 window.SyrianAtlas={
     loadGeoJson:loadGeoJsonToMap,
     setPopulationData:d=>{
         appState.populationData=d;
         if(appState.geojsonLayer)appState.geojsonLayer.setStyle(getFeatureStyle);
     },
-    getCurrentSource:()=>appState.currentDataSource,
-    clearCache:clearPopulationCache,
-    refreshData:refreshPopulationData,
-    getCacheInfo:()=>{
-        if(appState.cache){
-            const cached=appState.cache.get(POPULATION_CACHE_KEY);
-            return{
-                hasCache:!!cached
-            };
-        }
-        return{hasCache:false};
-    }
+    getCurrentSource:()=>appState.currentDataSource
 };

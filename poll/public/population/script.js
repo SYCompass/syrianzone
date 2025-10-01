@@ -1,3 +1,19 @@
+// Configuration constants
+const CONFIG = {
+    GOOGLE_SHEETS: {
+        SHEET_ID: '2PACX-1vS6vFJV6ldATqU0Gi-0tnn-2VPBWz8So0zbVpWoCIdv7f_m7tOyDXPlAsOncPzB_y-LD9ZxgPw9AOAl',
+        CACHE_DURATION: 24 * 60 * 60 * 1000, // 24 hours
+        MAX_RETRIES: 3
+    },
+    CSV: {
+        DELIMITER: ',',
+        TRIM_HEADERS: true
+    },
+    CACHE: {
+        NAMESPACE: 'population'
+    }
+};
+
 const appState={
     map:null,
     geojsonLayer:null,
@@ -33,6 +49,7 @@ function normalizeCityName(name){
         .replace(/Ḥ/g,'H')
         .toLowerCase();
 }
+
 function createNameMapping(cities){
     const mapping={};
     Object.keys(cities).forEach(city=>{
@@ -81,7 +98,7 @@ function findPopulation(provinceName){
     };
     if(special[provinceName]){
         for(const v of special[provinceName])
-            if(appState.populationData[v])return appState.populationData[v];
+            {if(appState.populationData[v])return appState.populationData[v];}
     }
     return pop;
 }
@@ -100,7 +117,7 @@ function loadGeoJsonToMap(data){
 
                     const name=feature.properties.province_name||'غير معروف';
                     const pop=findPopulation(name);
-                    const popStr=pop?pop.toLocaleString('ar-SY'):'لا توجد بيانات';
+                    const popStr=pop?pop.toLocaleString('en-US'):'لا توجد بيانات';
                     tooltip.innerHTML=
                         `<div class="city-name">${name}</div>
                          <div>عدد السكان: ${popStr}</div>
@@ -122,35 +139,120 @@ function loadGeoJsonToMap(data){
     appState.map.fitBounds(appState.geojsonLayer.getBounds());
 }
 
+// Process raw CSV data into sources format
+function processPopulationData(rawData) {
+    if (!rawData || rawData.length === 0) {
+        throw new Error('No data found in CSV');
+    }
+
+    const sources = [];
+    const sourceMap = {};
+
+    rawData.forEach(row => {
+        const sourceId = row.source_id || row.Source_ID || row['Source ID'];
+        const sourceUrl = row.source_url || row.Source_URL || row['Source URL'];
+        const date = row.date || row.Date;
+        const note = row.note || row.Note;
+        const cityName = row.city_name || row.City_Name || row['City Name'];
+        const populationStr = row.population || row.Population;
+
+        if (!sourceId || !cityName) return;
+
+        const population = parseInt(populationStr) || 0;
+
+        if (!sourceMap[sourceId]) {
+            sourceMap[sourceId] = {
+                source_id: parseInt(sourceId),
+                source_url: sourceUrl,
+                date: date,
+                note: note,
+                cities: {}
+            };
+            sources.push(sourceMap[sourceId]);
+        }
+
+        if (cityName && population >= 0) {
+            sourceMap[sourceId].cities[cityName] = population;
+        }
+    });
+
+    return { sources: sources };
+}
+
 async function loadPopulationData(){
-    const res=await fetch('/population/population_data.json');
-    const data=await res.json();
-    appState.allPopulationData=data;
+    try {
+        // Check cache first
+        const cache = window.SZ?.cache?.createCache(CONFIG.CACHE.NAMESPACE) || null;
+        const cachedData = cache?.get('populationData') || null;
+        if (cachedData) {
+            setupPopulationData(cachedData);
+            return;
+        }
 
-    const sourcesGrid=document.getElementById('sourcesGrid');
-    sourcesGrid.innerHTML='';
-
-    data.sources.forEach(src=>{
-        const id=`source_${src.source_id}`;
-        appState.dataSources[id]={
-            name:`المصدر ${src.source_id} (${src.date})`,
-            description:src.note||'بيانات سكان',
-            data:src.cities
+        // Fetch data using shared utilities
+        const loader = async () => {
+            const csvUrl = `https://docs.google.com/spreadsheets/d/e/${CONFIG.GOOGLE_SHEETS.SHEET_ID}/pub?output=csv`;
+            const res = await window.SZ.http.fetchWithRetry(csvUrl, {
+                retries: CONFIG.GOOGLE_SHEETS.MAX_RETRIES,
+                acceptTypes: 'text/csv, text/plain, */*'
+            });
+            const rows = window.SZ.csv.parseCSVToObjects(res.text, {
+                delimiter: CONFIG.CSV.DELIMITER,
+                trimHeaders: CONFIG.CSV.TRIM_HEADERS
+            });
+            return rows;
         };
 
-        const item=document.createElement('div');
-        item.className='source-item';
-        item.dataset.source=id;
-        item.innerHTML=`
+        const rawData = await window.SZ.offline.runWithOfflineRetry(loader, {
+            onError: (error) => console.error('Error loading population data:', error)
+        });
+
+        const data = processPopulationData(rawData);
+
+        if (!data.sources || data.sources.length === 0) {
+            throw new Error('No data found in sheet');
+        }
+
+        // Cache the processed data
+        cache?.set('populationData', data, CONFIG.GOOGLE_SHEETS.CACHE_DURATION);
+
+        setupPopulationData(data);
+    } catch(error) {
+        console.error('Error loading population data:', error);
+        throw error;
+    }
+}
+
+function setupPopulationData(data) {
+    appState.allPopulationData = data;
+
+    const sourcesGrid = document.getElementById('sourcesGrid');
+    sourcesGrid.innerHTML = '';
+
+    data.sources.forEach(src => {
+        const id = `source_${src.source_id}`;
+        appState.dataSources[id] = {
+            name: `المصدر ${src.source_id} (${src.date})`,
+            description: src.note || 'بيانات سكان',
+            data: src.cities
+        };
+
+        const item = document.createElement('div');
+        item.className = 'source-item';
+        item.dataset.source = id;
+        item.innerHTML = `
             <h4 class="source-name">المصدر ${src.source_id} (${src.date})</h4>
             <p class="source-description">${appState.dataSources[id].description}</p>
             <p style="font-size:.7rem;color:#5D695F;margin-top:2px">
                 ${Object.keys(src.cities).length} مدينة
             </p>`;
-        item.addEventListener('click',()=>selectDataSource(id));
+        item.addEventListener('click', () => selectDataSource(id));
         sourcesGrid.appendChild(item);
     });
-    if(data.sources.length)selectDataSource(`source_${data.sources[0].source_id}`);
+
+    if (data.sources.length) {
+        selectDataSource(`source_${data.sources[0].source_id}`);
+    }
 }
 
 function selectDataSource(id){
@@ -172,7 +274,6 @@ function selectDataSource(id){
     appState.currentDataSource=src.name;
     if(appState.geojsonLayer)appState.geojsonLayer.setStyle(getFeatureStyle);
     
-    // Close the data sources panel
     const panel=document.getElementById('dataSourcesPanel');
     const btn=document.getElementById('dataSourcesBtn');
     appState.showDataSources=false;
