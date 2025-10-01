@@ -5,10 +5,13 @@ const appState={
     dataSources:{},
     currentDataSource:null,
     showDataSources:false,
-    allPopulationData:null
+    allPopulationData:null,
+    cache:null
 };
 
 const GOOGLE_SHEET_ID = '2PACX-1vS6vFJV6ldATqU0Gi-0tnn-2VPBWz8So0zbVpWoCIdv7f_m7tOyDXPlAsOncPzB_y-LD9ZxgPw9AOAl';
+const POPULATION_CACHE_KEY = 'syrian_population_data';
+const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
 const tooltip=document.getElementById('hover-tooltip');
 
@@ -125,114 +128,128 @@ function loadGeoJsonToMap(data){
     appState.map.fitBounds(appState.geojsonLayer.getBounds());
 }
 
-// Parse CSV data from Google Sheets
-function parseCSV(csv){
-    const lines=csv.trim().split('\n');
-    const headers=lines[0].split(',').map(h=>h.trim());
-    
-    const sources=[];
-    const sourceMap={};
-    
-    for(let i=1;i<lines.length;i++){
-        const line=lines[i];
-        if(!line.trim())continue;
+// Parse CSV data from Google Sheets using SZ.csv utilities
+function parsePopulationCSV(csvText){
+    // Use SZ.csv to parse the CSV into objects
+    const rows = window.SZ.csv.parseCSVToObjects(csvText, {
+        delimiter: ',',
+        trimHeaders: true
+    });
 
-        const values=[];
-        let current='';
-        let inQuotes=false;
-        
-        for(let j=0;j<line.length;j++){
-            const char=line[j];
-            if(char==='"'){
-                inQuotes=!inQuotes;
-            }else if(char===','&&!inQuotes){
-                values.push(current.trim());
-                current='';
-            }else{
-                current+=char;
-            }
-        }
-        values.push(current.trim());
-        
-        if(values.length<6)continue;
-        
-        const sourceId=values[0];
-        const sourceUrl=values[1];
-        const date=values[2];
-        const note=values[3];
-        const cityName=values[4];
-        const population=parseInt(values[5])||0;
-        
+    if(!rows || rows.length === 0){
+        throw new Error('No data found in CSV');
+    }
+
+    const sources = [];
+    const sourceMap = {};
+
+    rows.forEach(row => {
+        const sourceId = row.source_id || row.Source_ID;
+        const sourceUrl = row.source_url || row.Source_URL;
+        const date = row.date || row.Date;
+        const note = row.note || row.Note;
+        const cityName = row.cityName || row.City_Name || row.city_name;
+        const population = parseInt(row.population || row.Population) || 0;
+
+        if(!sourceId || !cityName || !population) return;
+
         if(!sourceMap[sourceId]){
-            sourceMap[sourceId]={
-                source_id:parseInt(sourceId),
-                source_url:sourceUrl,
-                date:date,
-                note:note,
-                cities:{}
+            sourceMap[sourceId] = {
+                source_id: parseInt(sourceId),
+                source_url: sourceUrl,
+                date: date,
+                note: note,
+                cities: {}
             };
             sources.push(sourceMap[sourceId]);
         }
-        
-        if(cityName&&population){
-            sourceMap[sourceId].cities[cityName]=population;
-        }
-    }
-    
-    return{sources:sources};
+
+        sourceMap[sourceId].cities[cityName] = population;
+    });
+
+    return { sources: sources };
 }
 
 async function loadPopulationData(){
-    try {
-        const corsProxy='https://corsproxy.io/?';
-        let csvUrl=`https://docs.google.com/spreadsheets/d/e/${GOOGLE_SHEET_ID}/pub?output=csv`;
-        
-        let res;
-        try {
-            res=await fetch(corsProxy+encodeURIComponent(csvUrl));
-        } catch(e) {
-            console.log('CORS proxy failed, trying direct fetch...');
-            res=await fetch(csvUrl);
+    // Initialize cache if not already done
+    if(!appState.cache){
+        appState.cache = window.SZ.cache.createCache('population');
+    }
+
+    // Try to load from cache first
+    const cachedData = appState.cache.get(POPULATION_CACHE_KEY);
+    if(cachedData){
+        console.log('Loading population data from cache');
+        processPopulationData(cachedData);
+        return;
+    }
+
+    // Load data with offline retry handling
+    await window.SZ.offline.runWithOfflineRetry(
+        async () => {
+            const csvUrl = `https://docs.google.com/spreadsheets/d/e/${GOOGLE_SHEET_ID}/pub?output=csv`;
+
+            const response = await window.SZ.http.fetchWithRetry(csvUrl, {
+                retries: 3,
+                backoffMs: 1000,
+                timeoutMs: 10000,
+                acceptTypes: 'text/csv, text/plain, */*'
+            });
+
+            const data = parsePopulationCSV(response.text);
+
+            if(!data.sources || data.sources.length === 0){
+                throw new Error('No data found in sheet');
+            }
+
+            // Cache the data
+            appState.cache.set(POPULATION_CACHE_KEY, data, CACHE_TTL);
+
+            return data;
+        },
+        {
+            retries: 5,
+            backoffMs: 2000,
+            onSuccess: (data) => {
+                console.log('Successfully loaded population data');
+                processPopulationData(data);
+            },
+            onError: (error) => {
+                console.error('Failed to load population data after retries:', error);
+            }
         }
-        
-        if(!res.ok)throw new Error('Failed to fetch data');
-        
-        const csvText=await res.text();
-        const data=parseCSV(csvText);
-        
-        if(!data.sources||data.sources.length===0){
-            throw new Error('No data found in sheet');
-        }
-        
-        appState.allPopulationData=data;
+    );
+}
 
-        const sourcesGrid=document.getElementById('sourcesGrid');
-        sourcesGrid.innerHTML='';
+function processPopulationData(data){
+    appState.allPopulationData = data;
 
-        data.sources.forEach(src=>{
-            const id=`source_${src.source_id}`;
-            appState.dataSources[id]={
-                name:`المصدر ${src.source_id} (${src.date})`,
-                description:src.note||'بيانات سكان',
-                data:src.cities
-            };
+    const sourcesGrid = document.getElementById('sourcesGrid');
+    sourcesGrid.innerHTML = '';
 
-            const item=document.createElement('div');
-            item.className='source-item';
-            item.dataset.source=id;
-            item.innerHTML=`
-                <h4 class="source-name">المصدر ${src.source_id} (${src.date})</h4>
-                <p class="source-description">${appState.dataSources[id].description}</p>
-                <p style="font-size:.7rem;color:#5D695F;margin-top:2px">
-                    ${Object.keys(src.cities).length} مدينة
-                </p>`;
-            item.addEventListener('click',()=>selectDataSource(id));
-            sourcesGrid.appendChild(item);
-        });
-        
-        if(data.sources.length)selectDataSource(`source_${data.sources[0].source_id}`);
-    } catch(error) {
-        console.error('Error loading data from Google Sheets:',error);
+    data.sources.forEach(src => {
+        const id = `source_${src.source_id}`;
+        appState.dataSources[id] = {
+            name: `المصدر ${src.source_id} (${src.date})`,
+            description: src.note || 'بيانات سكان',
+            data: src.cities
+        };
+
+        const item = document.createElement('div');
+        item.className = 'source-item';
+        item.dataset.source = id;
+        item.innerHTML = `
+            <h4 class="source-name">المصدر ${src.source_id} (${src.date})</h4>
+            <p class="source-description">${appState.dataSources[id].description}</p>
+            <p style="font-size:.7rem;color:#5D695F;margin-top:2px">
+                ${Object.keys(src.cities).length} مدينة
+            </p>`;
+        item.addEventListener('click', () => selectDataSource(id));
+        sourcesGrid.appendChild(item);
+    });
+
+    if(data.sources.length) {
+        selectDataSource(`source_${data.sources[0].source_id}`);
     }
 }
 
@@ -299,11 +316,38 @@ document.addEventListener('DOMContentLoaded',async()=>{
         .catch(err=>console.error(err));
 });
 
+// Utility function to clear population cache
+function clearPopulationCache(){
+    if(appState.cache){
+        appState.cache.remove(POPULATION_CACHE_KEY);
+        console.log('Population cache cleared');
+    }
+}
+
+// Utility function to refresh population data
+async function refreshPopulationData(){
+    if(appState.cache){
+        appState.cache.remove(POPULATION_CACHE_KEY);
+    }
+    await loadPopulationData();
+}
+
 window.SyrianAtlas={
     loadGeoJson:loadGeoJsonToMap,
     setPopulationData:d=>{
         appState.populationData=d;
         if(appState.geojsonLayer)appState.geojsonLayer.setStyle(getFeatureStyle);
     },
-    getCurrentSource:()=>appState.currentDataSource
+    getCurrentSource:()=>appState.currentDataSource,
+    clearCache:clearPopulationCache,
+    refreshData:refreshPopulationData,
+    getCacheInfo:()=>{
+        if(appState.cache){
+            const cached=appState.cache.get(POPULATION_CACHE_KEY);
+            return{
+                hasCache:!!cached
+            };
+        }
+        return{hasCache:false};
+    }
 };
