@@ -1,4 +1,12 @@
 (function(){
+  // Mode: 'voters' | 'candidates'
+  let currentMode = 'voters';
+  const tabVoters = document.getElementById('tabVoters');
+  const tabCandidates = document.getElementById('tabCandidates');
+  const pageTitle = document.getElementById('pageTitle');
+  const pageSubtitle = document.getElementById('pageSubtitle');
+  const mainTableTitle = document.getElementById('mainTableTitle');
+  const mainTableDescription = document.getElementById('mainTableDescription');
   const statusEl = document.getElementById('status');
   const tableWrap = document.getElementById('tableWrap');
   const theadRow = document.getElementById('theadRow');
@@ -30,6 +38,9 @@
     { key: 'aleppo', label: 'حلب', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '1121899715' },
     { key: 'deir-ez-zor', label: 'دير الزور', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '1166128088' },
   ];
+
+  // Candidate sheets mapping (defaults to same as voters until provided)
+  const CANDIDATES_SHEET = { sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '109132918' };
 
   function csvUrlFor(p){
     return `https://docs.google.com/spreadsheets/d/${p.sheetId}/export?format=csv&gid=${p.gid}`;
@@ -80,6 +91,7 @@
   }
 
   function applyFilters(data){
+    if (currentMode === 'candidates') return data; // No filtering in candidates mode
     const q = normalizeString(searchInput.value);
     const sex = sexFilter.value;
     const group = ageGroupFilter.value;
@@ -262,6 +274,8 @@
       if (!k) return false;
       if (k === 'المطعونين') return false;
       if (k === 'أسماء جديدة') return false;
+      // In candidates mode, hide appeal status if present
+      if (currentMode === 'candidates' && (k === 'حالة الطعن' || k === 'AppealStatus')) return false;
       // Hide columns that are entirely empty in the current dataset
       try {
         return sortedRows.some((r)=> String(r[key] == null ? '' : r[key]).trim() !== '');
@@ -331,14 +345,14 @@
       tbody.appendChild(tr);
     });
 
-    // Render New Names table
+    // Render New Names table (only for voters mode)
     try {
       const section = document.getElementById('newNamesSection');
       const body = document.getElementById('newNamesBody');
       const selectedKey = provinceSelect.value || 'damascus';
       const newNamesKey = (headers || []).find((k)=> String(k||'').trim() === 'أسماء جديدة');
       if (!section || !body) return;
-      if (selectedKey === 'all' || !newNamesKey) {
+      if (currentMode === 'candidates' || selectedKey === 'all' || !newNamesKey) {
         section.style.display = 'none';
         body.innerHTML = '';
         return;
@@ -377,6 +391,48 @@
   let sortColumn = 'Name'; // Default sort by Name
   let sortDirection = 'asc'; // 'asc' or 'desc'
 
+  function updateCopyForMode(){
+    try {
+      if (pageTitle) pageTitle.textContent = 'المجلس التشريعي';
+      if (pageSubtitle) pageSubtitle.textContent = currentMode === 'candidates'
+        ? 'المرشحون لانتخابات المجلس التشريعي — يمكن التصفية والبحث وعرض إحصاءات'
+        : 'أعضاء الهيئات الناخبة لالمجلس التشريعي — يمكن التصفية والبحث وعرض إحصاءات';
+      if (mainTableTitle) mainTableTitle.textContent = currentMode === 'candidates' ? 'قائمة المرشحين' : 'القائمة الرئيسية';
+      if (mainTableDescription) mainTableDescription.textContent = currentMode === 'candidates'
+        ? 'القائمة الكاملة للمرشحين ضمن المحافظة المحددة.'
+        : 'القائمة الكاملة للأسماء ضمن المحافظة المحددة. يمكنك الفرز والبحث والتصفية باستخدام الأدوات أعلاه.';
+    } catch(_) {}
+  }
+
+  function updateProvinceOptions(){
+    const SOURCE = PROVINCES; // Province selection not used in candidates mode
+    const prev = provinceSelect.value;
+    provinceSelect.innerHTML = SOURCE.map(p=>`<option value="${p.key}">${p.label}</option>`).join('');
+    // Keep selection if exists; else default to 'damascus'
+    if (SOURCE.some(p=>p.key===prev)) {
+      provinceSelect.value = prev;
+    } else {
+      provinceSelect.value = 'damascus';
+    }
+  }
+
+  function updateVisibilityForMode(){
+    try {
+      const controls = document.getElementById('controlsCard');
+      const stats = document.getElementById('statsGrid');
+      const charts = document.getElementById('chartsCard');
+      if (currentMode === 'candidates') {
+        if (controls) controls.style.display = 'none';
+        if (stats) stats.style.display = 'none';
+        if (charts) charts.style.display = 'none';
+      } else {
+        if (controls) controls.style.display = '';
+        if (stats) stats.style.display = '';
+        if (charts) charts.style.display = '';
+      }
+    } catch(_) {}
+  }
+
   async function load(){
     try {
       statusEl.textContent = 'جاري التحميل…';
@@ -385,8 +441,13 @@
       let objects = [];
       
       {
-        const province = PROVINCES.find(p=>p.key===selectedKey) || PROVINCES[0];
-        const res = await fetch(csvUrlFor(province), { cache: 'no-store' });
+        let res;
+        if (currentMode === 'candidates') {
+          res = await fetch(csvUrlFor(CANDIDATES_SHEET), { cache: 'no-store' });
+        } else {
+          const province = PROVINCES.find(p=>p.key===selectedKey) || PROVINCES[0];
+          res = await fetch(csvUrlFor(province), { cache: 'no-store' });
+        }
         if(!res.ok){ throw new Error('HTTP '+res.status); }
         const text = await res.text();
         if (window.SZ?.csv?.detectRedirectHTML && window.SZ.csv.detectRedirectHTML(text)) {
@@ -417,8 +478,10 @@
       });
       const filtered = applyFilters(originalData);
       renderTable(headers, filtered);
-      updateStats(filtered);
-      renderCharts(filtered);
+      if (currentMode !== 'candidates') {
+        updateStats(filtered);
+        renderCharts(filtered);
+      }
       if(filtered.length===0){
         statusEl.textContent = 'لا توجد بيانات لعرضها حالياً';
         tableWrap.style.display = 'none';
@@ -426,6 +489,7 @@
         statusEl.style.display = 'none';
         tableWrap.style.display = '';
       }
+      updateVisibilityForMode();
     } catch(e){
       statusEl.textContent = 'تعذّر تحميل البيانات: '+(e && e.message ? e.message : '');
       tableWrap.style.display = 'none';
@@ -435,8 +499,10 @@
   function onControlsChange(){
     const filtered = applyFilters(originalData);
     renderTable(headers, filtered);
-    updateStats(filtered);
-    renderCharts(filtered);
+    if (currentMode !== 'candidates') {
+      updateStats(filtered);
+      renderCharts(filtered);
+    }
   }
 
   function resetFilters() {
@@ -463,8 +529,9 @@
       Chart.defaults.font.family = "'IBM Plex Sans Arabic', 'Tahoma', sans-serif";
       Chart.defaults.font.size = 13;
     } catch(e) {}
-    provinceSelect.innerHTML = PROVINCES.map(p=>`<option value="${p.key}">${p.label}</option>`).join('');
-    provinceSelect.value = 'damascus';
+    updateProvinceOptions();
+    updateCopyForMode();
+    updateVisibilityForMode();
     
     // Add reset button event listener
     const resetButton = document.getElementById('resetFilters');
@@ -479,6 +546,46 @@
   sexFilter.addEventListener('change', onControlsChange);
   ageGroupFilter.addEventListener('change', onControlsChange);
   try { appealFilter.addEventListener('change', onControlsChange); } catch(_) {}
+
+  function setMode(mode){
+    if (mode !== 'voters' && mode !== 'candidates') return;
+    if (currentMode === mode) return;
+    currentMode = mode;
+    // Toggle tabs UI
+    try {
+      if (tabVoters && tabCandidates) {
+        const active = mode === 'voters' ? tabVoters : tabCandidates;
+        const inactive = mode === 'voters' ? tabCandidates : tabVoters;
+        active.setAttribute('aria-selected', 'true');
+        inactive.setAttribute('aria-selected', 'false');
+        active.style.borderColor = 'var(--sz-color-primary)';
+        inactive.style.borderColor = 'transparent';
+        inactive.classList.add('text-gray-600');
+        active.classList.remove('text-gray-600');
+      }
+    } catch(_) {}
+    // Reset sort and filters minimally
+    sortColumn = 'Name';
+    sortDirection = 'asc';
+    updateProvinceOptions();
+    updateCopyForMode();
+    updateVisibilityForMode();
+    // Hide new names section on candidates
+    try {
+      const section = document.getElementById('newNamesSection');
+      if (section) section.style.display = mode === 'candidates' ? 'none' : section.style.display;
+    } catch(_) {}
+    // Reload
+    statusEl.style.display = '';
+    statusEl.textContent = 'جاري التحميل…';
+    tableWrap.style.display = 'none';
+    load();
+  }
+
+  try {
+    if (tabVoters) tabVoters.addEventListener('click', function(){ setMode('voters'); });
+    if (tabCandidates) tabCandidates.addEventListener('click', function(){ setMode('candidates'); });
+  } catch(_) {}
 })();
 
 

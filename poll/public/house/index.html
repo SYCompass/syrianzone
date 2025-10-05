@@ -92,8 +92,15 @@
 
   <main class="container mx-auto px-4 py-8">
     <div class="max-w-6xl mx-auto">
-      <h1 class="text-3xl font-bold text-center mb-4">المجلس التشريعي</h1>
-      <p class="text-center text-gray-600 mb-6">أعضاء الهيئات الناخبة لالمجلس التشريعي — يمكن التصفية والبحث وعرض إحصاءات</p>
+      <h1 id="pageTitle" class="text-3xl font-bold text-center mb-4">المجلس التشريعي</h1>
+      <p id="pageSubtitle" class="text-center text-gray-600 mb-6">أعضاء الهيئات الناخبة لالمجلس التشريعي — يمكن التصفية والبحث وعرض إحصاءات</p>
+
+      <div class="mb-4">
+        <div class="inline-flex gap-2 border-b" role="tablist">
+          <button id="tabVoters" class="px-4 py-2 font-medium border-b-2" style="border-color: var(--sz-color-primary);" aria-selected="true">الهيئات الناخبة</button>
+          <button id="tabCandidates" class="px-4 py-2 font-medium border-b-2 border-transparent text-gray-600" aria-selected="false">المرشحون</button>
+        </div>
+      </div>
 
       <!-- Disclaimer -->
       <div class="card p-4 mb-6 text-sm" style="color: var(--sz-color-ink);">
@@ -105,7 +112,7 @@
       </div>
 
       <!-- Controls -->
-      <div class="card p-4 mb-6">
+      <div id="controlsCard" class="card p-4 mb-6">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
           <div>
             <label class="block text-sm text-gray-600 mb-1">المحافظة</label>
@@ -156,7 +163,7 @@
       </div>
 
       <!-- Stats -->
-      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
+      <div id="statsGrid" class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
         <div class="card p-4 text-center">
           <div class="text-sm text-gray-600">الإجمالي</div>
           <div id="statTotal" class="text-2xl font-bold">–</div>
@@ -179,7 +186,7 @@
       </div>
 
       <!-- Charts -->
-      <div class="card p-4 mb-6">
+      <div id="chartsCard" class="card p-4 mb-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <h3 class="text-lg font-semibold mb-2">توزيع الجنس</h3>
@@ -215,8 +222,8 @@
 
       <!-- Table -->
       <div class="card p-4">
-        <h3 class="text-lg font-semibold mb-2">القائمة الرئيسية</h3>
-        <p class="text-sm text-gray-600 mb-2">القائمة الكاملة للأسماء ضمن المحافظة المحددة. يمكنك الفرز والبحث والتصفية باستخدام الأدوات أعلاه.</p>
+        <h3 id="mainTableTitle" class="text-lg font-semibold mb-2">القائمة الرئيسية</h3>
+        <p id="mainTableDescription" class="text-sm text-gray-600 mb-2">القائمة الكاملة للأسماء ضمن المحافظة المحددة. يمكنك الفرز والبحث والتصفية باستخدام الأدوات أعلاه.</p>
         <div id="status" class="text-center py-6 text-gray-600">جاري التحميل…</div>
         <div class="overflow-x-auto" id="tableWrap" style="display:none;">
           <table class="min-w-full bg-white table">
@@ -234,7 +241,7 @@
   <script src="/components/utils-theme.js" defer></script>
   <script src="/components/utils-csv.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-  <script src="/house/script.js?ver=1.0.9" defer></script>
+  <script src="/house/script.js?ver=1.1.1" defer></script>
 </body>
 </html>
 
