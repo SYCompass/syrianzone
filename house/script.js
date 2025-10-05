@@ -91,7 +91,16 @@
   }
 
   function applyFilters(data){
-    if (currentMode === 'candidates') return data; // No filtering in candidates mode
+    if (currentMode === 'candidates') {
+      const q = normalizeString(searchInput.value);
+      if (!q) return data;
+      return data.filter((row)=>{
+        const name = row.__nameNorm;
+        const place = row.__placeNorm;
+        const hay = `${name} ${place}`;
+        return hay.includes(q);
+      });
+    }
     const q = normalizeString(searchInput.value);
     const sex = sexFilter.value;
     const group = ageGroupFilter.value;
@@ -418,17 +427,40 @@
 
   function updateVisibilityForMode(){
     try {
-      const controls = document.getElementById('controlsCard');
+      const controlsCard = document.getElementById('controlsCard');
       const stats = document.getElementById('statsGrid');
       const charts = document.getElementById('chartsCard');
       if (currentMode === 'candidates') {
-        if (controls) controls.style.display = 'none';
+        if (controlsCard) controlsCard.style.display = '';
         if (stats) stats.style.display = 'none';
         if (charts) charts.style.display = 'none';
+        // Hide province and other filters, keep search only
+        const toHide = [provinceSelect, sexFilter, ageGroupFilter, appealFilter, document.getElementById('resetFilters')];
+        toHide.forEach((el)=>{
+          try {
+            if (!el) return;
+            const wrap = el.closest('div');
+            if (wrap) wrap.style.display = 'none';
+          } catch(_) {}
+        });
+        // Ensure search container is visible
+        try {
+          const searchWrap = searchInput?.closest('div');
+          if (searchWrap) searchWrap.style.display = '';
+        } catch(_) {}
       } else {
-        if (controls) controls.style.display = '';
+        if (controlsCard) controlsCard.style.display = '';
         if (stats) stats.style.display = '';
         if (charts) charts.style.display = '';
+        // Show all control items back
+        const all = [provinceSelect, sexFilter, ageGroupFilter, appealFilter, document.getElementById('resetFilters'), searchInput];
+        all.forEach((el)=>{
+          try {
+            if (!el) return;
+            const wrap = el.closest('div');
+            if (wrap) wrap.style.display = '';
+          } catch(_) {}
+        });
       }
     } catch(_) {}
   }
