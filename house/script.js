@@ -524,7 +524,7 @@
       if (pageSubtitle) pageSubtitle.textContent = currentMode === 'candidates'
         ? 'المرشحون لانتخابات المجلس التشريعي — يمكن التصفية والبحث'
         : currentMode === 'winners'
-        ? 'الفائزون في انتخابات المجلس التشريعي — بحث وملخص'
+        ? 'الفائزون في انتخابات المجلس التشريعي'
         : 'أعضاء الهيئات الناخبة لالمجلس التشريعي — يمكن التصفية والبحث وعرض إحصاءات';
       if (mainTableTitle) mainTableTitle.textContent = currentMode === 'candidates' ? 'قائمة المرشحين' : 'القائمة الرئيسية';
       if (mainTableDescription) mainTableDescription.textContent = currentMode === 'candidates'
