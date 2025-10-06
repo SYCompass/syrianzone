@@ -1,8 +1,9 @@
 (function(){
-  // Mode: 'voters' | 'candidates'
+  // Mode: 'voters' | 'candidates' | 'winners'
   let currentMode = 'voters';
   const tabVoters = document.getElementById('tabVoters');
   const tabCandidates = document.getElementById('tabCandidates');
+  const tabWinners = document.getElementById('tabWinners');
   const pageTitle = document.getElementById('pageTitle');
   const pageSubtitle = document.getElementById('pageSubtitle');
   const mainTableTitle = document.getElementById('mainTableTitle');
@@ -16,6 +17,7 @@
   const sexFilter = document.getElementById('sexFilter');
   const ageGroupFilter = document.getElementById('ageGroupFilter');
   const appealFilter = document.getElementById('appealFilter');
+  const resultFilter = document.getElementById('resultFilter');
   const statTotal = document.getElementById('statTotal');
   const statMale = document.getElementById('statMale');
   const statFemale = document.getElementById('statFemale');
@@ -91,14 +93,28 @@
   }
 
   function applyFilters(data){
-    if (currentMode === 'candidates') {
+    if (currentMode === 'candidates' || currentMode === 'winners') {
       const q = normalizeString(searchInput.value);
-      if (!q) return data;
+      const result = (currentMode === 'candidates' && resultFilter && typeof resultFilter.value === 'string') ? resultFilter.value : '';
       return data.filter((row)=>{
+        if (result) {
+          const isWinner = String(row['النتيجة'] || row['Result'] || '').trim() === 'فائز';
+          if (result === 'winner' && !isWinner) return false;
+          if (result === 'notWinner' && isWinner) return false;
+        }
+        if (!q) return true;
         const name = row.__nameNorm;
         const place = row.__placeNorm;
         const hay = `${name} ${place}`;
-        return hay.includes(q);
+        if (hay.includes(q)) return true;
+        try {
+          const winnersCol = Object.keys(row).find((k)=> String(k||'').trim() === 'الفائزين');
+          if (winnersCol) {
+            const raw = String(row[winnersCol] || '');
+            if (normalizeString(raw).includes(q)) return true;
+          }
+        } catch(_) {}
+        return false;
       });
     }
     const q = normalizeString(searchInput.value);
@@ -283,6 +299,9 @@
       if (!k) return false;
       if (k === 'المطعونين') return false;
       if (k === 'أسماء جديدة') return false;
+      if (k === 'الفائزين') return currentMode !== 'candidates';
+      // Always hide winners-gender column from bottom table
+      if (k === 'جنس الفائزين' || k === 'Sex (winners)') return false;
       // In candidates mode, hide appeal status if present
       if (currentMode === 'candidates' && (k === 'حالة الطعن' || k === 'AppealStatus')) return false;
       // Hide columns that are entirely empty in the current dataset
@@ -344,6 +363,13 @@
         if (String(r.__appealStatus || '').trim() === 'مطعون') {
           tr.classList.add('appealed-row');
         }
+        // Highlight winner row if النتيجة === فائز
+        try {
+          const resultVal = String(r['النتيجة'] || r['Result'] || '').trim();
+          if (resultVal === 'فائز') {
+            tr.style.backgroundColor = 'rgba(85, 106, 78, 0.12)';
+          }
+        } catch(_) {}
       } catch(_) {}
       headerDefs.forEach(({ key })=>{
         const td = document.createElement('td');
@@ -353,6 +379,97 @@
       });
       tbody.appendChild(tr);
     });
+
+    // Render Winners table (only for candidates mode)
+    try {
+      const section = document.getElementById('winnersSection');
+      const body = document.getElementById('winnersBody');
+      const countEl = document.getElementById('winnersCount');
+      const winnersChartCanvas = document.getElementById('winnersSexChart');
+      if (!section || !body) throw new Error('no winners section');
+      if (currentMode !== 'winners') {
+        section.style.display = 'none';
+        body.innerHTML = '';
+      } else {
+        // Build winners from الفائزين column; fallback to where النتيجة === فائز
+        const winnersCol = (headers || []).find((k)=> String(k||'').trim() === 'الفائزين');
+        let items = [];
+        let male = 0, female = 0;
+        if (winnersCol) {
+          function splitNames(val){
+            return String(val || '').split(/[,،;\n]+/).map(s=>s.trim()).filter(Boolean);
+          }
+          items = sortedRows.flatMap((r)=>{
+            const names = splitNames(r[winnersCol]);
+            const g = (r['جنس الفائزين'] || r['Sex (winners)'] || '').toString().trim();
+            const sex = g || (r['Sex'] || r['الجنس'] || '');
+            names.forEach(()=>{
+              if (sex === 'ذكر') male++; else if (sex === 'أنثى') female++;
+            });
+            return names.map((name)=> ({ name, sex }));
+          }).filter(Boolean);
+        }
+        if (!winnersCol || items.length === 0) {
+          // Fallback by scanning rows for النتيجة === فائز
+          items = sortedRows
+            .filter((r)=> String(r['النتيجة']||'').trim() === 'فائز')
+            .map((r)=> {
+              const sex = r['Sex'] || r['الجنس'] || '';
+              if (sex === 'ذكر') male++; else if (sex === 'أنثى') female++;
+              return { name: r['Name'] || r['الاسم'] || '', sex };
+            });
+        } else {
+          // When using الفائزين column we do not have district per entry; try to infer from the row
+          // handled above while adding sex counts
+        }
+        // Apply search to winners items
+        try {
+          const q = normalizeString(searchInput.value);
+          if (q) {
+            const filteredItems = [];
+            male = 0; female = 0;
+            items.forEach((it)=>{
+              const nm = typeof it === 'string' ? it : (it.name || '');
+              if (normalizeString(nm).includes(q)) {
+                filteredItems.push(it);
+                const sx = typeof it === 'string' ? '' : (it.sex || '');
+                if (sx === 'ذكر') male++; else if (sx === 'أنثى') female++;
+              }
+            });
+            items = filteredItems;
+          }
+        } catch(_) {}
+        body.innerHTML = '';
+        (items || []).forEach((it)=>{
+          const tr = document.createElement('tr');
+          const tdName = document.createElement('td');
+          tdName.className = 'px-4 py-2 text-sm border-t';
+          tdName.textContent = typeof it === 'string' ? it : (it.name || '');
+          const tdSex = document.createElement('td');
+          tdSex.className = 'px-4 py-2 text-sm border-t';
+          tdSex.textContent = typeof it === 'string' ? '' : (it.sex || '');
+          tr.appendChild(tdName);
+          tr.appendChild(tdSex);
+          body.appendChild(tr);
+        });
+        try { if (countEl) countEl.textContent = String((items || []).length); } catch(_) {}
+        section.style.display = '';
+
+        // Draw winners sex chart
+        try {
+          if (winnersChartCanvas && window.Chart) {
+            if (window.__winnersChart) { try { window.__winnersChart.destroy(); } catch(e) {} }
+            const maleBase = '#556A4E';
+            const femaleBase = '#A73F46';
+            window.__winnersChart = new Chart(winnersChartCanvas, {
+              type: 'doughnut',
+              data: { labels: ['ذكر','أنثى'], datasets: [{ data: [male, female], backgroundColor: [maleBase, femaleBase] }] },
+              options: { plugins: { legend: { position: 'bottom' } } }
+            });
+          }
+        } catch(_) {}
+      }
+    } catch(_) {}
 
     // Render New Names table (only for voters mode)
     try {
@@ -404,7 +521,9 @@
     try {
       if (pageTitle) pageTitle.textContent = 'المجلس التشريعي';
       if (pageSubtitle) pageSubtitle.textContent = currentMode === 'candidates'
-        ? 'المرشحون لانتخابات المجلس التشريعي — يمكن التصفية والبحث وعرض إحصاءات'
+        ? 'المرشحون لانتخابات المجلس التشريعي — يمكن التصفية والبحث'
+        : currentMode === 'winners'
+        ? 'الفائزون في انتخابات المجلس التشريعي — بحث وملخص'
         : 'أعضاء الهيئات الناخبة لالمجلس التشريعي — يمكن التصفية والبحث وعرض إحصاءات';
       if (mainTableTitle) mainTableTitle.textContent = currentMode === 'candidates' ? 'قائمة المرشحين' : 'القائمة الرئيسية';
       if (mainTableDescription) mainTableDescription.textContent = currentMode === 'candidates'
@@ -428,10 +547,12 @@
   function updateVisibilityForMode(){
     try {
       const controlsCard = document.getElementById('controlsCard');
+      const mainTableCard = document.getElementById('mainTableCard');
       const stats = document.getElementById('statsGrid');
       const charts = document.getElementById('chartsCard');
       if (currentMode === 'candidates') {
         if (controlsCard) controlsCard.style.display = '';
+        if (mainTableCard) mainTableCard.style.display = '';
         if (stats) stats.style.display = 'none';
         if (charts) charts.style.display = 'none';
         // Hide province and other filters, keep search only
@@ -448,8 +569,29 @@
           const searchWrap = searchInput?.closest('div');
           if (searchWrap) searchWrap.style.display = '';
         } catch(_) {}
+        // Ensure result filter is visible in candidates
+        try {
+          const rfWrap = resultFilter?.closest('div');
+          if (rfWrap) rfWrap.style.display = '';
+        } catch(_) {}
+      } else if (currentMode === 'winners') {
+        if (controlsCard) controlsCard.style.display = '';
+        if (mainTableCard) mainTableCard.style.display = 'none';
+        if (stats) stats.style.display = 'none';
+        if (charts) charts.style.display = 'none';
+        const toHide = [provinceSelect, sexFilter, ageGroupFilter, appealFilter, resultFilter, document.getElementById('resetFilters')];
+        toHide.forEach((el)=>{
+          try {
+            if (!el) return;
+            const wrap = el.closest('div');
+            if (wrap) wrap.style.display = 'none';
+          } catch(_) {}
+        });
+        const searchWrap = searchInput?.closest('div');
+        if (searchWrap) searchWrap.style.display = '';
       } else {
         if (controlsCard) controlsCard.style.display = '';
+        if (mainTableCard) mainTableCard.style.display = '';
         if (stats) stats.style.display = '';
         if (charts) charts.style.display = '';
         // Show all control items back
@@ -474,7 +616,7 @@
       
       {
         let res;
-        if (currentMode === 'candidates') {
+        if (currentMode === 'candidates' || currentMode === 'winners') {
           res = await fetch(csvUrlFor(CANDIDATES_SHEET), { cache: 'no-store' });
         } else {
           const province = PROVINCES.find(p=>p.key===selectedKey) || PROVINCES[0];
@@ -510,16 +652,21 @@
       });
       const filtered = applyFilters(originalData);
       renderTable(headers, filtered);
-      if (currentMode !== 'candidates') {
+      if (currentMode === 'voters') {
         updateStats(filtered);
         renderCharts(filtered);
       }
-      if(filtered.length===0){
-        statusEl.textContent = 'لا توجد بيانات لعرضها حالياً';
+      if (currentMode === 'winners') {
+        statusEl.style.display = 'none';
         tableWrap.style.display = 'none';
       } else {
-        statusEl.style.display = 'none';
-        tableWrap.style.display = '';
+        if(filtered.length===0){
+          statusEl.textContent = 'لا توجد بيانات لعرضها حالياً';
+          tableWrap.style.display = 'none';
+        } else {
+          statusEl.style.display = 'none';
+          tableWrap.style.display = '';
+        }
       }
       updateVisibilityForMode();
     } catch(e){
@@ -531,7 +678,7 @@
   function onControlsChange(){
     const filtered = applyFilters(originalData);
     renderTable(headers, filtered);
-    if (currentMode !== 'candidates') {
+    if (currentMode === 'voters') {
       updateStats(filtered);
       renderCharts(filtered);
     }
@@ -578,23 +725,22 @@
   sexFilter.addEventListener('change', onControlsChange);
   ageGroupFilter.addEventListener('change', onControlsChange);
   try { appealFilter.addEventListener('change', onControlsChange); } catch(_) {}
+  try { resultFilter.addEventListener('change', onControlsChange); } catch(_) {}
 
   function setMode(mode){
-    if (mode !== 'voters' && mode !== 'candidates') return;
+    if (mode !== 'voters' && mode !== 'candidates' && mode !== 'winners') return;
     if (currentMode === mode) return;
     currentMode = mode;
     // Toggle tabs UI
     try {
-      if (tabVoters && tabCandidates) {
-        const active = mode === 'voters' ? tabVoters : tabCandidates;
-        const inactive = mode === 'voters' ? tabCandidates : tabVoters;
-        active.setAttribute('aria-selected', 'true');
-        inactive.setAttribute('aria-selected', 'false');
-        active.style.borderColor = 'var(--sz-color-primary)';
-        inactive.style.borderColor = 'transparent';
-        inactive.classList.add('text-gray-600');
-        active.classList.remove('text-gray-600');
-      }
+      const buttons = [tabVoters, tabCandidates, tabWinners];
+      buttons.forEach((btn)=>{
+        if (!btn) return;
+        const isActive = (btn === (mode === 'voters' ? tabVoters : mode === 'candidates' ? tabCandidates : tabWinners));
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        btn.style.borderColor = isActive ? 'var(--sz-color-primary)' : 'transparent';
+        if (isActive) btn.classList.remove('text-gray-600'); else btn.classList.add('text-gray-600');
+      });
     } catch(_) {}
     // Reset sort and filters minimally
     sortColumn = 'Name';
@@ -605,7 +751,7 @@
     // Hide new names section on candidates
     try {
       const section = document.getElementById('newNamesSection');
-      if (section) section.style.display = mode === 'candidates' ? 'none' : section.style.display;
+      if (section) section.style.display = mode !== 'voters' ? 'none' : section.style.display;
     } catch(_) {}
     // Reload
     statusEl.style.display = '';
@@ -617,6 +763,7 @@
   try {
     if (tabVoters) tabVoters.addEventListener('click', function(){ setMode('voters'); });
     if (tabCandidates) tabCandidates.addEventListener('click', function(){ setMode('candidates'); });
+    if (tabWinners) tabWinners.addEventListener('click', function(){ setMode('winners'); });
   } catch(_) {}
 })();
 
