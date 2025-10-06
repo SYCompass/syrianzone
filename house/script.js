@@ -41,8 +41,9 @@
     { key: 'deir-ez-zor', label: 'دير الزور', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '1166128088' },
   ];
 
-  // Candidate sheets mapping (defaults to same as voters until provided)
+  // Sheets for candidates and winners
   const CANDIDATES_SHEET = { sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '109132918' };
+  const WINNERS_SHEET = { sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '385944900' };
 
   function csvUrlFor(p){
     return `https://docs.google.com/spreadsheets/d/${p.sheetId}/export?format=csv&gid=${p.gid}`;
@@ -96,11 +97,22 @@
     if (currentMode === 'candidates' || currentMode === 'winners') {
       const q = normalizeString(searchInput.value);
       const result = (currentMode === 'candidates' && resultFilter && typeof resultFilter.value === 'string') ? resultFilter.value : '';
+      const selDistrict = (currentMode === 'winners') ? (provinceSelect?.value || '') : '';
+      const selSex = (currentMode === 'winners') ? (sexFilter?.value || '') : '';
+      const selAge = (currentMode === 'winners') ? (ageGroupFilter?.value || '') : '';
       return data.filter((row)=>{
-        if (result) {
+        if (currentMode === 'candidates' && result) {
           const isWinner = String(row['النتيجة'] || row['Result'] || '').trim() === 'فائز';
           if (result === 'winner' && !isWinner) return false;
           if (result === 'notWinner' && isWinner) return false;
+        }
+        if (currentMode === 'winners') {
+          if (selSex && (row.__sexNorm !== selSex)) return false;
+          if (selAge && (row.__ageGroup !== selAge)) return false;
+          if (selDistrict && selDistrict !== 'all') {
+            const d = String(row['Electoral District (الدائرة الانتخابية)'] || '').trim();
+            if (d !== selDistrict) return false;
+          }
         }
         if (!q) return true;
         const name = row.__nameNorm;
@@ -391,68 +403,40 @@
         section.style.display = 'none';
         body.innerHTML = '';
       } else {
-        // Build winners from الفائزين column; fallback to where النتيجة === فائز
-        const winnersCol = (headers || []).find((k)=> String(k||'').trim() === 'الفائزين');
+        // Winners sheet lists winners one per row; map directly
         let items = [];
         let male = 0, female = 0;
-        if (winnersCol) {
-          function splitNames(val){
-            return String(val || '').split(/[,،;\n]+/).map(s=>s.trim()).filter(Boolean);
-          }
-          items = sortedRows.flatMap((r)=>{
-            const names = splitNames(r[winnersCol]);
-            const g = (r['جنس الفائزين'] || r['Sex (winners)'] || '').toString().trim();
-            const sex = g || (r['Sex'] || r['الجنس'] || '');
-            names.forEach(()=>{
-              if (sex === 'ذكر') male++; else if (sex === 'أنثى') female++;
-            });
-            return names.map((name)=> ({ name, sex }));
-          }).filter(Boolean);
-        }
-        if (!winnersCol || items.length === 0) {
-          // Fallback by scanning rows for النتيجة === فائز
-          items = sortedRows
-            .filter((r)=> String(r['النتيجة']||'').trim() === 'فائز')
-            .map((r)=> {
-              const sex = r['Sex'] || r['الجنس'] || '';
-              if (sex === 'ذكر') male++; else if (sex === 'أنثى') female++;
-              return { name: r['Name'] || r['الاسم'] || '', sex };
-            });
-        } else {
-          // When using الفائزين column we do not have district per entry; try to infer from the row
-          // handled above while adding sex counts
-        }
-        // Apply search to winners items
+        items = sortedRows.map((r)=>{
+          const sex = r['Sex'] || r['الجنس'] || '';
+          if (sex === 'ذكر') male++; else if (sex === 'أنثى') female++;
+          return { name: r['Name'] || r['الاسم'] || '', sex };
+        });
+        // Build winners thead with all headers
         try {
-          const q = normalizeString(searchInput.value);
-          if (q) {
-            const filteredItems = [];
-            male = 0; female = 0;
-            items.forEach((it)=>{
-              const nm = typeof it === 'string' ? it : (it.name || '');
-              if (normalizeString(nm).includes(q)) {
-                filteredItems.push(it);
-                const sx = typeof it === 'string' ? '' : (it.sex || '');
-                if (sx === 'ذكر') male++; else if (sx === 'أنثى') female++;
-              }
+          const wthead = document.getElementById('winnersTheadRow');
+          if (wthead) {
+            wthead.innerHTML = '';
+            (headers || []).forEach((key)=>{
+              const th = document.createElement('th');
+              th.className = 'px-4 py-2 text-right text-xs font-medium text-gray-600 uppercase tracking-wider bg-gray-50';
+              const label = (HEADER_LABELS_AR && HEADER_LABELS_AR[key]) ? HEADER_LABELS_AR[key] : key;
+              th.textContent = label;
+              wthead.appendChild(th);
             });
-            items = filteredItems;
           }
         } catch(_) {}
         body.innerHTML = '';
-        (items || []).forEach((it)=>{
+        (sortedRows || []).forEach((row)=>{
           const tr = document.createElement('tr');
-          const tdName = document.createElement('td');
-          tdName.className = 'px-4 py-2 text-sm border-t';
-          tdName.textContent = typeof it === 'string' ? it : (it.name || '');
-          const tdSex = document.createElement('td');
-          tdSex.className = 'px-4 py-2 text-sm border-t';
-          tdSex.textContent = typeof it === 'string' ? '' : (it.sex || '');
-          tr.appendChild(tdName);
-          tr.appendChild(tdSex);
+          (headers || []).forEach((key)=>{
+            const td = document.createElement('td');
+            td.className = 'px-4 py-2 text-sm border-t';
+            td.textContent = row[key] || '';
+            tr.appendChild(td);
+          });
           body.appendChild(tr);
         });
-        try { if (countEl) countEl.textContent = String((items || []).length); } catch(_) {}
+        try { if (countEl) countEl.textContent = String((sortedRows || []).length); } catch(_) {}
         section.style.display = '';
 
         // Draw winners sex chart
@@ -545,6 +529,21 @@
     }
   }
 
+  function updateDistrictOptionsFromData(rows){
+    try {
+      const list = Array.isArray(rows) ? rows : [];
+      const key = 'Electoral District (الدائرة الانتخابية)';
+      const values = Array.from(new Set(list.map(r=> String(r[key]||'').trim()).filter(Boolean)));
+      values.sort((a,b)=>{
+        try { return a.localeCompare(b, ['ar','ar-SA','ar-SY'], { sensitivity: 'base' }); } catch(_) { return a < b ? -1 : (a > b ? 1 : 0); }
+      });
+      const opts = ['<option value="all">الكل</option>'].concat(values.map(v=> `<option value="${v.replace(/\"/g,'&quot;')}">${v}</option>`));
+      provinceSelect.innerHTML = opts.join('');
+      provinceSelect.value = 'all';
+      try { const lab = provinceSelect.parentElement?.querySelector('label'); if (lab) lab.textContent = 'الدائرة الانتخابية'; } catch(_) {}
+    } catch(_) {}
+  }
+
   function updateVisibilityForMode(){
     try {
       const controlsCard = document.getElementById('controlsCard');
@@ -578,9 +577,26 @@
       } else if (currentMode === 'winners') {
         if (controlsCard) controlsCard.style.display = '';
         if (mainTableCard) mainTableCard.style.display = 'none';
-        if (stats) stats.style.display = 'none';
-        if (charts) charts.style.display = 'none';
-        const toHide = [provinceSelect, sexFilter, ageGroupFilter, appealFilter, resultFilter, document.getElementById('resetFilters')];
+        if (stats) stats.style.display = '';
+        if (charts) charts.style.display = '';
+        // Hide "مطعونين" stat in winners tab
+        try {
+          const appealedEl = document.getElementById('statAppealed');
+          const appealedCard = appealedEl ? appealedEl.closest('.card') : null;
+          if (appealedCard) appealedCard.style.display = 'none';
+        } catch(_) {}
+        // Hide appeal chart and winners secondary chart in winners tab
+        try {
+          const appealCanvas = document.getElementById('appealChart');
+          const appealWrap = appealCanvas ? appealCanvas.closest('div') : null;
+          if (appealWrap) appealWrap.style.display = 'none';
+        } catch(_) {}
+        try {
+          const wSexCanvas = document.getElementById('winnersSexChart');
+          const wSexWrap = wSexCanvas ? wSexCanvas.closest('div') : null;
+          if (wSexWrap) wSexWrap.style.display = 'none';
+        } catch(_) {}
+        const toHide = [appealFilter, resultFilter];
         toHide.forEach((el)=>{
           try {
             if (!el) return;
@@ -588,13 +604,25 @@
             if (wrap) wrap.style.display = 'none';
           } catch(_) {}
         });
-        const searchWrap = searchInput?.closest('div');
-        if (searchWrap) searchWrap.style.display = '';
+        // Show search, sex, age, district, reset
+        [searchInput, sexFilter, ageGroupFilter, provinceSelect, document.getElementById('resetFilters')].forEach((el)=>{
+          try {
+            const wrap = el?.closest('div');
+            if (wrap) wrap.style.display = '';
+          } catch(_) {}
+        });
+        try { const lab = provinceSelect.parentElement?.querySelector('label'); if (lab) lab.textContent = 'الدائرة الانتخابية'; } catch(_) {}
       } else {
         if (controlsCard) controlsCard.style.display = '';
         if (mainTableCard) mainTableCard.style.display = '';
         if (stats) stats.style.display = '';
         if (charts) charts.style.display = '';
+        // Ensure appeal chart (third) visible outside winners
+        try {
+          const appealCanvas = document.getElementById('appealChart');
+          const appealWrap = appealCanvas ? appealCanvas.closest('div') : null;
+          if (appealWrap) appealWrap.style.display = '';
+        } catch(_) {}
         // Show all control items back
         const all = [provinceSelect, sexFilter, ageGroupFilter, appealFilter, document.getElementById('resetFilters'), searchInput];
         all.forEach((el)=>{
@@ -617,7 +645,9 @@
       
       {
         let res;
-        if (currentMode === 'candidates' || currentMode === 'winners') {
+        if (currentMode === 'winners') {
+          res = await fetch(csvUrlFor(WINNERS_SHEET), { cache: 'no-store' });
+        } else if (currentMode === 'candidates') {
           res = await fetch(csvUrlFor(CANDIDATES_SHEET), { cache: 'no-store' });
         } else {
           const province = PROVINCES.find(p=>p.key===selectedKey) || PROVINCES[0];
@@ -651,9 +681,13 @@
         }
         return base;
       });
+      // Winners: populate district selector before filtering to avoid empty results due to stale value
+      if (currentMode === 'winners') {
+        try { updateDistrictOptionsFromData(originalData); provinceSelect.value = 'all'; } catch(_) {}
+      }
       const filtered = applyFilters(originalData);
       renderTable(headers, filtered);
-      if (currentMode === 'voters') {
+      if (currentMode === 'voters' || currentMode === 'winners') {
         updateStats(filtered);
         renderCharts(filtered);
       }

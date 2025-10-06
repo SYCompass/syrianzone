@@ -172,7 +172,7 @@
       </div>
 
       <!-- Stats -->
-      <div id="statsGrid" class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
+      <div id="statsGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div class="card p-4 text-center">
           <div class="text-sm text-gray-600">الإجمالي</div>
           <div id="statTotal" class="text-2xl font-bold">–</div>
@@ -196,7 +196,7 @@
 
       <!-- Charts -->
       <div id="chartsCard" class="card p-4 mb-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <h3 class="text-lg font-semibold mb-2">توزيع الجنس</h3>
             <canvas id="sexChart" height="220"></canvas>
@@ -204,10 +204,6 @@
           <div>
             <h3 class="text-lg font-semibold mb-2">توزيع الأعمار</h3>
             <canvas id="ageChart" height="220"></canvas>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold mb-2">حالة الطعن</h3>
-            <canvas id="appealChart" height="220"></canvas>
           </div>
         </div>
       </div>
@@ -232,18 +228,11 @@
       <!-- Winners Table (candidates mode) -->
       <div class="card p-4 mt-6 mb-6" id="winnersSection" style="display:none;">
         <h3 class="text-lg font-semibold mb-2">الفائزون</h3>
-        <div class="mb-4">
-          <h4 class="text-sm font-semibold mb-2">توزيع الجنس للفائزين</h4>
-          <canvas id="winnersSexChart" height="160"></canvas>
-        </div>
         <div class="text-sm text-gray-600 mb-2">العدد: <span id="winnersCount">–</span></div>
         <div class="overflow-x-auto">
           <table class="min-w-full bg-white table">
             <thead>
-              <tr>
-                <th class="px-4 py-2 text-right text-xs font-medium text-gray-600 uppercase tracking-wider bg-gray-50">الاسم</th>
-                <th class="px-4 py-2 text-right text-xs font-medium text-gray-600 uppercase tracking-wider bg-gray-50">الجنس</th>
-              </tr>
+              <tr id="winnersTheadRow"></tr>
             </thead>
             <tbody id="winnersBody"></tbody>
           </table>
