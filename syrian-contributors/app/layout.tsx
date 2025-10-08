@@ -52,7 +52,7 @@ export default function RootLayout({
         <Script src="/components/navbar.js" strategy="afterInteractive" />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <div className="flex min-h-screen flex-col">
-            <nav-bar base-path={BASE_PATH} asset-base="/"></nav-bar>
+            <nav-bar base-path={BASE_PATH} asset-base="/" no-theme-sync></nav-bar>
             <main className="flex-1">{children}</main>
             <Footer />
           </div>

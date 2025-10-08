@@ -7,8 +7,10 @@ class NavBar extends HTMLElement {
 
   connectedCallback() {
     this.render();
-    this.reflectThemeToHost();
-    this.observeTheme();
+    if (!this.hasAttribute('no-theme-sync')) {
+      this.reflectThemeToHost();
+      this.observeTheme();
+    }
     this.addEventListeners();
     this.highlightActivePage();
   }
@@ -62,14 +64,17 @@ class NavBar extends HTMLElement {
       navbar?.classList.toggle('menu-open');
     });
 
-    themeButtons?.forEach(btn => btn.addEventListener('click', () => {
-      if (window.SZ?.theme) {
-        window.SZ.theme.cycle();
-      }
-    }));
+    if (!this.hasAttribute('no-theme-sync')) {
+      themeButtons?.forEach(btn => btn.addEventListener('click', () => {
+        if (window.SZ?.theme) {
+          window.SZ.theme.cycle();
+        }
+      }));
+    }
   }
 
   render() {
+    const disableThemeSync = this.hasAttribute('no-theme-sync');
     const baseAttr = this.getAttribute('base-path');
     const htmlBase = document.documentElement?.getAttribute('data-base-path');
     const globalBase = (window.SZ && window.SZ.basePath) || '';
@@ -82,6 +87,17 @@ class NavBar extends HTMLElement {
       const normalizedPrefix = (assetBase || '').replace(/\/+$/, '');
       return normalizedPrefix ? `${normalizedPrefix}${normalizedPath}` : normalizedPath;
     };
+    const mobileThemeButton = disableThemeSync ? '' : `
+              <button class="theme-button" title="Toggle theme">
+                <i class="fas fa-adjust"></i>
+              </button>`;
+
+    const desktopThemeButton = disableThemeSync ? '' : `
+            <!-- Desktop theme toggle -->
+            <button class="theme-button" title="Toggle theme">
+              <i class="fas fa-adjust"></i>
+            </button>`;
+
     this.shadowRoot.innerHTML = `
       <style>
         @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css');
@@ -280,9 +296,7 @@ class NavBar extends HTMLElement {
               <img src="${assetPath('/assets/logo-darkmode.svg')}" class="logo-dark" alt="Syrian Zone" onerror="this.onerror=null; this.src='${basePath}/placeholder-logo.svg'">
             </a>
             <div class="mobile-actions">
-              <button class="theme-button" title="Toggle theme">
-                <i class="fas fa-adjust"></i>
-              </button>
+              ${mobileThemeButton}
               <button class="menu-button">
                 <i class="fas fa-bars"></i>
               </button>
@@ -340,10 +354,7 @@ class NavBar extends HTMLElement {
               <i class="fas fa-comments" style="color: var(--sz-color-accent);"></i>
               المنتدى
             </a>
-            <!-- Desktop theme toggle -->
-            <button class="theme-button" title="Toggle theme">
-              <i class="fas fa-adjust"></i>
-            </button>
+            ${desktopThemeButton}
           </div>
         </div>
       </nav>
