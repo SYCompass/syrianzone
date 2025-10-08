@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const subapps = ["bingo","board","compass","game","hotels","house","legacytierlist","party","population","sites","startpage","stats","syid","syofficial","alignment"]
+const subapps = ["bingo","board","compass","game","hotels","house","legacytierlist","party","population","sites","startpage","stats","syid","syofficial","alignment","syrian-contributors"]
 const staticDirs = ["assets","styles","components","flag-replacer", ...subapps]
 
 const isProd = process.env.NODE_ENV === "production"
@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
   env: { NEXT_PUBLIC_BASE_PATH: BASE_PATH },
   assetPrefix: BASE_PATH,
   eslint: { ignoreDuringBuilds: true },
+  experimental: {
+    turbo: {
+      root: __dirname,
+    },
+  },
   async rewrites() {
     const toIndex = subapps.map((d) => ({ source: `/${d}`, destination: `/${d}/index.html` }))
     const slashes = subapps.map((d) => ({ source: `/${d}/`, destination: `/${d}/index.html` }))
@@ -26,7 +31,13 @@ const nextConfig: NextConfig = {
       { source: "/tierlist/jolani", destination: "/jolani" },
       { source: "/tierlist/jolani/", destination: "/jolani" },
     ]
-    return { beforeFiles: [ ...tierlistRoutes, ...toIndex, ...slashes, ...passthru ] }
+    const syrianContributorsRoutes = [
+      { source: "/syrian-contributors/assets/:path*", destination: "/assets/:path*" },
+      { source: "/syrian-contributors/styles/:path*", destination: "/styles/:path*" },
+      { source: "/syrian-contributors/components/:path*", destination: "/components/:path*" },
+      { source: "/syrian-contributors/flag-replacer/:path*", destination: "/flag-replacer/:path*" },
+    ]
+    return { beforeFiles: [ ...tierlistRoutes, ...syrianContributorsRoutes, ...toIndex, ...slashes, ...passthru ] }
   },
   typescript: { ignoreBuildErrors: true }
 };

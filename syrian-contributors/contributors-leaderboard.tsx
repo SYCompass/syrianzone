@@ -10,6 +10,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Trophy, Medal, Award, Users, Calendar, CalendarDays, Clock, ExternalLink, Github } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? ""
+const assetPath = (path: string) => `${BASE_PATH}${path}`
+
 interface Contributor {
   username: string
   daily_contributions: number
@@ -56,7 +59,7 @@ const WinnerCard = ({ contributor, metric }: { contributor: Contributor; metric:
           <div className="relative mb-4">
             <div className="absolute inset-0 bg-yellow-400 rounded-full blur-md opacity-30"></div>
             <Avatar className="relative w-24 h-24 mx-auto border-3 border-yellow-400 shadow-lg">
-              <AvatarImage src={contributor.avatar_url || "/placeholder.svg"} alt={contributor.username} />
+              <AvatarImage src={contributor.avatar_url || assetPath("/placeholder.svg")} alt={contributor.username} />
               <AvatarFallback className="text-xl font-bold bg-yellow-100 text-yellow-800">
                 {contributor.username.slice(0, 2).toUpperCase()}
               </AvatarFallback>
@@ -128,7 +131,7 @@ const TopThreeCard = ({
             <CardContent className="p-6 text-center">
               <div className="relative mb-4">
                 <Avatar className="w-20 h-20 mx-auto border-3 border-gray-300 dark:border-gray-600 shadow-lg">
-                  <AvatarImage src={contributor.avatar_url || "/placeholder.svg"} alt={contributor.username} />
+                  <AvatarImage src={contributor.avatar_url || assetPath("/placeholder.svg")} alt={contributor.username} />
                   <AvatarFallback className="text-lg font-semibold">
                     {contributor.username.slice(0, 2).toUpperCase()}
                   </AvatarFallback>
@@ -185,7 +188,7 @@ const ContributorsList = ({
               <div className="flex items-center space-x-4">
                 <span className="text-lg font-bold text-gray-500 dark:text-gray-400 w-8">#{index + 4}</span>
                 <Avatar className="w-12 h-12">
-                  <AvatarImage src={contributor.avatar_url || "/placeholder.svg"} alt={contributor.username} />
+                  <AvatarImage src={contributor.avatar_url || assetPath("/placeholder.svg")} alt={contributor.username} />
                   <AvatarFallback className="text-sm">{contributor.username.slice(0, 2).toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <div>
@@ -222,7 +225,7 @@ export default function Component() {
   useEffect(() => {
     const fetchContributors = async () => {
       try {
-        const response = await fetch("/contributors.json")
+        const response = await fetch(`${BASE_PATH}/contributors.json`)
         const data = await response.json()
         setContributors(data)
       } catch (error) {
@@ -259,7 +262,7 @@ export default function Component() {
         <div
           className="absolute inset-0 opacity-10 dark:opacity-5 animate-slide"
           style={{
-            backgroundImage: "url('/pattern-light.svg')",
+            backgroundImage: `url('${assetPath("/pattern-light.svg")}')`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
             backgroundPosition: "center",
@@ -285,7 +288,7 @@ export default function Component() {
                   {isEagleLogo ? (
                     <div className="bg-[#edebe0] dark:bg-[#002623] flex justify-center items-center">
                       <img
-                        src="/eagle-logo.svg"
+                        src={assetPath("/eagle-logo.svg")}
                         alt="النسر السوري"
                         className="h-[120px] w-auto"
                         style={{ display: "block" }}
@@ -293,7 +296,7 @@ export default function Component() {
                     </div>
                   ) : (
                     <img
-                      src="/syria-flag.svg"
+                      src={assetPath("/syria-flag.svg")}
                       alt="علم سوريا"
                       className="h-[120px] w-auto"
                       style={{ display: "block" }}

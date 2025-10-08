@@ -692,7 +692,7 @@
         renderCharts(filtered);
       }
       if (currentMode === 'winners') {
-        updateDistrictOptionsFromData(originalData);
+        // Hide bottom table in winners tab
         statusEl.style.display = 'none';
         tableWrap.style.display = 'none';
       } else {
