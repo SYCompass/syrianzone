@@ -308,26 +308,31 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
         onDrop={(e) => handleDrop(e, "bank")}
         data-bank-area
       >
-        <div className="flex flex-col items-center gap-2">
-          <div className="text-sm flex items-center gap-2">
-            <label className="flex items-center gap-2">
-              <span className="whitespace-nowrap">التصنيف:</span>
-              <select
-                className="border rounded px-2 py-1 bg-white dark:bg-neutral-900 dark:border-neutral-800"
-                value={selectedCategory}
-                onChange={(e) => {
-                  const val = e.target.value as "minister" | "governor" | "security" | "jolani";
-                  setSelectedCategory(val);
-                }}
-              >
-                <option value="minister">الحكومة</option>
-                <option value="governor">المحافظون</option>
-                <option value="security">مسؤولو الأمن</option>
-                <option value="jolani">شخصيات الجولاني</option>
-              </select>
-            </label>
-          </div>
-        </div>
+		<div className="flex flex-col items-center gap-2">
+			<div className="text-sm flex items-center gap-2" role="tablist" aria-label="التصنيف">
+				{[
+					{ key: "minister", label: "الحكومة" },
+					{ key: "governor", label: "المحافظون" },
+					{ key: "security", label: "مسؤولو الأمن" },
+					{ key: "jolani", label: "شخصيات الجولاني" },
+				].map((c) => (
+					<button
+						key={c.key}
+						type="button"
+						role="tab"
+						aria-selected={selectedCategory === (c.key as "minister" | "governor" | "security" | "jolani")}
+						className={`px-3 py-1 rounded-full border dark:border-neutral-800 transition-colors ${
+							selectedCategory === (c.key as "minister" | "governor" | "security" | "jolani")
+								? "bg-black text-white dark:bg-white dark:text-black"
+								: "bg-white text-black dark:bg-neutral-900 dark:text-white"
+						}`}
+						onClick={() => setSelectedCategory(c.key as "minister" | "governor" | "security" | "jolani")}
+					>
+						{c.label}
+					</button>
+				))}
+			</div>
+		</div>
         <div className="flex flex-wrap justify-center gap-2 p-2">
           {bank.map((c) => {
             const selected = selectedIds.has(c.id);
