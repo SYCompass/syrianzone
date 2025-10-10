@@ -309,7 +309,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
         data-bank-area
       >
 		<div className="flex flex-col items-center gap-2">
-			<div className="text-sm flex items-center gap-2" role="tablist" aria-label="التصنيف">
+			<div className="text-sm flex items-center gap-2 overflow-x-auto -mx-2 px-2 max-w-full whitespace-nowrap flex-nowrap" role="tablist" aria-label="التصنيف">
 				{[
 					{ key: "minister", label: "الحكومة" },
 					{ key: "governor", label: "المحافظون" },
@@ -321,7 +321,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
 						type="button"
 						role="tab"
 						aria-selected={selectedCategory === (c.key as "minister" | "governor" | "security" | "jolani")}
-						className={`px-3 py-1 rounded-full border dark:border-neutral-800 transition-colors ${
+						className={`px-2.5 sm:px-3 py-1 text-xs sm:text-sm rounded-full border dark:border-neutral-800 transition-colors shrink-0 ${
 							selectedCategory === (c.key as "minister" | "governor" | "security" | "jolani")
 								? "bg-black text-white dark:bg-white dark:text-black"
 								: "bg-white text-black dark:bg-neutral-900 dark:text-white"
@@ -342,7 +342,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
                 draggable
                 onDragStart={(e) => handleDragStart(e, c.id)}
                 onClick={(e) => { e.stopPropagation(); toggleSelected(c.id); }}
-                className={`flex flex-col items-center gap-1 outline ${selected ? "!bg-gray-900 hover:!bg-gray-900 !text-white outline-2 outline-white" : "outline-none"} w-[120px]`}
+                className={`flex flex-col items-center gap-1 outline ${selected ? "!bg-gray-900 hover:!bg-gray-900 !text-white outline-2 outline-white" : "outline-none"} w-[104px] sm:w-[120px]`}
                 data-selected={selected ? "1" : undefined}
                 disabled={isSubmitting}
               >
@@ -411,7 +411,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
                     onClick={(e) => {
                       e.stopPropagation();
                     }}
-                    className={`flex flex-col items-center gap-1 mr-2 mb-2 outline ${selected ? "!bg-gray-900 hover:!bg-gray-900 !text-white outline-2 outline-white" : "outline-none"} w-[120px]`}
+                    className={`flex flex-col items-center gap-1 mr-2 mb-2 outline ${selected ? "!bg-gray-900 hover:!bg-gray-900 !text-white outline-2 outline-white" : "outline-none"} w-[104px] sm:w-[120px]`}
                     data-selected={selected ? "1" : undefined}
                     disabled={isSubmitting}
                   >
