@@ -26,6 +26,7 @@
 * قام **haiueida** ([@haiueida](https://x.com/haiueida)) بتوفير الترجمة الكردية لصفحة الحسابات الرسمية السورية.
 * ساهم **Waleed Khamees** - ([@WaleedKhamees](https://github.com/WaleedKhamees)) في ضغط الصور وتحسين الأداء للموقع.
 * ساهم **وحيد شعّار** ([https://x.com/WaheedShaar](https://x.com/WaheedShaar)) بتوفير نسخة DWG من العلم السوري في صفحة الهوية البصرية السورية
+* ساهم [**SourceM7**](https://github.com/SourceM7) بتطوير أطلس سوريا وتطوير الصفحة الرئيسية.
 * **يوري دندشي** - ([@yuri.dandashi](https://www.instagram.com/yuri.dandashi/)) قام بتصميم الشعار وأيقونة الموقع والهوية البصرية العامة.
 تحميل ملفات الهوية البصرية للمساحة السورية: [حملها من هنا](https://syrian.zone/assets/BrandKit.zip)
 
