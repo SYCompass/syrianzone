@@ -1,4 +1,4 @@
--- Insert bmj35–bmj43 into 'best-ministers' poll at the end of current sort
+-- Insert bmj35–bmj44 into 'best-ministers' poll at the end of current sort
 
 WITH p AS (
   SELECT id FROM polls WHERE slug = 'best-ministers'
@@ -17,7 +17,8 @@ FROM (
     ('bmj40', 'جولانيوس',      '/tierlist/images/jolani/jolani40.png', 6),
     ('bmj41', 'المقاتل',     '/tierlist/images/jolani/jolani41.jpeg', 7),
     ('bmj42', 'الآري',      '/tierlist/images/jolani/jolani42.jpeg', 8),
-    ('bmj43', 'شو علاقتنا بالموضوع نحنا؟',  '/tierlist/images/jolani/jolani43.png', 9)
+    ('bmj43', 'شو علاقتنا بالموضوع نحنا؟',  '/tierlist/images/jolani/jolani43.png', 9),
+    ('bmj44', 'الكوميدي', '/tierlist/images/jolani/jolani44.jpg', 10)
 ) AS x(id, name, image_url, ofs)
 ON CONFLICT (id) DO NOTHING;
 
