@@ -39,6 +39,8 @@
     { key: 'homs', label: 'حمص', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '252895295' },
     { key: 'aleppo', label: 'حلب', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '1121899715' },
     { key: 'deir-ez-zor', label: 'دير الزور', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '1166128088' },
+    { key: 'raqqa', label: 'الرقة', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '137630647' },
+  { key: 'hasakah', label: 'الحسكة', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '2031427715' },
   ];
 
   // Sheets for candidates and winners
