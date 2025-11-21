@@ -8,7 +8,13 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle2Icon, AlertCircleIcon } from "lucide-react";
 import { exportTierListFromData } from "@/lib/exportImage";
 
-type Candidate = { id: string; name: string; title?: string | null; imageUrl: string | null; category?: string | null };
+type Candidate = {
+  id: string;
+  name: string;
+  title?: string | null;
+  imageUrl: string | null;
+  category?: string | null;
+};
 
 type Props = {
   initialCandidates: Candidate[];
@@ -23,12 +29,23 @@ type TierKey = "S" | "A" | "B" | "C" | "D" | "F";
 
 const tierKeys: TierKey[] = ["S", "A", "B", "C", "D", "F"];
 
-const tierStyles: Record<TierKey, { label: string; area: string; border: string }> = {
+const tierStyles: Record<
+  TierKey,
+  { label: string; area: string; border: string }
+> = {
   S: { label: "bg-rose-600", area: "bg-rose-50", border: "border-rose-200" },
   A: { label: "bg-amber-600", area: "bg-amber-50", border: "border-amber-200" },
-  B: { label: "bg-emerald-600", area: "bg-emerald-50", border: "border-emerald-200" },
+  B: {
+    label: "bg-emerald-600",
+    area: "bg-emerald-50",
+    border: "border-emerald-200",
+  },
   C: { label: "bg-sky-600", area: "bg-sky-50", border: "border-sky-200" },
-  D: { label: "bg-violet-600", area: "bg-violet-50", border: "border-violet-200" },
+  D: {
+    label: "bg-violet-600",
+    area: "bg-violet-50",
+    border: "border-violet-200",
+  },
   F: { label: "bg-gray-800", area: "bg-gray-100", border: "border-gray-300" },
 };
 
@@ -43,9 +60,28 @@ const tierDescriptions: Record<TierKey, string> = {
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
-export default function TierBoard({ initialCandidates, pollId, voteDay, submitApiPath, minSelections = 3, pollSlug }: Props) {
+export default function TierBoard({
+  initialCandidates,
+  pollId,
+  voteDay,
+  submitApiPath,
+  minSelections = 3,
+  pollSlug,
+}: Props) {
   const router = useRouter();
-  const [tiers, setTiers] = useState<Record<TierKey, Candidate[]>>({ S: [], A: [], B: [], C: [], D: [], F: [] });
+  const [tiers, setTiers] = useState<Record<TierKey, Candidate[]>>({
+    S: [],
+    A: [],
+    B: [],
+    C: [],
+    D: [],
+    F: [],
+  });
+  const [selectedForTier, setSelectedForTier] = useState<string | null>(null);
+  const [modalPosition, setModalPosition] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
   // Deterministic seeded shuffle to avoid SSR/CSR hydration mismatch
   const shuffledInitial = useMemo(() => {
     function xmur3(str: string): number {
@@ -61,7 +97,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
     function mulberry32(a: number) {
       return function () {
         a |= 0;
-        a = (a + 0x6D2B79F5) | 0;
+        a = (a + 0x6d2b79f5) | 0;
         let t = Math.imul(a ^ (a >>> 15), 1 | a);
         t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
         return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
@@ -76,20 +112,28 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
     }
     return copy;
   }, [initialCandidates, pollId, voteDay]);
-  const [bank, setBank] = useState<Candidate[]>(() => shuffledInitial.filter((c) => c.category !== "governor" && c.category !== "security"));
-  const [selectedCategory, setSelectedCategory] = useState<"minister" | "governor" | "security" | "jolani">("minister");
+  const [bank, setBank] = useState<Candidate[]>(() =>
+    shuffledInitial.filter(
+      (c) => c.category !== "governor" && c.category !== "security"
+    )
+  );
+  const [selectedCategory, setSelectedCategory] = useState<
+    "minister" | "governor" | "security" | "jolani"
+  >("minister");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const containerRef = useRef<HTMLDivElement>(null);
   const tiersRef = useRef<HTMLDivElement>(null);
-  const [submitStatus, setSubmitStatus] = useState<{ ok: boolean; message: string; description?: string } | null>(null);
+  const [submitStatus, setSubmitStatus] = useState<{
+    ok: boolean;
+    message: string;
+    description?: string;
+  } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [nextSubmitAt, setNextSubmitAt] = useState<number | null>(null);
   const [now, setNow] = useState<number>(Date.now());
 
   const cooldownKey = `submitCooldown:${pollId}:${voteDay}`;
-
-  
 
   function createEmptyTiers(): Record<TierKey, Candidate[]> {
     return { S: [], A: [], B: [], C: [], D: [], F: [] };
@@ -140,29 +184,40 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
   // Important: do NOT depend on 'tiers' here to avoid infinite update loops.
   useEffect(() => {
     setSelectedIds(new Set());
+    setSelectedForTier(null);
+
     setTiers(createEmptyTiers());
     const filtered = shuffledInitial.filter((c) => {
       if (selectedCategory === "governor") return c.category === "governor";
       if (selectedCategory === "security") return c.category === "security";
       if (selectedCategory === "jolani") return c.category === "jolani";
       // ministers bucket = anything that's not governor, security, or jolani
-      return c.category !== "governor" && c.category !== "security" && c.category !== "jolani";
+      return (
+        c.category !== "governor" &&
+        c.category !== "security" &&
+        c.category !== "jolani"
+      );
     });
     setBank(filtered);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory, shuffledInitial]);
 
   function moveCandidateTo(candidateId: string, target: TierKey | "bank") {
-    const fromTierKey = tierKeys.find((k) => tiers[k].some((c) => c.id === candidateId));
+    const fromTierKey = tierKeys.find((k) =>
+      tiers[k].some((c) => c.id === candidateId)
+    );
     const fromBank = bank.some((c) => c.id === candidateId);
     let candidate: Candidate | undefined;
-    if (fromTierKey) candidate = tiers[fromTierKey].find((c) => c.id === candidateId);
-    if (!candidate && fromBank) candidate = bank.find((c) => c.id === candidateId);
+    if (fromTierKey)
+      candidate = tiers[fromTierKey].find((c) => c.id === candidateId);
+    if (!candidate && fromBank)
+      candidate = bank.find((c) => c.id === candidateId);
     if (!candidate) return;
 
     setTiers((t) => {
       const copy: Record<TierKey, Candidate[]> = { ...t };
-      for (const k of tierKeys) copy[k] = copy[k].filter((c) => c.id !== candidateId);
+      for (const k of tierKeys)
+        copy[k] = copy[k].filter((c) => c.id !== candidateId);
       return copy;
     });
     setBank((b) => b.filter((c) => c.id !== candidateId));
@@ -181,8 +236,12 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
       ...bank.filter((c) => idSet.has(c.id)),
     ];
     setTiers((prev) => {
-      const copy: Record<TierKey, Candidate[]> = { ...prev } as Record<TierKey, Candidate[]>;
-      for (const k of tierKeys) copy[k] = copy[k].filter((c) => !idSet.has(c.id));
+      const copy: Record<TierKey, Candidate[]> = { ...prev } as Record<
+        TierKey,
+        Candidate[]
+      >;
+      for (const k of tierKeys)
+        copy[k] = copy[k].filter((c) => !idSet.has(c.id));
       if (target !== "bank") copy[target] = [...copy[target], ...found];
       return copy;
     });
@@ -195,8 +254,8 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
 
   function toggleSelected(id: string) {
     setSelectedIds((prev) => {
-      const isInBank = bank.some((c) => c.id === id);
-      if (!isInBank) return prev;
+      // const isInBank = bank.some((c) => c.id === id);
+      // if (!isInBank) return prev;
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
@@ -215,11 +274,37 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
     e.dataTransfer.effectAllowed = "move";
   }
 
+  function handleCandidateClick(e: React.MouseEvent, candidateId: string) {
+    e.stopPropagation();
+
+    if (e.shiftKey || e.ctrlKey || e.metaKey) {
+      toggleSelected(candidateId);
+      setSelectedForTier(null);
+      setModalPosition(null);
+      return;
+    }
+
+    if (selectedForTier === candidateId) {
+      setSelectedForTier(null);
+      setModalPosition(null);
+    } else {
+      const rect = e.currentTarget.getBoundingClientRect();
+      setModalPosition({
+        top: rect.top - 10,
+        left: rect.left + rect.width / 2,
+      });
+      setSelectedForTier(candidateId);
+      setSelectedIds(new Set());
+    }
+  }
   async function submit() {
     const totalAssigned = tierKeys.reduce((acc, k) => acc + tiers[k].length, 0);
     if (totalAssigned < (minSelections || 3)) {
       const min = minSelections || 3;
-      const minMsg = min === 1 ? "الحد الأدنى للاختيار هو ١. الرجاء اختيار عنصر واحد على الأقل." : `الحد الأدنى للاختيار هو ${min}. الرجاء اختيار ${min} على الأقل.`;
+      const minMsg =
+        min === 1
+          ? "الحد الأدنى للاختيار هو ١. الرجاء اختيار عنصر واحد على الأقل."
+          : `الحد الأدنى للاختيار هو ${min}. الرجاء اختيار ${min} على الأقل.`;
       setSubmitStatus({ ok: false, message: minMsg });
       return;
     }
@@ -227,7 +312,12 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
       const seconds = Math.ceil((nextSubmitAt - Date.now()) / 1000);
       const minutes = Math.floor(seconds / 60);
       const rem = seconds % 60;
-      setSubmitStatus({ ok: false, message: `الرجاء الانتظار ${minutes}:${rem.toString().padStart(2, "0")} قبل إرسال تصويت آخر` });
+      setSubmitStatus({
+        ok: false,
+        message: `الرجاء الانتظار ${minutes}:${rem
+          .toString()
+          .padStart(2, "0")} قبل إرسال تصويت آخر`,
+      });
       return;
     }
     setIsSubmitting(true);
@@ -240,17 +330,20 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
     } = {
       pollSlug: pollSlug || "best-ministers",
       deviceId,
-      tiers: tierKeys.reduce((acc, k) => {
-        acc[k] = tiers[k].map((c, idx) => ({ candidateId: c.id, pos: idx }));
-        return acc;
-      }, {
-        S: [] as Array<{ candidateId: string; pos: number }>,
-        A: [] as Array<{ candidateId: string; pos: number }>,
-        B: [] as Array<{ candidateId: string; pos: number }>,
-        C: [] as Array<{ candidateId: string; pos: number }>,
-        D: [] as Array<{ candidateId: string; pos: number }>,
-        F: [] as Array<{ candidateId: string; pos: number }>,
-      } as Record<TierKey, Array<{ candidateId: string; pos: number }>>),
+      tiers: tierKeys.reduce(
+        (acc, k) => {
+          acc[k] = tiers[k].map((c, idx) => ({ candidateId: c.id, pos: idx }));
+          return acc;
+        },
+        {
+          S: [] as Array<{ candidateId: string; pos: number }>,
+          A: [] as Array<{ candidateId: string; pos: number }>,
+          B: [] as Array<{ candidateId: string; pos: number }>,
+          C: [] as Array<{ candidateId: string; pos: number }>,
+          D: [] as Array<{ candidateId: string; pos: number }>,
+          F: [] as Array<{ candidateId: string; pos: number }>,
+        } as Record<TierKey, Array<{ candidateId: string; pos: number }>>
+      ),
     };
     // Build submit path without double-prefixing BASE_PATH
     const providedPath = submitApiPath || "/api/submit";
@@ -276,16 +369,44 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
     setIsSaving(true);
     const appEl = containerRef.current;
     const maxWidthStyle = appEl ? window.getComputedStyle(appEl).maxWidth : "";
-    const targetWidthCss = maxWidthStyle && maxWidthStyle !== "none" ? maxWidthStyle : "1000px";
+    const targetWidthCss =
+      maxWidthStyle && maxWidthStyle !== "none" ? maxWidthStyle : "1000px";
     const targetWidth = parseInt(targetWidthCss, 10) || 1000;
     const data = {
-      S: tiers.S.map((c) => ({ name: c.name, title: c.title || null, imageUrl: c.imageUrl || null })),
-      A: tiers.A.map((c) => ({ name: c.name, title: c.title || null, imageUrl: c.imageUrl || null })),
-      B: tiers.B.map((c) => ({ name: c.name, title: c.title || null, imageUrl: c.imageUrl || null })),
-      C: tiers.C.map((c) => ({ name: c.name, title: c.title || null, imageUrl: c.imageUrl || null })),
-      D: tiers.D.map((c) => ({ name: c.name, title: c.title || null, imageUrl: c.imageUrl || null })),
-      F: tiers.F.map((c) => ({ name: c.name, title: c.title || null, imageUrl: c.imageUrl || null })),
-    } as Record<"S"|"A"|"B"|"C"|"D"|"F", Array<{ name: string; title?: string | null; imageUrl?: string | null }>>;
+      S: tiers.S.map((c) => ({
+        name: c.name,
+        title: c.title || null,
+        imageUrl: c.imageUrl || null,
+      })),
+      A: tiers.A.map((c) => ({
+        name: c.name,
+        title: c.title || null,
+        imageUrl: c.imageUrl || null,
+      })),
+      B: tiers.B.map((c) => ({
+        name: c.name,
+        title: c.title || null,
+        imageUrl: c.imageUrl || null,
+      })),
+      C: tiers.C.map((c) => ({
+        name: c.name,
+        title: c.title || null,
+        imageUrl: c.imageUrl || null,
+      })),
+      D: tiers.D.map((c) => ({
+        name: c.name,
+        title: c.title || null,
+        imageUrl: c.imageUrl || null,
+      })),
+      F: tiers.F.map((c) => ({
+        name: c.name,
+        title: c.title || null,
+        imageUrl: c.imageUrl || null,
+      })),
+    } as Record<
+      "S" | "A" | "B" | "C" | "D" | "F",
+      Array<{ name: string; title?: string | null; imageUrl?: string | null }>
+    >;
     try {
       await exportTierListFromData({
         tiers: data,
@@ -301,38 +422,54 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
   }
 
   return (
-    <Card ref={containerRef} className="max-w-screen-lg mx-auto p-4" data-capture-root>
+    <Card
+      ref={containerRef}
+      className="max-w-screen-lg mx-auto p-4"
+      data-capture-root
+    >
       <div
         className="mb-4 p-2 bg-gray-100 dark:bg-[#0D1315] border border-gray-200 dark:border-neutral-800 rounded"
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => handleDrop(e, "bank")}
         data-bank-area
       >
-		<div className="flex flex-col items-center gap-2">
-			<div className="text-sm flex items-center gap-2 overflow-x-auto -mx-2 px-2 max-w-full whitespace-nowrap flex-nowrap" role="tablist" aria-label="التصنيف">
-				{[
-					{ key: "minister", label: "الحكومة" },
-					{ key: "governor", label: "المحافظون" },
-					{ key: "security", label: "مسؤولو الأمن" },
-					{ key: "jolani", label: "شخصيات الجولاني" },
-				].map((c) => (
-					<button
-						key={c.key}
-						type="button"
-						role="tab"
-						aria-selected={selectedCategory === (c.key as "minister" | "governor" | "security" | "jolani")}
-						className={`px-2.5 sm:px-3 py-1 text-xs sm:text-sm rounded-full border dark:border-neutral-800 transition-colors shrink-0 ${
-							selectedCategory === (c.key as "minister" | "governor" | "security" | "jolani")
-								? "bg-black text-white dark:bg-white dark:text-black"
-								: "bg-white text-black dark:bg-neutral-900 dark:text-white"
-						}`}
-						onClick={() => setSelectedCategory(c.key as "minister" | "governor" | "security" | "jolani")}
-					>
-						{c.label}
-					</button>
-				))}
-			</div>
-		</div>
+        <div className="flex flex-col items-center gap-2">
+          <div
+            className="text-sm flex items-center gap-2 overflow-x-auto -mx-2 px-2 max-w-full whitespace-nowrap flex-nowrap"
+            role="tablist"
+            aria-label="التصنيف"
+          >
+            {[
+              { key: "minister", label: "الحكومة" },
+              { key: "governor", label: "المحافظون" },
+              { key: "security", label: "مسؤولو الأمن" },
+              { key: "jolani", label: "شخصيات الجولاني" },
+            ].map((c) => (
+              <button
+                key={c.key}
+                type="button"
+                role="tab"
+                aria-selected={
+                  selectedCategory ===
+                  (c.key as "minister" | "governor" | "security" | "jolani")
+                }
+                className={`px-2.5 sm:px-3 py-1 text-xs sm:text-sm rounded-full border dark:border-neutral-800 transition-colors shrink-0 ${
+                  selectedCategory ===
+                  (c.key as "minister" | "governor" | "security" | "jolani")
+                    ? "bg-black text-white dark:bg-white dark:text-black"
+                    : "bg-white text-black dark:bg-neutral-900 dark:text-white"
+                }`}
+                onClick={() =>
+                  setSelectedCategory(
+                    c.key as "minister" | "governor" | "security" | "jolani"
+                  )
+                }
+              >
+                {c.label}
+              </button>
+            ))}
+          </div>
+        </div>
         <div className="flex flex-wrap justify-center gap-2 p-2">
           {bank.map((c) => {
             const selected = selectedIds.has(c.id);
@@ -341,15 +478,34 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
                 key={c.id}
                 draggable
                 onDragStart={(e) => handleDragStart(e, c.id)}
-                onClick={(e) => { e.stopPropagation(); toggleSelected(c.id); }}
-                className={`flex flex-col items-center gap-1 outline ${selected ? "!bg-gray-900 hover:!bg-gray-900 !text-white outline-2 outline-white" : "outline-none"} w-[104px] sm:w-[120px]`}
+                onClick={(e) => handleCandidateClick(e, c.id)}
+                className={`flex flex-col items-center gap-1 outline ${
+                  selectedForTier === c.id
+                    ? "!bg-blue-600 hover:!bg-blue-600 !text-white outline-4 outline-blue-400 ring-4 ring-blue-300"
+                    : selected
+                    ? "!bg-purple-600 hover:!bg-purple-600 !text-white outline-2 outline-purple-400"
+                    : "outline-none"
+                } w-[104px] sm:w-[120px]`}
                 data-selected={selected ? "1" : undefined}
                 disabled={isSubmitting}
               >
-                <Avatar src={c.imageUrl || ""} alt={c.name} size={48} className="mb-1" />
-                <span className="text-xs text-center leading-tight">{c.name}</span>
+                <Avatar
+                  src={c.imageUrl || ""}
+                  alt={c.name}
+                  size={48}
+                  className="mb-1"
+                />
+                <span className="text-xs text-center leading-tight">
+                  {c.name}
+                </span>
                 {c.title ? (
-                  <span className={`text-[11px] text-gray-600 dark:text-gray-300 text-center leading-tight ${selected ? "!text-white" : ""}`}>{c.title}</span>
+                  <span
+                    className={`text-[11px] text-gray-600 dark:text-gray-300 text-center leading-tight ${
+                      selected || selectedForTier === c.id ? "!text-white" : ""
+                    }`}
+                  >
+                    {c.title}
+                  </span>
                 ) : null}
               </Button>
             );
@@ -357,30 +513,100 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
         </div>
       </div>
 
+      {selectedForTier && modalPosition && (
+        <div
+          className="fixed inset-0 z-50"
+          onClick={() => {
+            setSelectedForTier(null);
+            setModalPosition(null);
+          }}
+        >
+          <div
+            className="absolute bg-white dark:bg-slate-800 rounded-lg shadow-2xl border-2 border-slate-300 dark:border-slate-600 p-1.5"
+            style={{
+              top: `${modalPosition.top}px`,
+              left: `${modalPosition.left}px`,
+              transform: "translate(-50%, -100%)",
+              minWidth: "160px",
+              maxWidth: "180px",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-wrap gap-0.5 justify-center">
+              {tierKeys.map((k) => (
+                <button
+                  key={k}
+                  onClick={() => {
+                    moveCandidateTo(selectedForTier, k);
+                    setSelectedForTier(null);
+                    setModalPosition(null);
+                  }}
+                  className={`${tierStyles[k].label} text-white px-2 py-1 rounded text-xs font-bold hover:opacity-90 transition`}
+                >
+                  {k}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {selectedIds.size > 0 && (
+        <div className="mb-3 p-3 bg-purple-100 dark:bg-purple-900/30 border-2 border-purple-400 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex flex-wrap gap-1">
+              {tierKeys.map((k) => (
+                <button
+                  key={k}
+                  onClick={() => {
+                    moveCandidatesTo(Array.from(selectedIds), k);
+                  }}
+                  className={`${tierStyles[k].label} text-white px-2.5 py-1 rounded-md font-bold text-xs hover:opacity-90 transition`}
+                >
+                  {k}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="mb-3 text-sm text-gray-700 dark:text-gray-300 text-center flex flex-wrap gap-2 items-center justify-center">
         <span className="font-semibold">شرح المستويات:</span>
         <span className="inline-flex items-center gap-1">
-          <span className="px-2 py-0.5 rounded-md text-white bg-rose-600 font-semibold">S</span>
+          <span className="px-2 py-0.5 rounded-md text-white bg-rose-600 font-semibold">
+            S
+          </span>
           <span>ممتاز</span>
         </span>
         <span className="inline-flex items-center gap-1">
-          <span className="px-2 py-0.5 rounded-md text-white bg-amber-600 font-semibold">A</span>
+          <span className="px-2 py-0.5 rounded-md text-white bg-amber-600 font-semibold">
+            A
+          </span>
           <span>جيد جدًا</span>
         </span>
         <span className="inline-flex items-center gap-1">
-          <span className="px-2 py-0.5 rounded-md text-white bg-emerald-600 font-semibold">B</span>
+          <span className="px-2 py-0.5 rounded-md text-white bg-emerald-600 font-semibold">
+            B
+          </span>
           <span>جيد</span>
         </span>
         <span className="inline-flex items-center gap-1">
-          <span className="px-2 py-0.5 rounded-md text-white bg-sky-600 font-semibold">C</span>
+          <span className="px-2 py-0.5 rounded-md text-white bg-sky-600 font-semibold">
+            C
+          </span>
           <span>مقبول</span>
         </span>
         <span className="inline-flex items-center gap-1">
-          <span className="px-2 py-0.5 rounded-md text-white bg-violet-600 font-semibold">D</span>
+          <span className="px-2 py-0.5 rounded-md text-white bg-violet-600 font-semibold">
+            D
+          </span>
           <span>ضعيف</span>
         </span>
         <span className="inline-flex items-center gap-1">
-          <span className="px-2 py-0.5 rounded-md text-white bg-gray-800 font-semibold">F</span>
+          <span className="px-2 py-0.5 rounded-md text-white bg-gray-800 font-semibold">
+            F
+          </span>
           <span>سيئ</span>
         </span>
       </div>
@@ -388,18 +614,21 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
       <div ref={tiersRef} data-capture-target>
         {tierKeys.map((k) => (
           <div key={k} className="flex mb-1">
-            <div data-tier-label={k} className={`w-20 min-h-[165px] ${tierStyles[k].label} text-white rounded-r flex flex-col items-center justify-center`}>
+            <div
+              data-tier-label={k}
+              className={`w-20 min-h-[165px] ${tierStyles[k].label} text-white rounded-r flex flex-col items-center justify-center`}
+            >
               <span className="text-xl font-bold leading-none">{k}</span>
-              <span className="text-[16px] font-bold leading-none mt-4 opacity-90">{tierDescriptions[k]}</span>
+              <span className="text-[16px] font-bold leading-none mt-4 opacity-90">
+                {tierDescriptions[k]}
+              </span>
             </div>
             <div
               data-tier-area={k}
               className={`flex flex-wrap justify-center min-h-[165px] flex-grow p-2 border-2 border-dashed ${tierStyles[k].border} ${tierStyles[k].area} dark:bg-[#0D1315] rounded-l`}
               onDragOver={(e) => e.preventDefault()}
               onDrop={(e) => handleDrop(e, k)}
-              onClick={() => {
-                if (selectedIds.size > 0) moveCandidatesTo(Array.from(selectedIds), k);
-              }}
+              
             >
               {tiers[k].map((c) => {
                 const selected = selectedIds.has(c.id);
@@ -408,17 +637,29 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
                     key={c.id}
                     draggable
                     onDragStart={(e) => handleDragStart(e, c.id)}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    className={`flex flex-col items-center gap-1 mr-2 mb-2 outline ${selected ? "!bg-gray-900 hover:!bg-gray-900 !text-white outline-2 outline-white" : "outline-none"} w-[104px] sm:w-[120px]`}
+                    onClick={(e) => handleCandidateClick(e, c.id)}
+
+                    className={`flex flex-col items-center gap-1 mr-2 mb-2 outline ${
+                      selectedForTier === c.id 
+                        ? "!bg-blue-600 hover:!bg-blue-600 !text-white outline-4 outline-blue-400 ring-4 ring-blue-300" 
+                        : selected 
+                        ? "!bg-purple-600 hover:!bg-purple-600 !text-white outline-2 outline-purple-400" 
+                        : "outline-none"
+                    } w-[104px] sm:w-[120px]`}
                     data-selected={selected ? "1" : undefined}
                     disabled={isSubmitting}
                   >
-                    <Avatar src={c.imageUrl || ""} alt={c.name} size={48} className="mb-1" />
-                    <span className="text-xs text-center leading-tight">{c.name}</span>
+                    <Avatar
+                      src={c.imageUrl || ""}
+                      alt={c.name}
+                      size={48}
+                      className="mb-1"
+                    />
+                    <span className="text-xs text-center leading-tight">
+                      {c.name}
+                    </span>
                     {c.title ? (
-                      <span className="text-[11px] text-gray-600 dark:text-gray-300 text-center leading-tight">{c.title}</span>
+                      <span className={`text-[11px] text-gray-600 dark:text-gray-300 text-center leading-tight ${selectedForTier === c.id || selected ? "!text-white" : ""}`}>{c.title}</span>
                     ) : null}
                   </Button>
                 );
@@ -429,12 +670,35 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
       </div>
 
       <div className="flex gap-3 justify-center mt-6 p-4">
-        <Button type="button" variant="secondary" onClick={submit} disabled={isSubmitting} className="dark:bg-green-600 dark:hover:bg-green-500 dark:text-white">
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={submit}
+          disabled={isSubmitting}
+          className="dark:bg-green-600 dark:hover:bg-green-500 dark:text-white"
+        >
           {isSubmitting ? (
             <span className="inline-flex items-center gap-2">
-              <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+              <svg
+                className="animate-spin h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                />
               </svg>
               جاري الإرسال...
             </span>
@@ -442,12 +706,33 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
             "إرسال"
           )}
         </Button>
-        <Button type="button" onClick={saveImage} disabled={isSubmitting || isSaving}>
+        <Button
+          type="button"
+          onClick={saveImage}
+          disabled={isSubmitting || isSaving}
+        >
           {isSaving ? (
             <span className="inline-flex items-center gap-2">
-              <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+              <svg
+                className="animate-spin h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                />
               </svg>
               جاري التحضير...
             </span>
@@ -462,6 +747,7 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
             setBank(shuffledInitial);
             setTiers(createEmptyTiers());
             setSelectedIds(new Set());
+            setSelectedForTier(null);
           }}
         >
           مسح الاختيارات
@@ -485,6 +771,3 @@ export default function TierBoard({ initialCandidates, pollId, voteDay, submitAp
     </Card>
   );
 }
-
-
-
