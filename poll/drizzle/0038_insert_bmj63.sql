@@ -10,7 +10,7 @@ INSERT INTO candidates (id, poll_id, name, title, image_url, sort, category)
 SELECT x.id, (SELECT id FROM p), x.name, NULL, x.image_url, (SELECT s + x.ofs FROM base_sort), 'jolani'
 FROM (
   VALUES
-    ('bmj63', 'لآيرونماني', '/tierlist/images/jolani/jolani63.jpeg', 1)
+    ('bmj63', 'الآيرونماني', '/tierlist/images/jolani/jolani63.jpeg', 1)
 ) AS x(id, name, image_url, ofs)
 ON CONFLICT (id) DO NOTHING;
 
