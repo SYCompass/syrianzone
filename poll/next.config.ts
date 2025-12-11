@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const subapps = ["bingo","board","compass","game","hotels","house","legacytierlist","party","population","sites","startpage","stats","syid","syofficial","alignment","syrian-contributors"]
+const subapps = ["bingo","board","compass","food","game","hotels","house","legacytierlist","party","population","sites","startpage","stats","syid","syofficial","alignment","syrian-contributors"]
 const staticDirs = ["assets","styles","components","flag-replacer", ...subapps]
 
 const isProd = process.env.NODE_ENV === "production"
