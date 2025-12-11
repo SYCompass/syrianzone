@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="المطبخ السوري - اكتشف وتصفح وصفات الطعام السورية التقليدية">
+  <meta name="keywords" content="سوريا، المطبخ السوري، وصفات، طعام، أكلات سورية، طبخ">
+  <meta name="author" content="Syrian Zone">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="المطبخ السوري - وصفات الطعام السورية">
+  <meta property="og:description" content="اكتشف وتصفح وصفات الطعام السورية التقليدية من مختلف المناطق">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://syrian.zone/food">
+  <meta property="og:image" content="https://syrian.zone/assets/thumbnail.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Syrian Zone">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="المطبخ السوري - وصفات الطعام السورية">
+  <meta name="twitter:description" content="اكتشف وتصفح وصفات الطعام السورية التقليدية من مختلف المناطق">
+  <meta name="twitter:image" content="https://syrian.zone/assets/thumbnail.jpg">
+  
+  <title>المطبخ السوري - وصفات الطعام السورية - Syrian Zone</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/favicon.png">
+  
+  <!-- Stylesheets -->
+  <script>(function(){try{var s=localStorage.getItem('sz-theme');if(!s){var sp=localStorage.getItem('startpage-settings');if(sp){s=(JSON.parse(sp)||{}).theme}};document.documentElement.setAttribute('data-theme', s||'dark');}catch(e){}})();</script>
+  <link rel="stylesheet" href="/styles/theme.css">
+  <link rel="stylesheet" href="/styles/output.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K4H98TC203"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K4H98TC203');
+  </script>
+  <script src="/components/utils-theme.js" defer></script>
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="/food/styles.css">
+  
+  <!-- Components -->
+  <script src="/components/navbar.js"></script>
+  <script src="/components/back-to-top.js" defer></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <!-- Navbar Web Component -->
+  <nav-bar></nav-bar>
+
+  <!-- Main Content -->
+  <main class="flex-1">
+    <!-- Hero Section -->
+    <section class="bg-white border-b py-8" id="recipes">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="space-y-6">
+          <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="max-w-3xl mx-auto">
+              <h1 class="text-4xl md:text-5xl font-bold mb-6">المطبخ السوري</h1>
+              <p class="text-xl text-white opacity-90">اكتشف وتصفح وصفات الطعام السورية التقليدية من مختلف المناطق السورية</p>
+            </div>
+          </div>
+    
+          <!-- Search Box -->
+          <div class="relative max-w-2xl mx-auto">
+            <div class="relative">
+              <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"></i>
+              <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="ابحث عن وصفة..." 
+                class="search-filter-input w-full pr-10 pl-10 py-3 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]"
+              >
+              <button id="clearSearch" class="absolute left-3 top-1/2 transform -translate-y-1/2 hidden">
+                <i class="fas fa-times h-4 w-4 text-gray-400 hover:text-gray-600"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Filters -->
+          <div class="filter-container flex flex-wrap gap-4 justify-center items-end p-4">
+            <div class="flex flex-col space-y-2">
+              <label for="cityFilter" class="text-sm font-medium">المنطقة/المدينة</label>
+              <select id="cityFilter" class="search-filter-select flex h-10 w-full bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
+                <option value="">جميع المناطق</option>
+              </select>
+            </div>
+            
+            <div class="flex flex-col space-y-2">
+              <label for="difficultyFilter" class="text-sm font-medium">الصعوبة</label>
+              <select id="difficultyFilter" class="search-filter-select flex h-10 w-full bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
+                <option value="">جميع المستويات</option>
+              </select>
+            </div>
+            
+            <div class="flex flex-col space-y-2">
+              <label for="contributorFilter" class="text-sm font-medium">المساهم</label>
+              <select id="contributorFilter" class="search-filter-select flex h-10 w-full bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
+                <option value="">جميع المساهمين</option>
+              </select>
+            </div>
+            
+            <button id="clearFilters" class="search-filter-button inline-flex items-center justify-center whitespace-nowrap text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 h-10 px-4 py-2 transition-colors">
+              <i class="fas fa-times ml-2 h-4 w-4"></i> مسح الفلاتر
+            </button>
+          </div>
+        </div>
+        
+        <!-- Results Info -->
+        <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center pt-6 border-t mt-6 space-y-4 lg:space-y-0">
+          <span id="resultsCount" class="text-sm font-medium">جاري تحميل الوصفات...</span>
+          <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+            <!-- Sort -->
+            <div class="flex items-center space-x-2">
+              <label for="sortSelect" class="text-sm text-gray-600">ترتيب حسب:</label>
+              <select id="sortSelect" class="search-filter-select flex h-8 bg-white px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--sz-color-primary)] focus:border-[var(--sz-color-primary)]">
+                <option value="name">الاسم (أ-ي)</option>
+                <option value="name-desc">الاسم (ي-أ)</option>
+                <option value="difficulty">الصعوبة</option>
+                <option value="city">المنطقة</option>
+                <option value="time">الوقت</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recipes Grid -->
+    <section class="py-12">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="flex flex-col items-center justify-center py-12">
+          <div class="loading-spinner"></div>
+          <p class="mt-4 text-gray-600">جاري تحميل الوصفات...</p>
+        </div>
+        
+        <!-- Error Message -->
+        <div id="errorMessage" class="flex flex-col items-center justify-center py-12" style="display: none;">
+          <i class="fas fa-exclamation-triangle h-12 w-12 text-red-500 mb-4"></i>
+          <p class="text-center text-gray-600 mb-4">فشل في تحميل الوصفات. يرجى المحاولة لاحقاً.</p>
+          <button id="retryButton" class="search-filter-button inline-flex items-center justify-center whitespace-nowrap text-sm font-medium bg-[var(--sz-color-primary)] text-white hover:bg-[var(--sz-color-accent)] h-10 px-4 py-2 transition-colors">
+            إعادة المحاولة
+          </button>
+        </div>
+        
+        <!-- No Results -->
+        <div id="noResults" class="flex flex-col items-center justify-center py-12" style="display: none;">
+          <i class="fas fa-search h-12 w-12 text-gray-400 mb-4"></i>
+          <h3 class="text-lg font-semibold mb-2">لم يتم العثور على وصفات</h3>
+          <p class="text-gray-600">جرب تعديل كلمات البحث أو الفلاتر.</p>
+        </div>
+        
+        <!-- Recipes Grid -->
+        <div id="recipesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Recipe cards will be dynamically inserted here -->
+        </div>
+        
+        <!-- Load More -->
+        <div id="loadMoreContainer" class="flex justify-center mt-8" style="display: none;">
+          <button id="loadMoreBtn" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-[var(--sz-color-primary)] text-white hover:bg-[var(--sz-color-accent)] h-10 px-4 py-2 transition-colors">
+            <i class="fas fa-plus ml-2 h-4 w-4"></i> تحميل المزيد
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Recipe Modal -->
+  <div id="recipeModal" class="recipe-modal">
+    <div class="recipe-modal-content">
+      <div class="recipe-modal-header">
+        <h3 id="recipeModalTitle">تفاصيل الوصفة</h3>
+        <button class="close-modal" id="closeModal">✕</button>
+      </div>
+      <div class="recipe-modal-body" id="modalContent">
+        <!-- Content will be dynamically inserted here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer py-6 w-full">
+    <div class="container mx-auto px-4 text-center">
+      <p class="text-[var(--sz-color-ink)]">&copy; 2025 syrian.zone</p>
+      <p class="mt-2 text-sm text-[var(--sz-color-ink)]">
+        تم التطوير بواسطة <span class="font-semibold">هادي الأحمد</span>
+      </p>
+      <div class="mt-2 flex justify-center gap-4">
+        <a href="http://hadealahmad.com/" target="_blank" rel="noopener" class="footer-link flex items-center">
+          <i class="fas fa-globe ml-1"></i> الموقع الشخصي
+        </a>
+        <a href="https://x.com/hadealahmad" target="_blank" rel="noopener" class="footer-link flex items-center">
+          <i class="fab fa-x-twitter ml-1"></i> حساب X
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Configuration -->
+  <script src="/food/config.js"></script>
+  
+  <!-- Main JavaScript -->
+  <script src="/food/script.js"></script>
+</body>
+</html>
