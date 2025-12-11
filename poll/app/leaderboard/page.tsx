@@ -151,6 +151,30 @@ async function fetchAllTimeExtremes() {
 export default async function Page() {
   const rows = await fetchAllTimeTotals();
   const month = await fetchMonthExtremes();
+  // Deterministic month label (avoid Intl during hydration)
+  const now = new Date();
+  const yyyy = now.getUTCFullYear();
+  const mm = String(now.getUTCMonth() + 1).padStart(2, "0");
+  const currentMonthKey = `${yyyy}-${mm}`;
+  function formatArMonthLabel(ym: string) {
+    const [y, m] = ym.split("-");
+    const names = [
+      "يناير",
+      "فبراير",
+      "مارس",
+      "أبريل",
+      "مايو",
+      "يونيو",
+      "يوليو",
+      "أغسطس",
+      "سبتمبر",
+      "أكتوبر",
+      "نوفمبر",
+      "ديسمبر",
+    ];
+    const idx = Math.max(1, Math.min(12, parseInt(m, 10))) - 1;
+    return `${names[idx]} ${y}`;
+  }
   // Jolani data
   async function fetchJolaniAllTime() {
     // Count Jolani that live under the main poll by category
@@ -238,23 +262,29 @@ export default async function Page() {
   let rowsMinOnly: Array<{ candidateId: string; name: string; title?: string; imageUrl?: string; votes: number; score: number; avg: number; rank: number }> = [];
   let triadMinBestAvg: Array<{ candidateId: string; name: string; title?: string; imageUrl?: string; avg: number }> = [];
   if (p) {
-    const now = new Date();
-    const yyyy = now.getUTCFullYear();
-    const mm = String(now.getUTCMonth() + 1).padStart(2, "0");
-    months = [`${yyyy}-${mm}`];
-
     const allRows = await db
-      .select({ candidateId: dailyScores.candidateId, day: dailyScores.day, score: dailyScores.score })
+      .select({ candidateId: dailyScores.candidateId, day: dailyScores.day, score: dailyScores.score, votes: dailyScores.votes })
       .from(dailyScores)
       .where(eq(dailyScores.pollId, p.id))
-      .orderBy(desc(dailyScores.day));
-    const byCandidate = new Map<string, Map<string, number>>();
+      .orderBy(dailyScores.day);
+
+    // Build the complete list of months from all historical data
+    const monthSet = new Set<string>();
     for (const r of allRows) {
       const d = new Date(r.day as unknown as string);
       const key = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
-      if (!months.includes(key)) continue;
-      const m = byCandidate.get(r.candidateId) || new Map();
-      m.set(key, (m.get(key) || 0) + r.score);
+      monthSet.add(key);
+    }
+    months = Array.from(monthSet.values()).sort();
+
+    // Aggregate scores and votes per candidate per month across all time
+    const byCandidate = new Map<string, Map<string, { score: number; votes: number }>>();
+    for (const r of allRows) {
+      const d = new Date(r.day as unknown as string);
+      const key = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
+      const m = byCandidate.get(r.candidateId) || new Map<string, { score: number; votes: number }>();
+      const prev = m.get(key) || { score: 0, votes: 0 };
+      m.set(key, { score: prev.score + (r.score || 0), votes: prev.votes + (r.votes || 0) });
       byCandidate.set(r.candidateId, m);
     }
     const candsAll = await db
@@ -307,7 +337,11 @@ export default async function Page() {
       ranked.forEach((s, i) => colorById.set(s.id, GREEN_23[Math.min(i, GREEN_23.length - 1)]));
       return ranked.map((c) => ({
         name: c.name,
-        values: months.map((m) => byCandidate.get(c.id)?.get(m) || 0),
+        values: months.map((m) => {
+          const mv = byCandidate.get(c.id)?.get(m);
+          if (!mv) return 0;
+          return mv.votes > 0 ? mv.score / mv.votes : 0;
+        }),
         color: colorById.get(c.id),
         imageUrl: c.imageUrl || undefined,
       }));
@@ -468,9 +502,7 @@ export default async function Page() {
           {/* Best of month - Ministers */}
           <div className="max-w-screen-md mx-auto mt-6">
             <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر - الحكومة</h2>
-            <ClientOnly>
-              <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
-            </ClientOnly>
+            <p className="text-sm text-gray-500 mb-2">{formatArMonthLabel(currentMonthKey)}</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {monthMinBest.slice(0, 3).map((r) => (
                 <Card key={r.candidateId}>
@@ -488,9 +520,7 @@ export default async function Page() {
           {/* Worst of month - Ministers */}
           <div className="max-w-screen-md mx-auto mt-4">
             <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر - الحكومة</h2>
-            <ClientOnly>
-              <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
-            </ClientOnly>
+            <p className="text-sm text-gray-500 mb-2">{formatArMonthLabel(currentMonthKey)}</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {monthMinWorst.slice(0, 3).map((r) => (
                 <Card key={r.candidateId}>
@@ -568,9 +598,7 @@ export default async function Page() {
       {/* Best of month - Governors */}
       <div className="max-w-screen-md mx-auto mt-6">
         <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر - المحافظون</h2>
-        <ClientOnly>
-          <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
-        </ClientOnly>
+        <p className="text-sm text-gray-500 mb-2">{formatArMonthLabel(currentMonthKey)}</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {monthGovBest.slice(0, 3).map((r) => (
             <Card key={r.candidateId}>
@@ -588,9 +616,7 @@ export default async function Page() {
       {/* Worst of month - Governors */}
       <div className="max-w-screen-md mx-auto mt-4">
         <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر - المحافظون</h2>
-        <ClientOnly>
-          <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
-        </ClientOnly>
+        <p className="text-sm text-gray-500 mb-2">{formatArMonthLabel(currentMonthKey)}</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {monthGovWorst.slice(0, 3).map((r) => (
             <Card key={r.candidateId}>
@@ -659,9 +685,7 @@ export default async function Page() {
   {/* Best of month - Security */}
   <div className="max-w-screen-md mx-auto mt-6">
     <h2 className="font-semibold mb-2">الأعلى تقييماً لهذا الشهر - مسؤولي الأمن</h2>
-    <ClientOnly>
-      <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
-    </ClientOnly>
+    <p className="text-sm text-gray-500 mb-2">{formatArMonthLabel(currentMonthKey)}</p>
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
       {monthSecBest.slice(0, 3).map((r) => (
         <Card key={r.candidateId}>
@@ -680,9 +704,7 @@ export default async function Page() {
   {/* Worst of month - Security */}
   <div className="max-w-screen-md mx-auto mt-4">
     <h2 className="font-semibold mb-2">الأقل تقييماً لهذا الشهر - مسؤولي الأمن</h2>
-    <ClientOnly>
-      <p className="text-sm text-gray-500 mb-2">{new Intl.DateTimeFormat("ar-EG", { year: "numeric", month: "long" }).format(new Date())}</p>
-    </ClientOnly>
+    <p className="text-sm text-gray-500 mb-2">{formatArMonthLabel(currentMonthKey)}</p>
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
       {monthSecWorst.slice(0, 3).map((r) => (
         <Card key={r.candidateId}>
@@ -740,8 +762,6 @@ export default async function Page() {
           </CardContent>
         </Card>
       </div>
-
-      <AlgorithmInfo />
 
       {/* Jolani Top 3 Ever */}
       {jolaniTop3.length ? (
@@ -829,6 +849,7 @@ export default async function Page() {
           </Card>
         </div>
       ) : null}
+      <AlgorithmInfo />
     </main>
   );
 }

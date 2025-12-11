@@ -1,4 +1,13 @@
 (function(){
+  // Mode: 'voters' | 'candidates' | 'winners'
+  let currentMode = 'voters';
+  const tabVoters = document.getElementById('tabVoters');
+  const tabCandidates = document.getElementById('tabCandidates');
+  const tabWinners = document.getElementById('tabWinners');
+  const pageTitle = document.getElementById('pageTitle');
+  const pageSubtitle = document.getElementById('pageSubtitle');
+  const mainTableTitle = document.getElementById('mainTableTitle');
+  const mainTableDescription = document.getElementById('mainTableDescription');
   const statusEl = document.getElementById('status');
   const tableWrap = document.getElementById('tableWrap');
   const theadRow = document.getElementById('theadRow');
@@ -8,6 +17,7 @@
   const sexFilter = document.getElementById('sexFilter');
   const ageGroupFilter = document.getElementById('ageGroupFilter');
   const appealFilter = document.getElementById('appealFilter');
+  const resultFilter = document.getElementById('resultFilter');
   const statTotal = document.getElementById('statTotal');
   const statMale = document.getElementById('statMale');
   const statFemale = document.getElementById('statFemale');
@@ -29,7 +39,13 @@
     { key: 'homs', label: 'حمص', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '252895295' },
     { key: 'aleppo', label: 'حلب', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '1121899715' },
     { key: 'deir-ez-zor', label: 'دير الزور', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '1166128088' },
+    { key: 'raqqa', label: 'الرقة', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '137630647' },
+  { key: 'hasakah', label: 'الحسكة', sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '2031427715' },
   ];
+
+  // Sheets for candidates and winners
+  const CANDIDATES_SHEET = { sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '109132918' };
+  const WINNERS_SHEET = { sheetId: '1bZKrmEUiFHdeID8pXHkT8XBaZ--oo6g2mGNcVvZMCgc', gid: '385944900' };
 
   function csvUrlFor(p){
     return `https://docs.google.com/spreadsheets/d/${p.sheetId}/export?format=csv&gid=${p.gid}`;
@@ -80,6 +96,41 @@
   }
 
   function applyFilters(data){
+    if (currentMode === 'candidates' || currentMode === 'winners') {
+      const q = normalizeString(searchInput.value);
+      const result = (currentMode === 'candidates' && resultFilter && typeof resultFilter.value === 'string') ? resultFilter.value : '';
+      const selDistrict = (currentMode === 'winners') ? (provinceSelect?.value || '') : '';
+      const selSex = (currentMode === 'winners') ? (sexFilter?.value || '') : '';
+      const selAge = (currentMode === 'winners') ? (ageGroupFilter?.value || '') : '';
+      return data.filter((row)=>{
+        if (currentMode === 'candidates' && result) {
+          const isWinner = String(row['النتيجة'] || row['Result'] || '').trim() === 'فائز';
+          if (result === 'winner' && !isWinner) return false;
+          if (result === 'notWinner' && isWinner) return false;
+        }
+        if (currentMode === 'winners') {
+          if (selSex && (row.__sexNorm !== selSex)) return false;
+          if (selAge && (row.__ageGroup !== selAge)) return false;
+          if (selDistrict && selDistrict !== 'all') {
+            const d = String(row['Electoral District (الدائرة الانتخابية)'] || '').trim();
+            if (d !== selDistrict) return false;
+          }
+        }
+        if (!q) return true;
+        const name = row.__nameNorm;
+        const place = row.__placeNorm;
+        const hay = `${name} ${place}`;
+        if (hay.includes(q)) return true;
+        try {
+          const winnersCol = Object.keys(row).find((k)=> String(k||'').trim() === 'الفائزين');
+          if (winnersCol) {
+            const raw = String(row[winnersCol] || '');
+            if (normalizeString(raw).includes(q)) return true;
+          }
+        } catch(_) {}
+        return false;
+      });
+    }
     const q = normalizeString(searchInput.value);
     const sex = sexFilter.value;
     const group = ageGroupFilter.value;
@@ -262,6 +313,11 @@
       if (!k) return false;
       if (k === 'المطعونين') return false;
       if (k === 'أسماء جديدة') return false;
+      if (k === 'الفائزين') return currentMode !== 'candidates';
+      // Always hide winners-gender column from bottom table
+      if (k === 'جنس الفائزين' || k === 'Sex (winners)') return false;
+      // In candidates mode, hide appeal status if present
+      if (currentMode === 'candidates' && (k === 'حالة الطعن' || k === 'AppealStatus')) return false;
       // Hide columns that are entirely empty in the current dataset
       try {
         return sortedRows.some((r)=> String(r[key] == null ? '' : r[key]).trim() !== '');
@@ -321,6 +377,13 @@
         if (String(r.__appealStatus || '').trim() === 'مطعون') {
           tr.classList.add('appealed-row');
         }
+        // Highlight winner row if النتيجة === فائز
+        try {
+          const resultVal = String(r['النتيجة'] || r['Result'] || '').trim();
+          if (resultVal === 'فائز') {
+            tr.style.backgroundColor = 'rgba(85, 106, 78, 0.12)';
+          }
+        } catch(_) {}
       } catch(_) {}
       headerDefs.forEach(({ key })=>{
         const td = document.createElement('td');
@@ -331,14 +394,78 @@
       tbody.appendChild(tr);
     });
 
-    // Render New Names table
+    // Render Winners table (only for candidates mode)
+    try {
+      const section = document.getElementById('winnersSection');
+      const body = document.getElementById('winnersBody');
+      const countEl = document.getElementById('winnersCount');
+      const winnersChartCanvas = document.getElementById('winnersSexChart');
+      if (!section || !body) throw new Error('no winners section');
+      if (currentMode !== 'winners') {
+        section.style.display = 'none';
+        body.innerHTML = '';
+      } else {
+        // Winners sheet lists winners one per row; map directly
+        let items = [];
+        let male = 0, female = 0;
+        items = sortedRows.map((r)=>{
+          const sex = r['Sex'] || r['الجنس'] || '';
+          if (sex === 'ذكر') male++; else if (sex === 'أنثى') female++;
+          return { name: r['Name'] || r['الاسم'] || '', sex };
+        });
+        // Build winners thead with all headers
+        try {
+          const wthead = document.getElementById('winnersTheadRow');
+          if (wthead) {
+            wthead.innerHTML = '';
+            (headers || []).forEach((key)=>{
+              const th = document.createElement('th');
+              th.className = 'px-4 py-2 text-right text-xs font-medium text-gray-600 uppercase tracking-wider bg-gray-50';
+              const label = (HEADER_LABELS_AR && HEADER_LABELS_AR[key]) ? HEADER_LABELS_AR[key] : key;
+              th.textContent = label;
+              wthead.appendChild(th);
+            });
+          }
+        } catch(_) {}
+        body.innerHTML = '';
+        (sortedRows || []).forEach((row)=>{
+          const tr = document.createElement('tr');
+          (headers || []).forEach((key)=>{
+            const td = document.createElement('td');
+            td.className = 'px-4 py-2 text-sm border-t';
+            td.textContent = row[key] || '';
+            tr.appendChild(td);
+          });
+          body.appendChild(tr);
+        });
+        try { if (countEl) countEl.textContent = String((sortedRows || []).length); } catch(_) {}
+        section.style.display = '';
+
+        // Draw winners sex chart
+        try {
+          if (winnersChartCanvas && window.Chart) {
+            // store on window to allow redraws
+            if (window.__winnersChart) { try { window.__winnersChart.destroy(); } catch(e) {} }
+            const maleBase = '#556A4E';
+            const femaleBase = '#A73F46';
+            window.__winnersChart = new Chart(winnersChartCanvas, {
+              type: 'doughnut',
+              data: { labels: ['ذكر','أنثى'], datasets: [{ data: [male, female], backgroundColor: [maleBase, femaleBase] }] },
+              options: { plugins: { legend: { position: 'bottom' } } }
+            });
+          }
+        } catch(_) {}
+      }
+    } catch(_) {}
+
+    // Render New Names table (only for voters mode)
     try {
       const section = document.getElementById('newNamesSection');
       const body = document.getElementById('newNamesBody');
       const selectedKey = provinceSelect.value || 'damascus';
       const newNamesKey = (headers || []).find((k)=> String(k||'').trim() === 'أسماء جديدة');
       if (!section || !body) return;
-      if (selectedKey === 'all' || !newNamesKey) {
+      if (currentMode === 'candidates' || selectedKey === 'all' || !newNamesKey) {
         section.style.display = 'none';
         body.innerHTML = '';
         return;
@@ -377,6 +504,140 @@
   let sortColumn = 'Name'; // Default sort by Name
   let sortDirection = 'asc'; // 'asc' or 'desc'
 
+  function updateCopyForMode(){
+    try {
+      if (pageTitle) pageTitle.textContent = 'المجلس التشريعي';
+      if (pageSubtitle) pageSubtitle.textContent = currentMode === 'candidates'
+        ? 'المرشحون لانتخابات المجلس التشريعي — يمكن التصفية والبحث'
+        : currentMode === 'winners'
+        ? 'الفائزون في انتخابات المجلس التشريعي'
+        : 'أعضاء الهيئات الناخبة لالمجلس التشريعي — يمكن التصفية والبحث وعرض إحصاءات';
+      if (mainTableTitle) mainTableTitle.textContent = currentMode === 'candidates' ? 'قائمة المرشحين' : 'القائمة الرئيسية';
+      if (mainTableDescription) mainTableDescription.textContent = currentMode === 'candidates'
+        ? 'القائمة الكاملة للمرشحين ضمن المحافظة المحددة.'
+        : 'القائمة الكاملة للأسماء ضمن المحافظة المحددة. يمكنك الفرز والبحث والتصفية باستخدام الأدوات أعلاه.';
+    } catch(_) {}
+  }
+
+  function updateProvinceOptions(){
+    const SOURCE = PROVINCES; // Province selection not used in candidates mode
+    const prev = provinceSelect.value;
+    provinceSelect.innerHTML = SOURCE.map(p=>`<option value="${p.key}">${p.label}</option>`).join('');
+    // Keep selection if exists; else default to 'damascus'
+    if (SOURCE.some(p=>p.key===prev)) {
+      provinceSelect.value = prev;
+    } else {
+      provinceSelect.value = 'damascus';
+    }
+  }
+
+  function updateDistrictOptionsFromData(rows){
+    try {
+      const list = Array.isArray(rows) ? rows : [];
+      const key = 'Electoral District (الدائرة الانتخابية)';
+      const values = Array.from(new Set(list.map(r=> String(r[key]||'').trim()).filter(Boolean)));
+      values.sort((a,b)=>{
+        try { return a.localeCompare(b, ['ar','ar-SA','ar-SY'], { sensitivity: 'base' }); } catch(_) { return a < b ? -1 : (a > b ? 1 : 0); }
+      });
+      const opts = ['<option value="all">الكل</option>'].concat(values.map(v=> `<option value="${v.replace(/\"/g,'&quot;')}">${v}</option>`));
+      provinceSelect.innerHTML = opts.join('');
+      provinceSelect.value = 'all';
+      try { const lab = provinceSelect.parentElement?.querySelector('label'); if (lab) lab.textContent = 'الدائرة الانتخابية'; } catch(_) {}
+    } catch(_) {}
+  }
+
+  function updateVisibilityForMode(){
+    try {
+      const controlsCard = document.getElementById('controlsCard');
+      const mainTableCard = document.getElementById('mainTableCard');
+      const stats = document.getElementById('statsGrid');
+      const charts = document.getElementById('chartsCard');
+      if (currentMode === 'candidates') {
+        if (controlsCard) controlsCard.style.display = '';
+        if (mainTableCard) mainTableCard.style.display = '';
+        if (stats) stats.style.display = 'none';
+        if (charts) charts.style.display = 'none';
+        // Hide province and other filters, keep search only
+        const toHide = [provinceSelect, sexFilter, ageGroupFilter, appealFilter, document.getElementById('resetFilters')];
+        toHide.forEach((el)=>{
+          try {
+            if (!el) return;
+            const wrap = el.closest('div');
+            if (wrap) wrap.style.display = 'none';
+          } catch(_) {}
+        });
+        // Ensure search container is visible
+        try {
+          const searchWrap = searchInput?.closest('div');
+          if (searchWrap) searchWrap.style.display = '';
+        } catch(_) {}
+        // Ensure result filter is visible in candidates
+        try {
+          const rfWrap = resultFilter?.closest('div');
+          if (rfWrap) rfWrap.style.display = '';
+        } catch(_) {}
+      } else if (currentMode === 'winners') {
+        if (controlsCard) controlsCard.style.display = '';
+        if (mainTableCard) mainTableCard.style.display = 'none';
+        if (stats) stats.style.display = '';
+        if (charts) charts.style.display = '';
+        // Hide "مطعونين" stat in winners tab
+        try {
+          const appealedEl = document.getElementById('statAppealed');
+          const appealedCard = appealedEl ? appealedEl.closest('.card') : null;
+          if (appealedCard) appealedCard.style.display = 'none';
+        } catch(_) {}
+        // Hide appeal chart and winners secondary chart in winners tab
+        try {
+          const appealCanvas = document.getElementById('appealChart');
+          const appealWrap = appealCanvas ? appealCanvas.closest('div') : null;
+          if (appealWrap) appealWrap.style.display = 'none';
+        } catch(_) {}
+        try {
+          const wSexCanvas = document.getElementById('winnersSexChart');
+          const wSexWrap = wSexCanvas ? wSexCanvas.closest('div') : null;
+          if (wSexWrap) wSexWrap.style.display = 'none';
+        } catch(_) {}
+        const toHide = [appealFilter, resultFilter];
+        toHide.forEach((el)=>{
+          try {
+            if (!el) return;
+            const wrap = el.closest('div');
+            if (wrap) wrap.style.display = 'none';
+          } catch(_) {}
+        });
+        // Show search, sex, age, district, reset
+        [searchInput, sexFilter, ageGroupFilter, provinceSelect, document.getElementById('resetFilters')].forEach((el)=>{
+          try {
+            const wrap = el?.closest('div');
+            if (wrap) wrap.style.display = '';
+          } catch(_) {}
+        });
+        try { const lab = provinceSelect.parentElement?.querySelector('label'); if (lab) lab.textContent = 'الدائرة الانتخابية'; } catch(_) {}
+      } else {
+        if (controlsCard) controlsCard.style.display = '';
+        if (mainTableCard) mainTableCard.style.display = '';
+        if (stats) stats.style.display = '';
+        if (charts) charts.style.display = '';
+        // Ensure appeal chart (third) visible outside winners
+        try {
+          const appealCanvas = document.getElementById('appealChart');
+          const appealWrap = appealCanvas ? appealCanvas.closest('div') : null;
+          if (appealWrap) appealWrap.style.display = '';
+        } catch(_) {}
+        // Show all control items back
+        const all = [provinceSelect, sexFilter, ageGroupFilter, appealFilter, document.getElementById('resetFilters'), searchInput];
+        all.forEach((el)=>{
+          try {
+            if (!el) return;
+            const wrap = el.closest('div');
+            if (wrap) wrap.style.display = '';
+          } catch(_) {}
+        });
+      }
+    } catch(_) {}
+  }
+
   async function load(){
     try {
       statusEl.textContent = 'جاري التحميل…';
@@ -385,8 +646,15 @@
       let objects = [];
       
       {
-        const province = PROVINCES.find(p=>p.key===selectedKey) || PROVINCES[0];
-        const res = await fetch(csvUrlFor(province), { cache: 'no-store' });
+        let res;
+        if (currentMode === 'winners') {
+          res = await fetch(csvUrlFor(WINNERS_SHEET), { cache: 'no-store' });
+        } else if (currentMode === 'candidates') {
+          res = await fetch(csvUrlFor(CANDIDATES_SHEET), { cache: 'no-store' });
+        } else {
+          const province = PROVINCES.find(p=>p.key===selectedKey) || PROVINCES[0];
+          res = await fetch(csvUrlFor(province), { cache: 'no-store' });
+        }
         if(!res.ok){ throw new Error('HTTP '+res.status); }
         const text = await res.text();
         if (window.SZ?.csv?.detectRedirectHTML && window.SZ.csv.detectRedirectHTML(text)) {
@@ -415,17 +683,30 @@
         }
         return base;
       });
+      // Winners: populate district selector before filtering to avoid empty results due to stale value
+      if (currentMode === 'winners') {
+        try { updateDistrictOptionsFromData(originalData); provinceSelect.value = 'all'; } catch(_) {}
+      }
       const filtered = applyFilters(originalData);
       renderTable(headers, filtered);
-      updateStats(filtered);
-      renderCharts(filtered);
-      if(filtered.length===0){
-        statusEl.textContent = 'لا توجد بيانات لعرضها حالياً';
+      if (currentMode === 'voters' || currentMode === 'winners') {
+        updateStats(filtered);
+        renderCharts(filtered);
+      }
+      if (currentMode === 'winners') {
+        // Hide bottom table in winners tab
+        statusEl.style.display = 'none';
         tableWrap.style.display = 'none';
       } else {
-        statusEl.style.display = 'none';
-        tableWrap.style.display = '';
+        if(filtered.length===0){
+          statusEl.textContent = 'لا توجد بيانات لعرضها حالياً';
+          tableWrap.style.display = 'none';
+        } else {
+          statusEl.style.display = 'none';
+          tableWrap.style.display = '';
+        }
       }
+      updateVisibilityForMode();
     } catch(e){
       statusEl.textContent = 'تعذّر تحميل البيانات: '+(e && e.message ? e.message : '');
       tableWrap.style.display = 'none';
@@ -435,8 +716,10 @@
   function onControlsChange(){
     const filtered = applyFilters(originalData);
     renderTable(headers, filtered);
-    updateStats(filtered);
-    renderCharts(filtered);
+    if (currentMode === 'voters') {
+      updateStats(filtered);
+      renderCharts(filtered);
+    }
   }
 
   function resetFilters() {
@@ -463,8 +746,9 @@
       Chart.defaults.font.family = "'IBM Plex Sans Arabic', 'Tahoma', sans-serif";
       Chart.defaults.font.size = 13;
     } catch(e) {}
-    provinceSelect.innerHTML = PROVINCES.map(p=>`<option value="${p.key}">${p.label}</option>`).join('');
-    provinceSelect.value = 'damascus';
+    updateProvinceOptions();
+    updateCopyForMode();
+    updateVisibilityForMode();
     
     // Add reset button event listener
     const resetButton = document.getElementById('resetFilters');
@@ -479,6 +763,46 @@
   sexFilter.addEventListener('change', onControlsChange);
   ageGroupFilter.addEventListener('change', onControlsChange);
   try { appealFilter.addEventListener('change', onControlsChange); } catch(_) {}
+  try { resultFilter.addEventListener('change', onControlsChange); } catch(_) {}
+
+  function setMode(mode){
+    if (mode !== 'voters' && mode !== 'candidates' && mode !== 'winners') return;
+    if (currentMode === mode) return;
+    currentMode = mode;
+    // Toggle tabs UI
+    try {
+      const buttons = [tabVoters, tabCandidates, tabWinners];
+      buttons.forEach((btn)=>{
+        if (!btn) return;
+        const isActive = (btn === (mode === 'voters' ? tabVoters : mode === 'candidates' ? tabCandidates : tabWinners));
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        btn.style.borderColor = isActive ? 'var(--sz-color-primary)' : 'transparent';
+        if (isActive) btn.classList.remove('text-gray-600'); else btn.classList.add('text-gray-600');
+      });
+    } catch(_) {}
+    // Reset sort and filters minimally
+    sortColumn = 'Name';
+    sortDirection = 'asc';
+    updateProvinceOptions();
+    updateCopyForMode();
+    updateVisibilityForMode();
+    // Hide new names section on candidates
+    try {
+      const section = document.getElementById('newNamesSection');
+      if (section) section.style.display = mode !== 'voters' ? 'none' : section.style.display;
+    } catch(_) {}
+    // Reload
+    statusEl.style.display = '';
+    statusEl.textContent = 'جاري التحميل…';
+    tableWrap.style.display = 'none';
+    load();
+  }
+
+  try {
+    if (tabVoters) tabVoters.addEventListener('click', function(){ setMode('voters'); });
+    if (tabCandidates) tabCandidates.addEventListener('click', function(){ setMode('candidates'); });
+    if (tabWinners) tabWinners.addEventListener('click', function(){ setMode('winners'); });
+  } catch(_) {}
 })();
 
 

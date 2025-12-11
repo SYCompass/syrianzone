@@ -7,8 +7,10 @@ class NavBar extends HTMLElement {
 
   connectedCallback() {
     this.render();
-    this.reflectThemeToHost();
-    this.observeTheme();
+    if (!this.hasAttribute('no-theme-sync')) {
+      this.reflectThemeToHost();
+      this.observeTheme();
+    }
     this.addEventListeners();
     this.highlightActivePage();
   }
@@ -62,16 +64,43 @@ class NavBar extends HTMLElement {
       navbar?.classList.toggle('menu-open');
     });
 
-    themeButtons?.forEach(btn => btn.addEventListener('click', () => {
-      if (window.SZ?.theme) {
-        window.SZ.theme.cycle();
-      }
-    }));
+    if (!this.hasAttribute('no-theme-sync')) {
+      themeButtons?.forEach(btn => btn.addEventListener('click', () => {
+        if (window.SZ?.theme) {
+          window.SZ.theme.cycle();
+        }
+      }));
+    }
   }
 
   render() {
+    const disableThemeSync = this.hasAttribute('no-theme-sync');
+    const baseAttr = this.getAttribute('base-path');
+    const htmlBase = document.documentElement?.getAttribute('data-base-path');
+    const globalBase = (window.SZ && window.SZ.basePath) || '';
+    const basePath = baseAttr || htmlBase || globalBase || '';
+
+    const assetBaseAttr = this.getAttribute('asset-base');
+    const assetBase = assetBaseAttr !== null ? assetBaseAttr : basePath;
+    const assetPath = (path) => {
+      const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+      const normalizedPrefix = (assetBase || '').replace(/\/+$/, '');
+      return normalizedPrefix ? `${normalizedPrefix}${normalizedPath}` : normalizedPath;
+    };
+    const mobileThemeButton = disableThemeSync ? '' : `
+              <button class="theme-button" title="Toggle theme">
+                <i class="fas fa-adjust"></i>
+              </button>`;
+
+    const desktopThemeButton = disableThemeSync ? '' : `
+            <!-- Desktop theme toggle -->
+            <button class="theme-button" title="Toggle theme">
+              <i class="fas fa-adjust"></i>
+            </button>`;
+
     this.shadowRoot.innerHTML = `
       <style>
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css');
         :host {
           display: block;
           font-family: "IBM Plex Sans Arabic", sans-serif;
@@ -263,13 +292,11 @@ class NavBar extends HTMLElement {
         <div class="container">
           <div class="mobile-header">
             <a href="/" class="logo">
-              <img src="/assets/logo-lightmode.svg" class="logo-light" alt="Syrian Zone">
-              <img src="/assets/logo-darkmode.svg" class="logo-dark" alt="Syrian Zone">
+              <img src="${assetPath('/assets/logo-lightmode.svg')}" class="logo-light" alt="Syrian Zone" onerror="this.onerror=null; this.src='${basePath}/placeholder-logo.svg'">
+              <img src="${assetPath('/assets/logo-darkmode.svg')}" class="logo-dark" alt="Syrian Zone" onerror="this.onerror=null; this.src='${basePath}/placeholder-logo.svg'">
             </a>
             <div class="mobile-actions">
-              <button class="theme-button" title="Toggle theme">
-                <i class="fas fa-adjust"></i>
-              </button>
+              ${mobileThemeButton}
               <button class="menu-button">
                 <i class="fas fa-bars"></i>
               </button>
@@ -278,8 +305,8 @@ class NavBar extends HTMLElement {
           <div class="nav-items">
             <div class="desktop-logo">
               <a href="/" class="logo">
-                <img src="/assets/logo-lightmode.svg" class="logo-light" alt="Syrian Zone" style="height: 50px;">
-                <img src="/assets/logo-darkmode.svg" class="logo-dark" alt="Syrian Zone" style="height: 50px;">
+                <img src="${assetPath('/assets/logo-lightmode.svg')}" class="logo-light" alt="Syrian Zone" style="height: 50px;" onerror="this.onerror=null; this.src='${basePath}/placeholder-logo.svg'">
+                <img src="${assetPath('/assets/logo-darkmode.svg')}" class="logo-dark" alt="Syrian Zone" style="height: 50px;" onerror="this.onerror=null; this.src='${basePath}/placeholder-logo.svg'">
               </a>
             </div>
 
@@ -315,18 +342,19 @@ class NavBar extends HTMLElement {
               <i class="fas fa-globe" style="color: var(--sz-color-ink);"></i>
               المواقع السورية
             </a>
+            <a href="/syrian-contributors" class="nav-item">
+              <i class="fas fa-code" style="color: var(--sz-color-ink);"></i>
+              المساهمون السوريون
+            </a>
             <a target="_blank" href="https://github.com/SYCompass/Twitter-SVG-Syrian-Flag-Replacer/releases/tag/1.0.1" class="nav-item">
-              <img src="/flag-replacer/1f1f8-1f1fe.svg" alt="Flag Replacer" style="height: 1.1rem; width: 1.1rem; margin-left: 0.5rem;">
+              <img src="${assetPath('/flag-replacer/1f1f8-1f1fe.svg')}" alt="Flag Replacer" style="height: 1.1rem; width: 1.1rem; margin-left: 0.5rem;" onerror="this.onerror=null; this.src='${basePath}/syria-flag.svg'">
               مبدل العلم
             </a>
             <a target="_blank" href="https://wrraq.com" class="nav-item">
               <i class="fas fa-comments" style="color: var(--sz-color-accent);"></i>
               المنتدى
             </a>
-            <!-- Desktop theme toggle -->
-            <button class="theme-button" title="Toggle theme">
-              <i class="fas fa-adjust"></i>
-            </button>
+            ${desktopThemeButton}
           </div>
         </div>
       </nav>

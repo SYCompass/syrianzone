@@ -119,12 +119,10 @@ export default function MonthlyLineChart({ months, series, height = 260 }: Props
           {/* Lines: draw lower-ranked first so top-ranked render on top */}
           {[...visibleSeries].reverse().map((s) => {
             const color = s.color || hashToColor(s.name);
-            const originX = padding.left;
-            const originY = height - padding.bottom;
-            const path = [
-              `M${originX},${originY}`,
-              ...s.values.map((v, i) => `L${xFor(i)},${yFor(v || 0)}`),
-            ].join(" ");
+            const points = s.values.map((v, i) => [xFor(i), yFor(v || 0)] as const);
+            const path = points.length
+              ? `M${points[0][0]},${points[0][1]} ${points.slice(1).map(([x, y]) => `L${x},${y}`).join(" ")}`
+              : "";
             return (
               <g key={`s-${s.name}`}>
                 <path d={path} fill="none" stroke={color} strokeWidth={2.5} />
