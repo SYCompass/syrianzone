@@ -56,7 +56,7 @@ class AuthController extends Controller
 
         Auth::login($user, true);
 
-        return redirect(env('FRONTEND_URL') . '/admin/dashboard');
+        return redirect(env('FRONTEND_URL') . '/admin/polls');
     }
     
     public function user(Request $request) {

@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import {
     CheckCircle2, Palette, Users2, ListOrdered, Landmark, Compass,
-    Settings, Sun, Link, Moon, Utensils, Globe, Plus, Edit, X, Download, Upload, RotateCcw
+    Settings, Sun, Link, Moon, Utensils, Globe, Plus, Edit, X, Download, Upload, RotateCcw,
+    Cloud, CloudRain, CloudLightning, Snowflake, Wind
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,6 +43,37 @@ const PRESET_LINKS: PresetLink[] = [
     { href: 'https://wrraq.com', icon: null, text: 'المنتدى', image: '/assets/wrraq.png', external: true },
     { href: 'https://syrevarch.com/', icon: null, text: 'أرشيف الثورة', image: '/assets/syrevarchive.webp', external: true },
 ];
+
+
+const GOVERNORATES: Record<string, { lat: number; lon: number }> = {
+    'damascus': { lat: 33.5138, lon: 36.2765 },
+    'aleppo': { lat: 36.2021, lon: 37.1343 },
+    'homs': { lat: 34.7324, lon: 36.7137 },
+    'hama': { lat: 35.1318, lon: 36.7578 },
+    'latakia': { lat: 35.5317, lon: 35.7901 },
+    'tartus': { lat: 34.8890, lon: 35.8866 },
+    'deir-ez-zor': { lat: 35.3359, lon: 40.1408 },
+    'idlib': { lat: 35.9306, lon: 36.6339 },
+    'daraa': { lat: 32.6255, lon: 36.1016 },
+    'quneitra': { lat: 33.1250, lon: 35.8250 },
+    'sweida': { lat: 32.7089, lon: 36.5695 },
+    'rural-damascus': { lat: 33.5138, lon: 36.2765 },
+};
+
+const WEATHER_TRANSLATIONS: Record<string, string> = {
+    "clear sky": "سماء صافية",
+    "few clouds": "غيوم قليلة",
+    "scattered clouds": "غيوم متفرقة",
+    "broken clouds": "غيوم جزئية",
+    "shower rain": "مطر غزير",
+    "rain": "ممطر",
+    "thunderstorm": "عاصفة رعدية",
+    "snow": "مثلج",
+    "mist": "ضباب",
+    "overcast clouds": "غيوم ملبدة",
+    "light rain": "مطر خفيف",
+    "moderate rain": "مطر متوسط",
+};
 
 export default function HomeClient() {
     const [theme, setTheme] = useState<string | null>(null);
@@ -98,11 +130,46 @@ export default function HomeClient() {
         return () => clearInterval(timer);
     }, []);
 
-    // Fetch weather (simplified - you'll need to implement the full logic)
+    const getWeatherIcon = (iconCode: string) => {
+        if (iconCode.startsWith('01')) return <Sun className="w-8 h-8 text-yellow-500" />;
+        if (iconCode.startsWith('02')) return <Sun className="w-8 h-8 text-orange-400" />;
+        if (iconCode.startsWith('03') || iconCode.startsWith('04')) return <Cloud className="w-8 h-8 text-gray-400" />;
+        if (iconCode.startsWith('09') || iconCode.startsWith('10')) return <CloudRain className="w-8 h-8 text-blue-400" />;
+        if (iconCode.startsWith('11')) return <CloudLightning className="w-8 h-8 text-purple-500" />;
+        if (iconCode.startsWith('13')) return <Snowflake className="w-8 h-8 text-white" />;
+        if (iconCode.startsWith('50')) return <Wind className="w-8 h-8 text-gray-300" />;
+        return <Sun className="w-8 h-8 text-yellow-500" />;
+    };
+
+    // Fetch weather
     useEffect(() => {
-        // TODO: Implement weather fetching based on governorate
-        // This is a placeholder
-    }, [governorate]);
+        const fetchWeather = async () => {
+            try {
+                const coords = GOVERNORATES[governorate] || GOVERNORATES['damascus'];
+                const response = await fetch(`https://syrianzone.hade-alahmad1.workers.dev/?lat=${coords.lat}&lon=${coords.lon}`);
+                if (!response.ok) throw new Error('Weather fetch failed');
+                const data = await response.json();
+
+                let description = data.weather[0].description;
+                if (language === 'ar' && WEATHER_TRANSLATIONS[description]) {
+                    description = WEATHER_TRANSLATIONS[description];
+                }
+
+                setWeather({
+                    temp: Math.round(data.main.temp),
+                    description: description,
+                    icon: getWeatherIcon(data.weather[0].icon)
+                });
+            } catch (e) {
+                console.error(e);
+                setWeather(null);
+            }
+        };
+
+        if (mounted) {
+            fetchWeather();
+        }
+    }, [governorate, language, mounted]);
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
