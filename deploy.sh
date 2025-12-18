@@ -55,15 +55,10 @@ npm install
 # Build the Next.js application
 npm run build
 
-# 5. Restart PM2 process
+# Restart PM2 process
 echo "🔄 Reloading PM2..."
 pm2 startOrReload ../ecosystem.config.js
 
 cd ..
-
-# 6. Final Permissions Check
-# Ensure all files are owned by the syrian user to prevent permission issues
-echo "🔑 Correcting ownership to syrian:syrian..."
-sudo chown -R syrian:syrian .
 
 echo "✅ Deployment Finished Successfully!"
