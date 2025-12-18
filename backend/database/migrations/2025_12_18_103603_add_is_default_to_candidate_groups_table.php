@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('candidate_groups', function (Blueprint $table) {
-            $table->boolean('is_default')->default(false)->after('sort_order');
-        });
+        if (!Schema::hasColumn('candidate_groups', 'is_default')) {
+            Schema::table('candidate_groups', function (Blueprint $table) {
+                $table->boolean('is_default')->default(false)->after('sort_order');
+            });
+        }
     }
 
     /**
@@ -21,8 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('candidate_groups', function (Blueprint $table) {
-            $table->dropColumn('is_default');
-        });
+        if (Schema::hasColumn('candidate_groups', 'is_default')) {
+            Schema::table('candidate_groups', function (Blueprint $table) {
+                $table->dropColumn('is_default');
+            });
+        }
     }
 };
