@@ -25,8 +25,13 @@ async function getWallpapers(): Promise<Wallpaper[]> {
 }
 
 export const metadata = {
-    title: 'الهوية البصرية السورية - Syrian Visual Identity',
+    title: 'الهوية البصرية السورية',
     description: 'الهوية البصرية الرسمية للجمهورية العربية السورية - ألوان العلم، النسب والخطوط الرسمية',
+    openGraph: {
+        title: 'الهوية البصرية السورية - المساحة السورية',
+        description: 'الهوية البصرية الرسمية للجمهورية العربية السورية - ألوان العلم، النسب والخطوط الرسمية',
+        images: ['/assets/thumbnail.jpg'],
+    },
 };
 
 export default async function SyidPage() {

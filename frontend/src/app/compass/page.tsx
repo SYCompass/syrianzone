@@ -3,10 +3,10 @@ import CompassApp from './CompassApp';
 import { Globe } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'بوصلة سوريا | Syria Compass',
+    title: 'بوصلة سوريا',
     description: 'اختبار لتحديد الميول السياسية',
     openGraph: {
-        title: 'بوصلة سوريا | Syria Compass',
+        title: 'بوصلة سوريا - المساحة السورية',
         description: 'اختبار لتحديد الميول السياسية',
         images: ['/assets/thumbnail.jpg'],
     },

@@ -1,9 +1,11 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'إحصائيات المساحة السورية | Syrian Zone',
+    title: 'إحصائيات المساحة السورية',
     description: 'لوحة معلومات تفاعلية لإحصائيات المساحة السورية.',
     openGraph: {
+        title: 'إحصائيات المساحة السورية - المساحة السورية',
+        description: 'لوحة معلومات تفاعلية لإحصائيات المساحة السورية.',
         images: ['/assets/thumbnail.jpg'],
     },
 };

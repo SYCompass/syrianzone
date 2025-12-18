@@ -3,9 +3,11 @@ import { fetchOrganizations } from './data';
 import PartyClient from './PartyClient';
 
 export const metadata: Metadata = {
-    title: 'دليل المنظمات السياسية السورية | Syrian Zone',
+    title: 'دليل المنظمات السياسية السورية',
     description: 'دليل المنظمات السياسية السورية - اكتشف وتصفح المنظمات السياسية السورية.',
     openGraph: {
+        title: 'دليل المنظمات السياسية السورية - المساحة السورية',
+        description: 'دليل المنظمات السياسية السورية - اكتشف وتصفح المنظمات السياسية السورية.',
         images: ['/assets/thumbnail.jpg'],
     },
 };

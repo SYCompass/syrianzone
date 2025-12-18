@@ -3,9 +3,11 @@ import { JOLANI_ITEMS } from '../data';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'تقييم الجولاني | Syrian Zone',
+    title: 'تقييم الجولاني',
     description: 'تير ليست أبو محمد الجولاني - تقييم وترتيب.',
     openGraph: {
+        title: 'تقييم الجولاني - المساحة السورية',
+        description: 'تير ليست أبو محمد الجولاني - تقييم وترتيب.',
         images: ['/assets/thumbnail.jpg'],
     }
 };

@@ -3,8 +3,13 @@ import { fetchOfficialEntities } from './data';
 import SyOfficialClient from './SyOfficialClient';
 
 export const metadata: Metadata = {
-    title: 'Syrian Official Accounts Links | روابط الحسابات الرسمية السورية',
-    description: 'Social media directory for Syrian official entities - دليل وسائل التواصل الاجتماعي للجهات السورية الرسمية',
+    title: 'روابط الحسابات الرسمية السورية',
+    description: 'دليل وسائل التواصل الاجتماعي للجهات السورية الرسمية',
+    openGraph: {
+        title: 'روابط الحسابات الرسمية السورية - المساحة السورية',
+        description: 'دليل وسائل التواصل الاجتماعي للجهات السورية الرسمية',
+        images: ['/assets/thumbnail.jpg'],
+    },
 };
 
 export default async function SyOfficialPage() {

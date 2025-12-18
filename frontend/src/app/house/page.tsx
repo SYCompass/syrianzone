@@ -3,10 +3,10 @@ import HouseClient from './HouseClient';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'المجلس التشريعي | Syrian Zone',
+    title: 'المجلس التشريعي',
     description: 'أعضاء الهيئات الناخبة والمرشحين والفائزين في انتخابات المجلس التشريعي. تصفح القوائم والإحصاءات.',
     openGraph: {
-        title: 'المجلس التشريعي - Syrian Zone',
+        title: 'المجلس التشريعي - المساحة السورية',
         description: 'بيانات وإحصاءات انتخابات المجلس التشريعي.',
         images: ['/assets/thumbnail.jpg'],
     }

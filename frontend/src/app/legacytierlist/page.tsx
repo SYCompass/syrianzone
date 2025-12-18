@@ -3,9 +3,11 @@ import { MINISTERS } from './data';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'تقييم الوزراء | Syrian Zone',
+    title: 'تقييم الوزراء',
     description: 'تير ليست وزراء الحكومة السورية الجديدة - تقييم وترتيب الحكومة.',
     openGraph: {
+        title: 'تقييم الوزراء - المساحة السورية',
+        description: 'تير ليست وزراء الحكومة السورية الجديدة - تقييم وترتيب الحكومة.',
         images: ['/assets/thumbnail.jpg'],
     }
 };

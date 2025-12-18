@@ -3,9 +3,11 @@ import { fetchWebsites } from './data';
 import SitesClient from './SitesClient';
 
 export const metadata: Metadata = {
-    title: 'المواقع السورية | Syrian Zone',
+    title: 'المواقع السورية',
     description: 'دليل المواقع السورية - قائمة شاملة للمواقع السورية مصنفة حسب القطاعات.',
     openGraph: {
+        title: 'المواقع السورية - المساحة السورية',
+        description: 'دليل المواقع السورية - قائمة شاملة للمواقع السورية مصنفة حسب القطاعات.',
         images: ['/assets/thumbnail.jpg'],
     },
 };
