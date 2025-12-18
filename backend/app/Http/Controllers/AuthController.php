@@ -33,18 +33,24 @@ class AuthController extends Controller
             return redirect(env('FRONTEND_URL') . '/login?error=auth_failed');
         }
 
-        // Restrict login to specific email
-        if ($googleUser->getEmail() !== 'hade.alahmad1@gmail.com') {
-             return redirect(env('FRONTEND_URL') . '/login?error=access_denied_admin_only');
+        $email = $googleUser->getEmail();
+        $isSuperAdmin = $email === 'hade.alahmad1@gmail.com';
+
+        // Check if user exists or is superadmin
+        $user = User::where('email', $email)->first();
+
+        if (!$user && !$isSuperAdmin) {
+             return redirect(env('FRONTEND_URL') . '/letmein?error=access_denied_admin_only');
         }
 
         $user = User::updateOrCreate(
-            ['email' => $googleUser->getEmail()],
+            ['email' => $email],
             [
                 'name' => $googleUser->getName(),
                 'google_id' => $googleUser->getId(),
                 'avatar_url' => $googleUser->getAvatar(),
-                'password' => bcrypt(str()->random(16)) // Random password
+                'password' => $user ? $user->password : bcrypt(str()->random(16)), // Keep existing password or generate random
+                'role' => $isSuperAdmin ? 'superadmin' : ($user ? $user->role : 'admin'),
             ]
         );
 

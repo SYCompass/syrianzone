@@ -4,6 +4,7 @@ import axios from '@/lib/axios';
 import { useRouter } from 'next/navigation';
 
 import { useAuth } from '@/context/AuthContext';
+import AdminManagement from './AdminManagement';
 
 export default function AdminDashboard() {
     const { user, loading, isAdmin } = useAuth();
@@ -38,6 +39,8 @@ export default function AdminDashboard() {
                         تسجيل الخروج
                     </button>
                 </div>
+
+                <AdminManagement />
             </main>
         </div>
     );

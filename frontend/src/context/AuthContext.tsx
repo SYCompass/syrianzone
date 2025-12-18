@@ -4,15 +4,18 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from '@/lib/axios';
 
 interface User {
+    id: number;
     name: string;
     email: string;
     avatar_url: string;
+    role: string;
 }
 
 interface AuthContextType {
     user: User | null;
     loading: boolean;
     isAdmin: boolean;
+    isSuperAdmin: boolean;
     refreshUser: () => Promise<void>;
 }
 
@@ -37,10 +40,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         refreshUser();
     }, []);
 
-    const isAdmin = !!user; // In current implementation, if logged in, you are admin
+    const isAdmin = !!user;
+    const isSuperAdmin = user?.role === 'superadmin';
 
     return (
-        <AuthContext.Provider value={{ user, loading, isAdmin, refreshUser }}>
+        <AuthContext.Provider value={{ user, loading, isAdmin, isSuperAdmin, refreshUser }}>
             {children}
         </AuthContext.Provider>
     );
