@@ -16,16 +16,7 @@ export default function AdminDashboard() {
     };
     if (loading) return <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]"><div className="text-center py-20">Loading...</div></div>;
 
-    if (!isAdmin) {
-        return (
-            <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]">
-                <main className="container mx-auto px-4 py-8 mt-16 text-center">
-                    <h1 className="text-3xl font-bold mb-6">Unauthorized</h1>
-                    <p>You do not have permission to access this area.</p>
-                </main>
-            </div>
-        );
-    }
+
 
     return (
         <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]">
