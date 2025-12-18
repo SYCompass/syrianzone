@@ -19,7 +19,16 @@ interface CustomLink {
     icon?: string;
 }
 
-const PRESET_LINKS = [
+interface PresetLink {
+    href: string;
+    icon: React.ComponentType<{ className?: string }> | null;
+    text: string;
+    image?: string;
+    external?: boolean;
+    className?: string;
+}
+
+const PRESET_LINKS: PresetLink[] = [
     { href: '/syofficial', icon: CheckCircle2, text: 'الحسابات الرسمية' },
     { href: '/syid', icon: Palette, text: 'الهوية البصرية' },
     { href: '/party', icon: Users2, text: 'دليل الأحزاب' },
