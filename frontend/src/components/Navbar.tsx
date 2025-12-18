@@ -20,6 +20,7 @@ import {
   Link as LinkIcon,
 } from 'lucide-react';
 
+import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -66,6 +67,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = React.useState(false);
   const [theme, setTheme] = React.useState('dark');
+  const { user } = useAuth();
 
   React.useEffect(() => {
     const savedTheme = document.documentElement.getAttribute('data-theme') || 'dark';
@@ -85,13 +87,14 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 max-w-7xl mx-auto items-center px-4 md:px-8" dir="rtl">
+      <div className="container relative flex h-16 max-w-7xl mx-auto items-center px-4 md:px-8 justify-between lg:justify-normal" dir="rtl">
         {/* Mobile Menu */}
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <Button
               variant="ghost"
-              className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
+              size="icon"
+              className="lg:hidden h-10 w-10"
             >
               <Menu className="h-6 w-6" />
               <span className="sr-only">Toggle Menu</span>
@@ -151,7 +154,7 @@ export default function Navbar() {
         </Sheet>
 
         {/* Logo */}
-        <div className="flex shrink-0 ml-8 lg:ml-12">
+        <div className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 flex shrink-0 lg:ml-12">
           <Link href="/" className="flex items-center gap-2">
             <img
               src={theme === 'light' ? '/assets/logo-lightmode.svg' : '/assets/logo-darkmode.svg'}
@@ -235,7 +238,7 @@ export default function Navbar() {
         <div className="flex flex-1 items-center justify-end gap-2">
           <ThemeToggle />
           <div className="hidden md:flex items-center gap-2">
-            <div className="h-6 w-[1px] bg-border/50 mx-2" />
+            {user && <div className="h-6 w-[1px] bg-border/50 mx-2" />}
             <UserNav />
           </div>
           {/* Mobile UserNav if not using sidebar, but here it's in the sidebar bottom bar */}

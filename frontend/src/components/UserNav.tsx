@@ -48,22 +48,22 @@ export default function UserNav() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                     <Link href="/admin/dashboard" className="cursor-pointer">
-                        <LayoutDashboard className="mr-2 h-4 w-4" />
+                        <LayoutDashboard className="ml-2 h-4 w-4" />
                         <span>لوحة التحكم</span>
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                     <Link href="/admin/polls" className="cursor-pointer">
-                        <ListOrdered className="mr-2 h-4 w-4" />
+                        <ListOrdered className="ml-2 h-4 w-4" />
                         <span>إدارة التصويت</span>
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="cursor-pointer">
-                    <UserIcon className="mr-2 h-4 w-4" />
+                    <UserIcon className="ml-2 h-4 w-4" />
                     <span>الملف الشخصي</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive" onClick={logout}>
-                    <LogOut className="mr-2 h-4 w-4" />
+                    <LogOut className="ml-2 h-4 w-4" />
                     <span>تسجيل الخروج</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>
