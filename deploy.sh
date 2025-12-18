@@ -5,11 +5,7 @@ set -e
 
 echo "🚀 Starting Deployment..."
 
-# 1. Pull latest changes
-echo "📦 Pulling latest changes from git..."
-git pull origin main
-
-# 2. Environment Setup
+# 1. Environment Setup
 echo "🔑 Checking environment files..."
 if [ ! -f "backend/.env" ]; then
     echo "Creating backend/.env from .env.example..."

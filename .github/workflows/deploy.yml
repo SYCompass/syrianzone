@@ -10,11 +10,10 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Make deploy script executable
-        run: chmod +x deploy.sh
-
-      - name: Run Deployment Script
-        run: ./deploy.sh
+      - name: Sync and Deploy
+        run: |
+          cd /home/syrian/public_html/repo
+          git fetch origin main
+          git reset --hard origin/main
+          chmod +x deploy.sh
+          ./deploy.sh
