@@ -90,51 +90,29 @@ class PollController extends Controller
         // Fetch groups
         $groups = $poll->groups;
 
-        // Group the candidates
-        // We rely on candidate_group_id if present, else fallback to matching group key with category (backfill should have handled this)
-        
-        $response = ['poll' => $poll];
-
-        // Prepare buckets for each group
-        foreach ($groups as $group) {
-            $filtered = $allTimeAgg->filter(function($r) use ($group) {
-                // If we have candidate_group_id in stats?
-                // The aggregation query grouping by candidate_id doesn't include group_id.
-                // We map from $candidates lookup.
-                $c = \App\Models\Candidate::find($r['candidateId']); // already loaded in $candidates? $candidates is keyBy id
-                // Actually $candidates matches $groups logic.
-                // But $candidates collection contains Candidate models.
-                // In $allTimeAgg map, we used $candidates->get($row->candidate_id).
-                // Let's optimize.
-                // The $candidates collection has 'candidate_group_id'.
-                $cModel = \App\Models\Candidate::find($r['candidateId']); // This is N+1 if we don't look up from $candidates collection correctly.
-                // Re-use $candidates which is loaded.
-                
-                // Correction: $candidates was loaded: $candidates = $poll->candidates()->orderBy('sort')->get()->keyBy('id');
-                // But we didn't preserve it in scope of this filter easily without pass-by-use or looking up in $r.
-                // Ideally $r should have group id.
-                // Let's add group_id to mapped $r.
-                return false;
-            });
-        }
-        
-        // Revised approach:
-        // map $allTimeAgg to include group_id
+        // map $allTimeAgg to include group_id from candidate models
         $allTimeAgg = $allTimeAgg->map(function($item) use ($candidates) {
             $c = $candidates->get($item['candidateId']);
             $item['groupId'] = $c?->candidate_group_id;
             return $item;
         });
 
-        foreach ($groups as $group) {
-            $groupItems = $allTimeAgg->filter(fn($r) => $r['groupId'] === $group->id);
-            $response[$group->key ?? $group->id] = $ranker($groupItems);
-        }
+        $results = ['poll' => $poll, 'groups' => $groups];
         
-        // Also return groups meta so frontend knows what to render if it was generic leaderboard
-        $response['groups'] = $groups;
+        // Add group entries to results keyed by their key or id
+        foreach ($groups as $group) {
+            $groupItems = $allTimeAgg->filter(fn($item) => $item['groupId'] === $group->id);
+            
+            // Assign ranks sequentially based on sorted avg
+            $rankedItems = $groupItems->values()->map(function ($item, $index) {
+                $item['rank'] = $index + 1;
+                return $item;
+            });
 
-        return response()->json($response);
+            $results[$group->key ?? $group->id] = $rankedItems;
+        }
+
+        return response()->json($results);
     }
 
     public function show($idOrSlug)
