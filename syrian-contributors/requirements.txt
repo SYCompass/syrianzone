@@ -1,4 +1,0 @@
-asyncio
-aiohttp
-uvloop
-pytz

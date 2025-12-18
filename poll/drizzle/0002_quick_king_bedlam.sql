@@ -1,1 +1,0 @@
-ALTER TABLE "ballots" DROP CONSTRAINT "ballots_unique_poll_day_voter";

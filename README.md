@@ -25,6 +25,38 @@
 * **الحارث الموسى** - ([@tirh25](https://x.com/tirh25)) قام بإضافة عدد كبير من الحسابات الرسمية لصفحة الحسابات الرسمية السورية.
 * قام **haiueida** ([@haiueida](https://x.com/haiueida)) بتوفير الترجمة الكردية لصفحة الحسابات الرسمية السورية.
 * ساهم **Waleed Khamees** - ([@WaleedKhamees](https://github.com/WaleedKhamees)) في ضغط الصور وتحسين الأداء للموقع.
+# Syrian Zone Unified Monorepo
+
+This repository contains the unified codebase for Syrian Zone properties.
+
+## Structure
+
+- **`backend/`**: Laravel 11 API & Admin.
+- **`frontend/`**: Next.js 15 App Router Frontend.
+- **`_legacy/`**: Archived code from previous systems.
+- **`refactor_documentation/`**: Plans and guides for the unified system.
+
+## Getting Started
+
+### Backend
+```bash
+cd backend
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan serve
+```
+
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+## Legacy Data
+See `refactor_documentation/phase_3_detailed_plan.md` for details on how legacy data was migrated.
 * ساهم **وحيد شعّار** ([https://x.com/WaheedShaar](https://x.com/WaheedShaar)) بتوفير نسخة DWG من العلم السوري في صفحة الهوية البصرية السورية
 * ساهم [**SourceM7**](https://github.com/SourceM7) بتطوير أطلس سوريا وتطوير الصفحة الرئيسية
 * **يوري دندشي** - ([@yuri.dandashi](https://www.instagram.com/yuri.dandashi/)) قام بتصميم الشعار وأيقونة الموقع والهوية البصرية العامة.

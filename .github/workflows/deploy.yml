@@ -1,0 +1,20 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Make deploy script executable
+        run: chmod +x deploy.sh
+
+      - name: Run Deployment Script
+        run: ./deploy.sh
