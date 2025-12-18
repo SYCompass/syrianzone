@@ -22,10 +22,7 @@ interface LeaderboardEntry {
 
 interface LeaderboardData {
     poll: { id: string; title: string };
-    ministers: LeaderboardEntry[];
-    governors: LeaderboardEntry[];
-    security: LeaderboardEntry[];
-    jolani: LeaderboardEntry[];
+    [key: string]: any;
 }
 
 function formatNumberKM(n: number): string {
@@ -178,43 +175,43 @@ export default function LeaderboardPage() {
             <h1 className="text-2xl font-bold mb-4 text-center">الإحصائيات</h1>
 
             {/* Top 3 Ministers */}
-            {data.ministers.length >= 3 && (
-                <Top3Podium rows={data.ministers.slice(0, 3)} title="أفضل ٣ على الإطلاق - الحكومة" />
+            {(data.ministers || data.minister || []).length >= 3 && (
+                <Top3Podium rows={(data.ministers || data.minister || []).slice(0, 3)} title="أفضل ٣ على الإطلاق - الحكومة" />
             )}
 
             {/* Ministers Table */}
             <div className="max-w-screen-md mx-auto">
-                <LeaderboardTable rows={data.ministers} title="قائمة التصنيف التفصيلية - الحكومة" />
+                <LeaderboardTable rows={data.ministers || data.minister || []} title="قائمة التصنيف التفصيلية - الحكومة" />
             </div>
 
             {/* Top 3 Governors */}
-            {data.governors.length >= 3 && (
-                <Top3Podium rows={data.governors.slice(0, 3)} title="أفضل ٣ - المحافظون" />
+            {(data.governors || data.governor || []).length >= 3 && (
+                <Top3Podium rows={(data.governors || data.governor || []).slice(0, 3)} title="أفضل ٣ - المحافظون" />
             )}
 
             {/* Governors Table */}
             <div className="max-w-screen-md mx-auto">
-                <LeaderboardTable rows={data.governors} title="قائمة المحافظين" />
+                <LeaderboardTable rows={data.governors || data.governor || []} title="قائمة المحافظين" />
             </div>
 
             {/* Top 3 Security */}
-            {data.security.length >= 3 && (
-                <Top3Podium rows={data.security.slice(0, 3)} title="أفضل ٣ - مسؤولي الأمن" />
+            {(data.security || []).length >= 3 && (
+                <Top3Podium rows={(data.security || []).slice(0, 3)} title="أفضل ٣ - مسؤولي الأمن" />
             )}
 
             {/* Security Table */}
             <div className="max-w-screen-md mx-auto">
-                <LeaderboardTable rows={data.security} title="قائمة مسؤولي الأمن" />
+                <LeaderboardTable rows={data.security || []} title="قائمة مسؤولي الأمن" />
             </div>
 
             {/* Top 3 Jolani */}
-            {data.jolani.length >= 3 && (
-                <Top3Podium rows={data.jolani.slice(0, 3)} title="أفضل ٣ شخصيات الجولاني" />
+            {(data.jolani || []).length >= 3 && (
+                <Top3Podium rows={(data.jolani || []).slice(0, 3)} title="أفضل ٣ شخصيات الجولاني" />
             )}
 
             {/* Jolani Table */}
             <div className="max-w-screen-md mx-auto">
-                <LeaderboardTable rows={data.jolani} title="شخصيات الجولاني" />
+                <LeaderboardTable rows={data.jolani || []} title="شخصيات الجولاني" />
             </div>
         </main>
     );

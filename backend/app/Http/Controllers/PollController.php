@@ -97,19 +97,36 @@ class PollController extends Controller
             return $item;
         });
 
-        $results = ['poll' => $poll, 'groups' => $groups];
+        $results = [
+            'poll' => $poll, 
+            'groups' => $groups,
+            'ministers' => [],
+            'governors' => [],
+            'security' => [],
+            'jolani' => [],
+        ];
         
-        // Add group entries to results keyed by their key or id
         foreach ($groups as $group) {
             $groupItems = $allTimeAgg->filter(fn($item) => $item['groupId'] === $group->id);
             
-            // Assign ranks sequentially based on sorted avg
             $rankedItems = $groupItems->values()->map(function ($item, $index) {
                 $item['rank'] = $index + 1;
                 return $item;
             });
 
-            $results[$group->key ?? $group->id] = $rankedItems;
+            $key = $group->key ?? $group->id;
+            
+            // Normalize keys to match frontend expectations
+            $finalKey = match($key) {
+                'minister' => 'ministers',
+                'governor' => 'governors',
+                'secur' => 'security', // Handle possible truncated keys
+                'security' => 'security',
+                'jolani' => 'jolani',
+                default => $key
+            };
+            
+            $results[$finalKey] = $rankedItems;
         }
 
         return response()->json($results);
