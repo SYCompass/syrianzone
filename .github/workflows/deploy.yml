@@ -12,6 +12,7 @@ jobs:
     steps:
       - name: Sync and Deploy
         run: |
+          git config --global --add safe.directory /home/syrian/public_html/repo
           cd /home/syrian/public_html/repo
           git fetch origin main
           git reset --hard origin/main
