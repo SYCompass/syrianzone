@@ -30,6 +30,9 @@ fi
 echo "🐘 Deploying Backend (Laravel)..."
 cd backend
 
+# Ensure permissions are correct
+chmod -R 775 storage bootstrap/cache
+
 # Install PHP dependencies
 composer install --no-dev --optimize-autoloader
 
@@ -40,7 +43,9 @@ else
     php artisan migrate --force
 fi
 
-# Optimize caches
+# Clear old caches and optimize
+php artisan route:clear
+php artisan config:clear
 php artisan optimize
 
 cd ..
