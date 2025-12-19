@@ -242,7 +242,7 @@ export default function AdminPollManager({ pollId, initialData, onRefresh }: Pro
                             value="all"
                             className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border border-border bg-background"
                         >
-                            All Candidates
+                            All Candidates ({candidates.length})
                         </TabsTrigger>
                         {groups.map(g => (
                             <TabsTrigger
@@ -250,7 +250,7 @@ export default function AdminPollManager({ pollId, initialData, onRefresh }: Pro
                                 value={g.id}
                                 className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border border-border bg-background"
                             >
-                                {g.name}
+                                {g.name} ({candidates.filter(c => c.candidate_group_id === g.id).length})
                             </TabsTrigger>
                         ))}
                     </TabsList>
