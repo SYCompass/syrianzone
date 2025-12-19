@@ -193,9 +193,12 @@ export default function TierBoard({
 
         const filtered = shuffledInitial.filter((c) => {
             if (groups.length > 0) {
-                // Match by group ID
-                if (c.candidate_group_id === selectedGroupId) return true;
-                // Fallback legacy match
+                // Match by group ID if present (Strict filtering)
+                if (c.candidate_group_id) {
+                    return c.candidate_group_id === selectedGroupId;
+                }
+
+                // Fallback legacy match ONLY if no group ID is assigned
                 const group = groups.find(g => g.id === selectedGroupId);
                 if (group && group.key === c.category) return true;
 
