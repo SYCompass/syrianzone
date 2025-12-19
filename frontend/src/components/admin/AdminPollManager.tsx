@@ -154,16 +154,20 @@ export default function AdminPollManager({ pollId, initialData, onRefresh }: Pro
     const [cName, setCName] = useState("");
     const [cTitle, setCTitle] = useState("");
     const [cImage, setCImage] = useState("");
-    const [cCategory, setCCategory] = useState("minister");
+    // const [cCategory, setCCategory] = useState("minister"); // Removed static category
+    const [cGroupId, setCGroupId] = useState<string | null>(null);
 
     const openAddCandidate = (groupId: string | null) => {
         setEditingCandidate(null);
         setCName("");
         setCTitle("");
         setCImage("");
-        setCCategory("minister");
-        // If specific group is active (and not 'all'), pre-fill? 
-        // Logic handled in save: if groupId passed, use it.
+        // setCCategory("minister");
+        if (groupId) {
+            setCGroupId(groupId);
+        } else {
+            setCGroupId(null);
+        }
         setIsCandidateModalOpen(true);
     };
 
@@ -172,7 +176,8 @@ export default function AdminPollManager({ pollId, initialData, onRefresh }: Pro
         setCName(c.name);
         setCTitle(c.title || "");
         setCImage(c.image_url || c.imageUrl || "");
-        setCCategory(c.category || "minister");
+        // setCCategory(c.category || "minister");
+        setCGroupId(c.candidate_group_id || null);
         setIsCandidateModalOpen(true);
     };
 
@@ -183,7 +188,8 @@ export default function AdminPollManager({ pollId, initialData, onRefresh }: Pro
             name: cName,
             title: cTitle || null,
             image_url: cImage || null,
-            category: cCategory || null,
+            // category: cCategory || null,
+            candidate_group_id: cGroupId || null,
         };
 
         // If adding new
@@ -384,16 +390,16 @@ export default function AdminPollManager({ pollId, initialData, onRefresh }: Pro
                             <Input id="c-image" value={cImage} onChange={e => setCImage(e.target.value)} className="col-span-3" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="c-category" className="text-right">Category</Label>
-                            <Select value={cCategory} onValueChange={setCCategory}>
+                            <Label htmlFor="c-group" className="text-right">Group</Label>
+                            <Select value={cGroupId || "none"} onValueChange={(val) => setCGroupId(val === "none" ? null : val)}>
                                 <SelectTrigger className="col-span-3">
-                                    <SelectValue placeholder="Select category" />
+                                    <SelectValue placeholder="Select Group" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="minister">Minister</SelectItem>
-                                    <SelectItem value="prime_minister">Prime Minister</SelectItem>
-                                    <SelectItem value="director">Director</SelectItem>
-                                    <SelectItem value="other">Other</SelectItem>
+                                    <SelectItem value="none">No Group</SelectItem>
+                                    {groups.map(g => (
+                                        <SelectItem key={g.id} value={g.id}>{g.name}</SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                         </div>
