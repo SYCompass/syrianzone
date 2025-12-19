@@ -18,6 +18,13 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 // Types
 interface Candidate {
@@ -147,12 +154,14 @@ export default function AdminPollManager({ pollId, initialData, onRefresh }: Pro
     const [cName, setCName] = useState("");
     const [cTitle, setCTitle] = useState("");
     const [cImage, setCImage] = useState("");
+    const [cCategory, setCCategory] = useState("minister");
 
     const openAddCandidate = (groupId: string | null) => {
         setEditingCandidate(null);
         setCName("");
         setCTitle("");
         setCImage("");
+        setCCategory("minister");
         // If specific group is active (and not 'all'), pre-fill? 
         // Logic handled in save: if groupId passed, use it.
         setIsCandidateModalOpen(true);
@@ -163,6 +172,7 @@ export default function AdminPollManager({ pollId, initialData, onRefresh }: Pro
         setCName(c.name);
         setCTitle(c.title || "");
         setCImage(c.image_url || c.imageUrl || "");
+        setCCategory(c.category || "minister");
         setIsCandidateModalOpen(true);
     };
 
@@ -173,6 +183,7 @@ export default function AdminPollManager({ pollId, initialData, onRefresh }: Pro
             name: cName,
             title: cTitle || null,
             image_url: cImage || null,
+            category: cCategory || null,
         };
 
         // If adding new
@@ -371,6 +382,20 @@ export default function AdminPollManager({ pollId, initialData, onRefresh }: Pro
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="c-image" className="text-right">Image URL</Label>
                             <Input id="c-image" value={cImage} onChange={e => setCImage(e.target.value)} className="col-span-3" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="c-category" className="text-right">Category</Label>
+                            <Select value={cCategory} onValueChange={setCCategory}>
+                                <SelectTrigger className="col-span-3">
+                                    <SelectValue placeholder="Select category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="minister">Minister</SelectItem>
+                                    <SelectItem value="prime_minister">Prime Minister</SelectItem>
+                                    <SelectItem value="director">Director</SelectItem>
+                                    <SelectItem value="other">Other</SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
                     </div>
                     <DialogFooter>

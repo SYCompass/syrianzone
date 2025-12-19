@@ -27,7 +27,7 @@ class CandidateController extends Controller
             'name' => $validated['name'],
             'title' => $validated['title'],
             'image_url' => $validated['image_url'],
-            'category' => $validated['category'] ?? null,
+            'category' => $validated['category'] ?? 'minister',
             'sort' => 0, // Default sort
         ]);
 
