@@ -21,6 +21,7 @@ interface MapClientProps {
     populationData: CityData | null;
     currentDataType: DataType;
     currentSourceId: number | null;
+    customThresholds: number[];
 }
 
 function normalizeCityName(name: string): string {
@@ -61,14 +62,14 @@ function findPopulation(provinceName: string, populationData: CityData | null): 
     return 0;
 }
 
-function getColor(pop: number, dataType: DataType): string {
+function getColor(pop: number, dataType: DataType, thresholds: number[]): string {
     const config = DATA_TYPE_CONFIG[dataType];
     if (!config) return '#2a3033';
 
     if (pop === 0) return config.colors.none;
-    if (pop > config.thresholds[2]) return config.colors.high;
-    if (pop > config.thresholds[1]) return config.colors.medium;
-    if (pop > config.thresholds[0]) return config.colors.low;
+    if (pop > thresholds[2]) return config.colors.high;
+    if (pop > thresholds[1]) return config.colors.medium;
+    if (pop > thresholds[0]) return config.colors.low;
     return config.colors.low;
 }
 
@@ -93,12 +94,12 @@ function MapUpdater({ geoJsonData }: { geoJsonData: any }) {
     return null;
 }
 
-export default function MapClient({ geoJsonData, populationData, currentDataType, currentSourceId }: MapClientProps) {
+export default function MapClient({ geoJsonData, populationData, currentDataType, currentSourceId, customThresholds }: MapClientProps) {
 
     const style = (feature: any) => {
         const pop = findPopulation(feature.properties.province_name, populationData);
         return {
-            fillColor: getColor(pop, currentDataType),
+            fillColor: getColor(pop, currentDataType, customThresholds),
             weight: 1.5,
             opacity: 1,
             color: '#0D1117', // Dark border

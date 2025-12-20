@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { PopulationGroups, DataType, DATA_TYPES, DATA_TYPE_CONFIG, CityData, DataSource } from './types';
 import { Layers, Info, Filter } from 'lucide-react';
@@ -33,17 +33,40 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
     useEffect(() => {
         const sources = initialData[currentDataType];
         if (sources && sources.length > 0) {
-            // Check if we can keep current source (if it exists in new type - unlikely but logic wise)
-            // Or just pick first
             setCurrentSourceId(sources[0].source_id);
         } else {
             setCurrentSourceId(null);
         }
     }, [currentDataType, initialData]);
 
-    const currentSource = initialData[currentDataType].find(s => s.source_id === currentSourceId);
+    const currentSource = useMemo(() =>
+        initialData[currentDataType].find(s => s.source_id === currentSourceId),
+        [initialData, currentDataType, currentSourceId]
+    );
+
     const populationData = currentSource ? currentSource.cities : null;
     const config = DATA_TYPE_CONFIG[currentDataType];
+
+    // Dynamic Thresholds Calculation
+    const dynamicThresholds = useMemo(() => {
+        if (!populationData) return config.thresholds;
+        const values = Object.values(populationData).filter(v => v > 0);
+        if (values.length === 0) return config.thresholds;
+        const max = Math.max(...values);
+        // Use 10%, 40%, 70% of max as dynamic thresholds for visualization
+        return [
+            Math.floor(max * 0.1),
+            Math.floor(max * 0.4),
+            Math.floor(max * 0.7)
+        ];
+    }, [populationData, config.thresholds]);
+
+    // Format numbers for legend
+    const formatNumber = (num: number) => {
+        if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+        if (num >= 1000) return (num / 1000).toFixed(0) + 'K';
+        return num.toString();
+    };
 
     // Mobile Panel Toggle
     const togglePanel = () => setIsPanelOpen(!isPanelOpen);
@@ -65,18 +88,29 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                     populationData={populationData}
                     currentDataType={currentDataType}
                     currentSourceId={currentSourceId}
+                    customThresholds={dynamicThresholds}
                 />
 
                 {/* Legend Overlay */}
-                <div className="absolute bottom-6 right-6 z-[400] bg-card/90 backdrop-blur p-3 rounded shadow-lg border border-border text-sm">
+                <div className="absolute bottom-6 right-6 z-[400] bg-card/90 backdrop-blur p-3 rounded shadow-lg border border-border text-sm min-w-[150px]">
                     <h4 className="font-bold mb-2 text-foreground">{config.labelAr}</h4>
-                    <div className="space-y-1">
-                        {config.legend.map((item, idx) => (
-                            <div key={idx} className="flex items-center gap-2">
-                                <span className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></span>
-                                <span className="text-muted-foreground text-xs">{item.label}</span>
-                            </div>
-                        ))}
+                    <div className="space-y-1.5">
+                        <div className="flex items-center gap-2">
+                            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: config.colors.none }}></span>
+                            <span className="text-muted-foreground text-xs">لا توجد بيانات</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: config.colors.low }}></span>
+                            <span className="text-muted-foreground text-xs">أقل من {formatNumber(dynamicThresholds[1])}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: config.colors.medium }}></span>
+                            <span className="text-muted-foreground text-xs">{formatNumber(dynamicThresholds[1])} – {formatNumber(dynamicThresholds[2])}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: config.colors.high }}></span>
+                            <span className="text-muted-foreground text-xs">أكثر من {formatNumber(dynamicThresholds[2])}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -148,24 +182,75 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                         </div>
                     ) : (
                         initialData[currentDataType].map(source => (
-                            <button
+                            <div
                                 key={source.source_id}
-                                onClick={() => setCurrentSourceId(source.source_id)}
                                 className={`
-                                    w-full text-right p-3 rounded-lg border text-sm transition-all
+                                    w-full rounded-lg border text-sm transition-all overflow-hidden
                                     ${currentSourceId === source.source_id
                                         ? 'border-primary bg-primary/5 dark:bg-primary/10 ring-1 ring-primary'
                                         : 'border-border hover:border-accent bg-card shadow-sm'}
                                 `}
                             >
-                                <div className="font-semibold text-foreground mb-1">
-                                    {source.note || 'مصدر غير مسمى'} ({source.date})
-                                </div>
-                                <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
-                                    <span>المصدر: {source.source_id}</span>
-                                    <span>{Object.keys(source.cities).length} محافظة</span>
-                                </div>
-                            </button>
+                                <button
+                                    onClick={() => setCurrentSourceId(source.source_id)}
+                                    className="w-full text-right p-3"
+                                >
+                                    <div className="font-semibold text-foreground mb-1">
+                                        {source.note || 'مصدر غير مسمى'} ({source.date})
+                                    </div>
+                                    <div className="flex justify-between items-center text-xs text-muted-foreground">
+                                        <span>المصدر: {source.source_id}</span>
+                                        <span>{Object.keys(source.cities).length} محافظة</span>
+                                    </div>
+                                </button>
+
+                                {currentSourceId === source.source_id && (
+                                    <div className="p-3 border-t border-primary/20 bg-background/50 animate-in slide-in-from-top-2 duration-200">
+                                        <div className="mb-3">
+                                            <a
+                                                href={source.source_url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-xs text-primary underline hover:text-primary/80 flex items-center gap-1"
+                                            >
+                                                رابط المصدر الأصلي
+                                                <span className="text-[10px] transform rotate-45">↗</span>
+                                            </a>
+                                        </div>
+
+                                        <div className="overflow-hidden rounded border border-border bg-card">
+                                            <table className="w-full text-xs text-right">
+                                                <thead className="bg-muted text-muted-foreground">
+                                                    <tr>
+                                                        <th className="py-2 px-3 font-medium">المحافظة</th>
+                                                        <th className="py-2 px-3 text-left font-medium">العدد</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-border">
+                                                    {Object.entries(source.cities)
+                                                        .sort(([, a], [, b]) => b - a)
+                                                        .map(([city, pop]) => (
+                                                            <tr key={city} className="hover:bg-muted/50 transition-colors">
+                                                                <td className="py-1.5 px-3 font-medium">{city}</td>
+                                                                <td className="py-1.5 px-3 text-left font-mono text-muted-foreground">
+                                                                    {pop.toLocaleString('en-US')}
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                </tbody>
+                                                <tfoot className="bg-muted/50 border-t border-border font-bold">
+                                                    <tr>
+                                                        <td className="py-2 px-3">الإجمالي</td>
+                                                        <td className="py-2 px-3 text-left font-mono text-primary">
+                                                            {Object.values(source.cities).reduce((sum, val) => sum + val, 0).toLocaleString('en-US')}
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         ))
                     )}
                 </div>
