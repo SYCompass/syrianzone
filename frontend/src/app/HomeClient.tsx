@@ -59,6 +59,8 @@ const GOVERNORATES: Record<string, { lat: number; lon: number }> = {
     'quneitra': { lat: 33.1250, lon: 35.8250 },
     'sweida': { lat: 32.7089, lon: 36.5695 },
     'rural-damascus': { lat: 33.5138, lon: 36.2765 },
+    'hasakah': { lat: 36.5023, lon: 40.7382 },
+    'raqqa': { lat: 35.9520, lon: 39.0081 },
 };
 
 const WEATHER_TRANSLATIONS: Record<string, string> = {
@@ -486,6 +488,8 @@ export default function HomeClient({ aboutContent = '' }: { aboutContent?: strin
                                         <SelectItem value="quneitra">Quneitra</SelectItem>
                                         <SelectItem value="sweida">Sweida</SelectItem>
                                         <SelectItem value="rural-damascus">Rural Damascus</SelectItem>
+                                        <SelectItem value="hasakah">Hasakah</SelectItem>
+                                        <SelectItem value="raqqa">Raqqa</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
