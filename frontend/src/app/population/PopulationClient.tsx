@@ -64,6 +64,7 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                     geoJsonData={geoJsonData}
                     populationData={populationData}
                     currentDataType={currentDataType}
+                    currentSourceId={currentSourceId}
                 />
 
                 {/* Legend Overlay */}

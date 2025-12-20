@@ -20,6 +20,7 @@ interface MapClientProps {
     geoJsonData: any;
     populationData: CityData | null;
     currentDataType: DataType;
+    currentSourceId: number | null;
 }
 
 function normalizeCityName(name: string): string {
@@ -92,7 +93,7 @@ function MapUpdater({ geoJsonData }: { geoJsonData: any }) {
     return null;
 }
 
-export default function MapClient({ geoJsonData, populationData, currentDataType }: MapClientProps) {
+export default function MapClient({ geoJsonData, populationData, currentDataType, currentSourceId }: MapClientProps) {
 
     const style = (feature: any) => {
         const pop = findPopulation(feature.properties.province_name, populationData);
@@ -162,6 +163,7 @@ export default function MapClient({ geoJsonData, populationData, currentDataType
         >
             <MapUpdater geoJsonData={geoJsonData} />
             <GeoJSON
+                key={`${currentDataType}-${currentSourceId}`}
                 data={geoJsonData}
                 style={style}
                 onEachFeature={onEachFeature}
