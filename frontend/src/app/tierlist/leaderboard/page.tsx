@@ -8,6 +8,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon, Vote } from "lucide-react";
 import { TierAvatar as Avatar } from "@/components/poll/TierAvatar";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TimeseriesChart } from "./TimeseriesChart";
 
 interface LeaderboardEntry {
     candidateId: string;
@@ -174,45 +176,78 @@ export default function LeaderboardPage() {
 
             <h1 className="text-2xl font-bold mb-4 text-center">الإحصائيات</h1>
 
-            {/* Top 3 Ministers */}
-            {(data.ministers || data.minister || []).length >= 3 && (
-                <Top3Podium rows={(data.ministers || data.minister || []).slice(0, 3)} title="أفضل ٣ على الإطلاق - الحكومة" />
+            {data.history && (
+                <Tabs defaultValue="ministers" dir="rtl" className="w-full">
+                    <div className="flex justify-center mb-6">
+                        <TabsList className="grid w-full max-w-md grid-cols-4">
+                            <TabsTrigger value="ministers">الحكومة</TabsTrigger>
+                            <TabsTrigger value="governors">المحافظون</TabsTrigger>
+                            <TabsTrigger value="security">الأمن</TabsTrigger>
+                            <TabsTrigger value="jolani">الجولاني</TabsTrigger>
+                        </TabsList>
+                    </div>
+
+                    <TabsContent value="ministers">
+                        <TimeseriesChart
+                            history={data.history}
+                            candidates={data.ministers || data.minister || []}
+                            title="تقدم الحكومة"
+                        />
+                        {(data.ministers || data.minister || []).length >= 3 && (
+                            <Top3Podium rows={(data.ministers || data.minister || []).slice(0, 3)} title="أفضل ٣ على الإطلاق - الحكومة" />
+                        )}
+                        <LeaderboardTable rows={data.ministers || data.minister || []} title="قائمة التصنيف التفصيلية - الحكومة" />
+                    </TabsContent>
+
+                    <TabsContent value="governors">
+                        <TimeseriesChart
+                            history={data.history}
+                            candidates={data.governors || data.governor || []}
+                            title="تقدم المحافظين"
+                        />
+                        {(data.governors || data.governor || []).length >= 3 && (
+                            <Top3Podium rows={(data.governors || data.governor || []).slice(0, 3)} title="أفضل ٣ - المحافظون" />
+                        )}
+                        <LeaderboardTable rows={data.governors || data.governor || []} title="قائمة المحافظين" />
+                    </TabsContent>
+
+                    <TabsContent value="security">
+                        <TimeseriesChart
+                            history={data.history}
+                            candidates={data.security || []}
+                            title="تقدم مسؤولي الأمن"
+                        />
+                        {(data.security || []).length >= 3 && (
+                            <Top3Podium rows={(data.security || []).slice(0, 3)} title="أفضل ٣ - مسؤولي الأمن" />
+                        )}
+                        <LeaderboardTable rows={data.security || []} title="قائمة مسؤولي الأمن" />
+                    </TabsContent>
+
+                    <TabsContent value="jolani">
+                        <TimeseriesChart
+                            history={data.history}
+                            candidates={data.jolani || []}
+                            title="تقدم شخصيات الجولاني"
+                        />
+                        {(data.jolani || []).length >= 3 && (
+                            <Top3Podium rows={(data.jolani || []).slice(0, 3)} title="أفضل ٣ شخصيات الجولاني" />
+                        )}
+                        <LeaderboardTable rows={data.jolani || []} title="شخصيات الجولاني" />
+                    </TabsContent>
+                </Tabs>
             )}
 
-            {/* Ministers Table */}
-            <div className="max-w-screen-md mx-auto">
-                <LeaderboardTable rows={data.ministers || data.minister || []} title="قائمة التصنيف التفصيلية - الحكومة" />
-            </div>
-
-            {/* Top 3 Governors */}
-            {(data.governors || data.governor || []).length >= 3 && (
-                <Top3Podium rows={(data.governors || data.governor || []).slice(0, 3)} title="أفضل ٣ - المحافظون" />
+            {!data.history && (
+                <>
+                    {/* Fallback for old data structure if history missing or loading issue */}
+                    <div className="text-center text-red-500 mb-4">بيانات التاريخ غير متوفرة</div>
+                    {/* Ministers Table */}
+                    <div className="max-w-screen-md mx-auto">
+                        <LeaderboardTable rows={data.ministers || data.minister || []} title="قائمة التصنيف التفصيلية - الحكومة" />
+                    </div>
+                </>
             )}
 
-            {/* Governors Table */}
-            <div className="max-w-screen-md mx-auto">
-                <LeaderboardTable rows={data.governors || data.governor || []} title="قائمة المحافظين" />
-            </div>
-
-            {/* Top 3 Security */}
-            {(data.security || []).length >= 3 && (
-                <Top3Podium rows={(data.security || []).slice(0, 3)} title="أفضل ٣ - مسؤولي الأمن" />
-            )}
-
-            {/* Security Table */}
-            <div className="max-w-screen-md mx-auto">
-                <LeaderboardTable rows={data.security || []} title="قائمة مسؤولي الأمن" />
-            </div>
-
-            {/* Top 3 Jolani */}
-            {(data.jolani || []).length >= 3 && (
-                <Top3Podium rows={(data.jolani || []).slice(0, 3)} title="أفضل ٣ شخصيات الجولاني" />
-            )}
-
-            {/* Jolani Table */}
-            <div className="max-w-screen-md mx-auto">
-                <LeaderboardTable rows={data.jolani || []} title="شخصيات الجولاني" />
-            </div>
         </main>
     );
 }

@@ -104,6 +104,7 @@ class PollController extends Controller
             'governors' => [],
             'security' => [],
             'jolani' => [],
+            'history' => $this->getHistory($poll->id),
         ];
         
         foreach ($groups as $group) {
@@ -130,6 +131,26 @@ class PollController extends Controller
         }
 
         return response()->json($results);
+    }
+    
+    private function getHistory($pollId) {
+        $history = \Illuminate\Support\Facades\DB::table('daily_scores')
+            ->where('poll_id', $pollId)
+            ->select('candidate_id', 'day', 'votes', 'score')
+            ->orderBy('day')
+            ->get()
+            ->groupBy('candidate_id')
+            ->map(function ($items) {
+                return $items->map(function ($item) {
+                    return [
+                        'date' => $item->day,
+                        'votes' => (int)$item->votes,
+                        'score' => (int)$item->score,
+                    ];
+                });
+            });
+            
+        return $history;
     }
 
     public function show($idOrSlug)
