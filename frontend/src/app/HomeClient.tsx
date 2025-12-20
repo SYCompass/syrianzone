@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { marked } from 'marked';
 
 interface CustomLink {
     id: string;
@@ -75,7 +76,19 @@ const WEATHER_TRANSLATIONS: Record<string, string> = {
     "moderate rain": "مطر متوسط",
 };
 
-export default function HomeClient() {
+export default function HomeClient({ aboutContent = '' }: { aboutContent?: string }) {
+    const [aboutHtml, setAboutHtml] = useState('');
+
+    useEffect(() => {
+        const parseContent = async () => {
+            if (aboutContent) {
+                const html = await marked.parse(aboutContent);
+                setAboutHtml(html);
+            }
+        };
+        parseContent();
+    }, [aboutContent]);
+
     const [theme, setTheme] = useState<string | null>(null);
     const [language, setLanguage] = useState<'ar' | 'en' | null>(null);
     const [searchEngine, setSearchEngine] = useState('duckduckgo');
@@ -555,17 +568,15 @@ export default function HomeClient() {
 
             {/* About Dialog */}
             <Dialog open={aboutOpen} onOpenChange={setAboutOpen}>
-                <DialogContent>
+                <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>{currentLang === 'ar' ? 'حول Syrian Zone' : 'About Syrian Zone'}</DialogTitle>
                     </DialogHeader>
-                    <div className="py-4">
-                        <p className="text-muted-foreground">
-                            {currentLang === 'ar'
-                                ? 'Syrian Zone هي منصة شاملة للموارد والأدوات السورية.'
-                                : 'Syrian Zone is a comprehensive platform for Syrian resources and tools.'}
-                        </p>
-                    </div>
+                    <div
+                        className="py-4 space-y-4 [&>h1]:text-2xl [&>h1]:font-bold [&>h1]:mb-4 [&>h2]:text-xl [&>h2]:font-bold [&>h2]:mt-6 [&>h2]:mb-2 [&>p]:mb-4 [&>p]:leading-relaxed [&>ul]:list-disc [&>ul]:pl-6 [&>ul]:mb-4 [&_a]:text-primary [&_a]:underline"
+                        dir={currentLang === 'ar' ? 'rtl' : 'ltr'}
+                        dangerouslySetInnerHTML={{ __html: aboutHtml || (currentLang === 'ar' ? 'جاري التحميل...' : 'Loading...') }}
+                    />
                 </DialogContent>
             </Dialog>
         </div>

@@ -10,6 +10,12 @@ export const metadata = {
   },
 };
 
+import fs from 'fs';
+import path from 'path';
+
 export default function Home() {
-  return <HomeClient />;
+  const aboutPath = path.join(process.cwd(), 'src/data/about.md');
+  const aboutContent = fs.readFileSync(aboutPath, 'utf8');
+
+  return <HomeClient aboutContent={aboutContent} />;
 }
