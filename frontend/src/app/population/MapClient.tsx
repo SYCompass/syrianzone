@@ -15,7 +15,6 @@ L.Icon.Default.mergeOptions({
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-
 interface MapClientProps {
     geoJsonData: any;
     populationData: CityData | null;
@@ -73,7 +72,6 @@ function getColor(pop: number, dataType: DataType, thresholds: number[]): string
     return config.colors.low;
 }
 
-// Component to handle map resizing and fitting bounds
 function MapUpdater({ geoJsonData }: { geoJsonData: any }) {
     const map = useMap();
 
@@ -84,7 +82,6 @@ function MapUpdater({ geoJsonData }: { geoJsonData: any }) {
         }
     }, [geoJsonData, map]);
 
-    // Invalidate size on load to fix rendering issues
     useEffect(() => {
         setTimeout(() => {
             map.invalidateSize();
@@ -102,7 +99,7 @@ export default function MapClient({ geoJsonData, populationData, currentDataType
             fillColor: getColor(pop, currentDataType, customThresholds),
             weight: 1.5,
             opacity: 1,
-            color: '#0D1117', // Dark border
+            color: '#0D1117',
             fillOpacity: 0.85
         };
     };
@@ -110,7 +107,6 @@ export default function MapClient({ geoJsonData, populationData, currentDataType
     const onEachFeature = (feature: any, layer: L.Layer) => {
         const name = feature.properties.province_name;
 
-        // Tooltip logic
         layer.bindTooltip(() => {
             const pop = findPopulation(name, populationData);
             const config = DATA_TYPE_CONFIG[currentDataType];
@@ -125,10 +121,9 @@ export default function MapClient({ geoJsonData, populationData, currentDataType
         }, {
             direction: 'top',
             sticky: true,
-            className: 'custom-tooltip' // We need to add global styles for this or inline
+            className: 'custom-tooltip'
         });
 
-        // Hover effects
         layer.on({
             mouseover: (e) => {
                 const l = e.target;
@@ -137,15 +132,13 @@ export default function MapClient({ geoJsonData, populationData, currentDataType
                     color: '#E6EDF3',
                     fillOpacity: 1
                 });
-                l.bringToFront();
+                if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                    l.bringToFront();
+                }
             },
             mouseout: (e) => {
                 const l = e.target;
-                if (geoJsonData) {
-                    // Reset style is tricky in react-leaflet with function style
-                    // Simple reset:
-                    l.setStyle(style(feature));
-                }
+                l.setStyle(style(feature));
             }
         });
     };
@@ -153,22 +146,41 @@ export default function MapClient({ geoJsonData, populationData, currentDataType
     if (!geoJsonData) return null;
 
     return (
-        <MapContainer
-            center={[35.0, 38.5]}
-            zoom={7}
-            style={{ height: '100%', width: '100%', background: '#24292F' }} // Dark background matching theme
-            zoomControl={false}
-            scrollWheelZoom={false}
-            doubleClickZoom={false}
-            attributionControl={false}
-        >
-            <MapUpdater geoJsonData={geoJsonData} />
-            <GeoJSON
-                key={`${currentDataType}-${currentSourceId}`}
-                data={geoJsonData}
-                style={style}
-                onEachFeature={onEachFeature}
-            />
-        </MapContainer>
+        <div className="w-full h-full relative">
+            {/* Global CSS to remove the click rectangle/highlight on mobile */}
+            <style jsx global>{`
+                .leaflet-container {
+                    -webkit-tap-highlight-color: transparent;
+                    outline: none;
+                }
+                .leaflet-interactive {
+                    outline: none !important;
+                    -webkit-tap-highlight-color: transparent !important;
+                }
+                /* Removes the blue box on Android/Chrome */
+                path.leaflet-interactive:focus {
+                    outline: none;
+                }
+            `}</style>
+
+            <MapContainer
+                center={[35.0, 38.5]}
+                zoom={7}
+                style={{ height: '100%', width: '100%', background: '#24292F' }}
+                zoomControl={false}
+                scrollWheelZoom={false}
+                doubleClickZoom={false}
+                attributionControl={false}
+                tap={false}
+            >
+                <MapUpdater geoJsonData={geoJsonData} />
+                <GeoJSON
+                    key={`${currentDataType}-${currentSourceId}`}
+                    data={geoJsonData}
+                    style={style}
+                    onEachFeature={onEachFeature}
+                />
+            </MapContainer>
+        </div>
     );
 }

@@ -19,7 +19,7 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
     const [geoJsonData, setGeoJsonData] = useState<any>(null);
     const [currentDataType, setCurrentDataType] = useState<DataType>(DATA_TYPES.POPULATION);
     const [currentSourceId, setCurrentSourceId] = useState<number | null>(null);
-    const [isPanelOpen, setIsPanelOpen] = useState(true);
+    const [isPanelOpen, setIsPanelOpen] = useState(false);
 
     // Load GeoJSON on mount
     useEffect(() => {
@@ -38,6 +38,19 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
             setCurrentSourceId(null);
         }
     }, [currentDataType, initialData]);
+
+    useEffect(() => {
+    const handleResize = () => {
+        if (window.innerWidth >= 768) {
+            setIsPanelOpen(true);
+        } else {
+            setIsPanelOpen(false);
+        }
+
+         handleResize();
+    };
+
+    }, []);
 
     const currentSource = useMemo(() =>
         initialData[currentDataType].find(s => s.source_id === currentSourceId),
