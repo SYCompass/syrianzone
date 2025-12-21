@@ -171,7 +171,7 @@ export default function MapClient({ geoJsonData, populationData, currentDataType
                 scrollWheelZoom={false}
                 doubleClickZoom={false}
                 attributionControl={false}
-                tap={false}
+
             >
                 <MapUpdater geoJsonData={geoJsonData} />
                 <GeoJSON
