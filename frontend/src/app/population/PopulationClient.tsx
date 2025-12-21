@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { PopulationGroups, DataType, DATA_TYPES, DATA_TYPE_CONFIG, CityData } from './types';
-import { Layers, Info, Filter, X, BarChart3, CheckSquare, Square } from 'lucide-react';
+import { Layers, Info, Filter, X, BarChart3, CheckSquare, Square, ExternalLink } from 'lucide-react';
 
 const MapClient = dynamic(() => import('./MapClient'), {
     ssr: false,
@@ -19,7 +19,7 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
     const [currentDataType, setCurrentDataType] = useState<DataType>(DATA_TYPES.POPULATION);
     const [currentSourceId, setCurrentSourceId] = useState<number | null>(null);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
-    
+
     // New state for comparison tool
     const [selectedProvinces, setSelectedProvinces] = useState<string[]>([]);
 
@@ -80,8 +80,13 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
     const getProvinceStats = (provinceName: string) => {
         const stats: any = {};
         Object.values(DATA_TYPES).forEach(type => {
-            // Get the first available source for each type for comparison
-            const source = initialData[type][0];
+            // Use current source if type matches current selection, otherwise default to first source
+            let source;
+            if (type === currentDataType && currentSource) {
+                source = currentSource;
+            } else {
+                source = initialData[type][0];
+            }
             stats[type] = source?.cities[provinceName] || 0;
         });
         return stats;
@@ -93,11 +98,11 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
             p1: { name: selectedProvinces[0], stats: getProvinceStats(selectedProvinces[0]) },
             p2: { name: selectedProvinces[1], stats: getProvinceStats(selectedProvinces[1]) }
         };
-    }, [selectedProvinces, initialData]);
+    }, [selectedProvinces, initialData, currentDataType, currentSource]);
 
     return (
         <div className="flex flex-col h-[calc(100vh-64px)] overflow-hidden relative bg-background text-foreground" dir="rtl">
-            
+
             {/* Comparison Pop-up */}
             {comparisonData && (
                 <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-[1000] w-[90%] max-w-2xl bg-card border-2 border-primary rounded-xl shadow-2xl animate-in zoom-in-95 duration-200">
@@ -110,7 +115,7 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                             <X size={20} />
                         </button>
                     </div>
-                    
+
                     <div className="p-6">
                         <div className="grid grid-cols-3 gap-4 mb-8">
                             <div className="text-center font-bold text-lg text-primary truncate">{comparisonData.p1.name}</div>
@@ -134,14 +139,14 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                                         </div>
                                         <div className="flex h-4 w-full gap-1 bg-muted rounded-full overflow-hidden">
                                             <div className="flex justify-end w-1/2">
-                                                <div 
-                                                    className="h-full bg-primary transition-all duration-500 rounded-r-full" 
+                                                <div
+                                                    className="h-full bg-primary transition-all duration-500 rounded-r-full"
                                                     style={{ width: `${(v1 / max) * 100}%` }}
                                                 />
                                             </div>
                                             <div className="flex justify-start w-1/2">
-                                                <div 
-                                                    className="h-full bg-primary/60 transition-all duration-500 rounded-l-full" 
+                                                <div
+                                                    className="h-full bg-primary/60 transition-all duration-500 rounded-l-full"
                                                     style={{ width: `${(v2 / max) * 100}%` }}
                                                 />
                                             </div>
@@ -150,7 +155,7 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                                 );
                             })}
                         </div>
-                        
+
                         <div className="mt-8 pt-4 border-t border-border flex justify-between items-center text-[10px] text-muted-foreground">
                             <span>* تعتمد المقارنة على أحدث المصادر المتوفرة لكل فئة.</span>
                             <button onClick={() => setSelectedProvinces([])} className="text-primary hover:underline font-medium">إغلاق المقارنة</button>
@@ -176,7 +181,7 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                     currentSourceId={currentSourceId}
                     customThresholds={dynamicThresholds}
                 />
-                
+
                 {/* Legend Overlay */}
                 <div className="absolute bottom-6 right-6 z-[400] bg-card/90 backdrop-blur p-3 rounded shadow-lg border border-border text-sm min-w-[150px]">
                     <h4 className="font-bold mb-2 text-foreground">{config.labelAr}</h4>
@@ -212,7 +217,7 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                         <h2 className="text-lg font-bold text-foreground flex items-center gap-2"><Layers size={18} /> البيانات</h2>
                     </div>
 
-                    <div className="flex rounded-lg bg-muted p-1">
+                    <div className="flex rounded-lg bg-muted p-1 mb-4">
                         {Object.values(DATA_TYPES).map(type => (
                             <button
                                 key={type}
@@ -226,57 +231,97 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-card">
-                    {currentSource && (
-                        <div className="space-y-4">
-                            <div className="flex justify-between items-center px-1">
-                                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">قائمة المحافظات</h3>
-                                {selectedProvinces.length > 0 && (
-                                    <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold">
-                                        تم اختيار {selectedProvinces.length}/2
-                                    </span>
+                    {initialData[currentDataType]?.map(source => {
+                        const isExpanded = currentSourceId === source.source_id;
+
+                        return (
+                            <div key={source.source_id} className={`rounded-lg border transition-all duration-200 ${isExpanded ? 'border-primary bg-card shadow-md' : 'border-border bg-card/50 hover:bg-muted/50'}`}>
+
+                                {/* Accordion Header */}
+                                <div
+                                    className="p-3 flex flex-col gap-3 cursor-pointer select-none"
+                                    onClick={() => setCurrentSourceId(source.source_id)}
+                                >
+                                    <div className="flex flex-col gap-0.5">
+                                        <span className="font-bold text-sm">
+                                            {source.note || DATA_TYPE_CONFIG[currentDataType].labelAr}
+                                        </span>
+                                        {source.date && (
+                                            <span className="text-xs text-muted-foreground">{source.date}</span>
+                                        )}
+                                    </div>
+
+                                    {source.source_url && (
+                                        <div className="flex">
+                                            <a
+                                                href={source.source_url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-primary hover:text-primary/80 flex items-center gap-1 text-[10px] bg-primary/10 px-2 py-1 rounded-full transition-colors"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                رابط المصدر الأصلي
+                                                <ExternalLink size={10} />
+                                            </a>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Accordion Body (Table) */}
+                                {isExpanded && (
+                                    <div className="px-3 pb-3 pt-0 animate-in slide-in-from-top-2 duration-200">
+                                        <div className="mb-2 flex justify-between items-center px-1">
+                                            <h3 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">قائمة المحافظات</h3>
+                                            {selectedProvinces.length > 0 && (
+                                                <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold">
+                                                    تم اختيار {selectedProvinces.length}/2
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        <div className="overflow-hidden rounded-md border border-border/50">
+                                            <table className="w-full text-xs text-right">
+                                                <thead className="bg-muted/50 text-muted-foreground">
+                                                    <tr>
+                                                        <th className="py-2 px-2 text-center w-8"></th>
+                                                        <th className="py-2 px-2 font-medium">المحافظة</th>
+                                                        <th className="py-2 px-2 text-left font-medium">العدد</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-border/50 bg-card">
+                                                    {Object.entries(source.cities)
+                                                        .sort(([, a], [, b]) => b - a)
+                                                        .map(([city, pop]) => {
+                                                            const isSelected = selectedProvinces.includes(city);
+                                                            return (
+                                                                <tr
+                                                                    key={city}
+                                                                    className={`hover:bg-muted/50 transition-colors cursor-pointer ${isSelected ? 'bg-primary/5' : ''}`}
+                                                                    onClick={() => toggleProvinceSelection(city)}
+                                                                >
+                                                                    <td className="py-1.5 px-2 text-center">
+                                                                        <div className="flex justify-center">
+                                                                            {isSelected ?
+                                                                                <CheckSquare size={14} className="text-primary fill-primary/10" /> :
+                                                                                <Square size={14} className="text-muted-foreground" />
+                                                                            }
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className="py-1.5 px-2 font-medium">{city}</td>
+                                                                    <td className="py-1.5 px-2 text-left font-mono text-muted-foreground">
+                                                                        {pop.toLocaleString('en-US')}
+                                                                    </td>
+                                                                </tr>
+                                                            );
+                                                        })}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 )}
                             </div>
-                            
-                            <div className="overflow-hidden rounded-lg border border-border bg-card">
-                                <table className="w-full text-xs text-right">
-                                    <thead className="bg-muted text-muted-foreground">
-                                        <tr>
-                                            <th className="py-2 px-3 text-center w-10">مقارنة</th>
-                                            <th className="py-2 px-3 font-medium">المحافظة</th>
-                                            <th className="py-2 px-3 text-left font-medium">العدد</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-border">
-                                        {Object.entries(currentSource.cities)
-                                            .sort(([, a], [, b]) => b - a)
-                                            .map(([city, pop]) => {
-                                                const isSelected = selectedProvinces.includes(city);
-                                                return (
-                                                    <tr 
-                                                        key={city} 
-                                                        className={`hover:bg-muted/50 transition-colors cursor-pointer ${isSelected ? 'bg-primary/5' : ''}`}
-                                                        onClick={() => toggleProvinceSelection(city)}
-                                                    >
-                                                        <td className="py-1.5 px-3 text-center">
-                                                            <div className="flex justify-center">
-                                                                {isSelected ? 
-                                                                    <CheckSquare size={16} className="text-primary fill-primary/10" /> : 
-                                                                    <Square size={16} className="text-muted-foreground" />
-                                                                }
-                                                            </div>
-                                                        </td>
-                                                        <td className="py-1.5 px-3 font-medium">{city}</td>
-                                                        <td className="py-1.5 px-3 text-left font-mono text-muted-foreground">
-                                                            {pop.toLocaleString('en-US')}
-                                                        </td>
-                                                    </tr>
-                                                );
-                                            })}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    )}
+                        );
+                    })}
                 </div>
 
                 <div className="p-4 bg-muted border-t border-border text-xs text-muted-foreground">
