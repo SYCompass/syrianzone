@@ -1,23 +1,23 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Download, Copy, Check, ExternalLink } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import dynamic from 'next/dynamic';
+import { Download, Copy, Check, ExternalLink, Map as MapIcon, FileDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-interface Wallpaper {
-    title: string;
-    imageSrc: string;
-    downloadJpg?: string;
-    downloadPng?: string;
-    downloadSvg?: string;
-    designerName?: string;
-    designerLink?: string;
-}
+import { featureToSVG, getGovernorateNameAr } from '@/lib/geo-utils';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 interface SyidClientProps {
-    wallpapers: Wallpaper[];
 }
 
 // Color palettes from the official Syrian identity
@@ -56,9 +56,103 @@ const COLOR_PALETTES = [
     },
 ];
 
-export default function SyidClient({ wallpapers }: SyidClientProps) {
+export default function SyidClient() {
     const [copiedColor, setCopiedColor] = useState<string | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
+    const [geoJsonData, setGeoJsonData] = useState<any>(null);
+    const [selectedGov, setSelectedGov] = useState<string>("full");
+    const [govSearch, setGovSearch] = useState("");
+
+    const SyriaMap = dynamic(() => import('./SyriaMap'), {
+        ssr: false,
+        loading: () => <div className="h-[400px] w-full flex items-center justify-center bg-muted text-muted-foreground rounded-xl border-2 border-dashed border-border">جاري تحميل الخريطة...</div>
+    });
+
+    useEffect(() => {
+        fetch('/assets/population/syria_provinces.geojson')
+            .then(res => res.json())
+            .then(data => setGeoJsonData(data))
+            .catch(err => console.error('Failed to load GeoJSON', err));
+    }, []);
+
+    const governorates = useMemo(() => {
+        if (!geoJsonData) return [];
+        return geoJsonData.features
+            .map((f: any) => ({
+                id: f.properties.province_name,
+                nameAr: getGovernorateNameAr(f.properties.province_name)
+            }))
+            .sort((a: any, b: any) => a.nameAr.localeCompare(b.nameAr, 'ar'));
+    }, [geoJsonData]);
+
+    const filteredGovernorates = useMemo(() => {
+        return governorates.filter((gov: any) =>
+            gov.nameAr.includes(govSearch)
+        );
+    }, [governorates, govSearch]);
+
+    const handleExportSVG = () => {
+        if (!geoJsonData) return;
+
+        let svgString = "";
+        let filename = "";
+
+        if (selectedGov === "full") {
+            svgString = featureToSVG(geoJsonData);
+            filename = "خريطة_سوريا_كاملة.svg";
+        } else {
+            const feature = geoJsonData.features.find((f: any) => f.properties.province_name === selectedGov);
+            if (!feature) return;
+            svgString = featureToSVG(feature);
+            const nameAr = getGovernorateNameAr(selectedGov);
+            filename = `خريطة_سوريا_${nameAr}.svg`;
+        }
+
+        const blob = new Blob([svgString], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        setNotification(`تم تحميل الملف بنجاح`);
+        setTimeout(() => setNotification(null), 3000);
+    };
+
+    const handleExportGeoJSON = () => {
+        if (!geoJsonData) return;
+
+        let dataToExport = geoJsonData;
+        let filename = "syria_provinces.geojson";
+
+        if (selectedGov !== "full") {
+            const feature = geoJsonData.features.find((f: any) => f.properties.province_name === selectedGov);
+            if (!feature) return;
+
+            dataToExport = {
+                type: "FeatureCollection",
+                features: [feature]
+            };
+            const nameAr = getGovernorateNameAr(selectedGov);
+            filename = `خريطة_سوريا_${nameAr}.geojson`;
+        }
+
+        const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        setNotification(`تم تحميل الملف بنجاح`);
+        setTimeout(() => setNotification(null), 3000);
+    };
 
     const copyToClipboard = (text: string, colorHex: string) => {
         navigator.clipboard.writeText(text);
@@ -85,7 +179,7 @@ export default function SyidClient({ wallpapers }: SyidClientProps) {
                             href="https://syrianidentity.sy"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium bg-gradient-to-r from-[#6b1f2a] to-[#4a151e] text-white hover:from-[#4a151e] hover:to-[#3a1118] h-12 px-6 py-3 transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                            className="inline-flex items-center justify-center whitespace-nowrap text-sm font-bold bg-[#428177] text-white hover:bg-[#054239] h-12 px-8 rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-lg"
                         >
                             <ExternalLink className="ml-2 h-4 w-4" />
                             زيارة الموقع الرسمي للهوية البصرية السورية
@@ -95,19 +189,19 @@ export default function SyidClient({ wallpapers }: SyidClientProps) {
             </section>
 
             {/* Main Container */}
-            <div className="container mx-auto my-8 max-w-6xl">
-                <Card className="overflow-hidden border-2 border-border shadow-2xl">
+            <div className="container mx-auto my-8 max-w-7xl px-4 sm:px-6">
+                <Card className="overflow-hidden border border-border shadow-xl rounded-2xl bg-card">
 
                     {/* Color Palette Section */}
                     <div className="p-10" id="colors">
-                        <h2 className="text-4xl font-bold text-center text-foreground mb-8 pb-4 border-b-4 border-[#428177]">لوحة الألوان</h2>
+                        <h2 className="text-4xl font-bold text-center text-foreground mb-4">لوحة الألوان</h2>
                         <p className="text-center text-lg mb-8 text-muted-foreground">يمكنك النقر على اللون لنسخ الرمز مباشرةً</p>
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             {COLOR_PALETTES.map((palette) => (
                                 <div key={palette.name} className="mb-5">
                                     <div className="text-2xl font-semibold mb-2 text-center text-foreground">{palette.name}</div>
-                                    <div className="flex overflow-hidden shadow-lg border-4 border-border">
+                                    <div className="flex overflow-hidden shadow-md border border-border rounded-xl">
                                         {palette.colors.map((color) => (
                                             <div
                                                 key={color.hex}
@@ -132,14 +226,14 @@ export default function SyidClient({ wallpapers }: SyidClientProps) {
 
                     {/* Typography / Font Section */}
                     <div className="p-10 border-t border-border" id="typography">
-                        <h2 className="text-4xl font-bold text-center text-foreground mb-8 pb-4 border-b-4 border-[#428177]">الخطوط</h2>
+                        <h2 className="text-4xl font-bold text-center text-foreground mb-4">الخطوط</h2>
                         <p className="text-center text-lg mb-8 text-muted-foreground">احصل على خط قمرة المستخدم في الهوية البصرية السورية</p>
 
                         <div className="text-center mb-8">
                             <img
                                 src="/syid/materials/qomra2.webp"
                                 alt="خط قمرة"
-                                className="mx-auto max-w-full h-auto shadow-lg border-4 border-border"
+                                className="mx-auto max-w-full h-auto shadow-lg border-4 border-border rounded-xl"
                                 style={{ maxHeight: '300px' }}
                             />
                         </div>
@@ -149,8 +243,9 @@ export default function SyidClient({ wallpapers }: SyidClientProps) {
                                 href="https://iwantype.com/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-block bg-gradient-to-r from-[#428177] to-[#054239] text-white font-semibold text-lg py-4 px-10 no-underline transition-transform hover:-translate-y-0.5 hover:shadow-lg"
+                                className="inline-flex items-center justify-center bg-[#428177] text-white font-bold h-12 px-8 rounded-xl no-underline transition-all hover:bg-[#054239] hover:-translate-y-0.5 hover:shadow-lg"
                             >
+                                <ExternalLink className="ml-2 h-5 w-5" />
                                 شراء الخطوط من iWantype
                             </a>
                             <p className="mt-4 text-muted-foreground">
@@ -161,7 +256,7 @@ export default function SyidClient({ wallpapers }: SyidClientProps) {
 
                     {/* Flag Proportions Section */}
                     <div className="p-10 border-t border-border" id="flag">
-                        <h2 className="text-4xl font-bold text-center text-foreground mb-8 pb-4 border-b-4 border-[#428177]">العلم السوري ونسبه</h2>
+                        <h2 className="text-4xl font-bold text-center text-foreground mb-4">العلم السوري ونسبه</h2>
                         <p className="text-center text-lg mb-8 text-muted-foreground">النسب الدقيقة لتصميم العلم السوري الرسمي، كما هو موضح في المخطط أدناه.</p>
 
                         <div className="flag-diagram-wrapper">
@@ -229,22 +324,25 @@ export default function SyidClient({ wallpapers }: SyidClientProps) {
                             <a
                                 href="/syid/materials/العلم السوري بالنسب الصحيحة.png"
                                 download
-                                className="inline-block bg-gradient-to-r from-[#6b1f2a] to-[#4a151e] text-white font-semibold text-lg py-4 px-10 no-underline transition-transform hover:-translate-y-0.5 hover:shadow-lg text-center"
+                                className="inline-flex items-center justify-center bg-[#428177] text-white font-bold h-12 px-8 rounded-xl transition-all hover:bg-[#054239] hover:-translate-y-0.5 hover:shadow-lg text-center"
                             >
+                                <Download className="ml-2 h-5 w-5" />
                                 تحميل PNG
                             </a>
                             <a
                                 href="/syid/materials/العلم السوري بالنسب الصحيحة.svg"
                                 download
-                                className="inline-block bg-gradient-to-r from-[#6b1f2a] to-[#4a151e] text-white font-semibold text-lg py-4 px-10 no-underline transition-transform hover:-translate-y-0.5 hover:shadow-lg text-center"
+                                className="inline-flex items-center justify-center bg-[#428177] text-white font-bold h-12 px-8 rounded-xl transition-all hover:bg-[#054239] hover:-translate-y-0.5 hover:shadow-lg text-center"
                             >
+                                <FileDown className="ml-2 h-5 w-5" />
                                 تحميل SVG
                             </a>
                             <a
                                 href="/syid/materials/علم سوريا.dwg"
                                 download
-                                className="inline-block bg-gradient-to-r from-[#6b1f2a] to-[#4a151e] text-white font-semibold text-lg py-4 px-10 no-underline transition-transform hover:-translate-y-0.5 hover:shadow-lg text-center"
+                                className="inline-flex items-center justify-center bg-secondary text-secondary-foreground font-bold h-12 px-8 rounded-xl transition-all hover:bg-secondary/80 border-2 border-border hover:-translate-y-0.5 hover:shadow-lg text-center"
                             >
+                                <Download className="ml-2 h-5 w-5" />
                                 تحميل DWG
                             </a>
                         </div>
@@ -252,14 +350,14 @@ export default function SyidClient({ wallpapers }: SyidClientProps) {
 
                     {/* Materials Section */}
                     <div className="p-10 border-t border-border" id="materials">
-                        <h2 className="text-4xl font-bold text-center text-foreground mb-8 pb-4 border-b-4 border-[#428177]">المواد والموارد</h2>
+                        <h2 className="text-4xl font-bold text-center text-foreground mb-4">المواد والموارد</h2>
                         <p className="text-center text-lg mb-8 text-muted-foreground">تحميل المواد الرسمية والموارد المرئية للهوية البصرية السورية الجديدة.</p>
 
                         <div className="text-center mb-8">
                             <img
                                 src="/syid/materials/logo.ai.svg"
                                 alt="شعار الهوية البصرية السورية"
-                                className="mx-auto max-w-full h-auto shadow-lg border-4 border-border"
+                                className="mx-auto max-w-full h-auto shadow-lg border-4 border-border rounded-xl"
                                 style={{ maxHeight: '200px' }}
                             />
                         </div>
@@ -269,7 +367,7 @@ export default function SyidClient({ wallpapers }: SyidClientProps) {
                                 href="https://syrianidentity.sy/media-and-press"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center bg-gradient-to-r from-[#428177] to-[#054239] text-white font-semibold text-lg py-4 px-10 no-underline transition-transform hover:-translate-y-0.5 hover:shadow-lg"
+                                className="inline-flex items-center justify-center bg-[#428177] text-white font-bold h-12 px-8 rounded-xl no-underline transition-all hover:bg-[#054239] hover:-translate-y-0.5 hover:shadow-lg"
                             >
                                 <Download className="ml-2 h-5 w-5" />
                                 تحميل المواد والموارد الرسمية
@@ -277,72 +375,108 @@ export default function SyidClient({ wallpapers }: SyidClientProps) {
                         </div>
                     </div>
 
-                    {/* Wallpapers Grid */}
-                    {wallpapers.length > 0 && (
-                        <div className="p-10 border-t border-border" id="wallpapers">
-                            <h2 className="text-4xl font-bold text-center text-foreground mb-8 pb-4 border-b-4 border-[#428177]">خلفيات ومواد تصميمية</h2>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {wallpapers.map((wallpaper, index) => (
-                                    <Card key={index} className="overflow-hidden group border-2 border-border">
-                                        <div className="aspect-video relative overflow-hidden bg-muted">
-                                            <img
-                                                src={wallpaper.imageSrc}
-                                                alt={wallpaper.title}
-                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                            />
-                                        </div>
-                                        <CardContent className="p-4">
-                                            <h3 className="font-bold text-foreground mb-2">{wallpaper.title}</h3>
+                    {/* Syria Map Section */}
+                    <div className="p-10 border-t border-border" id="map">
+                        <h2 className="text-4xl font-bold text-center text-foreground mb-4">خريطة سوريا</h2>
+                        <p className="text-center text-lg mb-8 text-muted-foreground">عرض وتحميل الخرائط الرسمية للجمهورية العربية السورية بصيغ مختلفة وبدقة عالية.</p>
 
-                                            {wallpaper.designerName && (
-                                                <div className="mb-3">
-                                                    <a
-                                                        href={wallpaper.designerLink}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="inline-flex items-center gap-1"
-                                                    >
-                                                        <Badge variant="secondary" className="text-xs">
-                                                            {wallpaper.designerName}
-                                                            <ExternalLink className="h-3 w-3 mr-1" />
-                                                        </Badge>
-                                                    </a>
+                        <div className="max-w-4xl mx-auto mb-8">
+                            <div className="flex flex-col md:flex-row gap-4 mb-6">
+                                <div className="flex-1">
+                                    <Select onValueChange={setSelectedGov} value={selectedGov}>
+                                        <SelectTrigger className="w-full bg-muted border-2 border-border h-12 rounded-xl">
+                                            <SelectValue placeholder="اختر المحافظة..." />
+                                        </SelectTrigger>
+                                        <SelectContent className="bg-white dark:bg-[#1A1F22] border-2 border-border shadow-2xl z-[1001] opacity-100 rounded-2xl">
+                                            <div className="p-2 sticky top-0 bg-white dark:bg-[#1A1F22] z-[1002] border-b border-border mb-1">
+                                                <div className="relative">
+                                                    <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                                    <Input
+                                                        placeholder="بحث عن محافظة..."
+                                                        value={govSearch}
+                                                        onChange={(e) => setGovSearch(e.target.value)}
+                                                        className="h-9 pr-9 bg-muted/50 border-none focus-visible:ring-1 focus-visible:ring-[#428177]"
+                                                        onKeyDown={(e) => e.stopPropagation()}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <SelectItem value="full">سوريا كاملة</SelectItem>
+                                            {filteredGovernorates.map((gov: any) => (
+                                                <SelectItem key={gov.id} value={gov.id}>
+                                                    {gov.nameAr}
+                                                </SelectItem>
+                                            ))}
+                                            {filteredGovernorates.length === 0 && govSearch && (
+                                                <div className="py-6 text-center text-sm text-muted-foreground">
+                                                    لا توجد نتائج للبحث
                                                 </div>
                                             )}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="flex gap-2">
+                                    <Button
+                                        onClick={handleExportSVG}
+                                        className="h-12 px-6 bg-[#428177] hover:bg-[#054239] transition-all rounded-xl"
+                                    >
+                                        <FileDown className="ml-2 h-5 w-5" />
+                                        تحميل SVG
+                                    </Button>
+                                    <Button
+                                        onClick={handleExportGeoJSON}
+                                        className="h-12 px-6 bg-secondary text-secondary-foreground hover:bg-secondary/80 border-2 border-border transition-all rounded-xl"
+                                    >
+                                        <Download className="ml-2 h-5 w-5" />
+                                        تحميل GeoJSON
+                                    </Button>
+                                </div>
+                            </div>
 
-                                            <div className="flex flex-wrap gap-2">
-                                                {wallpaper.downloadJpg && (
-                                                    <a href={wallpaper.downloadJpg} download>
-                                                        <Button size="sm" variant="outline" className="bg-muted text-foreground border-border hover:bg-accent hover:text-accent-foreground">
-                                                            <Download className="h-3 w-3 ml-1" />
-                                                            JPG
-                                                        </Button>
-                                                    </a>
-                                                )}
-                                                {wallpaper.downloadPng && (
-                                                    <a href={wallpaper.downloadPng} download>
-                                                        <Button size="sm" variant="outline" className="bg-muted text-foreground border-border hover:bg-accent hover:text-accent-foreground">
-                                                            <Download className="h-3 w-3 ml-1" />
-                                                            PNG
-                                                        </Button>
-                                                    </a>
-                                                )}
-                                                {wallpaper.downloadSvg && (
-                                                    <a href={wallpaper.downloadSvg} download>
-                                                        <Button size="sm" variant="outline" className="bg-muted text-foreground border-border hover:bg-accent hover:text-accent-foreground">
-                                                            <Download className="h-3 w-3 ml-1" />
-                                                            SVG
-                                                        </Button>
-                                                    </a>
-                                                )}
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                ))}
+                            <div className="h-[500px] w-full mb-8 rounded-2xl overflow-hidden border-2 border-border shadow-inner">
+                                <SyriaMap geoJsonData={geoJsonData} selectedGovId={selectedGov} />
+                            </div>
+
+                            <div className="mt-12 pt-8 border-t border-border">
+                                <h3 className="text-2xl font-bold mb-6 text-foreground flex items-center gap-2">
+                                    <ExternalLink className="h-6 w-6 text-[#428177]" />
+                                    مصادر أخرى
+                                </h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <a
+                                        href="https://upload.wikimedia.org/wikipedia/commons/8/88/Blank_Syria_map.svg"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center p-4 rounded-xl bg-muted border border-border hover:bg-accent transition-colors group"
+                                    >
+                                        <div className="ml-4 p-2 rounded-full bg-white group-hover:bg-[#428177]/10 transition-colors">
+                                            <MapIcon className="h-6 w-6 text-[#428177]" />
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="font-bold text-foreground">خريطة سوريا (صماء)</div>
+                                            <div className="text-sm text-muted-foreground">صيغة SVG من ويكيميديا كومنز</div>
+                                        </div>
+                                        <Download className="h-5 w-5 text-muted-foreground group-hover:text-[#428177] transition-colors" />
+                                    </a>
+                                    <a
+                                        href="https://upload.wikimedia.org/wikipedia/commons/2/2d/Syria_physical_location_map.svg"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center p-4 rounded-xl bg-muted border border-border hover:bg-accent transition-colors group"
+                                    >
+                                        <div className="ml-4 p-2 rounded-full bg-white group-hover:bg-[#428177]/10 transition-colors">
+                                            <MapIcon className="h-6 w-6 text-[#428177]" />
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="font-bold text-foreground">خريطة جغرافية</div>
+                                            <div className="text-sm text-muted-foreground">صيغة SVG تضاريس سوريا</div>
+                                        </div>
+                                        <Download className="h-5 w-5 text-muted-foreground group-hover:text-[#428177] transition-colors" />
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    )}
+                    </div>
 
                 </Card>
             </div>

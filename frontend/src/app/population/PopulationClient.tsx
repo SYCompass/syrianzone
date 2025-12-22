@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { PopulationGroups, DataType, DATA_TYPES, DATA_TYPE_CONFIG, CityData } from './types';
 import { Layers, Info, Filter, X, BarChart3, CheckSquare, Square, ExternalLink } from 'lucide-react';
+import { getGovernorateNameAr } from '@/lib/geo-utils';
 
 const MapClient = dynamic(() => import('./MapClient'), {
     ssr: false,
@@ -87,7 +88,12 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
             } else {
                 source = initialData[type][0];
             }
-            stats[type] = source?.cities[provinceName] || 0;
+            if (source) {
+                const nameAr = getGovernorateNameAr(provinceName);
+                stats[type] = source.cities[provinceName] ?? source.cities[nameAr] ?? 0;
+            } else {
+                stats[type] = 0;
+            }
         });
         return stats;
     };
@@ -95,8 +101,8 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
     const comparisonData = useMemo(() => {
         if (selectedProvinces.length !== 2) return null;
         return {
-            p1: { name: selectedProvinces[0], stats: getProvinceStats(selectedProvinces[0]) },
-            p2: { name: selectedProvinces[1], stats: getProvinceStats(selectedProvinces[1]) }
+            p1: { name: getGovernorateNameAr(selectedProvinces[0]), stats: getProvinceStats(selectedProvinces[0]) },
+            p2: { name: getGovernorateNameAr(selectedProvinces[1]), stats: getProvinceStats(selectedProvinces[1]) }
         };
     }, [selectedProvinces, initialData, currentDataType, currentSource]);
 
@@ -307,7 +313,7 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                                                                             }
                                                                         </div>
                                                                     </td>
-                                                                    <td className="py-1.5 px-2 font-medium">{city}</td>
+                                                                    <td className="py-1.5 px-2 font-medium">{getGovernorateNameAr(city)}</td>
                                                                     <td className="py-1.5 px-2 text-left font-mono text-muted-foreground">
                                                                         {pop.toLocaleString('en-US')}
                                                                     </td>

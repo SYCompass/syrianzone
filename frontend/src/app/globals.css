@@ -190,6 +190,12 @@
         color: hsl(var(--foreground));
         font-family: 'IBM Plex Sans Arabic', sans-serif;
     }
+
+    button, 
+    [role="button"],
+    .button {
+        cursor: pointer;
+    }
 }
 
 html {

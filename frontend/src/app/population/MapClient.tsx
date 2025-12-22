@@ -5,6 +5,7 @@ import { MapContainer, GeoJSON, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { DataType, DATA_TYPE_CONFIG, CityData } from './types';
+import { getGovernorateNameAr } from '@/lib/geo-utils';
 
 // Fix for Leaflet icons
 // @ts-ignore
@@ -30,8 +31,15 @@ function normalizeCityName(name: string): string {
 
 function findPopulation(provinceName: string, populationData: CityData | null): number {
     if (!populationData) return 0;
+
+    // 1. Try direct match with GeoJSON name (English from GeoJSON)
     if (populationData[provinceName]) return populationData[provinceName];
 
+    // 2. Try match with translated Arabic name (Support for Arabic CSV)
+    const nameAr = getGovernorateNameAr(provinceName);
+    if (populationData[nameAr]) return populationData[nameAr];
+
+    // 3. Normalized fallback for variations
     const normalized = normalizeCityName(provinceName);
     const mapping = Object.keys(populationData).reduce((acc: any, city) => {
         acc[normalizeCityName(city)] = city;
@@ -111,10 +119,11 @@ export default function MapClient({ geoJsonData, populationData, currentDataType
             const pop = findPopulation(name, populationData);
             const config = DATA_TYPE_CONFIG[currentDataType];
             const popStr = pop ? pop.toLocaleString('en-US') : 'لا توجد بيانات';
+            const nameAr = getGovernorateNameAr(name);
 
             return `
                 <div class="text-right" style="font-family: 'IBM Plex Sans Arabic', sans-serif;">
-                    <div class="font-bold text-base mb-1">${name}</div>
+                    <div class="font-bold text-base mb-1">${nameAr}</div>
                     <div class="text-sm">${config.labelAr}: ${popStr}</div>
                 </div>
             `;
