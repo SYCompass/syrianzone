@@ -21,9 +21,12 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
     const [currentDataType, setCurrentDataType] = useState<DataType>(DATA_TYPES.POPULATION);
     const [currentSourceId, setCurrentSourceId] = useState<number | null>(null);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
-    
+
     // Comparison tool state
     const [selectedProvinces, setSelectedProvinces] = useState<string[]>([]);
+
+    // Rainfall detail state
+    const [selectedRainfallProvince, setSelectedRainfallProvince] = useState<{ name: string, data: any[] } | null>(null);
 
     // Cast the imported JSON
     const rainfallData = rainfallJson as RainfallData;
@@ -69,10 +72,10 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
     const dynamicThresholds = useMemo(() => {
         if (currentDataType === DATA_TYPES.RAINFALL) return config.thresholds;
         if (!populationData) return config.thresholds;
-        
+
         const values = Object.values(populationData).filter(v => v > 0);
         if (values.length === 0) return config.thresholds;
-        
+
         const max = Math.max(...values);
         return [Math.floor(max * 0.1), Math.floor(max * 0.4), Math.floor(max * 0.7)];
     }, [populationData, config.thresholds, currentDataType]);
@@ -81,7 +84,7 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
         setSelectedProvinces(prev => {
             if (prev.includes(province)) return prev.filter(p => p !== province);
             if (prev.length < 2) return [...prev, province];
-            return [prev[1], province]; 
+            return [prev[1], province];
         });
     };
 
@@ -90,7 +93,7 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
         const stats: any = {};
         Object.values(DATA_TYPES).forEach(type => {
             if (type === DATA_TYPES.RAINFALL) return;
-            
+
             // Use current source if type matches current selection, otherwise default to first source
             let source;
             if (type === currentDataType && currentSource) {
@@ -118,7 +121,7 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
 
     return (
         <div className="flex flex-col h-[calc(100vh-64px)] overflow-hidden relative bg-background text-foreground" dir="rtl">
-            
+
             {/* Comparison Pop-up (Only show if data exists and not in Rain mode) */}
             {comparisonData && currentDataType !== DATA_TYPES.RAINFALL && (
                 <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-[1000] w-[90%] max-w-2xl bg-card border-2 border-primary rounded-xl shadow-2xl animate-in zoom-in-95 duration-200">
@@ -131,7 +134,7 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                             <X size={20} />
                         </button>
                     </div>
-                    
+
                     <div className="p-6">
                         <div className="grid grid-cols-3 gap-4 mb-8">
                             <div className="text-center font-bold text-lg text-primary truncate">{comparisonData.p1.name}</div>
@@ -155,14 +158,14 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                                         </div>
                                         <div className="flex h-4 w-full gap-1 bg-muted rounded-full overflow-hidden">
                                             <div className="flex justify-end w-1/2">
-                                                <div 
-                                                    className="h-full bg-primary transition-all duration-500 rounded-r-full" 
+                                                <div
+                                                    className="h-full bg-primary transition-all duration-500 rounded-r-full"
                                                     style={{ width: `${(v1 / max) * 100}%` }}
                                                 />
                                             </div>
                                             <div className="flex justify-start w-1/2">
-                                                <div 
-                                                    className="h-full bg-primary/60 transition-all duration-500 rounded-l-full" 
+                                                <div
+                                                    className="h-full bg-primary/60 transition-all duration-500 rounded-l-full"
                                                     style={{ width: `${(v2 / max) * 100}%` }}
                                                 />
                                             </div>
@@ -171,7 +174,7 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                                 );
                             })}
                         </div>
-                        
+
                         <div className="mt-8 pt-4 border-t border-border flex justify-between items-center text-[10px] text-muted-foreground">
                             <span>* تعتمد المقارنة على أحدث المصادر المتوفرة لكل فئة.</span>
                             <button onClick={() => setSelectedProvinces([])} className="text-primary hover:underline font-medium">إغلاق المقارنة</button>
@@ -185,8 +188,8 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                 <div className="bg-card/90 backdrop-blur p-4 rounded-lg shadow-lg border border-border pointer-events-auto max-w-sm">
                     <h1 className="text-xl font-bold text-foreground mb-1">أطلس سوريا</h1>
                     <p className="text-sm text-muted-foreground">
-                        {currentDataType === DATA_TYPES.RAINFALL 
-                            ? 'عرض بيانات الهطولات المطرية السنوية (2021-2025)' 
+                        {currentDataType === DATA_TYPES.RAINFALL
+                            ? 'عرض بيانات الهطولات المطرية السنوية (2021-2025)'
                             : 'خريطة تفاعلية للبيانات السكانية والإنسانية'}
                     </p>
                 </div>
@@ -201,17 +204,67 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                     currentDataType={currentDataType}
                     currentSourceId={currentSourceId}
                     customThresholds={dynamicThresholds}
+                    onFeatureClick={(feature) => {
+                        if (currentDataType === DATA_TYPES.RAINFALL) {
+                            const name = feature.properties.province_name || feature.properties.ADM2_AR || feature.properties.ADM1_AR || feature.properties.Name;
+                            const nameAr = getGovernorateNameAr(name);
+
+                            // Re-use logic to find data (simplified for this context)
+                            const props = feature.properties;
+                            const codeKeys = ['ADM1_PCODE', 'ADM2_PCODE', 'admin1Pcode', 'admin2Pcode', 'code', 'id', 'PCODE'];
+                            let rData = null;
+
+                            for (const key of codeKeys) {
+                                if (props[key] && rainfallData[props[key]]) {
+                                    rData = rainfallData[props[key]];
+                                    break;
+                                }
+                            }
+
+                            if (!rData) {
+                                const nameKeys = ['province_name', 'ADM1_EN', 'ADM1_AR', 'name', 'Name', 'NAME', 'admin1Name_en'];
+                                for (const key of nameKeys) {
+                                    if (props[key]) {
+                                        const normalized = props[key].trim().replace(/['`]/g, '').replace(/Ḥ/g, 'H').toLowerCase();
+                                        // Dictionary mapping (repeated here for simplicity)
+                                        const PROVINCE_TO_PCODE: { [key: string]: string } = {
+                                            'damascus': 'SY01', 'aleppo': 'SY02', 'rural damascus': 'SY03', 'rif dimashq': 'SY03',
+                                            'homs': 'SY04', 'hama': 'SY05', 'lattakia': 'SY06', 'latakia': 'SY06',
+                                            'idlib': 'SY07', 'idleb': 'SY07', 'al hasakah': 'SY08', 'hasakah': 'SY08',
+                                            'deir ez-zor': 'SY09', 'deir ezzor': 'SY09', 'tartous': 'SY10', 'tartus': 'SY10',
+                                            'ar raqqah': 'SY11', 'raqqa': 'SY11', 'daraa': 'SY12', 'dar\'a': 'SY12',
+                                            'as suwayda': 'SY13', 'as suwayda\'': 'SY13', 'sweida': 'SY13',
+                                            'quneitra': 'SY14', 'al qunaytirah': 'SY14',
+                                            'دمشق': 'SY01', 'حلب': 'SY02', 'ريف دمشق': 'SY03', 'حمص': 'SY04', 'حماة': 'SY05',
+                                            'اللاذقية': 'SY06', 'إدلب': 'SY07', 'الحسكة': 'SY08', 'دير الزور': 'SY09',
+                                            'طرطوس': 'SY10', 'الرقة': 'SY11', 'درعا': 'SY12', 'السويداء': 'SY13', 'القنيطرة': 'SY14'
+                                        };
+                                        const mappedCode = PROVINCE_TO_PCODE[normalized];
+                                        if (mappedCode && rainfallData[mappedCode]) {
+                                            rData = rainfallData[mappedCode];
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (rData) {
+                                setSelectedRainfallProvince({ name: nameAr, data: rData });
+                                if (window.innerWidth < 768) setIsPanelOpen(true);
+                            }
+                        }
+                    }}
                 />
-                
+
                 {/* Legend Overlay */}
                 <div className="absolute bottom-6 right-6 z-[400] bg-card/90 backdrop-blur p-3 rounded shadow-lg border border-border text-sm min-w-[150px]">
                     <h4 className="font-bold mb-2 text-foreground flex items-center gap-2">
-                        {currentDataType === DATA_TYPES.RAINFALL && <CloudRain size={16} className="text-primary"/>}
+                        {currentDataType === DATA_TYPES.RAINFALL && <CloudRain size={16} className="text-primary" />}
                         {config.labelAr}
                     </h4>
                     <div className="space-y-1.5">
                         {config.legend.map((item, idx) => (
-                             <div key={idx} className="flex items-center gap-2">
+                            <div key={idx} className="flex items-center gap-2">
                                 <span className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></span>
                                 <span className="text-muted-foreground text-xs">{item.label}</span>
                             </div>
@@ -237,11 +290,15 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                                 key={type}
                                 onClick={() => {
                                     setCurrentDataType(type);
-                                    if (type === DATA_TYPES.RAINFALL) setSelectedProvinces([]); // Clear comparisons
+                                    if (type === DATA_TYPES.RAINFALL) {
+                                        setSelectedProvinces([]); // Clear comparisons
+                                    } else {
+                                        setSelectedRainfallProvince(null); // Clear rainfall selection
+                                    }
                                 }}
                                 className={`py-2 px-3 text-xs font-medium rounded-md transition-all flex items-center justify-center gap-2 border
-                                    ${currentDataType === type 
-                                        ? 'bg-primary/10 text-primary border-primary/20 shadow-sm' 
+                                    ${currentDataType === type
+                                        ? 'bg-primary/10 text-primary border-primary/20 shadow-sm'
                                         : 'bg-muted/50 text-muted-foreground border-transparent hover:bg-muted hover:text-foreground'}`}
                             >
                                 {type === DATA_TYPES.RAINFALL && <CloudRain size={14} />}
@@ -252,20 +309,71 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-card">
-                    
+
                     {/* OPTION 1: RAINFALL PANEL CONTENT */}
                     {currentDataType === DATA_TYPES.RAINFALL ? (
-                        <div className="flex flex-col items-center justify-center text-center h-full text-muted-foreground py-10 px-4">
-                            <CloudRain className="opacity-50 mb-4" size={48} />
-                            <h3 className="font-bold text-foreground mb-2">خريطة الأمطار</h3>
-                            <p className="text-sm leading-relaxed mb-6">
-                                حرك المؤشر فوق المناطق في الخريطة لعرض المخططات البيانية السنوية للهطولات المطرية.
-                            </p>
-                            
-                            <div className="w-full text-xs text-right bg-muted/50 p-3 rounded border border-border">
-                                <span className="font-bold block mb-1 text-foreground">عن البيانات:</span>
-                                تغطي البيانات الفترة من 2021 إلى 2025، وتظهر معدلات الهطول بالملم. يمثل اللون الأزرق السماوي في المخطط عام 2025.
-                            </div>
+                        <div className="flex flex-col h-full">
+                            {selectedRainfallProvince ? (
+                                <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-300">
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <h3 className="text-xl font-bold text-foreground">{selectedRainfallProvince.name}</h3>
+                                            <p className="text-xs text-muted-foreground mt-1">تفاصيل الهطولات المطرية السنوية</p>
+                                        </div>
+                                        <button
+                                            onClick={() => setSelectedRainfallProvince(null)}
+                                            className="p-1 hover:bg-muted rounded-md transition-colors text-muted-foreground"
+                                        >
+                                            <X size={18} />
+                                        </button>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 gap-3">
+                                        {[...selectedRainfallProvince.data].sort((a, b) => b.year - a.year).map((item, idx) => (
+                                            <div key={idx} className="bg-muted/40 p-3 rounded-lg border border-border/50 flex justify-between items-center group hover:bg-muted/60 transition-colors">
+                                                <div className="flex flex-col">
+                                                    <span className="text-xs text-muted-foreground">السنة</span>
+                                                    <span className="font-bold text-lg">{item.year}</span>
+                                                </div>
+                                                <div className="flex gap-6">
+                                                    <div className="flex flex-col items-end">
+                                                        <span className="text-[10px] text-muted-foreground">الهطول (ملم)</span>
+                                                        <span className="font-mono font-bold text-cyan-500">{item.rainfall.toFixed(1)}</span>
+                                                    </div>
+                                                    <div className="flex flex-col items-end">
+                                                        <span className="text-[10px] text-muted-foreground">المتوسط السنوي</span>
+                                                        <span className="font-mono font-bold text-slate-400">{item.rainfall_avg.toFixed(2)}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="bg-primary/5 p-4 rounded-xl border border-primary/10">
+                                        <div className="flex items-center gap-2 mb-3 text-primary">
+                                            <Info size={16} />
+                                            <span className="text-sm font-bold">ملخص المحافظة</span>
+                                        </div>
+                                        <div className="space-y-2 text-xs leading-relaxed text-muted-foreground">
+                                            <p>• أعلى هطول مطري تم تسجيله: <span className="text-foreground font-bold">{Math.max(...selectedRainfallProvince.data.map(d => d.rainfall)).toFixed(1)} ملم</span></p>
+                                            <p>• أدنى هطول مطري تم تسجيله: <span className="text-foreground font-bold">{Math.min(...selectedRainfallProvince.data.map(d => d.rainfall)).toFixed(1)} ملم</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center text-center h-full text-muted-foreground py-10 px-4">
+                                    <CloudRain className="opacity-50 mb-4" size={48} />
+                                    <h3 className="font-bold text-foreground mb-2">خريطة الأمطار</h3>
+                                    <p className="text-sm leading-relaxed mb-6">
+                                        اختر محافظة من الخريطة لعرض إحصائيات الأمطار التاريخية والمتوسط السنوي.
+                                    </p>
+
+                                    <div className="w-full text-xs text-right bg-muted/50 p-3 rounded border border-border">
+                                        <span className="font-bold block mb-1 text-foreground">عن البيانات:</span>
+                                        تغطي البيانات الفترة من 2021 إلى 2025، وتظهر معدلات الهطول بالملم.
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         /* OPTION 2: POPULATION PANEL CONTENT (New Upstream Layout) */

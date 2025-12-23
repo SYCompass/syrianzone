@@ -23,6 +23,7 @@ interface MapClientProps {
     currentDataType: DataType;
     currentSourceId: number | null;
     customThresholds: number[];
+    onFeatureClick?: (feature: any) => void;
 }
 
 function normalizeCityName(name: string): string {
@@ -119,7 +120,7 @@ function findPopulation(provinceName: string, populationData: CityData | null): 
 // === IMPROVED DATA FINDER ===
 function findRainData(feature: any, rainData: RainfallData | undefined) {
     if (!rainData) return null;
-    
+
     const props = feature.properties;
 
     // 1. Try Direct P-Code Match (if GeoJSON has codes)
@@ -136,7 +137,7 @@ function findRainData(feature: any, rainData: RainfallData | undefined) {
         if (props[key]) {
             const rawName = props[key];
             const normalized = normalizeCityName(rawName);
-            
+
             // Check dictionary mapping
             const mappedCode = PROVINCE_TO_PCODE[normalized];
             if (mappedCode && rainData[mappedCode]) {
@@ -162,12 +163,12 @@ function getColor(value: number, dataType: DataType, thresholds: number[]): stri
 function generateRainChartHtml(name: string, data: any[]) {
     const sorted = [...data].sort((a, b) => a.year - b.year);
     const maxVal = Math.max(...sorted.map(d => d.rainfall));
-    
+
     const barsHtml = sorted.map(d => {
         const height = maxVal > 0 ? (d.rainfall / maxVal) * 40 : 0;
         const isCurrentYear = d.year === 2025;
-        const barColor = isCurrentYear ? '#38bdf8' : '#64748b'; 
-        
+        const barColor = isCurrentYear ? '#38bdf8' : '#64748b';
+
         return `
             <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
                 <div style="
@@ -220,7 +221,7 @@ function MapUpdater({ geoJsonData }: { geoJsonData: any }) {
     return null;
 }
 
-export default function MapClient({ geoJsonData, populationData, rainfallData, currentDataType, currentSourceId, customThresholds }: MapClientProps) {
+export default function MapClient({ geoJsonData, populationData, rainfallData, currentDataType, currentSourceId, customThresholds, onFeatureClick }: MapClientProps) {
 
     const style = (feature: any) => {
         let value = 0;
@@ -245,7 +246,7 @@ export default function MapClient({ geoJsonData, populationData, rainfallData, c
         if (currentDataType === DATA_TYPES.RAINFALL) {
             return {
                 ...baseStyle,
-                color: '#164e63', 
+                color: '#164e63',
                 fillOpacity: 0.8
             };
         }
@@ -294,13 +295,13 @@ export default function MapClient({ geoJsonData, populationData, rainfallData, c
             mouseover: (e) => {
                 const l = e.target;
                 const highlightColor = currentDataType === DATA_TYPES.RAINFALL ? '#67e8f9' : '#E6EDF3';
-                
+
                 l.setStyle({
                     weight: 3,
                     color: highlightColor,
                     fillOpacity: 1
                 });
-                
+
                 if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
                     l.bringToFront();
                 }
@@ -308,6 +309,11 @@ export default function MapClient({ geoJsonData, populationData, rainfallData, c
             mouseout: (e) => {
                 const l = e.target;
                 l.setStyle(style(feature));
+            },
+            click: () => {
+                if (onFeatureClick) {
+                    onFeatureClick(feature);
+                }
             }
         });
     };
