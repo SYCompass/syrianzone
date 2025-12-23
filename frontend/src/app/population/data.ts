@@ -65,7 +65,8 @@ export async function fetchPopulationData(): Promise<PopulationGroups> {
         const dataTypeGroups: PopulationGroups = {
             [DATA_TYPES.POPULATION]: [],
             [DATA_TYPES.IDP]: [],
-            [DATA_TYPES.IDP_RETURNEES]: []
+            [DATA_TYPES.IDP_RETURNEES]: [],
+            [DATA_TYPES.RAINFALL]: [] // Added initialization
         };
 
         const sourceMap: { [key: string]: DataSource } = {};
@@ -104,7 +105,8 @@ export async function fetchPopulationData(): Promise<PopulationGroups> {
         return {
             [DATA_TYPES.POPULATION]: [],
             [DATA_TYPES.IDP]: [],
-            [DATA_TYPES.IDP_RETURNEES]: []
+            [DATA_TYPES.IDP_RETURNEES]: [],
+            [DATA_TYPES.RAINFALL]: []
         };
     }
 }

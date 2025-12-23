@@ -1,0 +1,2027 @@
+{
+  "SY01": [
+    {
+      "year": 2021,
+      "rainfall": 242.0,
+      "rainfall_avg": 6.98
+    },
+    {
+      "year": 2022,
+      "rainfall": 205.6,
+      "rainfall_avg": 6.98
+    },
+    {
+      "year": 2023,
+      "rainfall": 372.4,
+      "rainfall_avg": 6.98
+    },
+    {
+      "year": 2024,
+      "rainfall": 189.2,
+      "rainfall_avg": 6.98
+    },
+    {
+      "year": 2025,
+      "rainfall": 156.0,
+      "rainfall_avg": 6.78
+    }
+  ],
+  "SY0100": [
+    {
+      "year": 2021,
+      "rainfall": 242.0,
+      "rainfall_avg": 6.98
+    },
+    {
+      "year": 2022,
+      "rainfall": 205.6,
+      "rainfall_avg": 6.98
+    },
+    {
+      "year": 2023,
+      "rainfall": 372.4,
+      "rainfall_avg": 6.98
+    },
+    {
+      "year": 2024,
+      "rainfall": 189.2,
+      "rainfall_avg": 6.98
+    },
+    {
+      "year": 2025,
+      "rainfall": 156.0,
+      "rainfall_avg": 6.78
+    }
+  ],
+  "SY02": [
+    {
+      "year": 2021,
+      "rainfall": 240.78,
+      "rainfall_avg": 7.75
+    },
+    {
+      "year": 2022,
+      "rainfall": 241.01,
+      "rainfall_avg": 7.75
+    },
+    {
+      "year": 2023,
+      "rainfall": 235.44,
+      "rainfall_avg": 7.75
+    },
+    {
+      "year": 2024,
+      "rainfall": 252.6,
+      "rainfall_avg": 7.75
+    },
+    {
+      "year": 2025,
+      "rainfall": 159.89,
+      "rainfall_avg": 7.55
+    }
+  ],
+  "SY0200": [
+    {
+      "year": 2021,
+      "rainfall": 267.66,
+      "rainfall_avg": 8.56
+    },
+    {
+      "year": 2022,
+      "rainfall": 239.29,
+      "rainfall_avg": 8.56
+    },
+    {
+      "year": 2023,
+      "rainfall": 239.4,
+      "rainfall_avg": 8.56
+    },
+    {
+      "year": 2024,
+      "rainfall": 262.98,
+      "rainfall_avg": 8.56
+    },
+    {
+      "year": 2025,
+      "rainfall": 159.33,
+      "rainfall_avg": 8.33
+    }
+  ],
+  "SY0202": [
+    {
+      "year": 2021,
+      "rainfall": 236.55,
+      "rainfall_avg": 7.44
+    },
+    {
+      "year": 2022,
+      "rainfall": 212.34,
+      "rainfall_avg": 7.44
+    },
+    {
+      "year": 2023,
+      "rainfall": 217.43,
+      "rainfall_avg": 7.44
+    },
+    {
+      "year": 2024,
+      "rainfall": 243.18,
+      "rainfall_avg": 7.44
+    },
+    {
+      "year": 2025,
+      "rainfall": 152.67,
+      "rainfall_avg": 7.23
+    }
+  ],
+  "SY0203": [
+    {
+      "year": 2021,
+      "rainfall": 416.96,
+      "rainfall_avg": 13.65
+    },
+    {
+      "year": 2022,
+      "rainfall": 447.69,
+      "rainfall_avg": 13.65
+    },
+    {
+      "year": 2023,
+      "rainfall": 385.82,
+      "rainfall_avg": 13.65
+    },
+    {
+      "year": 2024,
+      "rainfall": 428.38,
+      "rainfall_avg": 13.65
+    },
+    {
+      "year": 2025,
+      "rainfall": 244.55,
+      "rainfall_avg": 13.25
+    }
+  ],
+  "SY0204": [
+    {
+      "year": 2021,
+      "rainfall": 290.12,
+      "rainfall_avg": 9.58
+    },
+    {
+      "year": 2022,
+      "rainfall": 281.78,
+      "rainfall_avg": 9.58
+    },
+    {
+      "year": 2023,
+      "rainfall": 264.25,
+      "rainfall_avg": 9.58
+    },
+    {
+      "year": 2024,
+      "rainfall": 297.08,
+      "rainfall_avg": 9.58
+    },
+    {
+      "year": 2025,
+      "rainfall": 178.14,
+      "rainfall_avg": 9.29
+    }
+  ],
+  "SY0205": [
+    {
+      "year": 2021,
+      "rainfall": 176.29,
+      "rainfall_avg": 5.7
+    },
+    {
+      "year": 2022,
+      "rainfall": 179.93,
+      "rainfall_avg": 5.7
+    },
+    {
+      "year": 2023,
+      "rainfall": 184.56,
+      "rainfall_avg": 5.7
+    },
+    {
+      "year": 2024,
+      "rainfall": 188.66,
+      "rainfall_avg": 5.7
+    },
+    {
+      "year": 2025,
+      "rainfall": 130.56,
+      "rainfall_avg": 5.57
+    }
+  ],
+  "SY0206": [
+    {
+      "year": 2021,
+      "rainfall": 232.45,
+      "rainfall_avg": 7.64
+    },
+    {
+      "year": 2022,
+      "rainfall": 283.46,
+      "rainfall_avg": 7.64
+    },
+    {
+      "year": 2023,
+      "rainfall": 269.43,
+      "rainfall_avg": 7.64
+    },
+    {
+      "year": 2024,
+      "rainfall": 280.9,
+      "rainfall_avg": 7.64
+    },
+    {
+      "year": 2025,
+      "rainfall": 182.71,
+      "rainfall_avg": 7.49
+    }
+  ],
+  "SY0207": [
+    {
+      "year": 2021,
+      "rainfall": 192.28,
+      "rainfall_avg": 5.88
+    },
+    {
+      "year": 2022,
+      "rainfall": 164.18,
+      "rainfall_avg": 5.88
+    },
+    {
+      "year": 2023,
+      "rainfall": 178.09,
+      "rainfall_avg": 5.88
+    },
+    {
+      "year": 2024,
+      "rainfall": 181.23,
+      "rainfall_avg": 5.88
+    },
+    {
+      "year": 2025,
+      "rainfall": 125.26,
+      "rainfall_avg": 5.74
+    }
+  ],
+  "SY0208": [
+    {
+      "year": 2021,
+      "rainfall": 256.19,
+      "rainfall_avg": 8.21
+    },
+    {
+      "year": 2022,
+      "rainfall": 249.74,
+      "rainfall_avg": 8.21
+    },
+    {
+      "year": 2023,
+      "rainfall": 251.41,
+      "rainfall_avg": 8.21
+    },
+    {
+      "year": 2024,
+      "rainfall": 293.56,
+      "rainfall_avg": 8.21
+    },
+    {
+      "year": 2025,
+      "rainfall": 166.85,
+      "rainfall_avg": 7.99
+    }
+  ],
+  "SY03": [
+    {
+      "year": 2021,
+      "rainfall": 148.07,
+      "rainfall_avg": 4.59
+    },
+    {
+      "year": 2022,
+      "rainfall": 138.56,
+      "rainfall_avg": 4.59
+    },
+    {
+      "year": 2023,
+      "rainfall": 223.14,
+      "rainfall_avg": 4.59
+    },
+    {
+      "year": 2024,
+      "rainfall": 129.87,
+      "rainfall_avg": 4.59
+    },
+    {
+      "year": 2025,
+      "rainfall": 117.25,
+      "rainfall_avg": 4.52
+    }
+  ],
+  "SY0301": [
+    {
+      "year": 2021,
+      "rainfall": 249.03,
+      "rainfall_avg": 7.06
+    },
+    {
+      "year": 2022,
+      "rainfall": 204.0,
+      "rainfall_avg": 7.06
+    },
+    {
+      "year": 2023,
+      "rainfall": 369.39,
+      "rainfall_avg": 7.06
+    },
+    {
+      "year": 2024,
+      "rainfall": 180.77,
+      "rainfall_avg": 7.06
+    },
+    {
+      "year": 2025,
+      "rainfall": 161.26,
+      "rainfall_avg": 6.86
+    }
+  ],
+  "SY0302": [
+    {
+      "year": 2021,
+      "rainfall": 108.38,
+      "rainfall_avg": 3.54
+    },
+    {
+      "year": 2022,
+      "rainfall": 109.97,
+      "rainfall_avg": 3.54
+    },
+    {
+      "year": 2023,
+      "rainfall": 172.31,
+      "rainfall_avg": 3.54
+    },
+    {
+      "year": 2024,
+      "rainfall": 99.3,
+      "rainfall_avg": 3.54
+    },
+    {
+      "year": 2025,
+      "rainfall": 95.27,
+      "rainfall_avg": 3.53
+    }
+  ],
+  "SY0303": [
+    {
+      "year": 2021,
+      "rainfall": 141.69,
+      "rainfall_avg": 4.64
+    },
+    {
+      "year": 2022,
+      "rainfall": 130.09,
+      "rainfall_avg": 4.64
+    },
+    {
+      "year": 2023,
+      "rainfall": 234.82,
+      "rainfall_avg": 4.64
+    },
+    {
+      "year": 2024,
+      "rainfall": 121.71,
+      "rainfall_avg": 4.64
+    },
+    {
+      "year": 2025,
+      "rainfall": 117.4,
+      "rainfall_avg": 4.58
+    }
+  ],
+  "SY0304": [
+    {
+      "year": 2021,
+      "rainfall": 302.17,
+      "rainfall_avg": 8.45
+    },
+    {
+      "year": 2022,
+      "rainfall": 260.35,
+      "rainfall_avg": 8.45
+    },
+    {
+      "year": 2023,
+      "rainfall": 455.39,
+      "rainfall_avg": 8.45
+    },
+    {
+      "year": 2024,
+      "rainfall": 259.57,
+      "rainfall_avg": 8.45
+    },
+    {
+      "year": 2025,
+      "rainfall": 210.09,
+      "rainfall_avg": 8.21
+    }
+  ],
+  "SY0305": [
+    {
+      "year": 2021,
+      "rainfall": 350.18,
+      "rainfall_avg": 10.0
+    },
+    {
+      "year": 2022,
+      "rainfall": 296.0,
+      "rainfall_avg": 10.0
+    },
+    {
+      "year": 2023,
+      "rainfall": 460.36,
+      "rainfall_avg": 10.0
+    },
+    {
+      "year": 2024,
+      "rainfall": 327.41,
+      "rainfall_avg": 10.0
+    },
+    {
+      "year": 2025,
+      "rainfall": 243.5,
+      "rainfall_avg": 9.63
+    }
+  ],
+  "SY0306": [
+    {
+      "year": 2021,
+      "rainfall": 177.82,
+      "rainfall_avg": 5.58
+    },
+    {
+      "year": 2022,
+      "rainfall": 148.31,
+      "rainfall_avg": 5.58
+    },
+    {
+      "year": 2023,
+      "rainfall": 236.64,
+      "rainfall_avg": 5.58
+    },
+    {
+      "year": 2024,
+      "rainfall": 157.69,
+      "rainfall_avg": 5.58
+    },
+    {
+      "year": 2025,
+      "rainfall": 124.82,
+      "rainfall_avg": 5.46
+    }
+  ],
+  "SY0307": [
+    {
+      "year": 2021,
+      "rainfall": 432.14,
+      "rainfall_avg": 11.61
+    },
+    {
+      "year": 2022,
+      "rainfall": 347.93,
+      "rainfall_avg": 11.61
+    },
+    {
+      "year": 2023,
+      "rainfall": 576.39,
+      "rainfall_avg": 11.61
+    },
+    {
+      "year": 2024,
+      "rainfall": 367.68,
+      "rainfall_avg": 11.61
+    },
+    {
+      "year": 2025,
+      "rainfall": 270.61,
+      "rainfall_avg": 11.25
+    }
+  ],
+  "SY0308": [
+    {
+      "year": 2021,
+      "rainfall": 403.93,
+      "rainfall_avg": 11.32
+    },
+    {
+      "year": 2022,
+      "rainfall": 332.23,
+      "rainfall_avg": 11.32
+    },
+    {
+      "year": 2023,
+      "rainfall": 531.23,
+      "rainfall_avg": 11.32
+    },
+    {
+      "year": 2024,
+      "rainfall": 306.07,
+      "rainfall_avg": 11.32
+    },
+    {
+      "year": 2025,
+      "rainfall": 263.43,
+      "rainfall_avg": 10.94
+    }
+  ],
+  "SY0309": [
+    {
+      "year": 2021,
+      "rainfall": 232.5,
+      "rainfall_avg": 6.46
+    },
+    {
+      "year": 2022,
+      "rainfall": 193.5,
+      "rainfall_avg": 6.46
+    },
+    {
+      "year": 2023,
+      "rainfall": 353.5,
+      "rainfall_avg": 6.46
+    },
+    {
+      "year": 2024,
+      "rainfall": 171.0,
+      "rainfall_avg": 6.46
+    },
+    {
+      "year": 2025,
+      "rainfall": 150.5,
+      "rainfall_avg": 6.25
+    }
+  ],
+  "SY04": [
+    {
+      "year": 2021,
+      "rainfall": 139.13,
+      "rainfall_avg": 4.35
+    },
+    {
+      "year": 2022,
+      "rainfall": 133.53,
+      "rainfall_avg": 4.35
+    },
+    {
+      "year": 2023,
+      "rainfall": 168.71,
+      "rainfall_avg": 4.35
+    },
+    {
+      "year": 2024,
+      "rainfall": 140.69,
+      "rainfall_avg": 4.35
+    },
+    {
+      "year": 2025,
+      "rainfall": 111.23,
+      "rainfall_avg": 4.31
+    }
+  ],
+  "SY0401": [
+    {
+      "year": 2021,
+      "rainfall": 191.32,
+      "rainfall_avg": 5.6
+    },
+    {
+      "year": 2022,
+      "rainfall": 152.43,
+      "rainfall_avg": 5.6
+    },
+    {
+      "year": 2023,
+      "rainfall": 207.03,
+      "rainfall_avg": 5.6
+    },
+    {
+      "year": 2024,
+      "rainfall": 166.53,
+      "rainfall_avg": 5.6
+    },
+    {
+      "year": 2025,
+      "rainfall": 122.85,
+      "rainfall_avg": 5.51
+    }
+  ],
+  "SY0402": [
+    {
+      "year": 2021,
+      "rainfall": 398.0,
+      "rainfall_avg": 11.38
+    },
+    {
+      "year": 2022,
+      "rainfall": 301.33,
+      "rainfall_avg": 11.38
+    },
+    {
+      "year": 2023,
+      "rainfall": 395.21,
+      "rainfall_avg": 11.38
+    },
+    {
+      "year": 2024,
+      "rainfall": 338.46,
+      "rainfall_avg": 11.38
+    },
+    {
+      "year": 2025,
+      "rainfall": 208.67,
+      "rainfall_avg": 10.98
+    }
+  ],
+  "SY0403": [
+    {
+      "year": 2021,
+      "rainfall": 639.5,
+      "rainfall_avg": 18.43
+    },
+    {
+      "year": 2022,
+      "rainfall": 529.56,
+      "rainfall_avg": 18.43
+    },
+    {
+      "year": 2023,
+      "rainfall": 648.31,
+      "rainfall_avg": 18.43
+    },
+    {
+      "year": 2024,
+      "rainfall": 674.81,
+      "rainfall_avg": 18.43
+    },
+    {
+      "year": 2025,
+      "rainfall": 368.0,
+      "rainfall_avg": 17.79
+    }
+  ],
+  "SY0404": [
+    {
+      "year": 2021,
+      "rainfall": 327.89,
+      "rainfall_avg": 9.12
+    },
+    {
+      "year": 2022,
+      "rainfall": 250.44,
+      "rainfall_avg": 9.12
+    },
+    {
+      "year": 2023,
+      "rainfall": 283.78,
+      "rainfall_avg": 9.12
+    },
+    {
+      "year": 2024,
+      "rainfall": 284.0,
+      "rainfall_avg": 9.12
+    },
+    {
+      "year": 2025,
+      "rainfall": 176.78,
+      "rainfall_avg": 8.89
+    }
+  ],
+  "SY0405": [
+    {
+      "year": 2021,
+      "rainfall": 110.65,
+      "rainfall_avg": 3.62
+    },
+    {
+      "year": 2022,
+      "rainfall": 118.99,
+      "rainfall_avg": 3.62
+    },
+    {
+      "year": 2023,
+      "rainfall": 148.88,
+      "rainfall_avg": 3.62
+    },
+    {
+      "year": 2024,
+      "rainfall": 120.77,
+      "rainfall_avg": 3.62
+    },
+    {
+      "year": 2025,
+      "rainfall": 101.78,
+      "rainfall_avg": 3.61
+    }
+  ],
+  "SY0406": [
+    {
+      "year": 2021,
+      "rainfall": 154.88,
+      "rainfall_avg": 4.66
+    },
+    {
+      "year": 2022,
+      "rainfall": 134.02,
+      "rainfall_avg": 4.66
+    },
+    {
+      "year": 2023,
+      "rainfall": 148.25,
+      "rainfall_avg": 4.66
+    },
+    {
+      "year": 2024,
+      "rainfall": 150.76,
+      "rainfall_avg": 4.66
+    },
+    {
+      "year": 2025,
+      "rainfall": 116.68,
+      "rainfall_avg": 4.65
+    }
+  ],
+  "SY05": [
+    {
+      "year": 2021,
+      "rainfall": 300.81,
+      "rainfall_avg": 8.58
+    },
+    {
+      "year": 2022,
+      "rainfall": 266.28,
+      "rainfall_avg": 8.58
+    },
+    {
+      "year": 2023,
+      "rainfall": 270.08,
+      "rainfall_avg": 8.58
+    },
+    {
+      "year": 2024,
+      "rainfall": 304.93,
+      "rainfall_avg": 8.58
+    },
+    {
+      "year": 2025,
+      "rainfall": 180.78,
+      "rainfall_avg": 8.37
+    }
+  ],
+  "SY0501": [
+    {
+      "year": 2021,
+      "rainfall": 315.94,
+      "rainfall_avg": 8.94
+    },
+    {
+      "year": 2022,
+      "rainfall": 267.17,
+      "rainfall_avg": 8.94
+    },
+    {
+      "year": 2023,
+      "rainfall": 272.99,
+      "rainfall_avg": 8.94
+    },
+    {
+      "year": 2024,
+      "rainfall": 300.02,
+      "rainfall_avg": 8.94
+    },
+    {
+      "year": 2025,
+      "rainfall": 169.91,
+      "rainfall_avg": 8.7
+    }
+  ],
+  "SY0502": [
+    {
+      "year": 2021,
+      "rainfall": 650.07,
+      "rainfall_avg": 17.84
+    },
+    {
+      "year": 2022,
+      "rainfall": 578.29,
+      "rainfall_avg": 17.84
+    },
+    {
+      "year": 2023,
+      "rainfall": 566.52,
+      "rainfall_avg": 17.84
+    },
+    {
+      "year": 2024,
+      "rainfall": 731.19,
+      "rainfall_avg": 17.84
+    },
+    {
+      "year": 2025,
+      "rainfall": 372.48,
+      "rainfall_avg": 17.18
+    }
+  ],
+  "SY0503": [
+    {
+      "year": 2021,
+      "rainfall": 171.87,
+      "rainfall_avg": 5.27
+    },
+    {
+      "year": 2022,
+      "rainfall": 158.46,
+      "rainfall_avg": 5.27
+    },
+    {
+      "year": 2023,
+      "rainfall": 163.11,
+      "rainfall_avg": 5.27
+    },
+    {
+      "year": 2024,
+      "rainfall": 169.08,
+      "rainfall_avg": 5.27
+    },
+    {
+      "year": 2025,
+      "rainfall": 123.53,
+      "rainfall_avg": 5.21
+    }
+  ],
+  "SY0504": [
+    {
+      "year": 2021,
+      "rainfall": 701.35,
+      "rainfall_avg": 18.66
+    },
+    {
+      "year": 2022,
+      "rainfall": 613.21,
+      "rainfall_avg": 18.66
+    },
+    {
+      "year": 2023,
+      "rainfall": 630.29,
+      "rainfall_avg": 18.66
+    },
+    {
+      "year": 2024,
+      "rainfall": 725.71,
+      "rainfall_avg": 18.66
+    },
+    {
+      "year": 2025,
+      "rainfall": 376.18,
+      "rainfall_avg": 18.02
+    }
+  ],
+  "SY0505": [
+    {
+      "year": 2021,
+      "rainfall": 426.88,
+      "rainfall_avg": 11.68
+    },
+    {
+      "year": 2022,
+      "rainfall": 368.88,
+      "rainfall_avg": 11.68
+    },
+    {
+      "year": 2023,
+      "rainfall": 359.25,
+      "rainfall_avg": 11.68
+    },
+    {
+      "year": 2024,
+      "rainfall": 420.31,
+      "rainfall_avg": 11.68
+    },
+    {
+      "year": 2025,
+      "rainfall": 215.5,
+      "rainfall_avg": 11.3
+    }
+  ],
+  "SY06": [
+    {
+      "year": 2021,
+      "rainfall": 848.94,
+      "rainfall_avg": 24.2
+    },
+    {
+      "year": 2022,
+      "rainfall": 835.42,
+      "rainfall_avg": 24.2
+    },
+    {
+      "year": 2023,
+      "rainfall": 795.79,
+      "rainfall_avg": 24.2
+    },
+    {
+      "year": 2024,
+      "rainfall": 997.32,
+      "rainfall_avg": 24.2
+    },
+    {
+      "year": 2025,
+      "rainfall": 542.73,
+      "rainfall_avg": 23.41
+    }
+  ],
+  "SY0600": [
+    {
+      "year": 2021,
+      "rainfall": 835.31,
+      "rainfall_avg": 24.23
+    },
+    {
+      "year": 2022,
+      "rainfall": 861.33,
+      "rainfall_avg": 24.23
+    },
+    {
+      "year": 2023,
+      "rainfall": 789.87,
+      "rainfall_avg": 24.23
+    },
+    {
+      "year": 2024,
+      "rainfall": 969.15,
+      "rainfall_avg": 24.23
+    },
+    {
+      "year": 2025,
+      "rainfall": 538.64,
+      "rainfall_avg": 23.47
+    }
+  ],
+  "SY0602": [
+    {
+      "year": 2021,
+      "rainfall": 855.81,
+      "rainfall_avg": 23.81
+    },
+    {
+      "year": 2022,
+      "rainfall": 828.86,
+      "rainfall_avg": 23.81
+    },
+    {
+      "year": 2023,
+      "rainfall": 811.1,
+      "rainfall_avg": 23.81
+    },
+    {
+      "year": 2024,
+      "rainfall": 1041.52,
+      "rainfall_avg": 23.81
+    },
+    {
+      "year": 2025,
+      "rainfall": 543.67,
+      "rainfall_avg": 23.01
+    }
+  ],
+  "SY0603": [
+    {
+      "year": 2021,
+      "rainfall": 874.24,
+      "rainfall_avg": 24.79
+    },
+    {
+      "year": 2022,
+      "rainfall": 829.52,
+      "rainfall_avg": 24.79
+    },
+    {
+      "year": 2023,
+      "rainfall": 797.72,
+      "rainfall_avg": 24.79
+    },
+    {
+      "year": 2024,
+      "rainfall": 1005.04,
+      "rainfall_avg": 24.79
+    },
+    {
+      "year": 2025,
+      "rainfall": 554.4,
+      "rainfall_avg": 23.97
+    }
+  ],
+  "SY0604": [
+    {
+      "year": 2021,
+      "rainfall": 831.43,
+      "rainfall_avg": 23.62
+    },
+    {
+      "year": 2022,
+      "rainfall": 783.64,
+      "rainfall_avg": 23.62
+    },
+    {
+      "year": 2023,
+      "rainfall": 785.86,
+      "rainfall_avg": 23.62
+    },
+    {
+      "year": 2024,
+      "rainfall": 995.71,
+      "rainfall_avg": 23.62
+    },
+    {
+      "year": 2025,
+      "rainfall": 531.86,
+      "rainfall_avg": 22.86
+    }
+  ],
+  "SY07": [
+    {
+      "year": 2021,
+      "rainfall": 418.48,
+      "rainfall_avg": 12.45
+    },
+    {
+      "year": 2022,
+      "rainfall": 383.41,
+      "rainfall_avg": 12.45
+    },
+    {
+      "year": 2023,
+      "rainfall": 350.9,
+      "rainfall_avg": 12.45
+    },
+    {
+      "year": 2024,
+      "rainfall": 439.75,
+      "rainfall_avg": 12.45
+    },
+    {
+      "year": 2025,
+      "rainfall": 230.44,
+      "rainfall_avg": 12.01
+    }
+  ],
+  "SY0700": [
+    {
+      "year": 2021,
+      "rainfall": 380.49,
+      "rainfall_avg": 11.75
+    },
+    {
+      "year": 2022,
+      "rainfall": 347.15,
+      "rainfall_avg": 11.75
+    },
+    {
+      "year": 2023,
+      "rainfall": 318.95,
+      "rainfall_avg": 11.75
+    },
+    {
+      "year": 2024,
+      "rainfall": 389.96,
+      "rainfall_avg": 11.75
+    },
+    {
+      "year": 2025,
+      "rainfall": 211.96,
+      "rainfall_avg": 11.35
+    }
+  ],
+  "SY0702": [
+    {
+      "year": 2021,
+      "rainfall": 360.68,
+      "rainfall_avg": 10.51
+    },
+    {
+      "year": 2022,
+      "rainfall": 302.86,
+      "rainfall_avg": 10.51
+    },
+    {
+      "year": 2023,
+      "rainfall": 295.04,
+      "rainfall_avg": 10.51
+    },
+    {
+      "year": 2024,
+      "rainfall": 369.98,
+      "rainfall_avg": 10.51
+    },
+    {
+      "year": 2025,
+      "rainfall": 188.11,
+      "rainfall_avg": 10.15
+    }
+  ],
+  "SY0703": [
+    {
+      "year": 2021,
+      "rainfall": 458.61,
+      "rainfall_avg": 14.39
+    },
+    {
+      "year": 2022,
+      "rainfall": 489.94,
+      "rainfall_avg": 14.39
+    },
+    {
+      "year": 2023,
+      "rainfall": 403.84,
+      "rainfall_avg": 14.39
+    },
+    {
+      "year": 2024,
+      "rainfall": 488.97,
+      "rainfall_avg": 14.39
+    },
+    {
+      "year": 2025,
+      "rainfall": 272.84,
+      "rainfall_avg": 13.93
+    }
+  ],
+  "SY0704": [
+    {
+      "year": 2021,
+      "rainfall": 580.26,
+      "rainfall_avg": 16.7
+    },
+    {
+      "year": 2022,
+      "rainfall": 564.44,
+      "rainfall_avg": 16.7
+    },
+    {
+      "year": 2023,
+      "rainfall": 505.56,
+      "rainfall_avg": 16.7
+    },
+    {
+      "year": 2024,
+      "rainfall": 647.78,
+      "rainfall_avg": 16.7
+    },
+    {
+      "year": 2025,
+      "rainfall": 336.3,
+      "rainfall_avg": 16.05
+    }
+  ],
+  "SY0705": [
+    {
+      "year": 2021,
+      "rainfall": 476.39,
+      "rainfall_avg": 13.58
+    },
+    {
+      "year": 2022,
+      "rainfall": 408.26,
+      "rainfall_avg": 13.58
+    },
+    {
+      "year": 2023,
+      "rainfall": 378.39,
+      "rainfall_avg": 13.58
+    },
+    {
+      "year": 2024,
+      "rainfall": 503.04,
+      "rainfall_avg": 13.58
+    },
+    {
+      "year": 2025,
+      "rainfall": 247.78,
+      "rainfall_avg": 13.02
+    }
+  ],
+  "SY08": [
+    {
+      "year": 2021,
+      "rainfall": 241.41,
+      "rainfall_avg": 9.25
+    },
+    {
+      "year": 2022,
+      "rainfall": 300.47,
+      "rainfall_avg": 9.25
+    },
+    {
+      "year": 2023,
+      "rainfall": 319.71,
+      "rainfall_avg": 9.25
+    },
+    {
+      "year": 2024,
+      "rainfall": 321.51,
+      "rainfall_avg": 9.25
+    },
+    {
+      "year": 2025,
+      "rainfall": 260.73,
+      "rainfall_avg": 9.04
+    }
+  ],
+  "SY0800": [
+    {
+      "year": 2021,
+      "rainfall": 191.47,
+      "rainfall_avg": 7.47
+    },
+    {
+      "year": 2022,
+      "rainfall": 238.87,
+      "rainfall_avg": 7.47
+    },
+    {
+      "year": 2023,
+      "rainfall": 261.93,
+      "rainfall_avg": 7.47
+    },
+    {
+      "year": 2024,
+      "rainfall": 253.58,
+      "rainfall_avg": 7.47
+    },
+    {
+      "year": 2025,
+      "rainfall": 216.28,
+      "rainfall_avg": 7.3
+    }
+  ],
+  "SY0802": [
+    {
+      "year": 2021,
+      "rainfall": 311.14,
+      "rainfall_avg": 11.84
+    },
+    {
+      "year": 2022,
+      "rainfall": 382.46,
+      "rainfall_avg": 11.84
+    },
+    {
+      "year": 2023,
+      "rainfall": 389.26,
+      "rainfall_avg": 11.84
+    },
+    {
+      "year": 2024,
+      "rainfall": 409.84,
+      "rainfall_avg": 11.84
+    },
+    {
+      "year": 2025,
+      "rainfall": 325.84,
+      "rainfall_avg": 11.57
+    }
+  ],
+  "SY0803": [
+    {
+      "year": 2021,
+      "rainfall": 382.48,
+      "rainfall_avg": 14.24
+    },
+    {
+      "year": 2022,
+      "rainfall": 445.09,
+      "rainfall_avg": 14.24
+    },
+    {
+      "year": 2023,
+      "rainfall": 463.28,
+      "rainfall_avg": 14.24
+    },
+    {
+      "year": 2024,
+      "rainfall": 517.42,
+      "rainfall_avg": 14.24
+    },
+    {
+      "year": 2025,
+      "rainfall": 365.67,
+      "rainfall_avg": 13.83
+    }
+  ],
+  "SY0804": [
+    {
+      "year": 2021,
+      "rainfall": 233.05,
+      "rainfall_avg": 8.88
+    },
+    {
+      "year": 2022,
+      "rainfall": 314.26,
+      "rainfall_avg": 8.88
+    },
+    {
+      "year": 2023,
+      "rainfall": 335.09,
+      "rainfall_avg": 8.88
+    },
+    {
+      "year": 2024,
+      "rainfall": 314.36,
+      "rainfall_avg": 8.88
+    },
+    {
+      "year": 2025,
+      "rainfall": 264.0,
+      "rainfall_avg": 8.71
+    }
+  ],
+  "SY09": [
+    {
+      "year": 2021,
+      "rainfall": 124.99,
+      "rainfall_avg": 4.29
+    },
+    {
+      "year": 2022,
+      "rainfall": 135.62,
+      "rainfall_avg": 4.29
+    },
+    {
+      "year": 2023,
+      "rainfall": 173.49,
+      "rainfall_avg": 4.29
+    },
+    {
+      "year": 2024,
+      "rainfall": 142.93,
+      "rainfall_avg": 4.29
+    },
+    {
+      "year": 2025,
+      "rainfall": 120.32,
+      "rainfall_avg": 4.18
+    }
+  ],
+  "SY0901": [
+    {
+      "year": 2021,
+      "rainfall": 128.62,
+      "rainfall_avg": 4.41
+    },
+    {
+      "year": 2022,
+      "rainfall": 144.89,
+      "rainfall_avg": 4.41
+    },
+    {
+      "year": 2023,
+      "rainfall": 174.99,
+      "rainfall_avg": 4.41
+    },
+    {
+      "year": 2024,
+      "rainfall": 148.02,
+      "rainfall_avg": 4.41
+    },
+    {
+      "year": 2025,
+      "rainfall": 125.94,
+      "rainfall_avg": 4.31
+    }
+  ],
+  "SY0902": [
+    {
+      "year": 2021,
+      "rainfall": 121.4,
+      "rainfall_avg": 4.19
+    },
+    {
+      "year": 2022,
+      "rainfall": 122.48,
+      "rainfall_avg": 4.19
+    },
+    {
+      "year": 2023,
+      "rainfall": 178.3,
+      "rainfall_avg": 4.19
+    },
+    {
+      "year": 2024,
+      "rainfall": 138.51,
+      "rainfall_avg": 4.19
+    },
+    {
+      "year": 2025,
+      "rainfall": 111.75,
+      "rainfall_avg": 4.05
+    }
+  ],
+  "SY0903": [
+    {
+      "year": 2021,
+      "rainfall": 117.37,
+      "rainfall_avg": 4.04
+    },
+    {
+      "year": 2022,
+      "rainfall": 122.68,
+      "rainfall_avg": 4.04
+    },
+    {
+      "year": 2023,
+      "rainfall": 160.1,
+      "rainfall_avg": 4.04
+    },
+    {
+      "year": 2024,
+      "rainfall": 131.27,
+      "rainfall_avg": 4.04
+    },
+    {
+      "year": 2025,
+      "rainfall": 113.48,
+      "rainfall_avg": 3.94
+    }
+  ],
+  "SY10": [
+    {
+      "year": 2021,
+      "rainfall": 812.52,
+      "rainfall_avg": 22.66
+    },
+    {
+      "year": 2022,
+      "rainfall": 738.12,
+      "rainfall_avg": 22.66
+    },
+    {
+      "year": 2023,
+      "rainfall": 774.9,
+      "rainfall_avg": 22.66
+    },
+    {
+      "year": 2024,
+      "rainfall": 973.18,
+      "rainfall_avg": 22.66
+    },
+    {
+      "year": 2025,
+      "rainfall": 513.16,
+      "rainfall_avg": 21.87
+    }
+  ],
+  "SY1000": [
+    {
+      "year": 2021,
+      "rainfall": 739.1,
+      "rainfall_avg": 21.03
+    },
+    {
+      "year": 2022,
+      "rainfall": 659.05,
+      "rainfall_avg": 21.03
+    },
+    {
+      "year": 2023,
+      "rainfall": 724.1,
+      "rainfall_avg": 21.03
+    },
+    {
+      "year": 2024,
+      "rainfall": 928.86,
+      "rainfall_avg": 21.03
+    },
+    {
+      "year": 2025,
+      "rainfall": 473.14,
+      "rainfall_avg": 20.36
+    }
+  ],
+  "SY1003": [
+    {
+      "year": 2021,
+      "rainfall": 845.0,
+      "rainfall_avg": 23.91
+    },
+    {
+      "year": 2022,
+      "rainfall": 752.21,
+      "rainfall_avg": 23.91
+    },
+    {
+      "year": 2023,
+      "rainfall": 837.71,
+      "rainfall_avg": 23.91
+    },
+    {
+      "year": 2024,
+      "rainfall": 995.21,
+      "rainfall_avg": 23.91
+    },
+    {
+      "year": 2025,
+      "rainfall": 531.57,
+      "rainfall_avg": 23.09
+    }
+  ],
+  "SY1004": [
+    {
+      "year": 2021,
+      "rainfall": 866.29,
+      "rainfall_avg": 23.59
+    },
+    {
+      "year": 2022,
+      "rainfall": 737.86,
+      "rainfall_avg": 23.59
+    },
+    {
+      "year": 2023,
+      "rainfall": 781.86,
+      "rainfall_avg": 23.59
+    },
+    {
+      "year": 2024,
+      "rainfall": 976.86,
+      "rainfall_avg": 23.59
+    },
+    {
+      "year": 2025,
+      "rainfall": 506.86,
+      "rainfall_avg": 22.74
+    }
+  ],
+  "SY1005": [
+    {
+      "year": 2021,
+      "rainfall": 877.75,
+      "rainfall_avg": 23.42
+    },
+    {
+      "year": 2022,
+      "rainfall": 774.5,
+      "rainfall_avg": 23.42
+    },
+    {
+      "year": 2023,
+      "rainfall": 788.62,
+      "rainfall_avg": 23.42
+    },
+    {
+      "year": 2024,
+      "rainfall": 1029.12,
+      "rainfall_avg": 23.42
+    },
+    {
+      "year": 2025,
+      "rainfall": 539.38,
+      "rainfall_avg": 22.58
+    }
+  ],
+  "SY1006": [
+    {
+      "year": 2021,
+      "rainfall": 820.74,
+      "rainfall_avg": 22.83
+    },
+    {
+      "year": 2022,
+      "rainfall": 789.17,
+      "rainfall_avg": 22.83
+    },
+    {
+      "year": 2023,
+      "rainfall": 776.17,
+      "rainfall_avg": 22.83
+    },
+    {
+      "year": 2024,
+      "rainfall": 979.65,
+      "rainfall_avg": 22.83
+    },
+    {
+      "year": 2025,
+      "rainfall": 531.3,
+      "rainfall_avg": 22.01
+    }
+  ],
+  "SY11": [
+    {
+      "year": 2021,
+      "rainfall": 154.09,
+      "rainfall_avg": 5.31
+    },
+    {
+      "year": 2022,
+      "rainfall": 192.5,
+      "rainfall_avg": 5.31
+    },
+    {
+      "year": 2023,
+      "rainfall": 197.78,
+      "rainfall_avg": 5.31
+    },
+    {
+      "year": 2024,
+      "rainfall": 177.75,
+      "rainfall_avg": 5.31
+    },
+    {
+      "year": 2025,
+      "rainfall": 146.27,
+      "rainfall_avg": 5.18
+    }
+  ],
+  "SY1101": [
+    {
+      "year": 2021,
+      "rainfall": 138.68,
+      "rainfall_avg": 4.85
+    },
+    {
+      "year": 2022,
+      "rainfall": 171.49,
+      "rainfall_avg": 4.85
+    },
+    {
+      "year": 2023,
+      "rainfall": 174.37,
+      "rainfall_avg": 4.85
+    },
+    {
+      "year": 2024,
+      "rainfall": 154.75,
+      "rainfall_avg": 4.85
+    },
+    {
+      "year": 2025,
+      "rainfall": 131.82,
+      "rainfall_avg": 4.74
+    }
+  ],
+  "SY1102": [
+    {
+      "year": 2021,
+      "rainfall": 191.03,
+      "rainfall_avg": 6.76
+    },
+    {
+      "year": 2022,
+      "rainfall": 259.34,
+      "rainfall_avg": 6.76
+    },
+    {
+      "year": 2023,
+      "rainfall": 265.64,
+      "rainfall_avg": 6.76
+    },
+    {
+      "year": 2024,
+      "rainfall": 243.08,
+      "rainfall_avg": 6.76
+    },
+    {
+      "year": 2025,
+      "rainfall": 191.66,
+      "rainfall_avg": 6.6
+    }
+  ],
+  "SY1103": [
+    {
+      "year": 2021,
+      "rainfall": 139.91,
+      "rainfall_avg": 4.53
+    },
+    {
+      "year": 2022,
+      "rainfall": 156.96,
+      "rainfall_avg": 4.53
+    },
+    {
+      "year": 2023,
+      "rainfall": 164.71,
+      "rainfall_avg": 4.53
+    },
+    {
+      "year": 2024,
+      "rainfall": 146.56,
+      "rainfall_avg": 4.53
+    },
+    {
+      "year": 2025,
+      "rainfall": 122.41,
+      "rainfall_avg": 4.43
+    }
+  ],
+  "SY12": [
+    {
+      "year": 2021,
+      "rainfall": 247.88,
+      "rainfall_avg": 7.41
+    },
+    {
+      "year": 2022,
+      "rainfall": 235.74,
+      "rainfall_avg": 7.41
+    },
+    {
+      "year": 2023,
+      "rainfall": 344.9,
+      "rainfall_avg": 7.41
+    },
+    {
+      "year": 2024,
+      "rainfall": 194.67,
+      "rainfall_avg": 7.41
+    },
+    {
+      "year": 2025,
+      "rainfall": 180.86,
+      "rainfall_avg": 7.15
+    }
+  ],
+  "SY1200": [
+    {
+      "year": 2021,
+      "rainfall": 234.43,
+      "rainfall_avg": 7.05
+    },
+    {
+      "year": 2022,
+      "rainfall": 234.67,
+      "rainfall_avg": 7.05
+    },
+    {
+      "year": 2023,
+      "rainfall": 320.97,
+      "rainfall_avg": 7.05
+    },
+    {
+      "year": 2024,
+      "rainfall": 187.47,
+      "rainfall_avg": 7.05
+    },
+    {
+      "year": 2025,
+      "rainfall": 179.55,
+      "rainfall_avg": 6.78
+    }
+  ],
+  "SY1202": [
+    {
+      "year": 2021,
+      "rainfall": 250.0,
+      "rainfall_avg": 7.41
+    },
+    {
+      "year": 2022,
+      "rainfall": 221.56,
+      "rainfall_avg": 7.41
+    },
+    {
+      "year": 2023,
+      "rainfall": 358.5,
+      "rainfall_avg": 7.41
+    },
+    {
+      "year": 2024,
+      "rainfall": 190.22,
+      "rainfall_avg": 7.41
+    },
+    {
+      "year": 2025,
+      "rainfall": 174.24,
+      "rainfall_avg": 7.17
+    }
+  ],
+  "SY1203": [
+    {
+      "year": 2021,
+      "rainfall": 266.11,
+      "rainfall_avg": 7.98
+    },
+    {
+      "year": 2022,
+      "rainfall": 256.59,
+      "rainfall_avg": 7.98
+    },
+    {
+      "year": 2023,
+      "rainfall": 364.03,
+      "rainfall_avg": 7.98
+    },
+    {
+      "year": 2024,
+      "rainfall": 211.97,
+      "rainfall_avg": 7.98
+    },
+    {
+      "year": 2025,
+      "rainfall": 191.84,
+      "rainfall_avg": 7.69
+    }
+  ],
+  "SY13": [
+    {
+      "year": 2021,
+      "rainfall": 175.83,
+      "rainfall_avg": 5.45
+    },
+    {
+      "year": 2022,
+      "rainfall": 187.39,
+      "rainfall_avg": 5.45
+    },
+    {
+      "year": 2023,
+      "rainfall": 253.83,
+      "rainfall_avg": 5.45
+    },
+    {
+      "year": 2024,
+      "rainfall": 134.92,
+      "rainfall_avg": 5.45
+    },
+    {
+      "year": 2025,
+      "rainfall": 148.11,
+      "rainfall_avg": 5.31
+    }
+  ],
+  "SY1300": [
+    {
+      "year": 2021,
+      "rainfall": 170.37,
+      "rainfall_avg": 5.28
+    },
+    {
+      "year": 2022,
+      "rainfall": 180.25,
+      "rainfall_avg": 5.28
+    },
+    {
+      "year": 2023,
+      "rainfall": 238.37,
+      "rainfall_avg": 5.28
+    },
+    {
+      "year": 2024,
+      "rainfall": 128.24,
+      "rainfall_avg": 5.28
+    },
+    {
+      "year": 2025,
+      "rainfall": 140.51,
+      "rainfall_avg": 5.15
+    }
+  ],
+  "SY1302": [
+    {
+      "year": 2021,
+      "rainfall": 170.61,
+      "rainfall_avg": 5.14
+    },
+    {
+      "year": 2022,
+      "rainfall": 194.54,
+      "rainfall_avg": 5.14
+    },
+    {
+      "year": 2023,
+      "rainfall": 248.15,
+      "rainfall_avg": 5.14
+    },
+    {
+      "year": 2024,
+      "rainfall": 131.42,
+      "rainfall_avg": 5.14
+    },
+    {
+      "year": 2025,
+      "rainfall": 155.46,
+      "rainfall_avg": 5.0
+    }
+  ],
+  "SY1303": [
+    {
+      "year": 2021,
+      "rainfall": 189.23,
+      "rainfall_avg": 6.0
+    },
+    {
+      "year": 2022,
+      "rainfall": 191.69,
+      "rainfall_avg": 6.0
+    },
+    {
+      "year": 2023,
+      "rainfall": 283.14,
+      "rainfall_avg": 6.0
+    },
+    {
+      "year": 2024,
+      "rainfall": 148.58,
+      "rainfall_avg": 6.0
+    },
+    {
+      "year": 2025,
+      "rainfall": 152.96,
+      "rainfall_avg": 5.83
+    }
+  ],
+  "SY14": [
+    {
+      "year": 2021,
+      "rainfall": 538.26,
+      "rainfall_avg": 15.21
+    },
+    {
+      "year": 2022,
+      "rainfall": 452.51,
+      "rainfall_avg": 15.21
+    },
+    {
+      "year": 2023,
+      "rainfall": 661.09,
+      "rainfall_avg": 15.21
+    },
+    {
+      "year": 2024,
+      "rainfall": 440.43,
+      "rainfall_avg": 15.21
+    },
+    {
+      "year": 2025,
+      "rainfall": 366.31,
+      "rainfall_avg": 14.64
+    }
+  ],
+  "SY1400": [
+    {
+      "year": 2021,
+      "rainfall": 567.65,
+      "rainfall_avg": 15.94
+    },
+    {
+      "year": 2022,
+      "rainfall": 468.22,
+      "rainfall_avg": 15.94
+    },
+    {
+      "year": 2023,
+      "rainfall": 696.02,
+      "rainfall_avg": 15.94
+    },
+    {
+      "year": 2024,
+      "rainfall": 456.78,
+      "rainfall_avg": 15.94
+    },
+    {
+      "year": 2025,
+      "rainfall": 381.63,
+      "rainfall_avg": 15.34
+    }
+  ],
+  "SY1402": [
+    {
+      "year": 2021,
+      "rainfall": 431.21,
+      "rainfall_avg": 12.55
+    },
+    {
+      "year": 2022,
+      "rainfall": 395.29,
+      "rainfall_avg": 12.55
+    },
+    {
+      "year": 2023,
+      "rainfall": 533.86,
+      "rainfall_avg": 12.55
+    },
+    {
+      "year": 2024,
+      "rainfall": 380.86,
+      "rainfall_avg": 12.55
+    },
+    {
+      "year": 2025,
+      "rainfall": 310.5,
+      "rainfall_avg": 12.06
+    }
+  ]
+}

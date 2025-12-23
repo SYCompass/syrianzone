@@ -1,3 +1,12 @@
+export const DATA_TYPES = {
+    POPULATION: 'population',
+    IDP: 'idp',
+    IDP_RETURNEES: 'idp_returnees',
+    RAINFALL: 'rainfall'
+} as const;
+
+export type DataType = typeof DATA_TYPES[keyof typeof DATA_TYPES];
+
 export interface CityData {
     [cityName: string]: number;
 }
@@ -8,26 +17,26 @@ export interface DataSource {
     date: string;
     note: string;
     cities: CityData;
-    data_type?: 'population' | 'idp' | 'idp_returnees';
+    data_type?: DataType; // Updated to use the dynamic type
 }
 
 export interface PopulationGroups {
-    population: DataSource[];
-    idp: DataSource[];
-    idp_returnees: DataSource[];
+    [DATA_TYPES.POPULATION]: DataSource[];
+    [DATA_TYPES.IDP]: DataSource[];
+    [DATA_TYPES.IDP_RETURNEES]: DataSource[];
+    [DATA_TYPES.RAINFALL]: DataSource[]; // Added to prevent indexing errors
 }
 
-export interface PopulationDataResponse {
-    dataTypeGroups: PopulationGroups;
+// Rainfall specific types
+export interface RainfallYear {
+    year: number;
+    rainfall: number;
+    rainfall_avg: number;
 }
 
-export const DATA_TYPES = {
-    POPULATION: 'population',
-    IDP: 'idp',
-    IDP_RETURNEES: 'idp_returnees'
-} as const;
-
-export type DataType = typeof DATA_TYPES[keyof typeof DATA_TYPES];
+export interface RainfallData {
+    [pcode: string]: RainfallYear[];
+}
 
 export const DATA_TYPE_CONFIG = {
     [DATA_TYPES.POPULATION]: {
@@ -64,6 +73,18 @@ export const DATA_TYPE_CONFIG = {
             { label: 'أقل من ٥٠ ألف', color: '#006400' },
             { label: '٥٠ ألف – ١٠٠ ألف', color: '#228B22' },
             { label: 'أكثر من ١٠٠ ألف', color: '#32CD32' }
+        ]
+    },
+    [DATA_TYPES.RAINFALL]: {
+        label: 'معدل الهطول المطري',
+        labelAr: 'الأمطار',
+        colors: { none: '#2a3033', low: '#b4d7e6', medium: '#66b2d6', high: '#006994' },
+        thresholds: [100, 300, 500],
+        legend: [
+            { label: 'لا توجد بيانات', color: '#2a3033' },
+            { label: 'أقل من 100 مم', color: '#b4d7e6' },
+            { label: '100 - 500 مم', color: '#66b2d6' },
+            { label: 'أكثر من 500 مم', color: '#006994' }
         ]
     }
 };
