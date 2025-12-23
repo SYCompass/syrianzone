@@ -16,7 +16,7 @@ export default async function PopulationPage() {
     const data = await fetchPopulationData();
 
     return (
-        <div className="min-h-screen bg-background">
+        <div className="h-[calc(100vh-64px)] overflow-hidden flex flex-col bg-background">
             <PopulationClient initialData={data} />
         </div>
     );

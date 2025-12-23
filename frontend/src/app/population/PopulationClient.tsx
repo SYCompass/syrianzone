@@ -374,6 +374,22 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                                     </div>
                                 </div>
                             )}
+
+                            {/* Source Link */}
+                            <div className="mt-auto pt-8">
+                                <a
+                                    href="https://data.humdata.org/dataset/syr-rainfall-subnational/resource/dcdb5e03-4d4d-4479-a06c-cbe0a206dfd3"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors group border border-border/50"
+                                >
+                                    <div className="flex flex-col gap-0.5 text-right">
+                                        <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">مصدر البيانات</span>
+                                        <span className="text-xs font-medium group-hover:text-primary transition-colors">Humanitarian Data Exchange (HDX)</span>
+                                    </div>
+                                    <ExternalLink size={14} className="text-muted-foreground group-hover:text-primary" />
+                                </a>
+                            </div>
                         </div>
                     ) : (
                         /* OPTION 2: POPULATION PANEL CONTENT (New Upstream Layout) */
