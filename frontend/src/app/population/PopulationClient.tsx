@@ -34,7 +34,7 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
     const rainfallData = rainfallJson as RainfallData;
 
     useEffect(() => {
-        fetch('/assets/population/syria_provinces.geojson')
+        fetch('/assets/population/syr_admin1.geojson')
             .then(res => res.json())
             .then(data => setGeoJsonData(data))
             .catch(err => console.error('Failed to load GeoJSON', err));
