@@ -2,12 +2,14 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
-import { PopulationGroups, DataType, DATA_TYPES, DATA_TYPE_CONFIG, RainfallData } from './types';
+import { PopulationGroups, DATA_TYPES, DATA_TYPE_CONFIG, RainfallData } from './types';
 import { Layers, Info, Filter, X, BarChart3, CheckSquare, Square, ExternalLink, CloudRain } from 'lucide-react';
 import { getGovernorateNameAr } from '@/lib/geo-utils';
 import rainfallJson from './rainfall_yearly.json';
 
-const MapClient = dynamic(() => import('./MapClient'), {
+type DataType = typeof DATA_TYPES[keyof typeof DATA_TYPES];
+
+const MapClient = dynamic(() => import('./components/map/MapClient'), {
     ssr: false,
     loading: () => <div className="h-full w-full flex items-center justify-center bg-card text-muted-foreground">جاري تحميل الخريطة...</div>
 });
