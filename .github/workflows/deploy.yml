@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: [self-hosted, syrianzone]
     steps:
       - name: Sync and Deploy
         run: |
