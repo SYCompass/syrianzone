@@ -1,59 +1,10 @@
-import { DataSource, PopulationGroups, CSV_URL, DataType, DATA_TYPES } from './types';
+import { parseCSVToObjects } from './csv-parser';
+import { PopulationGroups } from '../types';
+import { DATA_TYPES } from '../constants/data-config';
+import { CSV_URL } from '../constants/api-config';
+import { DataSource } from '../types/data-types';
 
-// Helper to parse CSV line handling quotes
-function parseCSVRow(line: string): string[] {
-    const result = [];
-    let current = '';
-    let inQuotes = false;
-    let i = 0;
-
-    while (i < line.length) {
-        const char = line[i];
-
-        if (char === '"') {
-            if (inQuotes && line[i + 1] === '"') {
-                current += '"';
-                i += 2;
-            } else {
-                inQuotes = !inQuotes;
-                i++;
-            }
-        } else if (char === ',' && !inQuotes) {
-            result.push(current.trim());
-            current = '';
-            i++;
-        } else {
-            current += char;
-            i++;
-        }
-    }
-    result.push(current.trim());
-    return result;
-}
-
-function parseCSVToObjects(csvText: string): any[] {
-    const lines = csvText.trim().split('\n');
-    if (lines.length < 2) return [];
-
-    const headers = parseCSVRow(lines[0]).map(h => h.trim());
-    const data: any[] = [];
-
-    for (let i = 1; i < lines.length; i++) {
-        if (!lines[i].trim()) continue;
-
-        const values = parseCSVRow(lines[i]);
-        const row: any = {};
-
-        headers.forEach((header, index) => {
-            if (index < values.length) {
-                row[header] = values[index];
-            }
-        });
-
-        data.push(row);
-    }
-    return data;
-}
+type DataType = typeof DATA_TYPES[keyof typeof DATA_TYPES];
 
 export async function fetchPopulationData(): Promise<PopulationGroups> {
     try {
@@ -66,7 +17,7 @@ export async function fetchPopulationData(): Promise<PopulationGroups> {
             [DATA_TYPES.POPULATION]: [],
             [DATA_TYPES.IDP]: [],
             [DATA_TYPES.IDP_RETURNEES]: [],
-            [DATA_TYPES.RAINFALL]: [] // Added initialization
+            [DATA_TYPES.RAINFALL]: []
         };
 
         const sourceMap: { [key: string]: DataSource } = {};

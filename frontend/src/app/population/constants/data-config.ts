@@ -7,37 +7,6 @@ export const DATA_TYPES = {
 
 export type DataType = typeof DATA_TYPES[keyof typeof DATA_TYPES];
 
-export interface CityData {
-    [cityName: string]: number;
-}
-
-export interface DataSource {
-    source_id: number;
-    source_url: string;
-    date: string;
-    note: string;
-    cities: CityData;
-    data_type?: DataType; // Updated to use the dynamic type
-}
-
-export interface PopulationGroups {
-    [DATA_TYPES.POPULATION]: DataSource[];
-    [DATA_TYPES.IDP]: DataSource[];
-    [DATA_TYPES.IDP_RETURNEES]: DataSource[];
-    [DATA_TYPES.RAINFALL]: DataSource[]; // Added to prevent indexing errors
-}
-
-// Rainfall specific types
-export interface RainfallYear {
-    year: number;
-    rainfall: number;
-    rainfall_avg: number;
-}
-
-export interface RainfallData {
-    [pcode: string]: RainfallYear[];
-}
-
 export const DATA_TYPE_CONFIG = {
     [DATA_TYPES.POPULATION]: {
         label: 'عدد السكان',
@@ -88,6 +57,3 @@ export const DATA_TYPE_CONFIG = {
         ]
     }
 };
-
-export const SHEET_ID = '2PACX-1vS6vFJV6ldATqU0Gi-0tnn-2VPBWz8So0zbVpWoCIdv7f_m7tOyDXPlAsOncPzB_y-LD9ZxgPw9AOAl';
-export const CSV_URL = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=csv`;
