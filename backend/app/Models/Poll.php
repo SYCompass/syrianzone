@@ -11,18 +11,7 @@ class Poll extends Model
 
     protected $fillable = ['slug', 'title', 'timezone', 'is_active'];
 
-    public function candidates()
-    {
-        return $this->hasMany(Candidate::class);
-    }
-
-    public function ballots()
-    {
-        return $this->hasMany(Ballot::class);
-    }
-
-    public function groups()
-    {
-        return $this->hasMany(CandidateGroup::class)->orderBy('sort_order');
-    }
+    public function candidates() { return $this->hasMany(Candidate::class); }
+    public function ballots() { return $this->hasMany(Ballot::class); }
+    public function groups() { return $this->hasMany(CandidateGroup::class)->orderBy('sort_order'); }
 }

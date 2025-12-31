@@ -11,13 +11,6 @@ class Candidate extends Model
 
     protected $fillable = ['poll_id', 'candidate_group_id', 'name', 'title', 'image_url', 'category', 'sort'];
 
-    public function poll()
-    {
-        return $this->belongsTo(Poll::class);
-    }
-
-    public function group()
-    {
-        return $this->belongsTo(CandidateGroup::class, 'candidate_group_id');
-    }
+    public function poll() { return $this->belongsTo(Poll::class); }
+    public function group() { return $this->belongsTo(CandidateGroup::class, 'candidate_group_id'); }
 }

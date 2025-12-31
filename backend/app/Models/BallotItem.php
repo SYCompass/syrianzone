@@ -9,17 +9,9 @@ class BallotItem extends Model
 {
     use HasUuids;
 
-    public $timestamps = false; // No timestamps in migration
-
+    public $timestamps = false;
     protected $fillable = ['ballot_id', 'candidate_id', 'tier', 'position'];
 
-    public function ballot()
-    {
-        return $this->belongsTo(Ballot::class);
-    }
-
-    public function candidate()
-    {
-        return $this->belongsTo(Candidate::class);
-    }
+    public function ballot() { return $this->belongsTo(Ballot::class); }
+    public function candidate() { return $this->belongsTo(Candidate::class); }
 }
