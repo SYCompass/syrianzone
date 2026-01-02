@@ -77,9 +77,19 @@ export default function IssuesMatrixClient() {
   const matrixRef = useRef<HTMLDivElement | null>(null);
 
   /* ---------- DATA FETCH ---------- */
-  useEffect(() => {
-    getIssues().then(setIssues);
-  }, []);
+ useEffect(() => {
+  const loadIssues = async () => {
+    try {
+      const data = await getIssues();
+      setIssues(data);
+    } catch (err) {
+      console.error("Failed to load issues", err);
+      setIssues([]);
+    }
+  };
+
+  loadIssues();
+}, []);
 
   /* ---------- RESPONSIVE ---------- */
   useEffect(() => {

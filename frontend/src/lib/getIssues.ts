@@ -30,38 +30,42 @@ type SheetRow = {
 /**
  * Fetches issues from a public Google Sheets JSON endpoint
  * and converts them into Issue objects used by the app.
- */
-export async function getIssues(): Promise<Issue[]> {
-  // Read the Google Sheet URL from environment variables
+ */export async function getIssues(): Promise<Issue[]> {
   const url = process.env.NEXT_PUBLIC_ISSUES_SHEET_URL;
 
-  // Safety check to avoid runtime errors
   if (!url) {
-    throw new Error("NEXT_PUBLIC_ISSUES_SHEET_URL is not defined");
+    console.error("NEXT_PUBLIC_ISSUES_SHEET_URL is not defined");
+    return [];
   }
 
-  // Fetch data from Google Sheets
-  const res = await fetch(url);
+  try {
+    const res = await fetch(url);
 
-  // Handle HTTP errors
-  if (!res.ok) {
-    throw new Error("Failed to fetch Google Sheet data");
+    if (!res.ok) {
+      throw new Error("Failed to fetch Google Sheet data");
+    }
+
+    const data: SheetRow[] = await res.json();
+
+    if (!Array.isArray(data)) {
+      throw new Error("Invalid data format from Google Sheets");
+    }
+
+    return data
+      .filter(
+        (row) =>
+          row &&
+          typeof row.title === "string" &&
+          typeof row.category === "string"
+      )
+      .map((row, index) => ({
+        id: row.id?.toString() ?? String(index),
+        title: row.title,
+        category: row.category,
+      }));
+  } catch (error) {
+    console.error("getIssues failed:", error);
+    
+    return [];
   }
-
-  /**
-   * The response is already a clean JSON array
-   * coming directly from Google Sheets
-   */
-  const data: SheetRow[] = await res.json();
-
-  /**
-   * Normalize data into Issue objects
-   * - Ensure id is always a string
-   * - Use index as fallback if id is missing
-   */
-  return data.map((row, index) => ({
-    id: row.id?.toString() ?? String(index),
-    title: row.title,
-    category: row.category,
-  }));
 }
