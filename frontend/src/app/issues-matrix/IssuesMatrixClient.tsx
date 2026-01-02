@@ -198,7 +198,7 @@ export default function IssuesMatrixClient() {
     if (!matrixRef.current) return;
 
     const canvas = await html2canvas(matrixRef.current, {
-      backgroundColor: "#020817",
+      backgroundColor: "#151c1b",
       scale: 2,
       useCORS: true,
     });
