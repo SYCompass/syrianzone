@@ -1,4 +1,7 @@
+import { getCanonicalCityName } from '@/lib/city-name-standardizer';
+
 export function generateRainChartHtml(name: string, data: any[]) {
+    const displayName = getCanonicalCityName(name);
     const sorted = [...data].sort((a, b) => a.year - b.year);
     const maxVal = Math.max(...sorted.map(d => d.rainfall));
 
@@ -24,7 +27,7 @@ export function generateRainChartHtml(name: string, data: any[]) {
 
     return `
         <div class="text-right" style="font-family: 'IBM Plex Sans Arabic', sans-serif; min-width: 130px;">
-            <div class="font-bold text-base mb-1 text-slate-100">${name}</div>
+            <div class="font-bold text-base mb-1 text-slate-100">${displayName}</div>
             <div class="flex justify-between items-end mb-2 mt-2">
                 <div>
                     <div class="text-[10px] text-slate-400">آخر هطول</div>
@@ -39,11 +42,12 @@ export function generateRainChartHtml(name: string, data: any[]) {
 }
 
 export function generatePopulationTooltipHtml(name: string, value: number, label: string) {
+    const displayName = getCanonicalCityName(name);
     const valueStr = value ? value.toLocaleString('en-US') : 'لا توجد بيانات';
     
     return `
         <div class="text-right" style="font-family: 'IBM Plex Sans Arabic', sans-serif;">
-            <div class="font-bold text-base mb-1">${name}</div>
+            <div class="font-bold text-base mb-1">${displayName}</div>
             <div class="text-sm">${label}: ${valueStr}</div>
         </div>
     `;

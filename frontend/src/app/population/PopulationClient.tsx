@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { PopulationGroups, DATA_TYPES, DATA_TYPE_CONFIG, RainfallData } from './types';
 import { Layers, Info, Filter, X, BarChart3, CheckSquare, Square, ExternalLink, CloudRain } from 'lucide-react';
-import { getGovernorateNameAr } from '@/lib/geo-utils';
+import { sortCitiesByOrder, getCanonicalCityName } from '@/lib/city-name-standardizer';
 import rainfallJson from './rainfall_yearly.json';
 
 type DataType = typeof DATA_TYPES[keyof typeof DATA_TYPES];
@@ -96,7 +96,6 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
         Object.values(DATA_TYPES).forEach(type => {
             if (type === DATA_TYPES.RAINFALL) return;
 
-            // Use current source if type matches current selection, otherwise default to first source
             let source;
             if (type === currentDataType && currentSource) {
                 source = currentSource;
@@ -104,8 +103,7 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                 source = initialData[type][0];
             }
             if (source) {
-                const nameAr = getGovernorateNameAr(provinceName);
-                stats[type] = source.cities[provinceName] ?? source.cities[nameAr] ?? 0;
+                stats[type] = source.cities[provinceName] ?? 0;
             } else {
                 stats[type] = 0;
             }
@@ -116,8 +114,8 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
     const comparisonData = useMemo(() => {
         if (selectedProvinces.length !== 2) return null;
         return {
-            p1: { name: getGovernorateNameAr(selectedProvinces[0]), stats: getProvinceStats(selectedProvinces[0]) },
-            p2: { name: getGovernorateNameAr(selectedProvinces[1]), stats: getProvinceStats(selectedProvinces[1]) }
+            p1: { name: selectedProvinces[0], stats: getProvinceStats(selectedProvinces[0]) },
+            p2: { name: selectedProvinces[1], stats: getProvinceStats(selectedProvinces[1]) }
         };
     }, [selectedProvinces, initialData, currentDataType, currentSource]);
 
@@ -209,7 +207,7 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                     onFeatureClick={(feature) => {
                         if (currentDataType === DATA_TYPES.RAINFALL) {
                             const name = feature.properties.province_name || feature.properties.ADM2_AR || feature.properties.ADM1_AR || feature.properties.Name;
-                            const nameAr = getGovernorateNameAr(name);
+                            const nameAr = getCanonicalCityName(name);
 
                             // Re-use logic to find data (simplified for this context)
                             const props = feature.properties;
@@ -453,32 +451,29 @@ export default function PopulationClient({ initialData }: PopulationClientProps)
                                                         </tr>
                                                     </thead>
                                                     <tbody className="divide-y divide-border/50 bg-card">
-                                                        {Object.entries(source.cities)
-                                                            .sort(([, a], [, b]) => b - a)
-                                                            .map(([city, pop]) => {
-                                                                const isSelected = selectedProvinces.includes(city);
-                                                                const nameAr = getGovernorateNameAr(city);
-                                                                return (
-                                                                    <tr
-                                                                        key={city}
-                                                                        className={`hover:bg-muted/50 transition-colors cursor-pointer ${isSelected ? 'bg-primary/5' : ''}`}
-                                                                        onClick={() => toggleProvinceSelection(city)}
-                                                                    >
-                                                                        <td className="py-1.5 px-2 text-center">
-                                                                            <div className="flex justify-center">
-                                                                                {isSelected ?
-                                                                                    <CheckSquare size={14} className="text-primary fill-primary/10" /> :
-                                                                                    <Square size={14} className="text-muted-foreground" />
-                                                                                }
-                                                                            </div>
-                                                                        </td>
-                                                                        <td className="py-1.5 px-2 font-medium">{nameAr}</td>
-                                                                        <td className="py-1.5 px-2 text-left font-mono text-muted-foreground">
-                                                                            {pop.toLocaleString('en-US')}
-                                                                        </td>
-                                                                    </tr>
-                                                                );
-                                                            })}
+                                                        {sortCitiesByOrder(Object.entries(source.cities)).map(([city, pop]) => {
+                                                            const isSelected = selectedProvinces.includes(city);
+                                                            return (
+                                                                <tr
+                                                                    key={city}
+                                                                    className={`hover:bg-muted/50 transition-colors cursor-pointer ${isSelected ? 'bg-primary/5' : ''}`}
+                                                                    onClick={() => toggleProvinceSelection(city)}
+                                                                >
+                                                                    <td className="py-1.5 px-2 text-center">
+                                                                        <div className="flex justify-center">
+                                                                            {isSelected ?
+                                                                                <CheckSquare size={14} className="text-primary fill-primary/10" /> :
+                                                                                <Square size={14} className="text-muted-foreground" />
+                                                                            }
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className="py-1.5 px-2 font-medium">{city}</td>
+                                                                    <td className="py-1.5 px-2 text-left font-mono text-muted-foreground">
+                                                                        {pop.toLocaleString('en-US')}
+                                                                    </td>
+                                                                </tr>
+                                                            );
+                                                        })}
                                                     </tbody>
                                                 </table>
                                             </div>

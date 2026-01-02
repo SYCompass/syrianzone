@@ -1,6 +1,6 @@
 import L from 'leaflet';
 import { DATA_TYPES, DATA_TYPE_CONFIG, CityData, RainfallData } from '../../types';
-import { getGovernorateNameAr } from '@/lib/geo-utils';
+import { getCanonicalCityName } from '@/lib/city-name-standardizer';
 import { findPopulation, findRainData } from '../../utils/data-finder';
 import { generateRainChartHtml, generatePopulationTooltipHtml } from './tooltip-generators';
 import { getFeatureStyle, getHighlightStyle } from './map-styles';
@@ -17,7 +17,7 @@ export function setupFeatureInteractions(
     onFeatureClick?: (feature: any) => void
 ) {
     const name = feature.properties.province_name || feature.properties.ADM2_AR || feature.properties.ADM1_AR || feature.properties.Name;
-    const nameAr = getGovernorateNameAr(name);
+    const nameAr = getCanonicalCityName(name);
 
     // Bind tooltip
     layer.bindTooltip(() => {

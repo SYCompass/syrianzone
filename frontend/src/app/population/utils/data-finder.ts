@@ -1,45 +1,23 @@
 import { CityData, RainfallData } from '../types';
-import { getGovernorateNameAr } from '@/lib/geo-utils';
-import { normalizeCityName } from './name-normalizer';
+import { getCanonicalCityName, normalizeForMatching } from '@/lib/city-name-standardizer';
 import { PROVINCE_TO_PCODE } from '../constants/province-mappings';
 
 export function findPopulation(provinceName: string, populationData: CityData | null): number {
     if (!populationData) return 0;
 
-    // 1. Try direct match with GeoJSON name
-    if (populationData[provinceName]) return populationData[provinceName];
+    const canonicalName = getCanonicalCityName(provinceName);
+    
+    if (populationData[canonicalName]) {
+        return populationData[canonicalName];
+    }
 
-    // 2. Try match with translated Arabic name
-    const nameAr = getGovernorateNameAr(provinceName);
-    if (populationData[nameAr]) return populationData[nameAr];
-
-    // 3. Normalized fallback for variations
-    const normalized = normalizeCityName(provinceName);
-    const mapping = Object.keys(populationData).reduce((acc: any, city) => {
-        acc[normalizeCityName(city)] = city;
-        return acc;
-    }, {});
-
-    if (mapping[normalized]) return populationData[mapping[normalized]];
-
-    const special: { [key: string]: string[] } = {
-        'Al Ḥasakah': ['Al Hasakah', 'Hasakah'],
-        'Ar Raqqah': ['Raqqa'],
-        "As Suwayda'": ['As Suwayda'],
-        "Dar`a": ['Daraa'],
-        'Dayr Az Zawr': ['Deir ez-Zor'],
-        'Rif Dimashq': ['Rural Damascus'],
-        'Ḥimş': ['Homs'],
-        'Ḩamāh': ['Hama'],
-        'Idlib': ['Idleb'],
-        'Ţarţūs': ['Tartous']
-    };
-
-    if (special[provinceName]) {
-        for (const v of special[provinceName]) {
-            if (populationData[v]) return populationData[v];
+    const normalized = normalizeForMatching(provinceName);
+    for (const [city, value] of Object.entries(populationData)) {
+        if (normalizeForMatching(city) === normalized) {
+            return value;
         }
     }
+
     return 0;
 }
 
@@ -58,17 +36,17 @@ export function findRainData(feature: any, rainData: RainfallData | undefined) {
 
     // 2. Try Name Match
     const nameKeys = ['province_name', 'ADM1_EN', 'ADM1_AR', 'name', 'Name', 'NAME', 'admin1Name_en'];
-    for (const key of nameKeys) {
-        if (props[key]) {
-            const rawName = props[key];
-            const normalized = normalizeCityName(rawName);
+        for (const key of nameKeys) {
+            if (props[key]) {
+                const rawName = props[key];
+                const normalized = normalizeForMatching(rawName);
 
-            const mappedCode = PROVINCE_TO_PCODE[normalized];
-            if (mappedCode && rainData[mappedCode]) {
-                return rainData[mappedCode];
+                const mappedCode = PROVINCE_TO_PCODE[normalized];
+                if (mappedCode && rainData[mappedCode]) {
+                    return rainData[mappedCode];
+                }
             }
         }
-    }
 
     return null;
 }

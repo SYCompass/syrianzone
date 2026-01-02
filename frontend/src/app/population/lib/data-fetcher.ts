@@ -3,6 +3,7 @@ import { PopulationGroups } from '../types';
 import { DATA_TYPES } from '../constants/data-config';
 import { CSV_URL } from '../constants/api-config';
 import { DataSource } from '../types/data-types';
+import { standardizeCityNames } from '@/lib/city-name-standardizer';
 
 type DataType = typeof DATA_TYPES[keyof typeof DATA_TYPES];
 
@@ -47,6 +48,10 @@ export async function fetchPopulationData(): Promise<PopulationGroups> {
             }
 
             sourceMap[key].cities[cityName] = parseInt(row.population) || 0;
+        });
+
+        Object.values(sourceMap).forEach(source => {
+            source.cities = standardizeCityNames(source.cities);
         });
 
         return dataTypeGroups;
