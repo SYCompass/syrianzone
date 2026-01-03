@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PollController;
 use App\Http\Controllers\ContributorController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\MetricsController;
 
 Route::get('/polls', [PollController::class, 'index']);
 Route::get('/polls/{poll}', [PollController::class, 'show']);
@@ -37,3 +38,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/sites/{id}', [SiteController::class, 'update']);
     Route::delete('/sites/{id}', [SiteController::class, 'destroy']);
 });
+
+Route::get('/metrics', [MetricsController::class, 'index']);
