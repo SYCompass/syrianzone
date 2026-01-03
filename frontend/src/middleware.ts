@@ -14,7 +14,7 @@ function isVotingPath(pathname: string): boolean {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const protector = isVotingPath(pathname) ? ajVoting : aj;
-  const decision = await protector.protect(request);
+  const decision = await protector.protect(request, { requested: 1 });
 
   if (decision.isDenied()) {
     if (decision.reason.isRateLimit()) {
