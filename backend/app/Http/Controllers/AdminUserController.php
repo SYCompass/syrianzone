@@ -2,51 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class AdminUserController extends Controller
 {
-    public function index(Request $request) {
-        // Ensure only superadmin can list
-        if ($request->user()->role !== 'superadmin') {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+    public function index()
+    {
         return User::all();
     }
 
-    public function store(Request $request) {
-        if ($request->user()->role !== 'superadmin') {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
-        $request->validate([
+    public function store(Request $request)
+    {
+        $data = $request->validate([
             'email' => 'required|email|unique:users,email',
-            'name' => 'required|string'
+            'name' => 'required|string',
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make(Str::random(16)), // Dummy password, will rely on Google Auth
-            'role' => 'admin'
-        ]);
-
-        return response()->json($user, 201);
+        return response()->json(User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make(Str::random(16)),
+            'role' => 'admin',
+        ]), 201);
     }
 
-    public function destroy(Request $request, $id) {
-        if ($request->user()->role !== 'superadmin') {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
+    public function destroy($id)
+    {
         $user = User::findOrFail($id);
-        
-        // Prevent deleting self or other superadmins (optional safety)
-        if ($user->role === 'superadmin') {
-             return response()->json(['message' => 'Cannot delete superadmin'], 403);
+
+        if ($user->isSuperAdmin()) {
+            return response()->json(['message' => 'Cannot delete superadmin'], 403);
         }
 
         $user->delete();

@@ -2,29 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
-    /**
-     * Redirect the user to the Google authentication page.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    private const SUPERADMIN_EMAIL = 'hade.alahmad1@gmail.com';
+
     public function redirectToProvider()
     {
         return Socialite::driver('google')->redirect();
     }
 
-    /**
-     * Obtain the user information from Google.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function handleProviderCallback()
     {
         try {
@@ -34,13 +25,11 @@ class AuthController extends Controller
         }
 
         $email = $googleUser->getEmail();
-        $isSuperAdmin = $email === 'hade.alahmad1@gmail.com';
-
-        // Check if user exists or is superadmin
         $user = User::where('email', $email)->first();
+        $isSuperAdmin = $email === self::SUPERADMIN_EMAIL;
 
         if (!$user && !$isSuperAdmin) {
-             return redirect(env('FRONTEND_URL') . '/letmein?error=access_denied_admin_only');
+            return redirect(env('FRONTEND_URL') . '/letmein?error=access_denied_admin_only');
         }
 
         $user = User::updateOrCreate(
@@ -49,21 +38,22 @@ class AuthController extends Controller
                 'name' => $googleUser->getName(),
                 'google_id' => $googleUser->getId(),
                 'avatar_url' => $googleUser->getAvatar(),
-                'password' => $user ? $user->password : bcrypt(str()->random(16)), // Keep existing password or generate random
-                'role' => $isSuperAdmin ? 'superadmin' : ($user ? $user->role : 'admin'),
+                'password' => $user?->password ?? bcrypt(str()->random(16)),
+                'role' => $isSuperAdmin ? 'superadmin' : ($user?->role ?? 'admin'),
             ]
         );
 
         Auth::login($user, true);
-
         return redirect(env('FRONTEND_URL') . '/admin/polls');
     }
-    
-    public function user(Request $request) {
+
+    public function user(Request $request)
+    {
         return $request->user();
     }
-    
-    public function logout(Request $request) {
+
+    public function logout(Request $request)
+    {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
