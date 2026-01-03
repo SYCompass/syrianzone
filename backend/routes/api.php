@@ -10,8 +10,11 @@ use App\Http\Controllers\SiteController;
 Route::get('/polls', [PollController::class, 'index']);
 Route::get('/polls/{poll}', [PollController::class, 'show']);
 Route::get('/polls/{poll}/leaderboard', [PollController::class, 'leaderboard']);
-Route::post('/polls/{poll}/vote', [PollController::class, 'vote']);
-Route::post('/submit', [PollController::class, 'submit']);
+
+Route::middleware('throttle:voting')->group(function () {
+    Route::post('/polls/{poll}/vote', [PollController::class, 'vote']);
+    Route::post('/submit', [PollController::class, 'submit']);
+});
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/polls', [PollController::class, 'store']);

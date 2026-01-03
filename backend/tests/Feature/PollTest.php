@@ -108,3 +108,24 @@ test('vote requires minimum 3 selections', function () {
         'tiers' => ['S' => [['candidateId' => $candidate->id]]],
     ])->assertStatus(400);
 });
+
+test('voting is rate limited', function () {
+    $poll = Poll::factory()->create(['slug' => 'test']);
+    $candidate = Candidate::factory()->create(['poll_id' => $poll->id]);
+    $payload = [
+        'pollSlug' => 'test',
+        'deviceId' => 'device',
+        'tiers' => [
+            'S' => [['candidateId' => $candidate->id, 'pos' => 0]],
+            'A' => [['candidateId' => $candidate->id, 'pos' => 0]],
+            'B' => [['candidateId' => $candidate->id, 'pos' => 0]],
+        ],
+    ];
+
+    for ($i = 0; $i < 11; $i++) {
+        $payload['deviceId'] = "device-{$i}";
+        $response = $this->postJson('/api/submit', $payload);
+    }
+
+    $response->assertStatus(429)->assertJsonPath('error', 'Too many votes. Please slow down.');
+});
