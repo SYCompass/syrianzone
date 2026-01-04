@@ -39,7 +39,7 @@ class NavBar extends HTMLElement {
     const currentPath = window.location.pathname;
     const navItems = this.shadowRoot.querySelectorAll('.nav-item');
     const mobileTitle = this.shadowRoot.querySelector('.mobile-title');
-    
+
     navItems.forEach(item => {
       const href = item.getAttribute('href');
       if ((href === '/' && currentPath === '/') || (href !== '/' && currentPath.startsWith(href))) {
@@ -56,7 +56,7 @@ class NavBar extends HTMLElement {
     const navItems = this.shadowRoot.querySelector('.nav-items');
     const navbar = this.shadowRoot.querySelector('.navbar');
     const themeButtons = this.shadowRoot.querySelectorAll('.theme-button');
-    
+
     // Safely handle menu button click
     menuButton?.addEventListener('click', () => {
       navItems?.classList.toggle('show');
@@ -346,7 +346,7 @@ class NavBar extends HTMLElement {
               <i class="fas fa-code" style="color: var(--sz-color-ink);"></i>
               المساهمون السوريون
             </a>
-            <a target="_blank" href="https://github.com/SYCompass/Twitter-SVG-Syrian-Flag-Replacer/releases/tag/1.0.1" class="nav-item">
+            <a target="_blank" href="https://chromewebstore.google.com/detail/syrian-flag-replacer/dngipobppehfhfggmbdiiiodgcibdeog" class="nav-item">
               <img src="${assetPath('/flag-replacer/1f1f8-1f1fe.svg')}" alt="Flag Replacer" style="height: 1.1rem; width: 1.1rem; margin-left: 0.5rem;" onerror="this.onerror=null; this.src='${basePath}/syria-flag.svg'">
               مبدل العلم
             </a>

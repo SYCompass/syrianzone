@@ -60,7 +60,7 @@ const navLinks = [
 
 const externalLinks = [
   { href: 'https://wrraq.com', text: 'المنتدى', icon: MessageSquare },
-  { href: 'https://github.com/SYCompass/Twitter-SVG-Syrian-Flag-Replacer/releases/tag/1.0.1', text: 'مبدل العلم', isFlag: true },
+  { href: 'https://chromewebstore.google.com/detail/syrian-flag-replacer/dngipobppehfhfggmbdiiiodgcibdeog', text: 'مبدل العلم', isFlag: true },
 ];
 
 export default function Navbar() {

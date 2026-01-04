@@ -40,7 +40,7 @@ const PRESET_LINKS: PresetLink[] = [
     { href: '/sites', icon: Link, text: 'دليل المواقع' },
     { href: '/population', icon: Globe, text: 'أطلس' },
     { href: 'https://food.syrian.zone', icon: Utensils, text: 'وصفاتنا' },
-    { href: 'https://github.com/SYCompass/Twitter-SVG-Syrian-Flag-Replacer/releases/tag/1.0.1', icon: null, text: 'مبدل العلم', image: '/flag-replacer/1f1f8-1f1fe.svg', external: true },
+    { href: 'https://chromewebstore.google.com/detail/syrian-flag-replacer/dngipobppehfhfggmbdiiiodgcibdeog', icon: null, text: 'مبدل العلم', image: '/flag-replacer/1f1f8-1f1fe.svg', external: true },
     { href: 'https://wrraq.com', icon: null, text: 'المنتدى', image: '/assets/wrraq.png', external: true },
     { href: 'https://syrevarch.com/', icon: null, text: 'أرشيف الثورة', image: '/assets/syrevarchive.webp', external: true },
 ];
